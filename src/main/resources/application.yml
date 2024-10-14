@@ -1,0 +1,16 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+  ssl:
+    enabled: false
+
+spring:
+  application:
+    name: lingolift
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
