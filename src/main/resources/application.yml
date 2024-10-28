@@ -7,7 +7,7 @@ server:
 
 spring:
   application:
-    name: lingolift
+    name: grammr
 
 management:
   endpoints:

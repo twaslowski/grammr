@@ -5,11 +5,11 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.twaslowski</groupId>
-    <artifactId>mood-tracker</artifactId>
+    <groupId>com.grammr</groupId>
+    <artifactId>grammr-core</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>mood-tracker</name>
+    <name>grammr</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -47,26 +47,10 @@
             <scope>provided</scope>
         </dependency>
 
-
-        <!-- Database -->
         <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-database-postgresql</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
+            <groupId>io.github.sashirestela</groupId>
+            <artifactId>simple-openai</artifactId>
+            <version>3.9.0</version>
         </dependency>
 
         <!-- Web -->

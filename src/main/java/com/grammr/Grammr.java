@@ -1,12 +1,12 @@
-package com.lingolift;
+package com.grammr;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Lingolift {
+public class Grammr {
 
   public static void main(String[] args) {
-    SpringApplication.run(Lingolift.class, args);
+    SpringApplication.run(Grammr.class, args);
   }
 }
