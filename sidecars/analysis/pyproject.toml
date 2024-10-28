@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "analysis"
+version = "0.1.0"
+description = ""
+authors = ["Tobias Waslowski <tobiaswaslowski@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12.4"
+spacy = "^3.8.2"
+fastapi = "^0.115.2"
+uvicorn = "^0.32.0"
+
+[tool.poetry.group.dev]
+optional = true
+
+# testing, linting, utilities
+[tool.poetry.group.dev.dependencies]
+pip = "^23.3.2"
+mypy = "^1.8.0"
+pytest = "^7.4.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+minversion = "7.4.4"
+addopts = "-s -v --disable-warnings"
+testpaths = [
+  "test",
+]
