@@ -31,5 +31,5 @@ hs_err_pid*
 target
 /.flattened-pom.xml
 
-.env
+.envrc
 __pycache__
