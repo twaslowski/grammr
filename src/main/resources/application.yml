@@ -14,3 +14,12 @@ management:
     web:
       exposure:
         include: health
+
+llm:
+  openai:
+    api-key: ${OPENAI_API_KEY}
+    default-model: gpt-4o-mini
+
+telegram:
+  bot:
+    token: ${TELEGRAM_TOKEN}
