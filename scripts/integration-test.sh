@@ -1,7 +1,12 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
-./scripts/start-local-dependencies.sh
-source .env
+set -eo pipefail
 
-./mvnw test -P integration
-./mvnw jacoco:report
+PROJECT_ROOT=$(git rev-parse --show-toplevel)
+export PROJECT_ROOT
+source "$PROJECT_ROOT/scripts/common.sh"
+
+trap stop_environment SIGINT EXIT SIGTERM
+
+start_environment
+integration_test
