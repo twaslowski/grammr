@@ -12,9 +12,13 @@ This is a clean rewrite of [lingolift](https://github.com/twaslowski/lingolift-c
   - an optional `ancestor` (a reference to another `Token` in the phrase that it relates to).
 
 - `Phrase` refers to a collection of `Tokens` that form a sentence.
-- `Translation` is a `Phrase` that is a translation of another `Phrase`.
+
+- A `SemanticTranslation` is a `Phrase` that is a translation of another `Phrase`. The _meaning_
+of the original phrase is preserved as well as possible in the translation.
 It consists of a `source_phrase` and a `target_phrase`.
-- A `Literal Translation` is a direct, literal translation of a word. It can be combined
-with a `Token` to enhance understanding of how a `Phrase` in the source language is constructed.
-It consists of:
-  - 
+
+- A `LiteralTranslation` is a direct, literal translation of a word. This can help users better
+understand how phrases are constructed. It consists of the `source phrase` and a collection of
+`translated tokens`, which are a key-value pair of tokens from the source phrase and their
+directly translated counterparts. For example, "Ich bin ein Student" would contain four translated
+tokens: `(Ich, I)`, `(bin, am)`, `(ein, a)`, `(Student, student)`.
