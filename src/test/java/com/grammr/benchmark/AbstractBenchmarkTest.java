@@ -7,4 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @BenchmarkTest
 public class AbstractBenchmarkTest {
 
+  // metrics to collect:
+  // time
+  // amount of consumed/generated tokens -> cost
 }

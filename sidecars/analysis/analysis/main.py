@@ -21,7 +21,7 @@ def _perform_analysis(phrase: str) -> list:
 
 
 def _map_to_response_event(tokens: list) -> Analysis:
-  return {"tokens": tokens}
+  return {"translatedTokens": tokens}
 
 
 if __name__ == '__main__':

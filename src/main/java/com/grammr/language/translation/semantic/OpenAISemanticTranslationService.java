@@ -1,6 +1,4 @@
-package com.grammr.language.translation;
-
-import static java.lang.String.format;
+package com.grammr.language.translation.semantic;
 
 import com.grammr.domain.value.SemanticTranslation;
 import com.grammr.language.AbstractOpenAIService;
@@ -12,9 +10,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
+import static java.lang.String.format;
+
 @RequiredArgsConstructor
 @Service
-public class OpenAISemanticTranslationService extends AbstractOpenAIService<SemanticTranslation> implements SemanticTranslationService {
+public class OpenAISemanticTranslationService extends AbstractOpenAIService implements SemanticTranslationService {
 
   public SemanticTranslation translate(String phrase) {
     return openAIChatCompletion(phrase, SemanticTranslation.class);
@@ -42,6 +42,6 @@ public class OpenAISemanticTranslationService extends AbstractOpenAIService<Sema
   @Override
   public UserMessage generateUserMessage(String phrase) {
     // todo: source (and perhaps target) language should be parameterizable
-    return UserMessage.of(format("Translate the following phrase from to English: %s", phrase));
+    return UserMessage.of(format("Translate the following phrase to English: %s", phrase));
   }
 }

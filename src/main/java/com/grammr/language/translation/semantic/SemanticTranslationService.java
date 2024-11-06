@@ -1,4 +1,4 @@
-package com.grammr.language.translation;
+package com.grammr.language.translation.semantic;
 
 import com.grammr.domain.value.SemanticTranslation;
 

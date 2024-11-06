@@ -7,16 +7,21 @@ import io.github.sashirestela.openai.domain.chat.Chat;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.SystemMessage;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.UserMessage;
 import io.github.sashirestela.openai.domain.chat.ChatRequest;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
-public abstract class AbstractOpenAIService<T> {
+@RequiredArgsConstructor
+public abstract class AbstractOpenAIService {
 
   protected ObjectMapper objectMapper;
   protected SimpleOpenAI openAIClient;
+
+  @Getter
   protected String modelName;
 
   @SneakyThrows
-  public T openAIChatCompletion(String phrase, Class<T> responseType) {
+  public <T> T openAIChatCompletion(String phrase, Class<T> responseType) {
     var request = chatRequest(phrase);
     var futureChat = openAIClient.chatCompletions().create(request);
     Chat response = futureChat.join();

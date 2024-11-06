@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class OpenAILanguageRecognitionService extends AbstractOpenAIService<LanguageRecognition> implements LanguageRecognitionService {
+public class OpenAILanguageRecognitionService extends AbstractOpenAIService implements LanguageRecognitionService {
 
   public LanguageRecognition recognizeLanguage(String phrase) {
     return openAIChatCompletion(phrase, LanguageRecognition.class);
