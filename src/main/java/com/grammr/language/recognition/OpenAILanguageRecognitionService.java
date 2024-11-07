@@ -3,7 +3,7 @@ package com.grammr.language.recognition;
 import static java.lang.String.format;
 
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.domain.value.LanguageRecognition;
+import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.language.AbstractOpenAIService;
 import io.github.sashirestela.openai.common.ResponseFormat;
 import io.github.sashirestela.openai.common.ResponseFormat.JsonSchema;

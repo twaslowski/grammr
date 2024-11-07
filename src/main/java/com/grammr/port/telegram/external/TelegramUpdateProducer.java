@@ -19,7 +19,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Slf4j
 @RequiredArgsConstructor
 @Profile("!test")
-public class TelegramPoller implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
+public class TelegramUpdateProducer implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
 
   private final Queue<TelegramUpdate> incomingMessageQueue;
 

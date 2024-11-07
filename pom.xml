@@ -150,7 +150,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${version.surefire}</version>
                 <configuration>
-                    <excludedGroups>integration</excludedGroups>
+                    <excludedGroups>integration,benchmark</excludedGroups>
                     <systemPropertyVariables>
                         <spring.profiles.active>test</spring.profiles.active>
                     </systemPropertyVariables>

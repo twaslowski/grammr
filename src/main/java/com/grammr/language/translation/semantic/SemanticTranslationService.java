@@ -1,8 +1,8 @@
 package com.grammr.language.translation.semantic;
 
-import com.grammr.domain.value.SemanticTranslation;
+import com.grammr.domain.value.language.SemanticTranslation;
 
 public interface SemanticTranslationService {
 
-  SemanticTranslation translate(String phrase);
+  SemanticTranslation createSemanticTranslation(String phrase);
 }

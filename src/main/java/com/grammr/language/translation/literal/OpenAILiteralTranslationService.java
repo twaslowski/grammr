@@ -4,8 +4,8 @@ import static java.lang.String.format;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.domain.value.ExampleValues;
-import com.grammr.domain.value.LiteralTranslation;
-import com.grammr.domain.value.TranslatedToken;
+import com.grammr.domain.value.language.LiteralTranslation;
+import com.grammr.domain.value.language.TranslatedToken;
 import com.grammr.language.AbstractOpenAIService;
 import com.grammr.language.Tokenizer;
 import io.github.sashirestela.openai.SimpleOpenAI;
@@ -73,8 +73,8 @@ public class OpenAILiteralTranslationService extends AbstractOpenAIService imple
   protected SystemMessage getSystemMessage() {
     return SystemMessage.of(
         "Translate words into English within the context of a sentence. "
-            + "Provide your responses in JSON format with the following structure:" +
-            objectMapper.writeValueAsString(ExampleValues.translatedToken()));
+            + "Provide your responses in JSON format with the following structure:"
+            + objectMapper.writeValueAsString(ExampleValues.translatedToken()));
   }
 
   @Override

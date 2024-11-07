@@ -1,4 +1,4 @@
-package com.grammr.domain.value;
+package com.grammr.domain.value.language;
 
 import lombok.Builder;
 

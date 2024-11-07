@@ -1,6 +1,8 @@
 package com.grammr.language.translation.semantic;
 
-import com.grammr.domain.value.SemanticTranslation;
+import static java.lang.String.format;
+
+import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.language.AbstractOpenAIService;
 import io.github.sashirestela.openai.common.ResponseFormat;
 import io.github.sashirestela.openai.common.ResponseFormat.JsonSchema;
@@ -10,13 +12,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
-import static java.lang.String.format;
-
 @RequiredArgsConstructor
 @Service
 public class OpenAISemanticTranslationService extends AbstractOpenAIService implements SemanticTranslationService {
 
-  public SemanticTranslation translate(String phrase) {
+  public SemanticTranslation createSemanticTranslation(String phrase) {
     return openAIChatCompletion(phrase, SemanticTranslation.class);
   }
 

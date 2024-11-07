@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.grammr.annotation.BenchmarkTest;
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.domain.value.LanguageRecognition;
+import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.language.recognition.OpenAILanguageRecognitionService;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;

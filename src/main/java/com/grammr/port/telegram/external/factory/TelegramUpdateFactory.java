@@ -2,6 +2,7 @@ package com.grammr.port.telegram.external.factory;
 
 import com.grammr.port.telegram.dto.update.TelegramTextUpdate;
 import com.grammr.port.telegram.dto.update.TelegramUpdate;
+import com.grammr.port.telegram.exception.RequiredDataMissingException;
 import java.util.Optional;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
@@ -22,10 +23,14 @@ public class TelegramUpdateFactory {
   }
 
   private static long extractChatId(Update update) {
-    if (update.hasCallbackQuery()) {
-      return update.getCallbackQuery().getMessage().getChatId();
-    } else {
-      return update.getMessage().getChatId();
+    try {
+      if (update.hasCallbackQuery()) {
+        return update.getCallbackQuery().getMessage().getChatId();
+      } else {
+        return update.getMessage().getChatId();
+      }
+    } catch (NullPointerException e) {
+      throw new RequiredDataMissingException(e);
     }
   }
 }

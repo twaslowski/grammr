@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.domain.value.LanguageRecognition;
+import com.grammr.domain.value.language.LanguageRecognition;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 

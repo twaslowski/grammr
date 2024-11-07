@@ -3,7 +3,7 @@ package com.grammr.benchmark;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.grammr.annotation.BenchmarkTest;
-import com.grammr.domain.value.TranslatedToken;
+import com.grammr.domain.value.language.TranslatedToken;
 import com.grammr.language.translation.literal.OpenAILiteralTranslationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
