@@ -1,5 +1,5 @@
 # The builder image, used to build the virtual environment
-FROM python:3.11-buster as builder
+FROM python:3.12-slim as builder
 
 RUN pip install poetry==1.4.2
 
@@ -23,12 +23,17 @@ ENV VIRTUAL_ENV=/app/.venv \
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
-COPY analysis/ ./analysis
-COPY init.sh .
+ENV APP_DIR=/app
+
+COPY analysis/ ${APP_DIR}/analysis
+COPY docker/init.sh ${APP_DIR}/init.sh
 
 # Args setup
 ENV LANGUAGE_CODE=""
 ENV SPACY_MODEL=""
 
+EXPOSE 8000
+WORKDIR ${APP_DIR}
+
 # Command to run the FastAPI server
-CMD ["sh", "-c", "init.sh"]
+CMD /bin/sh init.sh

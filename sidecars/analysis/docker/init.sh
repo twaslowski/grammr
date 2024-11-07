@@ -5,5 +5,5 @@ if [ -z "${SPACY_MODEL}" ]; then
     exit 1
 fi
 
-python3 -m spacy install "${SPACY_MODEL}"
-python3 -m uvicorn analysis.main:app --host 0.0.0.0 --port 8000
+python3 -m spacy download "${SPACY_MODEL}"
+python3 -m uvicorn analysis.main:app --host=0.0.0.0 --port=8000
