@@ -8,6 +8,7 @@ public class BotApiMessageFactory {
   public static SendMessage createTextResponse(TelegramTextResponse response) {
     return SendMessage.builder()
         .chatId(response.getChatId())
+        .parseMode("HTML")
         .text(response.getText())
         .build();
   }

@@ -1,6 +1,7 @@
 package com.grammr.port.telegram;
 
 import com.grammr.common.AbstractConsumer;
+import com.grammr.common.AnalysisStringifier;
 import com.grammr.domain.event.AnalysisCompleteEvent;
 import com.grammr.port.telegram.dto.response.TelegramResponse;
 import com.grammr.port.telegram.dto.response.TelegramTextResponse;
@@ -31,7 +32,7 @@ public class AnalysisCompleteEventConsumer extends AbstractConsumer<AnalysisComp
   private TelegramTextResponse telegramResponseFrom(AnalysisCompleteEvent event) {
     return TelegramTextResponse.builder()
         .chatId(event.chatId())
-        .text(event.analysis().toString())
+        .text(AnalysisStringifier.stringifyAnalysis(event.analysis()))
         .build();
   }
 }
