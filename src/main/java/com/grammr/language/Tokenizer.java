@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class Tokenizer {
 
   public Collection<String> tokenize(String phrase) {
-    return Arrays.stream(phrase.split("\\W+"))
+    return Arrays.stream(phrase.split("\\P{L}+"))
         .filter(token -> !token.isEmpty())
         .collect(Collectors.toList());
   }

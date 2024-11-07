@@ -10,8 +10,12 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class HandlerConfiguration {
 
+  private final TextUpdateHandler textUpdateHandler;
+
   @Bean
   public Collection<UpdateHandler> handlers() {
-    return List.of();
+    return List.of(
+        textUpdateHandler
+    );
   }
 }

@@ -21,10 +21,10 @@ public class TelegramResponseConsumer extends AbstractConsumer<TelegramResponse>
   private final TelegramClient telegramClient;
 
   public TelegramResponseConsumer(
-      BlockingQueue<TelegramResponse> incomingMessageQueue,
+      BlockingQueue<TelegramResponse> outgoingMessageQueue,
       TelegramClient telegramClient
   ) {
-    super(incomingMessageQueue);
+    super(outgoingMessageQueue);
     this.telegramClient = telegramClient;
   }
 

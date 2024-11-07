@@ -15,9 +15,9 @@ management:
       exposure:
         include: health
 
-llm:
-  openai:
-    api-key: ${OPENAI_API_KEY}
+openai:
+  api-key: ${OPENAI_API_KEY}
+  model:
     default-model: gpt-4o-mini
 
 telegram:

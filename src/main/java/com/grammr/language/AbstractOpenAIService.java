@@ -7,11 +7,15 @@ import io.github.sashirestela.openai.domain.chat.Chat;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.SystemMessage;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.UserMessage;
 import io.github.sashirestela.openai.domain.chat.ChatRequest;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
+@Slf4j
 public abstract class AbstractOpenAIService {
 
   protected ObjectMapper objectMapper;
@@ -25,7 +29,9 @@ public abstract class AbstractOpenAIService {
     var request = chatRequest(phrase);
     var futureChat = openAIClient.chatCompletions().create(request);
     Chat response = futureChat.join();
-    return objectMapper.readValue(response.firstContent(), responseType);
+    String content = response.firstContent();
+    log.info("Got response from OpenAI: {}; tokens: {}", content, response.getUsage().getTotalTokens());
+    return objectMapper.readValue(content, responseType);
   }
 
   private ChatRequest chatRequest(String phrase) {

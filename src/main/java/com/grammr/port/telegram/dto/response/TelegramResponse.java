@@ -7,8 +7,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public abstract class TelegramResponse {
 
-  public long chatId;
-  public String text;
+  private long chatId;
+  private String text;
 
   public static final String UNKNOWN_COMMAND_RESPONSE = "Unfortunately, I cannot process that message.";
   public static final String ERROR_RESPONSE = "An error occurred. Please try again later.";

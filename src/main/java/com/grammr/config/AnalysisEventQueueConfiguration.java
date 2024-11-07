@@ -5,8 +5,10 @@ import com.grammr.domain.event.AnalysisRequestEvent;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-public class QueueConfig {
+@Configuration
+public class AnalysisEventQueueConfiguration {
 
   @Bean
   public BlockingQueue<AnalysisRequestEvent> analysisRequestEventQueue() {

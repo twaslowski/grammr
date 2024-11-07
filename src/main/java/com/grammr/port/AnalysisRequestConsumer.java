@@ -5,9 +5,11 @@ import com.grammr.domain.event.AnalysisCompleteEvent;
 import com.grammr.domain.event.AnalysisRequestEvent;
 import com.grammr.service.AnalysisRequestService;
 import java.util.concurrent.BlockingQueue;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class AnalysisRequestConsumer extends AbstractConsumer<AnalysisRequestEvent> {
 
   private final AnalysisRequestService analysisRequestService;
@@ -24,6 +26,7 @@ public class AnalysisRequestConsumer extends AbstractConsumer<AnalysisRequestEve
   @Override
   protected void handleItem(AnalysisRequestEvent analysisRequest) {
     var analysis = analysisRequestService.processAnalysisRequest(analysisRequest);
+    log.info("Performed analysis: {}", analysis);
     var analysisCompletionEvent = AnalysisCompleteEvent.builder()
         .analysis(analysis)
         .requestId(analysisRequest.requestId())

@@ -16,17 +16,26 @@ import io.github.sashirestela.openai.domain.chat.ChatMessage.SystemMessage;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.UserMessage;
 import io.github.sashirestela.openai.domain.chat.ChatRequest;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
+@Slf4j
 public class OpenAILiteralTranslationService extends AbstractOpenAIService implements LiteralTranslationService {
 
   private final Tokenizer tokenizer;
-  private final ObjectMapper objectMapper;
-  private final SimpleOpenAI openAIClient;
+
+  public OpenAILiteralTranslationService(Tokenizer tokenizer,
+                                         ObjectMapper objectMapper,
+                                         SimpleOpenAI openAIClient,
+                                         @Value("${openai.model.default-model}")
+                                         String modelName) {
+    super(objectMapper, openAIClient, modelName);
+    this.tokenizer = tokenizer;
+    this.objectMapper = objectMapper;
+  }
 
   @Override
   public LiteralTranslation createLiteralTranslation(String phrase) {
@@ -37,6 +46,7 @@ public class OpenAILiteralTranslationService extends AbstractOpenAIService imple
         .map(token -> executeChatRequest(token, TranslatedToken.class))
         .collect(Collectors.toSet());
 
+    log.info("Retrieved translated tokens: {}", translatedTokens);
     return new LiteralTranslation(phrase, translatedTokens);
   }
 

@@ -10,7 +10,7 @@ public class SimpleOpenAIConfiguration {
 
   @Bean
   public SimpleOpenAI openAIClient(
-      @Value("${llm.openai.api-key}") String apiKey
+      @Value("${openai.api-key}") String apiKey
   ) {
     return SimpleOpenAI.builder()
         .apiKey(apiKey)

@@ -2,6 +2,8 @@ package com.grammr.port.telegram.handler;
 
 import com.grammr.domain.event.AnalysisRequestEvent;
 import com.grammr.port.telegram.dto.response.TelegramResponse;
+import com.grammr.port.telegram.dto.response.TelegramTextResponse;
+import com.grammr.port.telegram.dto.update.TelegramTextUpdate;
 import com.grammr.port.telegram.dto.update.TelegramUpdate;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
@@ -23,11 +25,14 @@ public class TextUpdateHandler implements UpdateHandler {
             .requestId(UUID.randomUUID().toString())
             .build()
     );
-    return null;
+    return TelegramTextResponse.builder()
+        .text("Analysis in progress ...")
+        .chatId(update.getChatId())
+        .build();
   }
 
   @Override
   public boolean canHandle(TelegramUpdate update) {
-    return !update.getText().isEmpty();
+    return update instanceof TelegramTextUpdate && !update.getText().isEmpty();
   }
 }

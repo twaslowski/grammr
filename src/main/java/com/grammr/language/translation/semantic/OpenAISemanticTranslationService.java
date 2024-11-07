@@ -2,19 +2,29 @@ package com.grammr.language.translation.semantic;
 
 import static java.lang.String.format;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.language.AbstractOpenAIService;
+import io.github.sashirestela.openai.SimpleOpenAI;
 import io.github.sashirestela.openai.common.ResponseFormat;
 import io.github.sashirestela.openai.common.ResponseFormat.JsonSchema;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.SystemMessage;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.UserMessage;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
 public class OpenAISemanticTranslationService extends AbstractOpenAIService implements SemanticTranslationService {
+
+  public OpenAISemanticTranslationService(
+      ObjectMapper objectMapper,
+      SimpleOpenAI openAI,
+      @Value("${openai.model.default-model}")
+      String modelName
+  ) {
+    super(objectMapper, openAI, modelName);
+  }
 
   public SemanticTranslation createSemanticTranslation(String phrase) {
     return openAIChatCompletion(phrase, SemanticTranslation.class);
