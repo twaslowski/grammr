@@ -8,8 +8,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12.4"
 spacy = "^3.8.2"
-fastapi = "^0.115.2"
 uvicorn = "^0.32.0"
+fastapi = "^0.115.4"
 
 [tool.poetry.group.dev]
 optional = true
@@ -19,6 +19,7 @@ optional = true
 pip = "^23.3.2"
 mypy = "^1.8.0"
 pytest = "^7.4.4"
+black = "^24.10.0"
 
 [build-system]
 requires = ["poetry-core"]
