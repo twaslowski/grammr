@@ -1,7 +1,7 @@
 package com.grammr.config;
 
-import com.grammr.domain.event.AnalysisCompleteEvent;
-import com.grammr.domain.event.AnalysisRequestEvent;
+import com.grammr.domain.event.FullAnalysisCompleteEvent;
+import com.grammr.domain.event.FullAnalysisRequest;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.springframework.context.annotation.Bean;
@@ -11,12 +11,12 @@ import org.springframework.context.annotation.Configuration;
 public class AnalysisEventQueueConfiguration {
 
   @Bean
-  public BlockingQueue<AnalysisRequestEvent> analysisRequestEventQueue() {
+  public BlockingQueue<FullAnalysisRequest> analysisRequestEventQueue() {
     return new LinkedBlockingQueue<>();
   }
 
   @Bean
-  public BlockingQueue<AnalysisCompleteEvent> analysisCompleteEventQueue() {
+  public BlockingQueue<FullAnalysisCompleteEvent> analysisCompleteEventQueue() {
     return new LinkedBlockingQueue<>();
   }
 }

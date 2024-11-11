@@ -3,16 +3,16 @@ package com.grammr.common;
 import static java.lang.String.format;
 import static java.lang.String.join;
 
-import com.grammr.domain.value.Analysis;
+import com.grammr.domain.value.FullAnalysis;
 import com.grammr.domain.value.language.LiteralTranslation;
 import com.grammr.domain.value.language.SemanticTranslation;
 
 public class AnalysisStringifier {
 
-  public static String stringifyAnalysis(Analysis analysis) {
+  public static String stringifyAnalysis(FullAnalysis fullAnalysis) {
     return format("%s%n%s",
-        stringifySemanticTranslation(analysis.semanticTranslation()),
-        stringifyLiteralTranslation(analysis.literalTranslation())
+        stringifySemanticTranslation(fullAnalysis.semanticTranslation()),
+        stringifyLiteralTranslation(fullAnalysis.literalTranslation())
     );
   }
 

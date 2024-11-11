@@ -2,7 +2,7 @@ package com.grammr.port.telegram;
 
 import com.grammr.common.AbstractConsumer;
 import com.grammr.common.AnalysisStringifier;
-import com.grammr.domain.event.AnalysisCompleteEvent;
+import com.grammr.domain.event.FullAnalysisCompleteEvent;
 import com.grammr.port.telegram.dto.response.TelegramResponse;
 import com.grammr.port.telegram.dto.response.TelegramTextResponse;
 import java.util.concurrent.BlockingQueue;
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class AnalysisCompleteEventConsumer extends AbstractConsumer<AnalysisCompleteEvent> {
+public class AnalysisCompleteEventConsumer extends AbstractConsumer<FullAnalysisCompleteEvent> {
 
   private final BlockingQueue<TelegramResponse> outgoingMessageQueue;
 
   public AnalysisCompleteEventConsumer(
-      BlockingQueue<AnalysisCompleteEvent> incomingMessageQueue,
+      BlockingQueue<FullAnalysisCompleteEvent> incomingMessageQueue,
       BlockingQueue<TelegramResponse> outgoingMessageQueue
   ) {
     super(incomingMessageQueue);
@@ -24,15 +24,15 @@ public class AnalysisCompleteEventConsumer extends AbstractConsumer<AnalysisComp
   }
 
   @Override
-  protected void handleItem(AnalysisCompleteEvent analysisCompleteEvent) {
-    var telegramResponse = telegramResponseFrom(analysisCompleteEvent);
+  protected void handleItem(FullAnalysisCompleteEvent fullAnalysisCompleteEvent) {
+    var telegramResponse = telegramResponseFrom(fullAnalysisCompleteEvent);
     outgoingMessageQueue.add(telegramResponse);
   }
 
-  private TelegramTextResponse telegramResponseFrom(AnalysisCompleteEvent event) {
+  private TelegramTextResponse telegramResponseFrom(FullAnalysisCompleteEvent event) {
     return TelegramTextResponse.builder()
         .chatId(event.chatId())
-        .text(AnalysisStringifier.stringifyAnalysis(event.analysis()))
+        .text(AnalysisStringifier.stringifyAnalysis(event.fullAnalysis()))
         .build();
   }
 }

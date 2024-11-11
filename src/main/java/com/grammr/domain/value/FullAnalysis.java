@@ -5,7 +5,7 @@ import com.grammr.domain.value.language.SemanticTranslation;
 import lombok.Builder;
 
 @Builder
-public record Analysis(
+public record FullAnalysis(
     String sourcePhrase,
     SemanticTranslation semanticTranslation,
     LiteralTranslation literalTranslation
