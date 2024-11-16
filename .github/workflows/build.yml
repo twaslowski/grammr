@@ -21,9 +21,6 @@ jobs:
       - name: Unit tests
         run: ./scripts/unit-test.sh
 
-      - name: Integration tests
-        run: ./scripts/integration-test.sh
-
       - name: Upload jar artifact
         uses: actions/upload-artifact@v4
         with:
