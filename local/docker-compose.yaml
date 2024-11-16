@@ -1,0 +1,10 @@
+services:
+  analysis:
+    image: tobiaswaslowski/grammatical-analysis
+    build:
+      context: ../sidecars/analysis
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - SPACY_MODEL=ru_core_news_sm

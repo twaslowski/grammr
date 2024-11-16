@@ -17,6 +17,11 @@ RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
 # Use the official Python image from the Docker Hub
 FROM python:3.12-slim
 
+RUN apt-get update && apt-get install -y curl
+
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD curl --fail --silent --show-error http://localhost:8000/health
+
 # Set up dependencies
 ENV VIRTUAL_ENV=/app/.venv \
     PATH="/app/.venv/bin:$PATH"

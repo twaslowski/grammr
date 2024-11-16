@@ -223,6 +223,14 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.grammr.Grammr</mainClass>
+                    <layout>JAR</layout>
+                </configuration>
+            </plugin>
 
         </plugins>
     </build>

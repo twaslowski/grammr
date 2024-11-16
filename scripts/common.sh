@@ -1,10 +1,10 @@
 function stop_environment() {
-  echo "Not implemented yet."
+  docker compose -f local/docker-compose.yaml down
   exit 1
 }
 
 function start_environment() {
-  echo "Not implemented yet."
+  docker compose -f local/docker-compose.yaml up -d --build analysis
   exit 1
 }
 
@@ -12,22 +12,21 @@ function package() {
   ./mvnw package -DskipTests
 }
 
-function build() {
-  echo "Not implemented yet."
-  exit 1
+function deploy() {
+  TAG="sha-$(git rev-parse --short HEAD)"
 
-#  TAG=$1
-#
-#  if [ -z "$TAG" ]; then
-#    echo "TAG is required"
-#    exit 1
-#  fi
-#
-#  ROOT=$(git rev-parse --show-toplevel)
-#  package
-#  docker build -t "open-mood-tracker:$TAG" "$ROOT"
+  export TF_VAR_image_tag="$TAG"
+  export TF_VAR_telegram_token="$TELEGRAM_TOKEN"
+
+  pushd terraform || exit
+  terraform init
+  terraform apply -auto-approve
 }
 
+function activate_minikube() {
+  minikube start
+  eval "$(minikube docker-env)"
+}
 
 function unit_test() {
   ./mvnw test

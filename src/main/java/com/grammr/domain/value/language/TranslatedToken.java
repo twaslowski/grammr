@@ -3,10 +3,7 @@ package com.grammr.domain.value.language;
 import lombok.Builder;
 
 @Builder
-public record TranslatedToken(
-    String source,
-    String translation
-) {
+public record TranslatedToken(String source, String translation) {
 
   @Override
   public boolean equals(Object obj) {

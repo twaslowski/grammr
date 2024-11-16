@@ -1,25 +1,38 @@
 resource "helm_release" "application" {
-  chart = "../charts/open-mood-tracker"
-  name = "open-mood-tracker"
-  namespace = "open-mood-tracker"
+  chart            = "../charts/grammr"
+  name             = "grammr"
+  namespace        = local.namespace
+  create_namespace = true
 
-  values = [
-    <<YAML
-    environmentVariables:
-      - name: SPRING_PROFILES_ACTIVE
-        value: prod
-      - name: TELEGRAM_TOKEN
-        valueFrom:
-            secretKeyRef:
-                name: telegram-token
-                key: telegram_token
-      - name: OPENAI_API_KEY
-        valueFrom:
-            secretKeyRef:
-                name: openai-api-key
-                key: openai_api_key
-    YAML
-  ]
+  set {
+    name  = "environmentVariables[0].name"
+    value = "SPRING_PROFILES_ACTIVE"
+  }
+
+  set {
+    name  = "environmentVariables[0].value"
+    value = "prod"
+  }
+
+  set {
+    name  = "environmentVariables[1].name"
+    value = "TELEGRAM_TOKEN"
+  }
+
+  set_sensitive {
+    name  = "environmentVariables[1].value"
+    value = var.telegram_token
+  }
+
+  set {
+    name  = "environmentVariables[2].name"
+    value = "OPENAI_API_KEY"
+  }
+
+  set_sensitive {
+    name  = "environmentVariables[2].value"
+    value = var.openai_api_key
+  }
 
   timeout = 150
 }

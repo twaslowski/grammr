@@ -12,4 +12,4 @@ COPY target/grammr-core-1.0-SNAPSHOT.jar ${APP_DIR}/grammr-core.jar
 
 EXPOSE 8443
 
-CMD ["java", "-jar", "/var/opt/mood-tracker.jar", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}"]
+CMD ["java", "-jar", "/var/opt/grammr-core.jar", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}"]

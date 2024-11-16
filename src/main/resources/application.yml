@@ -23,3 +23,7 @@ openai:
 telegram:
   bot:
     token: ${TELEGRAM_TOKEN}
+
+analysis:
+  rest:
+    endpoint: ${ANALYSIS_ENDPOINT}
