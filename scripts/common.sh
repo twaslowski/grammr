@@ -29,7 +29,7 @@ function activate_minikube() {
 }
 
 function unit_test() {
-  ./mvnw test
+  ./mvnw package test
 }
 
 function integration_test() {
