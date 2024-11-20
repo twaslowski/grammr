@@ -1,6 +1,5 @@
 package com.grammr.port.rest;
 
-import com.grammr.domain.event.GrammaticalAnalysisRequest;
 import com.grammr.domain.value.language.GrammaticalAnalysis;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +13,7 @@ public class GrammaticalAnalysisPort {
 
   private final RestClient restClient;
 
-  public GrammaticalAnalysis performAnalysis(GrammaticalAnalysisRequest request) {
+  public GrammaticalAnalysis performAnalysis(String phrase) {
     return null;
   }
 }

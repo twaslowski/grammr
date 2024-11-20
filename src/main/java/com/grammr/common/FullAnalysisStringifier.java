@@ -7,7 +7,7 @@ import com.grammr.domain.value.FullAnalysis;
 import com.grammr.domain.value.language.LiteralTranslation;
 import com.grammr.domain.value.language.SemanticTranslation;
 
-public class AnalysisStringifier {
+public class FullAnalysisStringifier {
 
   public static String stringifyAnalysis(FullAnalysis fullAnalysis) {
     return format("%s%n%s",
