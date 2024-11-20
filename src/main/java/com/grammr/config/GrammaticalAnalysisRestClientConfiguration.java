@@ -5,11 +5,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
 @Configuration
-public class RestClientConfiguration {
+public class GrammaticalAnalysisRestClientConfiguration {
 
   @Bean
   public RestClient restClient() {
-    return RestClient.create();
+    return RestClient.builder()
+        .baseUrl("http://localhost:8000")
+        .build();
   }
-
 }

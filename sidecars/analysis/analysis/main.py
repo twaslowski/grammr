@@ -1,6 +1,8 @@
+import logging
 import os
 import spacy
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from spacy.tokens import Token
 
 from analysis.domain.analysis import Analysis, AnalysisToken
@@ -9,13 +11,16 @@ from analysis.domain.analysis_request import AnalysisRequest
 nlp = spacy.load(os.getenv("SPACY_MODEL"))
 app = FastAPI()
 
+logger = logging.getLogger(__name__)
 
-@app.post("/analysis")
-async def analyze(request: AnalysisRequest) -> Analysis:
-    tokens = _perform_analysis(request.phrase)
-    print(tokens)
-    analysis = _create_response(tokens, request)
-    return analysis
+
+@app.post("/grammatical-analysis")
+async def analyze(request: AnalysisRequest) -> JSONResponse:
+    logger.info(f"Received request: {request}")
+    # tokens = _perform_analysis(request.phrase)
+    # print(tokens)
+    # analysis = _create_response(tokens, request)
+    return request
 
 
 @app.get("/health")

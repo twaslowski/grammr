@@ -4,6 +4,11 @@ services:
     build:
       context: ../sidecars/analysis
       dockerfile: docker/Dockerfile
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8000/health"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
     ports:
       - "8000:8000"
     environment:
