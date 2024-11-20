@@ -10,6 +10,7 @@ import io.github.sashirestela.openai.common.ResponseFormat;
 import io.github.sashirestela.openai.common.ResponseFormat.JsonSchema;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.SystemMessage;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.UserMessage;
+import java.util.List;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class OpenAISemanticTranslationService extends AbstractOpenAIService impl
   }
 
   public SemanticTranslation createSemanticTranslation(String phrase) {
-    return openAIChatCompletion(phrase, SemanticTranslation.class);
+    return openAIChatCompletion(generateUserMessage(List.of(phrase)), SemanticTranslation.class);
   }
 
   @Override
@@ -49,9 +50,8 @@ public class OpenAISemanticTranslationService extends AbstractOpenAIService impl
         ))));
   }
 
-  @Override
-  public UserMessage generateUserMessage(String phrase) {
+  public UserMessage generateUserMessage(List<String> params) {
     // todo: source (and perhaps target) language should be parameterizable
-    return UserMessage.of(format("Translate the following phrase to English: %s", phrase));
+    return UserMessage.of(format("Translate the following phrase to English: %s", params.getFirst()));
   }
 }

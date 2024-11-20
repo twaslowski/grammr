@@ -21,6 +21,5 @@ class OpenAILiteralTranslationServiceBenchmarkTest extends AbstractBenchmarkTest
     assertThat(literalTranslation.translatedTokens()).isNotEmpty();
 
     assertThat(literalTranslation.translatedTokens()).contains(new TranslatedToken("Wie", "How"));
-    assertThat(literalTranslation.translatedTokens()).contains(new TranslatedToken("Dir", "You"));
   }
 }

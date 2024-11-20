@@ -8,7 +8,6 @@ import io.github.sashirestela.openai.domain.chat.ChatMessage.SystemMessage;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.UserMessage;
 import io.github.sashirestela.openai.domain.chat.ChatRequest;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -20,13 +19,11 @@ public abstract class AbstractOpenAIService {
 
   protected ObjectMapper objectMapper;
   protected SimpleOpenAI openAIClient;
-
-  @Getter
   protected String modelName;
 
   @SneakyThrows
-  public <T> T openAIChatCompletion(String phrase, Class<T> responseType) {
-    var request = chatRequest(phrase);
+  public <T> T openAIChatCompletion(UserMessage userMessage, Class<T> responseType) {
+    var request = chatRequest(userMessage);
     var futureChat = openAIClient.chatCompletions().create(request);
     Chat response = futureChat.join();
     String content = response.firstContent();
@@ -34,17 +31,15 @@ public abstract class AbstractOpenAIService {
     return objectMapper.readValue(content, responseType);
   }
 
-  private ChatRequest chatRequest(String phrase) {
+  private ChatRequest chatRequest(UserMessage userMessage) {
     return ChatRequest.builder()
         .model(modelName)
         .message(getSystemMessage())
-        .message(generateUserMessage(phrase))
+        .message(userMessage)
         .responseFormat(getResponseFormat())
         .maxCompletionTokens(100)
         .build();
   }
-
-  protected abstract UserMessage generateUserMessage(String param);
 
   protected abstract SystemMessage getSystemMessage();
 
