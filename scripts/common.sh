@@ -1,4 +1,5 @@
 function stop_environment() {
+  docker compose -f local/docker-compose.yaml logs --timestamps analysis > target/docker.log
   docker compose -f local/docker-compose.yaml down
 }
 

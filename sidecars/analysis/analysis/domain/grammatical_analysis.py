@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from spacy.tokens import Token
 
 
-class Analysis(BaseModel):
-    phrase: str
-    request_id: str
+class GrammaticalAnalysis(BaseModel):
+    source_phrase: str = Field(alias="sourcePhrase")
+    request_id: str = Field(alias="requestId")
     tokens: list["AnalysisToken"]
 
 
