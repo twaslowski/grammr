@@ -2,7 +2,7 @@ package com.grammr.service;
 
 import com.grammr.domain.event.FullAnalysisRequest;
 import com.grammr.domain.value.FullAnalysis;
-import com.grammr.language.analysis.GrammaticalAnalysisService;
+import com.grammr.language.analysis.MorphologicalAnalysisService;
 import com.grammr.language.translation.literal.LiteralTranslationService;
 import com.grammr.language.translation.semantic.SemanticTranslationService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class AnalysisRequestService {
 
   private final SemanticTranslationService semanticTranslationService;
   private final LiteralTranslationService literalTranslationService;
-  private final GrammaticalAnalysisService analysisService;
+  private final MorphologicalAnalysisService analysisService;
 
   public FullAnalysis processFullAnalysisRequest(FullAnalysisRequest analysisRequest) {
     var sourcePhrase = analysisRequest.phrase();
@@ -27,7 +27,7 @@ public class AnalysisRequestService {
     return FullAnalysis.builder()
         .literalTranslation(literalTranslation)
         .semanticTranslation(semanticTranslation)
-        .grammaticalAnalysis(grammaticalAnalysis)
+        .morphologicalAnalysis(grammaticalAnalysis)
         .sourcePhrase(sourcePhrase)
         .build();
   }

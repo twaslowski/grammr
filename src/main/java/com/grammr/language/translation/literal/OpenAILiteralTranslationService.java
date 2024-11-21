@@ -1,7 +1,6 @@
 package com.grammr.language.translation.literal;
 
 import com.grammr.domain.value.language.LiteralTranslation;
-import com.grammr.domain.value.language.TranslatedToken;
 import com.grammr.language.Tokenizer;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

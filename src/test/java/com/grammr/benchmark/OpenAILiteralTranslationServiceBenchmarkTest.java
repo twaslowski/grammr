@@ -3,7 +3,7 @@ package com.grammr.benchmark;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.grammr.annotation.BenchmarkTest;
-import com.grammr.domain.value.language.TranslatedToken;
+import com.grammr.domain.value.language.TokenTranslation;
 import com.grammr.language.translation.literal.OpenAILiteralTranslationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,8 @@ class OpenAILiteralTranslationServiceBenchmarkTest extends AbstractBenchmarkTest
   void benchmarkOpenAILiteralTranslation() {
     var literalTranslation = openAILiteralTranslationService.createLiteralTranslation("Wie geht es dir?");
     assertThat(literalTranslation.sourcePhrase()).isEqualTo("Wie geht es dir?");
-    assertThat(literalTranslation.translatedTokens()).isNotEmpty();
+    assertThat(literalTranslation.tokenTranslations()).isNotEmpty();
 
-    assertThat(literalTranslation.translatedTokens()).contains(new TranslatedToken("Wie", "How"));
+    assertThat(literalTranslation.tokenTranslations()).contains(new TokenTranslation("Wie", "How"));
   }
 }

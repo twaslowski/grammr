@@ -17,8 +17,14 @@ This is a clean rewrite of [lingolift](https://github.com/twaslowski/lingolift-c
 of the original phrase is preserved as well as possible in the translation.
 It consists of a `source_phrase` and a `target_phrase`.
 
-- A `LiteralTranslation` is a direct, literal translation of a word. This can help users better
+- A `LiteralTranslation` is a direct, literal translation of a phrase. This can help users better
 understand how phrases are constructed. It consists of the `source phrase` and a collection of
-`translated tokens`, which are a key-value pair of tokens from the source phrase and their
+`TokenTranslations`, which are a key-value pair of tokens from the source phrase and their
 directly translated counterparts. For example, "Ich bin ein Student" would contain four translated
 tokens: `(Ich, I)`, `(bin, am)`, `(ein, a)`, `(Student, student)`.
+
+- `Tokens` are aggregated through the process of literally translating and grammatically analyzing
+phrases. These processes return Sets of `TokenTranslations` and `TokenMorphology` respectively,
+which are coalesced into `Tokens` that ultimately make up a `Phrase`.
+Therefore, a `FullAnalysis` consists of a set of `Tokens` holding their literal translation
+and grammatical analysis, as well as the semantic translation of the phrase.

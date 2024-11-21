@@ -4,16 +4,16 @@ from pydantic import BaseModel, Field
 from spacy.tokens import Token
 
 
-class GrammaticalAnalysis(BaseModel):
+class MorphologicalAnalysis(BaseModel):
     source_phrase: str = Field(alias="sourcePhrase")
     request_id: str = Field(alias="requestId")
-    tokens: list["AnalysisToken"]
+    tokens: list["TokenMorphology"]
 
 
-class AnalysisToken(BaseModel):
+class TokenMorphology(BaseModel):
     text: str
     lemma: str
 
     @staticmethod
-    def from_spacy_token(token: Token) -> AnalysisToken:
-        return AnalysisToken(text=token.text, lemma=token.lemma_)
+    def from_spacy_token(token: Token) -> TokenMorphology:
+        return TokenMorphology(text=token.text, lemma=token.lemma_)

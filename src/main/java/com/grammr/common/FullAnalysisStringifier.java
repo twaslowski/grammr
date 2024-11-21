@@ -5,6 +5,7 @@ import static java.lang.String.join;
 
 import com.grammr.domain.value.FullAnalysis;
 import com.grammr.domain.value.language.LiteralTranslation;
+import com.grammr.domain.value.language.MorphologicalAnalysis;
 import com.grammr.domain.value.language.SemanticTranslation;
 
 public class FullAnalysisStringifier {
@@ -23,7 +24,7 @@ public class FullAnalysisStringifier {
   }
 
   public static String stringifyLiteralTranslation(LiteralTranslation literalTranslation) {
-    return join("\n", literalTranslation.translatedTokens().stream()
+    return join("\n", literalTranslation.tokenTranslations().stream()
         .map(token -> format("%s -> %s",
             italic(token.source()),
             italic(token.translation())))

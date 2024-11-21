@@ -4,7 +4,7 @@ import static java.lang.String.format;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.domain.value.ExampleValues;
-import com.grammr.domain.value.language.TranslatedToken;
+import com.grammr.domain.value.language.TokenTranslation;
 import com.grammr.language.AbstractOpenAIService;
 import io.github.sashirestela.openai.SimpleOpenAI;
 import io.github.sashirestela.openai.common.ResponseFormat;
@@ -29,8 +29,8 @@ public class OpenAITokenTranslationService extends AbstractOpenAIService {
     super(objectMapper, openAI, modelName);
   }
 
-  public TranslatedToken createTranslatedToken(String phrase, String token) {
-    return openAIChatCompletion(generateUserMessage(phrase, token), TranslatedToken.class);
+  public TokenTranslation createTranslatedToken(String phrase, String token) {
+    return openAIChatCompletion(generateUserMessage(phrase, token), TokenTranslation.class);
   }
 
   protected UserMessage generateUserMessage(String phrase, String token) {
@@ -46,14 +46,14 @@ public class OpenAITokenTranslationService extends AbstractOpenAIService {
     return SystemMessage.of(
         "Translate words into English within the context of a sentence. "
             + "Provide your responses in JSON format with the following structure:"
-            + objectMapper.writeValueAsString(ExampleValues.translatedToken()));
+            + objectMapper.writeValueAsString(ExampleValues.tokenTranslation()));
   }
 
   @Override
   protected ResponseFormat getResponseFormat() {
     return ResponseFormat.jsonSchema(JsonSchema.builder()
         .name("translatedToken")
-        .schemaClass(TranslatedToken.class)
+        .schemaClass(TokenTranslation.class)
         .build());
   }
 }

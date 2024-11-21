@@ -1,11 +1,11 @@
 package com.grammr.domain.value;
 
-import com.grammr.domain.value.language.TranslatedToken;
+import com.grammr.domain.value.language.TokenTranslation;
 
 public class ExampleValues {
 
-  public static TranslatedToken translatedToken() {
-    return TranslatedToken.builder()
+  public static TokenTranslation tokenTranslation() {
+    return TokenTranslation.builder()
         .source("Wie")
         .translation("How")
         .build();
