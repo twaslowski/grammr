@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.grammr.annotation.BenchmarkTest;
 import com.grammr.domain.value.language.TokenTranslation;
-import com.grammr.language.translation.literal.OpenAILiteralTranslationService;
+import com.grammr.service.language.translation.literal.OpenAILiteralTranslationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

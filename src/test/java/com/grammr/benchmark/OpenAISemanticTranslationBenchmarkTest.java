@@ -3,7 +3,7 @@ package com.grammr.benchmark;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.grammr.annotation.BenchmarkTest;
-import com.grammr.language.translation.semantic.OpenAISemanticTranslationService;
+import com.grammr.service.language.translation.semantic.OpenAISemanticTranslationService;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

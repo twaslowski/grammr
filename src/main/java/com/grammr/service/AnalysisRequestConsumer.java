@@ -1,9 +1,8 @@
-package com.grammr.port;
+package com.grammr.service;
 
 import com.grammr.common.AbstractConsumer;
 import com.grammr.domain.event.FullAnalysisCompleteEvent;
 import com.grammr.domain.event.FullAnalysisRequest;
-import com.grammr.service.AnalysisRequestService;
 import java.util.concurrent.BlockingQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,11 +1,11 @@
-package com.grammr.language.translation.literal;
+package com.grammr.service.language.translation.literal;
 
 import static java.lang.String.format;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.domain.value.ExampleValues;
 import com.grammr.domain.value.language.TokenTranslation;
-import com.grammr.language.AbstractOpenAIService;
+import com.grammr.service.language.AbstractOpenAIService;
 import io.github.sashirestela.openai.SimpleOpenAI;
 import io.github.sashirestela.openai.common.ResponseFormat;
 import io.github.sashirestela.openai.common.ResponseFormat.JsonSchema;

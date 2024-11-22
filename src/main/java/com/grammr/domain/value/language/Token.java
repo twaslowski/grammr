@@ -6,4 +6,15 @@ public record Token(
     TokenMorphology morphology
 ) {
 
+  public static Token create(String text) {
+    return new Token(text, null, null);
+  }
+
+  public Token withTranslation(TokenTranslation tokenTranslation) {
+    return new Token(text, tokenTranslation.translation(), morphology);
+  }
+
+  public Token withMorphology(TokenMorphology morphology) {
+    return new Token(text, translation, morphology);
+  }
 }

@@ -1,4 +1,4 @@
-package com.grammr.language.translation.literal;
+package com.grammr.service.language.translation.literal;
 
 import com.grammr.domain.value.language.LiteralTranslation;
 

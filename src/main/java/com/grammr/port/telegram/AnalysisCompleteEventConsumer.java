@@ -1,10 +1,10 @@
 package com.grammr.port.telegram;
 
 import com.grammr.common.AbstractConsumer;
-import com.grammr.common.FullAnalysisStringifier;
 import com.grammr.domain.event.FullAnalysisCompleteEvent;
 import com.grammr.port.telegram.dto.response.TelegramResponse;
 import com.grammr.port.telegram.dto.response.TelegramTextResponse;
+import com.grammr.service.FullAnalysisStringificationService;
 import java.util.concurrent.BlockingQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class AnalysisCompleteEventConsumer extends AbstractConsumer<FullAnalysis
   private TelegramTextResponse telegramResponseFrom(FullAnalysisCompleteEvent event) {
     return TelegramTextResponse.builder()
         .chatId(event.chatId())
-        .text(FullAnalysisStringifier.stringifyAnalysis(event.fullAnalysis()))
+        .text(FullAnalysisStringificationService.stringifyAnalysis(event.fullAnalysis()))
         .build();
   }
 }

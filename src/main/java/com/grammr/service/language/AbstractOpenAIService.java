@@ -1,4 +1,4 @@
-package com.grammr.language;
+package com.grammr.service.language;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.sashirestela.openai.SimpleOpenAI;

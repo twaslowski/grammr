@@ -1,4 +1,4 @@
-package com.grammr.language.analysis;
+package com.grammr.service.language.analysis;
 
 import com.grammr.domain.value.language.MorphologicalAnalysis;
 import com.grammr.port.rest.MorphologicalAnalysisPort;

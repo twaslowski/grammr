@@ -2,11 +2,12 @@ package com.grammr.language;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.grammr.service.TokenService;
 import org.junit.jupiter.api.Test;
 
 class TokenizerTest {
 
-  private final Tokenizer tokenizer = new Tokenizer();
+  private final TokenService tokenizer = new TokenService();
 
   @Test
   void shouldExtractWhitespaceSeparatedTokens() {
@@ -28,5 +29,4 @@ class TokenizerTest {
     var tokens = tokenizer.tokenize(sentence);
     assertEquals(9, tokens.size());
   }
-
 }
