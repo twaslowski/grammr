@@ -12,5 +12,5 @@ def extract_features(token: Token) -> dict[str, str]:
     for tag in tags:
         if tag != "":
             key, value = tag.split("=")
-            result[key.lower()] = value.upper()
+            result[key.upper()] = value.upper()
     return result

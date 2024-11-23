@@ -5,10 +5,12 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Gender {
-  MASC("Masculine"),
-  FEM("Feminine"),
-  NEUT("Neuter");
+public enum Tense implements FeatureValue {
+  PAST("Past"),
+  IMP("Imperfect"),
+  PRES("Present"),
+  PQP("Plusquamperfect"),
+  FUT("Future");
 
   private final String fullIdentifier;
 }

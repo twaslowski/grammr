@@ -5,10 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Gender {
-  MASC("Masculine"),
-  FEM("Feminine"),
-  NEUT("Neuter");
-
+public enum Person implements FeatureValue {
+  FIRST("First"),
+  SECOND("Second"),
+  THIRD("Third");
   private final String fullIdentifier;
 }
