@@ -10,8 +10,12 @@ python = "^3.12.4"
 spacy = "3.7.0"
 uvicorn = "^0.32.0"
 fastapi = "^0.115.4"
+
+# Sensitive Cython dependencies that need to be pinned due to cross-system compilation issues
 thinc = "8.2.4"
 numpy = "1.26.4"
+cymem = "2.0.8"
+murmurhash = "1.0.10"
 
 [tool.poetry.group.dev]
 optional = true
@@ -22,6 +26,7 @@ pip = "^23.3.2"
 mypy = "^1.8.0"
 pytest = "^7.4.4"
 black = "^24.10.0"
+de-core-news-sm = { url = "https://github.com/explosion/spacy-models/releases/download/de_core_news_sm-3.7.0/de_core_news_sm-3.7.0.tar.gz" }
 
 [build-system]
 requires = ["poetry-core"]

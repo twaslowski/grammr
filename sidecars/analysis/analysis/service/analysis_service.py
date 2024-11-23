@@ -1,10 +1,10 @@
 import os
 import spacy
+from analysis.service.token_mapper import from_spacy_token
 
 from analysis.domain.analysis_request import AnalysisRequest
 from analysis.domain.morphological_analysis import (
     MorphologicalAnalysis,
-    TokenMorphology,
 )
 
 nlp = spacy.load(os.getenv("SPACY_MODEL"))
@@ -16,7 +16,7 @@ def perform_analysis(request: AnalysisRequest) -> list:
         source_phrase=request.phrase,
         request_id=request.request_id,
         tokens=[
-            TokenMorphology.from_spacy_token(token)
+            from_spacy_token(token)
             for token in spacy_tokens
             if not _token_is_punctuation(token)
         ],

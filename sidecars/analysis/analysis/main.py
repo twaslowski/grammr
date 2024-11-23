@@ -1,13 +1,10 @@
 import logging
-import os
-import spacy
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
 from analysis.domain.analysis_request import AnalysisRequest
 from analysis.service import analysis_service
 
-nlp = spacy.load(os.getenv("SPACY_MODEL"))
 app = FastAPI()
 
 logging.basicConfig(
