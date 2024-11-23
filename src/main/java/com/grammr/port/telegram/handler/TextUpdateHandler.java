@@ -1,6 +1,6 @@
 package com.grammr.port.telegram.handler;
 
-import com.grammr.domain.event.FullAnalysisRequest;
+import com.grammr.domain.event.FullAnalysisRequestEvent;
 import com.grammr.port.telegram.dto.response.TelegramResponse;
 import com.grammr.port.telegram.dto.response.TelegramTextResponse;
 import com.grammr.port.telegram.dto.update.TelegramTextUpdate;
@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class TextUpdateHandler implements UpdateHandler {
 
-  private final BlockingQueue<FullAnalysisRequest> analysisRequestQueue;
+  private final BlockingQueue<FullAnalysisRequestEvent> analysisRequestQueue;
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     analysisRequestQueue.add(
-        FullAnalysisRequest.builder()
+        FullAnalysisRequestEvent.builder()
             .phrase(update.getText())
             .chatId(update.getChatId())
             .requestId(UUID.randomUUID().toString())

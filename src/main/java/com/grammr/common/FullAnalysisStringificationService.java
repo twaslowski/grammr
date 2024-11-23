@@ -1,4 +1,4 @@
-package com.grammr.service;
+package com.grammr.common;
 
 import static java.lang.String.format;
 import static java.lang.String.join;
@@ -8,30 +8,32 @@ import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.Token;
 import com.grammr.domain.value.language.TokenMorphology;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FullAnalysisStringificationService {
 
-  public static String stringifyAnalysis(FullAnalysis fullAnalysis) {
+  public String stringifyAnalysis(FullAnalysis fullAnalysis) {
     return format("%s%n%s",
         stringifySemanticTranslation(fullAnalysis.semanticTranslation()),
         stringifyTokens(fullAnalysis.tokens())
     );
   }
 
-  public static String stringifySemanticTranslation(SemanticTranslation translation) {
+  public String stringifySemanticTranslation(SemanticTranslation translation) {
     return format("%s translates to %s",
         bold(translation.sourcePhrase()),
         bold(translation.translatedPhrase()));
   }
 
-  public static String stringifyTokens(List<Token> tokens) {
+  public String stringifyTokens(List<Token> tokens) {
     return join("\n", tokens.stream()
-        .map(FullAnalysisStringificationService::stringifyToken)
+        .map(this::stringifyToken)
         .toList());
   }
 
-  private static String stringifyToken(Token token) {
-    StringBuilder stringBuilder = new StringBuilder(bold(token.text()));
+  private String stringifyToken(Token token) {
+    StringBuilder stringBuilder = new StringBuilder();
     if (token.translation() != null) {
       stringBuilder.append(stringifyTokenTranslation(token));
     }
@@ -41,22 +43,22 @@ public class FullAnalysisStringificationService {
     return stringBuilder.toString();
   }
 
-  private static String stringifyTokenMorphology(TokenMorphology tokenMorphology) {
-    if (!tokenMorphology.text().equalsIgnoreCase(tokenMorphology.lemma())) {
+  private String stringifyTokenMorphology(TokenMorphology tokenMorphology) {
+    if (tokenMorphology.text().equalsIgnoreCase(tokenMorphology.lemma())) {
       return "";
     }
     return String.format("(from %s)", italic(tokenMorphology.lemma()));
   }
 
-  private static String stringifyTokenTranslation(Token token) {
+  private String stringifyTokenTranslation(Token token) {
     return format("%s -> %s", bold(token.text()), bold(token.translation()));
   }
 
-  private static String bold(String text) {
-    return format("'<b>%s</b>'", text);
+  private String bold(String text) {
+    return format("<b>%s</b>", text);
   }
 
-  private static String italic(String text) {
-    return format("'<i>%s</i>'", text);
+  private String italic(String text) {
+    return format("<i>%s</i>", text);
   }
 }

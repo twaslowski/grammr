@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
-import com.grammr.domain.event.FullAnalysisRequest;
+import com.grammr.domain.event.FullAnalysisRequestEvent;
 import com.grammr.port.telegram.dto.update.TelegramTextUpdate;
 import java.util.concurrent.BlockingQueue;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class TextUpdateHandlerTest {
 
   @Mock
-  private BlockingQueue<FullAnalysisRequest> analysisRequestQueue;
+  private BlockingQueue<FullAnalysisRequestEvent> analysisRequestQueue;
 
   @InjectMocks
   private TextUpdateHandler textUpdateHandler;
@@ -48,6 +48,6 @@ class TextUpdateHandlerTest {
         .text("someText")
         .build();
     textUpdateHandler.handleUpdate(update);
-    verify(analysisRequestQueue).add(any(FullAnalysisRequest.class));
+    verify(analysisRequestQueue).add(any(FullAnalysisRequestEvent.class));
   }
 }

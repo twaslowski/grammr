@@ -1,8 +1,8 @@
 package com.grammr.service;
 
-import com.grammr.domain.event.FullAnalysisRequest;
+import com.grammr.domain.event.FullAnalysisRequestEvent;
 import com.grammr.domain.value.FullAnalysis;
-import com.grammr.service.language.analysis.MorphologicalAnalysisService;
+import com.grammr.service.language.morphology.MorphologicalAnalysisService;
 import com.grammr.service.language.translation.literal.LiteralTranslationService;
 import com.grammr.service.language.translation.semantic.SemanticTranslationService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class AnalysisRequestService {
   private final MorphologicalAnalysisService analysisService;
   private final TokenService tokenService;
 
-  public FullAnalysis processFullAnalysisRequest(FullAnalysisRequest analysisRequest) {
+  public FullAnalysis processFullAnalysisRequest(FullAnalysisRequestEvent analysisRequest) {
     var sourcePhrase = analysisRequest.phrase();
     log.info("Processing analysis request for source phrase: '{}'", sourcePhrase);
 

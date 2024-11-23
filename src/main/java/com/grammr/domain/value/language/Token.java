@@ -1,5 +1,8 @@
 package com.grammr.domain.value.language;
 
+import lombok.Builder;
+
+@Builder
 public record Token(
     String text,
     String translation,
