@@ -13,8 +13,8 @@ nlp = spacy.load(os.getenv("SPACY_MODEL"))
 def perform_analysis(request: AnalysisRequest) -> list:
     spacy_tokens = nlp(request.phrase)
     return MorphologicalAnalysis(
-        sourcePhrase=request.phrase,
-        requestId=request.request_id,
+        source_phrase=request.phrase,
+        request_id=request.request_id,
         tokens=[
             TokenMorphology.from_spacy_token(token)
             for token in spacy_tokens

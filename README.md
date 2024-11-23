@@ -1,6 +1,8 @@
 # grammr
 
-This is a clean rewrite of [lingolift](https://github.com/twaslowski/lingolift-core).
+Note: This is a clean rewrite of [lingolift](https://github.com/twaslowski/lingolift-core).
+
+Learning languages is hard. This projects aim is to help.
 
 ## Domain Language
 
@@ -28,3 +30,11 @@ phrases. These processes return Sets of `TokenTranslations` and `TokenMorphology
 which are coalesced into `Tokens` that ultimately make up a `Phrase`.
 Therefore, a `FullAnalysis` consists of a set of `Tokens` holding their literal translation
 and grammatical analysis, as well as the semantic translation of the phrase.
+
+## Part of Speech & Features
+
+- `Part of Speech` (POS) is a grammatical category of words that have similar grammatical properties.
+Read more: https://universaldependencies.org/u/pos/index.html
+
+- `Features` are morphological and syntactic properties of words. They are used to distinguish
+between different grammatical categories of words. Read more: https://universaldependencies.org/u/feat/index.html

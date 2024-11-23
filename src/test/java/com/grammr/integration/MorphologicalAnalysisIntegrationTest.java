@@ -3,6 +3,7 @@ package com.grammr.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.grammr.annotation.IntegrationTest;
+import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.service.language.morphology.MorphologicalAnalysisService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +24,10 @@ public class MorphologicalAnalysisIntegrationTest {
     assertThat(analysis).isNotNull();
     assertThat(analysis.requestId()).isNotNull();
     assertThat(analysis.tokens().size()).isEqualTo(4);
+
+    assertThat(analysis.findByText("тебя").orElseThrow().partOfSpeechTag())
+        .isEqualTo(PartOfSpeechTag.PRON);
+    assertThat(analysis.findByText("дела").orElseThrow().partOfSpeechTag())
+        .isEqualTo(PartOfSpeechTag.NOUN);
   }
 }

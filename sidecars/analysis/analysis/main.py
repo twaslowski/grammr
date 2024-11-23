@@ -10,6 +10,10 @@ from analysis.service import analysis_service
 nlp = spacy.load(os.getenv("SPACY_MODEL"))
 app = FastAPI()
 
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+
 logger = logging.getLogger(__name__)
 
 

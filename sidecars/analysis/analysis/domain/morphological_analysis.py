@@ -1,19 +1,20 @@
 from __future__ import annotations
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from spacy.tokens import Token
 
 
 class MorphologicalAnalysis(BaseModel):
-    source_phrase: str = Field(alias="sourcePhrase")
-    request_id: str = Field(alias="requestId")
+    source_phrase: str
+    request_id: str
     tokens: list["TokenMorphology"]
 
 
 class TokenMorphology(BaseModel):
     text: str
     lemma: str
+    pos: str
 
     @staticmethod
     def from_spacy_token(token: Token) -> TokenMorphology:
-        return TokenMorphology(text=token.text, lemma=token.lemma_)
+        return TokenMorphology(text=token.text, lemma=token.lemma_, pos=token.pos_)
