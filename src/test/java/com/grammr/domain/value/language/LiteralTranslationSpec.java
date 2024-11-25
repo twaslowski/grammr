@@ -1,6 +1,5 @@
-package com.grammr.domain.value;
+package com.grammr.domain.value.language;
 
-import com.grammr.domain.value.language.LiteralTranslation;
 import java.util.List;
 
 public class LiteralTranslationSpec {

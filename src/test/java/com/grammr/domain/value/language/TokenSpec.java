@@ -1,6 +1,4 @@
-package com.grammr.domain.value;
-
-import com.grammr.domain.value.language.Token;
+package com.grammr.domain.value.language;
 
 public class TokenSpec {
 

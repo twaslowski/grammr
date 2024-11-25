@@ -1,6 +1,4 @@
-package com.grammr.domain.value;
-
-import com.grammr.domain.value.language.SemanticTranslation;
+package com.grammr.domain.value.language;
 
 public class SemanticTranslationSpec {
 

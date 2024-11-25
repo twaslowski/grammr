@@ -2,8 +2,8 @@ package com.grammr.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.grammr.domain.value.LiteralTranslationSpec;
-import com.grammr.domain.value.MorphologicalAnalysisSpec;
+import com.grammr.domain.value.language.LiteralTranslationSpec;
+import com.grammr.domain.value.language.MorphologicalAnalysisSpec;
 import com.grammr.domain.value.language.TokenTranslation;
 import java.util.List;
 import org.junit.jupiter.api.Test;

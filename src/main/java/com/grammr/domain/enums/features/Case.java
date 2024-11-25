@@ -1,11 +1,10 @@
 package com.grammr.domain.enums.features;
 
-import lombok.Getter;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Getter
-public enum Case {
+public enum Case implements FeatureProperty {
 
   NOM("Nominative"),
   GEN("Genitive"),
@@ -17,4 +16,18 @@ public enum Case {
   INS("Instrumental");
 
   private final String fullIdentifier;
+
+  public String fullIdentifier() {
+    return fullIdentifier;
+  }
+
+  @Override
+  public FeatureType type() {
+    return FeatureType.CASE;
+  }
+
+  @Override
+  public Set<FeatureCategory> categories() {
+    return Set.of(FeatureCategory.NOMINAL);
+  }
 }

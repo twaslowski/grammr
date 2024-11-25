@@ -1,26 +1,24 @@
 package com.grammr.domain.enums.features;
 
 import java.util.Set;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Getter
 @RequiredArgsConstructor
-public enum Person implements FeatureProperty {
+public enum Animacy implements FeatureProperty {
 
-  FIRST("First"),
-  SECOND("Second"),
-  THIRD("Third");
+  ANIM("Animate"),
+  INAN("Inanimate");
 
   private final String fullIdentifier;
 
+  @Override
   public String fullIdentifier() {
     return fullIdentifier;
   }
 
   @Override
   public FeatureType type() {
-    return FeatureType.PERSON;
+    return FeatureType.ANIMACY;
   }
 
   @Override

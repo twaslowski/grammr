@@ -4,27 +4,25 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Getter
 @RequiredArgsConstructor
-public enum Person implements FeatureProperty {
+@Getter
+public enum MiscellaneousFeature implements FeatureProperty {
+  UNSUPPORTED_FEATURE("Unsupported Morphological Feature.");
 
-  FIRST("First"),
-  SECOND("Second"),
-  THIRD("Third");
+  private final String value;
 
-  private final String fullIdentifier;
-
+  @Override
   public String fullIdentifier() {
-    return fullIdentifier;
+    return value;
   }
 
   @Override
   public FeatureType type() {
-    return FeatureType.PERSON;
+    return FeatureType.MISC;
   }
 
   @Override
   public Set<FeatureCategory> categories() {
-    return Set.of(FeatureCategory.NOMINAL);
+    return Set.of();
   }
 }

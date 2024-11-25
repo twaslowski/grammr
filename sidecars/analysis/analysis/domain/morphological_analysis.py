@@ -13,4 +13,9 @@ class TokenMorphology(BaseModel):
     text: str
     lemma: str
     pos: str
-    features: dict[str, str] = {}
+    features: list["Feature"] = []
+
+
+class Feature(BaseModel):
+    type: str
+    value: str

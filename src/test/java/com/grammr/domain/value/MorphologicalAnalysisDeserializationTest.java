@@ -29,11 +29,11 @@ public class MorphologicalAnalysisDeserializationTest {
               "lemma": "тебя",
               "pos": "PRON",
               "features": [{
-                "type": "CASE",
+                "type": "case",
                 "value": "GEN"
               },
               {
-                "type": "NUMBER",
+                "type": "number",
                 "value": "SING"
               }]
             },
@@ -42,11 +42,11 @@ public class MorphologicalAnalysisDeserializationTest {
               "lemma": "дело",
               "pos": "NOUN",
               "features": [{
-                "type": "GENDER",
+                "type": "gender",
                 "value": "MALE"
               },
               {
-                "type": "CASE",
+                "type": "case",
                 "value": "NOM"
               }]
             }

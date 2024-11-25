@@ -19,7 +19,9 @@ async def analyze(request: AnalysisRequest) -> JSONResponse:
     logger.info(f"Received request: {request}")
     analysis = analysis_service.perform_analysis(request)
     logger.info(f"Returning analysis: {analysis.model_dump()}")
-    return analysis
+    return JSONResponse(
+        content=analysis.model_dump(), headers={"Content-Type": "application/json"}
+    )
 
 
 @app.get("/health")

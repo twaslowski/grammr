@@ -2,9 +2,9 @@ package com.grammr.common;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.grammr.domain.value.SemanticTranslationSpec;
-import com.grammr.domain.value.TokenMorphologySpec;
-import com.grammr.domain.value.TokenSpec;
+import com.grammr.domain.value.language.SemanticTranslationSpec;
+import com.grammr.domain.value.language.TokenMorphologySpec;
+import com.grammr.domain.value.language.TokenSpec;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
