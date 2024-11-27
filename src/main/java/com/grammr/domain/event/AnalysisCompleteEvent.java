@@ -4,7 +4,7 @@ import com.grammr.domain.value.FullAnalysis;
 import lombok.Builder;
 
 @Builder
-public record FullAnalysisCompleteEvent(
+public record AnalysisCompleteEvent(
     FullAnalysis fullAnalysis,
     String requestId,
     long chatId

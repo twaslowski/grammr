@@ -2,9 +2,10 @@ package com.grammr.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.grammr.domain.value.language.LiteralTranslationSpec;
 import com.grammr.domain.value.language.MorphologicalAnalysisSpec;
+import com.grammr.domain.value.language.Token;
 import com.grammr.domain.value.language.TokenTranslation;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -14,14 +15,15 @@ class TokenServiceTest {
 
   @Test
   void shouldCreateAndPopulateToken() {
-    var literalTranslation = LiteralTranslationSpec.valid()
-        .tokenTranslations(List.of(new TokenTranslation("hola", "hello")))
-        .build();
     var morphologicalAnalysis = MorphologicalAnalysisSpec.valid().build();
+    List<TokenTranslation> translations = List.of(new TokenTranslation("hola", "hello"));
 
-    var tokens = List.of("hola", "world");
+    var tokens = List.of(
+        Token.fromString("hola"),
+        Token.fromString("mundo")
+    );
 
-    var enrichedTokens = tokenService.consolidateTokens(tokens, morphologicalAnalysis, literalTranslation);
+    var enrichedTokens = tokenService.enrichTokens(tokens, translations, morphologicalAnalysis);
     assertThat(enrichedTokens).hasSize(2);
 
     assertThat(enrichedTokens.getFirst().translation()).isEqualTo("hello");
@@ -29,12 +31,15 @@ class TokenServiceTest {
 
   @Test
   void shouldCreatePlainTextToken() {
-    var literalTranslation = LiteralTranslationSpec.valid().build();
+    var translations = new ArrayList<TokenTranslation>();
     var analysis = MorphologicalAnalysisSpec.valid().build();
 
-    var tokens = List.of("hello", "world");
+    var tokens = List.of(
+        Token.fromString("hello"),
+        Token.fromString("world")
+    );
 
-    var enrichedTokens = tokenService.consolidateTokens(tokens, analysis, literalTranslation);
+    var enrichedTokens = tokenService.enrichTokens(tokens, translations, analysis);
 
     assertThat(enrichedTokens).hasSize(2);
     assertThat(enrichedTokens.getFirst().text()).isEqualTo("hello");

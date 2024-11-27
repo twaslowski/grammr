@@ -1,7 +1,7 @@
 package com.grammr.service.language.translation.literal;
 
-import com.grammr.domain.value.language.LiteralTranslation;
-import com.grammr.service.TokenService;
+import com.grammr.domain.value.language.TokenTranslation;
+import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,18 +12,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OpenAILiteralTranslationService implements LiteralTranslationService {
 
-  private final TokenService tokenizer;
   private final OpenAITokenTranslationService openAITokenTranslationService;
 
   @Override
-  public LiteralTranslation createLiteralTranslation(String phrase) {
-    var tokens = tokenizer.tokenize(phrase);
-
-    var translatedTokens = tokens.stream()
-        .map(token -> openAITokenTranslationService.createTranslatedToken(phrase, token))
-        .collect(Collectors.toSet());
+  public List<TokenTranslation> translateTokens(String phrase, List<String> words) {
+    var translatedTokens = words.stream()
+        .map(word -> openAITokenTranslationService.createTranslation(phrase, word))
+        .collect(Collectors.toList());
 
     log.info("Retrieved translated tokens: {}", translatedTokens);
-    return new LiteralTranslation(phrase, translatedTokens);
+    return translatedTokens;
   }
 }

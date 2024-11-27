@@ -9,7 +9,7 @@ public record Token(
     TokenMorphology morphology
 ) {
 
-  public static Token create(String text) {
+  public static Token fromString(String text) {
     return new Token(text, null, null);
   }
 

@@ -29,8 +29,8 @@ public class OpenAITokenTranslationService extends AbstractOpenAIService {
     super(objectMapper, openAI, modelName);
   }
 
-  public TokenTranslation createTranslatedToken(String phrase, String token) {
-    return openAIChatCompletion(generateUserMessage(phrase, token), TokenTranslation.class);
+  public TokenTranslation createTranslation(String phrase, String word) {
+    return openAIChatCompletion(generateUserMessage(phrase, word), TokenTranslation.class);
   }
 
   protected UserMessage generateUserMessage(String phrase, String token) {

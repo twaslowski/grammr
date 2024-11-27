@@ -1,9 +1,10 @@
 package com.grammr.service.language.translation.literal;
 
-import com.grammr.domain.value.language.LiteralTranslation;
+import com.grammr.domain.value.language.TokenTranslation;
+import java.util.List;
 
 public interface LiteralTranslationService {
 
-  LiteralTranslation createLiteralTranslation(String phrase);
+  List<TokenTranslation> translateTokens(String phrase, List<String> words);
 }
 

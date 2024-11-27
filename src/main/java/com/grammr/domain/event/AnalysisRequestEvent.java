@@ -3,7 +3,7 @@ package com.grammr.domain.event;
 import lombok.Builder;
 
 @Builder
-public record FullAnalysisRequestEvent(
+public record AnalysisRequestEvent(
     String phrase,
     String requestId,
     // Todo: Most likely, the Telegram Port should eventually have its own database

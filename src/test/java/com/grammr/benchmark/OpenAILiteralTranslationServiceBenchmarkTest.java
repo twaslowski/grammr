@@ -3,7 +3,8 @@ package com.grammr.benchmark;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.grammr.annotation.BenchmarkTest;
-import com.grammr.domain.value.language.TokenTranslation;
+import com.grammr.domain.value.language.Token;
+import com.grammr.service.TokenService;
 import com.grammr.service.language.translation.literal.OpenAILiteralTranslationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,24 @@ class OpenAILiteralTranslationServiceBenchmarkTest extends AbstractBenchmarkTest
   @Autowired
   private OpenAILiteralTranslationService openAILiteralTranslationService;
 
+  @Autowired
+  private TokenService tokenService;
+
   @Test
   void benchmarkOpenAILiteralTranslation() {
-    var literalTranslation = openAILiteralTranslationService.createLiteralTranslation("Wie geht es dir?");
-    assertThat(literalTranslation.sourcePhrase()).isEqualTo("Wie geht es dir?");
-    assertThat(literalTranslation.tokenTranslations()).isNotEmpty();
+    var phrase = "Wie geht es dir?";
+    var tokens = tokenService.tokenize(phrase).stream()
+        .map(Token::text)
+        .toList();
 
-    assertThat(literalTranslation.tokenTranslations()).contains(new TokenTranslation("Wie", "How"));
+    var translatedTokens = openAILiteralTranslationService.translateTokens("Wie geht es dir?", tokens);
+
+    assertThat(translatedTokens.size()).isEqualTo(4);
+    assertThat(translatedTokens.getFirst().source()).isEqualTo("Wie");
+    assertThat(translatedTokens.getFirst().translation()).isEqualToIgnoringCase("How");
+
+    assertThat(translatedTokens.get(1).source()).isEqualToIgnoringCase("geht");
+    assertThat(translatedTokens.get(2).source()).isEqualToIgnoringCase("es");
+    assertThat(translatedTokens.get(3).source()).isEqualToIgnoringCase("dir");
   }
 }

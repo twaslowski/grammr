@@ -1,36 +1,36 @@
 package com.grammr.service;
 
 import com.grammr.common.AbstractConsumer;
-import com.grammr.domain.event.FullAnalysisCompleteEvent;
-import com.grammr.domain.event.FullAnalysisRequestEvent;
+import com.grammr.domain.event.AnalysisCompleteEvent;
+import com.grammr.domain.event.AnalysisRequestEvent;
 import java.util.concurrent.BlockingQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class AnalysisRequestHandler extends AbstractConsumer<FullAnalysisRequestEvent> {
+public class AnalysisRequestHandler extends AbstractConsumer<AnalysisRequestEvent> {
 
   private final AnalysisRequestService analysisRequestService;
-  private final BlockingQueue<FullAnalysisCompleteEvent> fullAnalysisCompleteEventQueue;
+  private final BlockingQueue<AnalysisCompleteEvent> analysisCompleteEventQueue;
 
-  public AnalysisRequestHandler(BlockingQueue<FullAnalysisRequestEvent> analysisRequestQueue,
-                                BlockingQueue<FullAnalysisCompleteEvent> fullAnalysisCompleteEventQueue,
+  public AnalysisRequestHandler(BlockingQueue<AnalysisRequestEvent> analysisRequestQueue,
+                                BlockingQueue<AnalysisCompleteEvent> analysisCompleteEventQueue,
                                 AnalysisRequestService analysisRequestService) {
     super(analysisRequestQueue);
-    this.fullAnalysisCompleteEventQueue = fullAnalysisCompleteEventQueue;
+    this.analysisCompleteEventQueue = analysisCompleteEventQueue;
     this.analysisRequestService = analysisRequestService;
   }
 
   @Override
-  protected void handleItem(FullAnalysisRequestEvent analysisRequest) {
+  protected void handleItem(AnalysisRequestEvent analysisRequest) {
     var analysis = analysisRequestService.processFullAnalysisRequest(analysisRequest);
     log.info("Performed analysis: {}", analysis);
-    var analysisCompletionEvent = FullAnalysisCompleteEvent.builder()
+    var analysisCompletionEvent = AnalysisCompleteEvent.builder()
         .fullAnalysis(analysis)
         .requestId(analysisRequest.requestId())
         .chatId(analysisRequest.chatId())
         .build();
-    fullAnalysisCompleteEventQueue.add(analysisCompletionEvent);
+    analysisCompleteEventQueue.add(analysisCompletionEvent);
   }
 }
