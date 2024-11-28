@@ -2,6 +2,7 @@ package com.grammr.common;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.domain.value.language.SemanticTranslationSpec;
 import com.grammr.domain.value.language.TokenMorphologySpec;
 import com.grammr.domain.value.language.TokenSpec;
@@ -42,11 +43,11 @@ class FullAnalysisStringificationServiceTest {
         .morphology(morphology)
         .build());
     var result = fullAnalysisStringificationService.stringifyTokens(tokens);
-    assertEquals("(from <i>lemma</i>)", result);
+    assertEquals(", (from <i>lemma</i>), <i>Noun</i>, Nominative Singular Masculine", result);
   }
 
   @Test
-  void shouldNotStringifyMorphologyIfTokenTextEqualsLemma() {
+  void shouldNotStringifyMorphologyIfTokenIsNotInflected() {
     var morphology = TokenMorphologySpec.valid()
         .text("someText")
         .lemma("someText")
@@ -56,5 +57,20 @@ class FullAnalysisStringificationServiceTest {
         .build());
     var result = fullAnalysisStringificationService.stringifyTokens(tokens);
     assertEquals("", result);
+  }
+
+  @Test
+  void shouldNotStringifyFeaturesIfCategoryIsNeitherNominalNorVerbal() {
+    var morphology = TokenMorphologySpec.valid()
+        .text("someText")
+        .lemma("someOtherText")
+        .partOfSpeechTag(PartOfSpeechTag.CCONJ)
+        .build();
+
+    var tokens = List.of(TokenSpec.textOnly()
+        .morphology(morphology)
+        .build());
+    var result = fullAnalysisStringificationService.stringifyTokens(tokens);
+    assertEquals(", (from <i>someOtherText</i>), <i>Coordinating Conjunction</i>", result);
   }
 }

@@ -12,4 +12,7 @@ public record FullAnalysis(
     List<Token> tokens
 ) {
 
+  public boolean hasTokens() {
+    return tokens != null && !tokens.isEmpty();
+  }
 }

@@ -37,13 +37,18 @@ public class AnalysisRequestService {
       var literalTranslation = literalTranslationService.translateTokens(sourcePhrase, words);
       var grammaticalAnalysis = analysisService.analyze(sourcePhrase);
 
-      tokenService.enrichTokens(tokens, literalTranslation, grammaticalAnalysis);
+      tokens = tokenService.enrichTokens(tokens, literalTranslation, grammaticalAnalysis);
+      return FullAnalysis.builder()
+          .semanticTranslation(semanticTranslation)
+          .sourcePhrase(sourcePhrase)
+          .tokens(tokens)
+          .build();
     }
 
     return FullAnalysis.builder()
         .semanticTranslation(semanticTranslation)
         .sourcePhrase(sourcePhrase)
-        .tokens(tokens)
+        .tokens(List.of())
         .build();
   }
 

@@ -2,7 +2,7 @@ package com.grammr.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.domain.event.GrammaticalAnalysisRequest;
+import com.grammr.domain.event.MorphologicalAnalysisRequest;
 import com.grammr.domain.value.language.LanguageRecognition;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ public class ObjectMapperTest {
   @SneakyThrows
   void shouldSerializeGrammaticalAnalysisRequest() {
     var phrase = "Foo";
-    var request = GrammaticalAnalysisRequest.from(phrase);
+    var request = MorphologicalAnalysisRequest.from(phrase);
 
     var json = objectMapper.writeValueAsString(request);
     assertThat(json).isEqualTo("{\"phrase\":\"Foo\",\"requestId\":\"" + request.requestId() + "\"}");

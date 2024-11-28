@@ -1,8 +1,15 @@
 package com.grammr.domain.enums;
 
+import static com.grammr.domain.enums.features.FeatureCategory.NOMINAL;
+import static com.grammr.domain.enums.features.FeatureCategory.OTHER;
+import static com.grammr.domain.enums.features.FeatureCategory.VERBAL;
+
+import com.grammr.domain.enums.features.FeatureCategory;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Getter
 public enum PartOfSpeechTag {
 
   /**
@@ -12,27 +19,28 @@ public enum PartOfSpeechTag {
    */
 
   // Open Class Words
-  ADJ("Adjective"),
-  ADV("Adverb"),
-  NOUN("Noun"),
-  INTJ("Interjection"),
-  PROPN("Proper Noun"),
-  VERB("Verb"),
+  ADJ("Adjective", NOMINAL),
+  PROPN("Proper Noun", NOMINAL),
+  NOUN("Noun", NOMINAL),
+  VERB("Verb", VERBAL),
+  ADV("Adverb", OTHER),
+  INTJ("Interjection", OTHER),
 
   // Closed Class Words
-  ADP("Adposition"),
-  AUX("Auxiliary Verb"),
-  CCONJ("Coordinating Conjunction"),
-  DET("Determiner"),
-  NUM("Numeral"),
-  PART("Particle"),
-  PRON("Pronoun"),
-  SCONJ("Subordinating Conjunction"),
+  ADP("Adposition", OTHER),
+  AUX("Auxiliary Verb", VERBAL),
+  CCONJ("Coordinating Conjunction", OTHER),
+  DET("Determiner", NOMINAL),
+  NUM("Numeral", OTHER),
+  PART("Particle", OTHER),
+  PRON("Pronoun", NOMINAL),
+  SCONJ("Subordinating Conjunction", OTHER),
 
   // Other
-  PUNCT("Punctuation"),
-  SYM("Symbol"),
-  X("Other");
+  PUNCT("Punctuation", OTHER),
+  SYM("Symbol", OTHER),
+  X("Other", OTHER);
 
-  private final String value;
+  private final String fullIdentifier;
+  private final FeatureCategory featureCategory;
 }

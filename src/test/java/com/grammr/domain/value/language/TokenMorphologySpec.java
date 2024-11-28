@@ -12,6 +12,10 @@ public class TokenMorphologySpec {
         .text("text")
         .lemma("lemma")
         .partOfSpeechTag(PartOfSpeechTag.NOUN)
-        .features(List.of(Feature.of(FeatureType.CASE, "NOM")));
+        .features(List.of(
+            Feature.of(FeatureType.CASE, "NOM"),
+            Feature.of(FeatureType.NUMBER, "SING"),
+            Feature.of(FeatureType.GENDER, "MASC")
+        ));
   }
 }

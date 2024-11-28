@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Person implements FeatureProperty {
 
-  FIRST("First"),
-  SECOND("Second"),
-  THIRD("Third");
+  FIRST("First person"),
+  SECOND("Second person"),
+  THIRD("Third person");
 
   private final String fullIdentifier;
 

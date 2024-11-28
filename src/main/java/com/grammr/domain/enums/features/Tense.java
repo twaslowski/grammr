@@ -8,11 +8,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Tense implements FeatureProperty {
 
-  PAST("Past"),
+  PAST("Past tense"),
   IMP("Imperfect"),
-  PRES("Present"),
+  PRES("Present tense"),
   PQP("Plusquamperfect"),
-  FUT("Future");
+  FUT("Future tense");
 
   private final String fullIdentifier;
 
