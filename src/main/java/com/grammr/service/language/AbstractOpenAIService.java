@@ -22,13 +22,20 @@ public abstract class AbstractOpenAIService {
   protected String modelName;
 
   @SneakyThrows
-  public <T> T openAIChatCompletion(UserMessage userMessage, Class<T> responseType) {
+  public <T extends AIGeneratedContent> T openAIChatCompletion(UserMessage userMessage, Class<T> responseType) {
     var request = chatRequest(userMessage);
     var futureChat = openAIClient.chatCompletions().create(request);
     Chat response = futureChat.join();
     String content = response.firstContent();
+    var parsed = objectMapper.readValue(content, responseType);
+    enrichWithTokenUsage(parsed, response);
     log.info("Got response from OpenAI: {}; tokens: {}", content, response.getUsage().getTotalTokens());
-    return objectMapper.readValue(content, responseType);
+    return parsed;
+  }
+
+  private <T extends AIGeneratedContent> void enrichWithTokenUsage(T parsed, Chat response) {
+    parsed.setCompletionTokens(response.getUsage().getCompletionTokens());
+    parsed.setPromptTokens(response.getUsage().getPromptTokens());
   }
 
   private ChatRequest chatRequest(UserMessage userMessage) {

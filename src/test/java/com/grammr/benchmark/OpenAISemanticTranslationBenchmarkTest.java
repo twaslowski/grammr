@@ -20,8 +20,8 @@ public class OpenAISemanticTranslationBenchmarkTest extends AbstractBenchmarkTes
   @MethodSource("providePhrasePairs")
   void shouldCreateSemanticTranslation(String sourcePhrase, String translatedPhrase) {
     var semanticTranslation = semanticTranslationService.createSemanticTranslation(sourcePhrase);
-    assertThat(semanticTranslation.sourcePhrase()).isEqualTo(sourcePhrase);
-    assertThat(semanticTranslation.translatedPhrase()).isEqualTo(translatedPhrase);
+    assertThat(semanticTranslation.getSourcePhrase()).isEqualTo(sourcePhrase);
+    assertThat(semanticTranslation.getTranslatedPhrase()).isEqualTo(translatedPhrase);
   }
 
   private static Stream<Arguments> providePhrasePairs() {

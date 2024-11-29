@@ -20,17 +20,17 @@ public class FullAnalysisStringificationService {
   private static final String NEWLINE = "\n";
 
   public String stringifyAnalysis(FullAnalysis fullAnalysis) {
-    return format("%s%s%s",
+    return format("%s%s%s%s",
         stringifySemanticTranslation(fullAnalysis.semanticTranslation()),
         NEWLINE,
-        stringifyTokens(fullAnalysis.tokens())
-    );
+        stringifyTokens(fullAnalysis.tokens()),
+        stringifyUsage(fullAnalysis));
   }
 
   public String stringifySemanticTranslation(SemanticTranslation translation) {
     return format("%s translates to %s",
-        bold(translation.sourcePhrase()),
-        bold(translation.translatedPhrase()));
+        bold(translation.getSourcePhrase()),
+        bold(translation.getTranslatedPhrase()));
   }
 
   public String stringifyTokens(List<Token> tokens) {
@@ -92,8 +92,17 @@ public class FullAnalysisStringificationService {
         morphology.getFullFeatureIdentifier(FeatureType.GENDER));
   }
 
+  private String stringifyUsage(FullAnalysis fullAnalysis) {
+    return format("Usage: " + NEWLINE
+        + "Completion: %s"
+        + "Prompt: %s",
+        fullAnalysis.completionTokens(),
+        fullAnalysis.promptTokens()
+    );
+  }
+
   private String stringifyTokenTranslation(Token token) {
-    return format("%s -> %s", bold(token.text()), bold(token.translation()));
+    return format("%s -> %s", bold(token.text()), bold(token.translation().getTranslation()));
   }
 
   private String bold(String text) {

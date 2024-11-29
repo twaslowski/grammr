@@ -5,7 +5,7 @@ import lombok.Builder;
 @Builder
 public record Token(
     String text,
-    String translation,
+    TokenTranslation translation,
     TokenMorphology morphology
 ) {
 
@@ -14,7 +14,7 @@ public record Token(
   }
 
   public Token withTranslation(TokenTranslation tokenTranslation) {
-    return new Token(text, tokenTranslation.translation(), morphology);
+    return new Token(text, tokenTranslation, morphology);
   }
 
   public Token withMorphology(TokenMorphology morphology) {

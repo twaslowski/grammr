@@ -1,13 +1,14 @@
 package com.grammr.config;
 
+import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.event.MorphologicalAnalysisRequest;
 import com.grammr.domain.value.language.LanguageRecognition;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class ObjectMapperTest {
 
@@ -23,7 +24,10 @@ public class ObjectMapperTest {
     var json = objectMapper.writeValueAsString(languageRecognition);
 
     // then
-    assertThat(json).isEqualTo("{\"languageCode\":\"DE\"}");
+    assertEquals("{\"languageCode\":\"DE\"}",
+        json,
+        JSONCompareMode.LENIENT
+    );
   }
 
   @Test
@@ -33,6 +37,12 @@ public class ObjectMapperTest {
     var request = MorphologicalAnalysisRequest.from(phrase);
 
     var json = objectMapper.writeValueAsString(request);
-    assertThat(json).isEqualTo("{\"phrase\":\"Foo\",\"requestId\":\"" + request.requestId() + "\"}");
+    assertEquals("{"
+            + "\"phrase\":\"Foo\","
+            + "\"requestId\":\"" + request.requestId()
+            + "\"}",
+        json,
+        JSONCompareMode.LENIENT
+    );
   }
 }

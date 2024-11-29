@@ -7,6 +7,7 @@ import com.grammr.domain.value.language.SemanticTranslationSpec;
 import com.grammr.domain.value.language.TokenMorphologySpec;
 import com.grammr.domain.value.language.TokenSpec;
 import java.util.List;
+import com.grammr.domain.value.language.TokenTranslation;
 import org.junit.jupiter.api.Test;
 
 class FullAnalysisStringificationServiceTest {
@@ -22,8 +23,6 @@ class FullAnalysisStringificationServiceTest {
 
   @Test
   void shouldStringifyTokens() {
-    // todo: this is a scenario that should not actually occur; perhaps, a stringified token with
-    // nothing else should be null
     var tokens = List.of(TokenSpec.textOnly().build());
     var result = fullAnalysisStringificationService.stringifyTokens(tokens);
     assertEquals("", result);
@@ -31,7 +30,9 @@ class FullAnalysisStringificationServiceTest {
 
   @Test
   void shouldStringifyTokensWithTranslation() {
-    var tokens = List.of(TokenSpec.textOnly().translation("translation").build());
+    var tokens = List.of(TokenSpec.textOnly()
+        .translation(new TokenTranslation("text", "translation"))
+        .build());
     var result = fullAnalysisStringificationService.stringifyTokens(tokens);
     assertEquals("<b>text</b> -> <b>translation</b>", result);
   }

@@ -28,11 +28,11 @@ class OpenAILiteralTranslationServiceBenchmarkTest extends AbstractBenchmarkTest
     var translatedTokens = openAILiteralTranslationService.translateTokens("Wie geht es dir?", tokens);
 
     assertThat(translatedTokens.size()).isEqualTo(4);
-    assertThat(translatedTokens.getFirst().source()).isEqualTo("Wie");
-    assertThat(translatedTokens.getFirst().translation()).isEqualToIgnoringCase("How");
+    assertThat(translatedTokens.getFirst().getSource()).isEqualTo("Wie");
+    assertThat(translatedTokens.getFirst().getTranslation()).isEqualToIgnoringCase("How");
 
-    assertThat(translatedTokens.get(1).source()).isEqualToIgnoringCase("geht");
-    assertThat(translatedTokens.get(2).source()).isEqualToIgnoringCase("es");
-    assertThat(translatedTokens.get(3).source()).isEqualToIgnoringCase("dir");
+    assertThat(translatedTokens.get(1).getSource()).isEqualToIgnoringCase("geht");
+    assertThat(translatedTokens.get(2).getSource()).isEqualToIgnoringCase("es");
+    assertThat(translatedTokens.get(3).getSource()).isEqualToIgnoringCase("dir");
   }
 }

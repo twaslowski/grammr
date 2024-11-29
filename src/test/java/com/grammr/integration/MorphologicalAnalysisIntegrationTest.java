@@ -1,14 +1,11 @@
 package com.grammr.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.PERIOD;
 
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.domain.enums.features.Animacy;
-import com.grammr.domain.enums.features.Case;
 import com.grammr.domain.enums.features.FeatureType;
-import com.grammr.domain.enums.features.Gender;
 import com.grammr.domain.enums.features.Number;
 import com.grammr.domain.enums.features.Person;
 import com.grammr.domain.enums.features.Tense;

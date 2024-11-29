@@ -30,7 +30,7 @@ public class TokenService {
   }
 
   private Token enrichWithTranslation(Token token, List<TokenTranslation> literalTranslation) {
-    return literalTranslation.stream().filter(translation -> translation.source().equals(token.text()))
+    return literalTranslation.stream().filter(translation -> translation.getSource().equals(token.text()))
         .findFirst()
         .map(token::withTranslation)
         .orElse(token);

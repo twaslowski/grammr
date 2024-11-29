@@ -26,7 +26,7 @@ class TokenServiceTest {
     var enrichedTokens = tokenService.enrichTokens(tokens, translations, morphologicalAnalysis);
     assertThat(enrichedTokens).hasSize(2);
 
-    assertThat(enrichedTokens.getFirst().translation()).isEqualTo("hello");
+    assertThat(enrichedTokens.getFirst().translation().getTranslation()).isEqualTo("hello");
   }
 
   @Test
