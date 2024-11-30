@@ -12,4 +12,4 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - SPACY_MODEL=ru_core_news_sm
+      - SPACY_MODELS=ru_core_news_sm,de_core_news_sm
