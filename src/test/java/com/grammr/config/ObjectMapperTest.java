@@ -1,18 +1,20 @@
 package com.grammr.config;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.event.MorphologicalAnalysisRequest;
 import com.grammr.domain.value.language.LanguageRecognition;
+import com.grammr.domain.value.language.SemanticTranslation;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class ObjectMapperTest {
 
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper = new ObjectMapperConfiguration().objectMapper();
 
   @Test
   @SneakyThrows
@@ -26,7 +28,19 @@ public class ObjectMapperTest {
     // then
     assertEquals("{\"languageCode\":\"DE\"}",
         json,
-        JSONCompareMode.LENIENT
+        JSONCompareMode.STRICT
+    );
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldNotSerializeCompletionTokensOnAIGeneratedContentClasses() {
+    var languageRecognition = new LanguageRecognition(LanguageCode.DE);
+    languageRecognition.setCompletionTokens(100);
+    var json = objectMapper.writeValueAsString(languageRecognition);
+    assertEquals("{\"languageCode\":\"DE\"}",
+        json,
+        JSONCompareMode.STRICT
     );
   }
 
@@ -34,15 +48,25 @@ public class ObjectMapperTest {
   @SneakyThrows
   void shouldSerializeGrammaticalAnalysisRequest() {
     var phrase = "Foo";
-    var request = MorphologicalAnalysisRequest.from(phrase);
+    var request = MorphologicalAnalysisRequest.from(phrase, LanguageCode.DE);
 
     var json = objectMapper.writeValueAsString(request);
     assertEquals("{"
             + "\"phrase\":\"Foo\","
+            + "\"languageCode\":\"DE\","
             + "\"requestId\":\"" + request.requestId()
             + "\"}",
         json,
         JSONCompareMode.LENIENT
     );
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldDeserializeSemanticTranslation() {
+    var json = "{\"sourcePhrase\":\"How are you doing\",\"translatedPhrase\":\"Wie geht es dir?\"}";
+    var translation = objectMapper.readValue(json, SemanticTranslation.class);
+    assertThat(translation.getSourcePhrase()).isEqualTo("How are you doing");
+    assertThat(translation.getTranslatedPhrase()).isEqualTo("Wie geht es dir?");
   }
 }

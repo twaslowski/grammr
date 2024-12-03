@@ -1,8 +1,7 @@
 package com.grammr.service.language.translation.semantic;
 
-import static java.lang.String.format;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grammr.common.MessageUtil;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.service.language.AbstractOpenAIService;
 import io.github.sashirestela.openai.SimpleOpenAI;
@@ -10,7 +9,6 @@ import io.github.sashirestela.openai.common.ResponseFormat;
 import io.github.sashirestela.openai.common.ResponseFormat.JsonSchema;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.SystemMessage;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.UserMessage;
-import java.util.List;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,14 +19,15 @@ public class OpenAISemanticTranslationService extends AbstractOpenAIService impl
   public OpenAISemanticTranslationService(
       ObjectMapper objectMapper,
       SimpleOpenAI openAI,
+      MessageUtil messageUtil,
       @Value("${openai.model.default-model}")
       String modelName
   ) {
-    super(objectMapper, openAI, modelName);
+    super(objectMapper, openAI, messageUtil, modelName);
   }
 
   public SemanticTranslation createSemanticTranslation(String phrase) {
-    return openAIChatCompletion(generateUserMessage(List.of(phrase)), SemanticTranslation.class);
+    return openAIChatCompletion(generateUserMessage(phrase), SemanticTranslation.class);
   }
 
   @Override
@@ -42,16 +41,16 @@ public class OpenAISemanticTranslationService extends AbstractOpenAIService impl
   @SneakyThrows
   @Override
   public SystemMessage getSystemMessage() {
-    return SystemMessage.of(format(
-        "You translate sentences while retaining meaning as closely as possible. Return a JSON with the following structure: %s",
+    return SystemMessage.of(messageUtil.parameterizeMessage(
+        "openai.translation.semantic.prompt.system",
         objectMapper.writeValueAsString(new SemanticTranslation(
             "How are you doing",
             "Wie geht es dir?"
         ))));
   }
 
-  public UserMessage generateUserMessage(List<String> params) {
+  public UserMessage generateUserMessage(String phrase) {
     // todo: source (and perhaps target) language should be parameterizable
-    return UserMessage.of(format("Translate the following phrase to English: %s", params.getFirst()));
+    return UserMessage.of(messageUtil.parameterizeMessage("openai.translation.semantic.prompt.user", phrase));
   }
 }

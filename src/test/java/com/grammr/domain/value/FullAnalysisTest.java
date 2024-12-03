@@ -24,7 +24,7 @@ class FullAnalysisTest {
 
     var fullAnalysis = FullAnalysis.builder()
         .semanticTranslation(semanticTranslation)
-        .tokens(List.of(Token.fromString("somestring")
+        .analyzedTokens(List.of(Token.fromString("somestring")
             .withTranslation(tokenTranslation)))
         .build();
 

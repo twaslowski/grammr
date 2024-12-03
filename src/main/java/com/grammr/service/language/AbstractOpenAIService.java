@@ -1,6 +1,7 @@
 package com.grammr.service.language;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grammr.common.MessageUtil;
 import io.github.sashirestela.openai.SimpleOpenAI;
 import io.github.sashirestela.openai.common.ResponseFormat;
 import io.github.sashirestela.openai.domain.chat.Chat;
@@ -19,6 +20,7 @@ public abstract class AbstractOpenAIService {
 
   protected ObjectMapper objectMapper;
   protected SimpleOpenAI openAIClient;
+  protected MessageUtil messageUtil;
   protected String modelName;
 
   @SneakyThrows
@@ -29,7 +31,7 @@ public abstract class AbstractOpenAIService {
     String content = response.firstContent();
     var parsed = objectMapper.readValue(content, responseType);
     enrichWithTokenUsage(parsed, response);
-    log.info("Got response from OpenAI: {}; tokens: {}", content, response.getUsage().getTotalTokens());
+    log.info("Got response from OpenAI: {}; analyzedTokens: {}", content, response.getUsage().getTotalTokens());
     return parsed;
   }
 

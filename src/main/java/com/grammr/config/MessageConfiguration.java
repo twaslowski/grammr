@@ -1,4 +1,4 @@
-package com.grammr.port.telegram.config;
+package com.grammr.config;
 
 import java.util.Locale;
 import org.springframework.context.MessageSource;

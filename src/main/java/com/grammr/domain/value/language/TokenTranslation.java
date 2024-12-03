@@ -1,17 +1,19 @@
 package com.grammr.domain.value.language;
 
 import com.grammr.service.language.AIGeneratedContent;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@Data
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class TokenTranslation extends AIGeneratedContent {
 
-  String source;
-  String translation;
+  private String source;
+  private String translation;
 
   @Override
   public boolean equals(Object obj) {

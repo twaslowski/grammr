@@ -1,17 +1,19 @@
 package com.grammr.domain.value.language;
 
 import com.grammr.service.language.AIGeneratedContent;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class SemanticTranslation extends AIGeneratedContent {
 
-  private final String sourcePhrase;
-  private final String translatedPhrase;
+  private String sourcePhrase;
+  private String translatedPhrase;
 }

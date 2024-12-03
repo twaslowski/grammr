@@ -9,5 +9,5 @@ public class AbstractBenchmarkTest {
 
   // metrics to collect:
   // time
-  // amount of consumed/generated tokens -> cost
+  // amount of consumed/generated analyzedTokens -> cost
 }

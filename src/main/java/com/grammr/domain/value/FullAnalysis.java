@@ -1,5 +1,6 @@
 package com.grammr.domain.value;
 
+import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.Token;
 import com.grammr.domain.value.language.TokenTranslation;
@@ -10,12 +11,13 @@ import lombok.Builder;
 public record FullAnalysis(
     String sourcePhrase,
     SemanticTranslation semanticTranslation,
-    List<Token> tokens
+    LanguageRecognition languageRecognition,
+    List<Token> analyzedTokens
 ) {
 
   public long completionTokens() {
     return semanticTranslation.getCompletionTokens()
-        + tokens.stream()
+        + analyzedTokens.stream()
             .map(Token::translation)
             .map(TokenTranslation::getCompletionTokens)
             .reduce(0L, Long::sum);
@@ -23,7 +25,7 @@ public record FullAnalysis(
 
   public long promptTokens() {
     return semanticTranslation.getPromptTokens()
-        + tokens.stream()
+        + analyzedTokens.stream()
             .map(Token::translation)
             .map(TokenTranslation::getPromptTokens)
             .reduce(0L, Long::sum);

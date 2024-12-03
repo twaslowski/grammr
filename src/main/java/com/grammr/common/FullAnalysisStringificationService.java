@@ -23,7 +23,7 @@ public class FullAnalysisStringificationService {
     return format("%s%s%s%s",
         stringifySemanticTranslation(fullAnalysis.semanticTranslation()),
         NEWLINE,
-        stringifyTokens(fullAnalysis.tokens()),
+        stringifyTokens(fullAnalysis.analyzedTokens()),
         stringifyUsage(fullAnalysis));
   }
 

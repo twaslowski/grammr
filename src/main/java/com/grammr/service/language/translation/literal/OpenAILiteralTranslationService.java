@@ -28,7 +28,7 @@ public class OpenAILiteralTranslationService implements LiteralTranslationServic
         .map(CompletableFuture::join)
         .collect(Collectors.toList());
 
-    log.info("Retrieved translated tokens: {}", translatedTokens);
+    log.info("Retrieved translated analyzedTokens: {}", translatedTokens);
     return translatedTokens;
   }
 }

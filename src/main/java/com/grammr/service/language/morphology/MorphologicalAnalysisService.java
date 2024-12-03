@@ -1,5 +1,7 @@
 package com.grammr.service.language.morphology;
 
+import com.grammr.domain.enums.LanguageCode;
+import com.grammr.domain.event.MorphologicalAnalysisRequest;
 import com.grammr.domain.value.language.MorphologicalAnalysis;
 import com.grammr.port.rest.MorphologicalAnalysisPort;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +15,8 @@ public class MorphologicalAnalysisService {
 
   private final MorphologicalAnalysisPort analysisPort;
 
-  public MorphologicalAnalysis analyze(String phrase) {
-    var analysis = analysisPort.performAnalysis(phrase);
+  public MorphologicalAnalysis analyze(String phrase, LanguageCode languageCode) {
+    var analysis = analysisPort.performAnalysis(MorphologicalAnalysisRequest.from(phrase, languageCode));
     log.info("Analysis for phrase '{}' is: {}", phrase, analysis);
     return analysis;
   }

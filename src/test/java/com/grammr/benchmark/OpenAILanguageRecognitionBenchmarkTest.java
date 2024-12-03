@@ -30,7 +30,8 @@ public class OpenAILanguageRecognitionBenchmarkTest extends AbstractBenchmarkTes
     return Stream.of(
         Arguments.of("How are you doing?", LanguageCode.EN),
         Arguments.of("Wie geht es dir?", LanguageCode.DE),
-        Arguments.of("как у тебя дела?", LanguageCode.RU)
+        Arguments.of("как у тебя дела?", LanguageCode.RU),
+        Arguments.of("fasdioufn asdnklj ert cdvsd", LanguageCode.UNSUPPORTED)
     );
   }
 }

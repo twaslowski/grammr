@@ -14,16 +14,16 @@ public class MorphologicalAnalysisPort {
 
   private final RestClient restClient;
 
-  public MorphologicalAnalysis performAnalysis(String phrase) {
+  public MorphologicalAnalysis performAnalysis(MorphologicalAnalysisRequest analysisRequest) {
     try {
       return restClient
           .post()
           .uri("/morphological-analysis")
-          .body(MorphologicalAnalysisRequest.from(phrase))
+          .body(analysisRequest)
           .retrieve()
           .body(MorphologicalAnalysis.class);
     } catch (Exception e) {
-      log.error("Error performing analysis for phrase: {}", phrase, e);
+      log.error("Error performing analysis for phrase: {}", analysisRequest.phrase(), e);
       return null;
     }
   }
