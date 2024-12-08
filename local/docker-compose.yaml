@@ -13,3 +13,18 @@ services:
       - "8000:8000"
     environment:
       - SPACY_MODELS=ru_core_news_sm,de_core_news_sm
+
+  postgresql:
+    image: postgres:14.7
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: grammr
+    healthcheck:
+      test: [ "CMD", "psql", "postgresql://user:password@localhost:5432/grammr", "-c", "select 1;" ]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+    command: [ "postgres", "-c", "log_statement=all" ]

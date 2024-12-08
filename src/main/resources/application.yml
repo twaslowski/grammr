@@ -8,6 +8,15 @@ server:
 spring:
   application:
     name: grammr
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: "\"grammr\""
+    open-in-view: false
 
 management:
   endpoints:
@@ -26,4 +35,4 @@ telegram:
 
 analysis:
   rest:
-    endpoint: ${ANALYSIS_ENDPOINT}
+    base-url: ${ANALYSIS_ENDPOINT}

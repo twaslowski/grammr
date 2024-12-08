@@ -4,7 +4,7 @@ function stop_environment() {
 }
 
 function start_environment() {
-  docker compose -f local/docker-compose.yaml up -d --build analysis --wait
+  docker compose -f local/docker-compose.yaml up -d --build --wait
 }
 
 function package() {

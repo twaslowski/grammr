@@ -35,7 +35,6 @@ COPY docker/init.sh ${APP_DIR}/init.sh
 COPY docker/download_models.py ${APP_DIR}/download_models.py
 
 # Args setup
-ENV LANGUAGE_CODE=""
 ENV SPACY_MODEL=""
 
 EXPOSE 8000
