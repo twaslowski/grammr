@@ -3,10 +3,12 @@ package com.grammr.port.telegram.external;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import com.grammr.port.telegram.dto.response.TelegramResponse;
-import com.grammr.port.telegram.dto.response.TelegramTextResponse;
+import com.grammr.telegram.dto.response.TelegramResponse;
+import com.grammr.telegram.dto.response.TelegramTextResponse;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import com.grammr.telegram.external.TelegramResponseConsumer;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

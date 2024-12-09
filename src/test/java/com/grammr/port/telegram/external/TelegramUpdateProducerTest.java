@@ -3,10 +3,11 @@ package com.grammr.port.telegram.external;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 
-import com.grammr.port.telegram.dto.update.TelegramTextUpdate;
-import com.grammr.port.telegram.dto.update.TelegramUpdate;
-import com.grammr.port.telegram.exception.RequiredDataMissingException;
-import com.grammr.port.telegram.external.factory.TelegramUpdateFactory;
+import com.grammr.telegram.dto.update.TelegramTextUpdate;
+import com.grammr.telegram.dto.update.TelegramUpdate;
+import com.grammr.telegram.exception.RequiredDataMissingException;
+import com.grammr.telegram.external.TelegramUpdateProducer;
+import com.grammr.telegram.external.factory.TelegramUpdateFactory;
 import java.util.Queue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

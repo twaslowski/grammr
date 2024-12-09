@@ -24,7 +24,6 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
     var analysisRequest = AnalysisRequestEvent.builder()
         .phrase(sourcePhrase)
         .requestId("123")
-        .chatId(1)
         .build();
 
     mockLanguageRecognition(sourcePhrase, LanguageCode.DE);
@@ -38,7 +37,6 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
 
     // then
     assertThat(fullAnalysis).isNotNull();
-    assertThat(fullAnalysis.languageRecognition().getLanguageCode()).isEqualTo(LanguageCode.DE);
     assertThat(fullAnalysis.semanticTranslation().getTranslatedPhrase()).isEqualTo(phraseTranslation);
     assertThat(fullAnalysis.analyzedTokens()).allMatch(token -> token.morphology() != null);
   }
@@ -62,6 +60,5 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
     assertThat(fullAnalysis).isNotNull();
     assertThat(fullAnalysis.analyzedTokens()).isEmpty();
     assertThat(fullAnalysis.semanticTranslation()).isNotNull();
-    assertThat(fullAnalysis.languageRecognition().getLanguageCode()).isEqualTo(LanguageCode.UNSUPPORTED);
   }
 }

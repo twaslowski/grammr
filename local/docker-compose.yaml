@@ -12,7 +12,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - SPACY_MODELS=ru_core_news_sm,de_core_news_sm
+      - SPACY_MODELS=de_core_news_sm
 
   postgresql:
     image: postgres:14.7

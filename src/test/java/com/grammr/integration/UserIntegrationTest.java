@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 import com.grammr.annotation.IntegrationTest;
-import com.grammr.port.telegram.dto.update.TelegramTextUpdate;
+import com.grammr.telegram.dto.update.TelegramTextUpdate;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

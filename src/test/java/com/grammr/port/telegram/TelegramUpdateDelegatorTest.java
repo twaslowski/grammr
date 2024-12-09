@@ -4,8 +4,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.grammr.port.telegram.dto.update.TelegramTextUpdate;
-import com.grammr.port.telegram.handler.TextUpdateHandler;
+import com.grammr.telegram.TelegramUpdateDelegator;
+import com.grammr.telegram.dto.update.TelegramTextUpdate;
+import com.grammr.telegram.handler.TextUpdateHandler;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 

@@ -7,6 +7,9 @@ import static org.mockito.Mockito.when;
 import com.grammr.domain.User;
 import com.grammr.repository.UserRepository;
 import java.util.Optional;
+
+import com.grammr.telegram.service.UserInitializationService;
+import com.grammr.telegram.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

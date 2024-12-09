@@ -29,7 +29,7 @@ public class AnalysisRequestHandler extends AbstractConsumer<AnalysisRequestEven
     var analysisCompletionEvent = AnalysisCompleteEvent.builder()
         .fullAnalysis(analysis)
         .requestId(analysisRequest.requestId())
-        .chatId(analysisRequest.chatId())
+        .chatId(analysisRequest.user().getTelegramId())
         .build();
     analysisCompleteEventQueue.add(analysisCompletionEvent);
   }
