@@ -1,6 +1,7 @@
 package com.grammr.domain;
 
 import com.grammr.domain.enums.LanguageCode;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -37,6 +38,7 @@ public class User {
   private LanguageCode languageLearned;
 
   @CreationTimestamp
+  @Column(updatable = false)
   private ZonedDateTime createdTimestamp;
 
   @UpdateTimestamp

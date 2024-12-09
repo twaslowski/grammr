@@ -4,7 +4,6 @@ import com.grammr.telegram.dto.update.TelegramTextUpdate;
 import com.grammr.telegram.dto.update.TelegramUpdate;
 import com.grammr.telegram.exception.RequiredDataMissingException;
 import java.util.Optional;
-
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 

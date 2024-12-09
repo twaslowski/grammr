@@ -6,7 +6,6 @@ import com.grammr.domain.event.AnalysisCompleteEvent;
 import com.grammr.telegram.dto.response.TelegramResponse;
 import com.grammr.telegram.dto.response.TelegramTextResponse;
 import java.util.concurrent.BlockingQueue;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

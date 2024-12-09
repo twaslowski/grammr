@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.enums.PartOfSpeechTag;
-import com.grammr.domain.enums.features.Animacy;
 import com.grammr.domain.enums.features.FeatureType;
 import com.grammr.domain.enums.features.Number;
 import com.grammr.domain.enums.features.Person;
@@ -22,25 +21,23 @@ public class MorphologicalAnalysisIntegrationTest extends IntegrationTestBase {
 
   @Test
   void shouldCreateAnalysis() {
-    var phrase = "я люблю собаку.";
-    var analysis = analysisService.analyze(phrase, LanguageCode.RU);
+    var phrase = "Ich lerne Deutsch.";
+    var analysis = analysisService.analyze(phrase, LanguageCode.DE);
 
     assertThat(analysis).isNotNull();
     assertThat(analysis.requestId()).isNotNull();
     assertThat(analysis.tokens().size()).isEqualTo(3);
 
-    var ya = analysis.findByText("я").orElseThrow();
-    assertThat(ya.partOfSpeechTag()).isEqualTo(PartOfSpeechTag.PRON);
+    var ich = analysis.findByText("Ich").orElseThrow();
+    assertThat(ich.partOfSpeechTag()).isEqualTo(PartOfSpeechTag.PRON);
 
-    var lyublyu = analysis.findByText("люблю").orElseThrow();
-    assertThat(lyublyu.partOfSpeechTag()).isEqualTo(PartOfSpeechTag.VERB);
-    assertThat(lyublyu.getFeature(FeatureType.PERSON).orElseThrow()).isEqualTo(Person.FIRST);
-    assertThat(lyublyu.getFeature(FeatureType.NUMBER).orElseThrow()).isEqualTo(Number.SING);
-    assertThat(lyublyu.getFeature(FeatureType.TENSE).orElseThrow()).isEqualTo(Tense.PRES);
+    var lerne = analysis.findByText("lerne").orElseThrow();
+    assertThat(lerne.partOfSpeechTag()).isEqualTo(PartOfSpeechTag.VERB);
+    assertThat(lerne.getFeature(FeatureType.PERSON).orElseThrow()).isEqualTo(Person.FIRST);
+    assertThat(lerne.getFeature(FeatureType.NUMBER).orElseThrow()).isEqualTo(Number.SING);
+    assertThat(lerne.getFeature(FeatureType.TENSE).orElseThrow()).isEqualTo(Tense.PRES);
 
-    var sobaku = analysis.findByText("собаку").orElseThrow();
-    assertThat(sobaku.partOfSpeechTag()).isEqualTo(PartOfSpeechTag.NOUN);
-    assertThat(sobaku.getFeature(FeatureType.ANIMACY).orElseThrow()).isEqualTo(Animacy.ANIM);
-    assertThat(sobaku.getFeature(FeatureType.ANIMACY).orElseThrow()).isEqualTo(Animacy.ANIM);
+    var deutsch = analysis.findByText("Deutsch").orElseThrow();
+    assertThat(deutsch.partOfSpeechTag()).isEqualTo(PartOfSpeechTag.NOUN);
   }
 }

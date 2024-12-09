@@ -14,6 +14,15 @@ public enum Person implements FeatureProperty {
 
   private final String fullIdentifier;
 
+  public static Person from(String value) {
+    return switch (value) {
+      case "1" -> FIRST;
+      case "2" -> SECOND;
+      case "3" -> THIRD;
+      default -> throw new IllegalArgumentException("Unsupported person value: " + value);
+    };
+  }
+
   public String fullIdentifier() {
     return fullIdentifier;
   }

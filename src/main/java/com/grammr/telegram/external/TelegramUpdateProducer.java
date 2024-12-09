@@ -3,7 +3,6 @@ package com.grammr.telegram.external;
 import com.grammr.telegram.dto.update.TelegramUpdate;
 import com.grammr.telegram.external.factory.TelegramUpdateFactory;
 import java.util.Queue;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

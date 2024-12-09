@@ -4,7 +4,6 @@ import com.grammr.telegram.dto.response.TelegramResponse;
 import com.grammr.telegram.dto.update.TelegramUpdate;
 import com.grammr.telegram.handler.UpdateHandler;
 import java.util.Collection;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -3,12 +3,14 @@ package com.grammr.service;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.event.AnalysisRequestEvent;
 import com.grammr.domain.value.FullAnalysis;
+import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.Token;
 import com.grammr.service.language.morphology.MorphologicalAnalysisService;
 import com.grammr.service.language.recognition.LanguageRecognitionService;
 import com.grammr.service.language.translation.literal.LiteralTranslationService;
 import com.grammr.service.language.translation.semantic.SemanticTranslationService;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -49,6 +51,7 @@ public class AnalysisRequestService {
     } else {
       return FullAnalysis.builder()
           .sourcePhrase(sourcePhrase)
+          .analyzedTokens(List.of())
           .build();
     }
   }
@@ -59,11 +62,14 @@ public class AnalysisRequestService {
     var tokens = tokenService.tokenize(phrase);
     var words = tokens.stream().map(Token::text).toList();
 
-    var semanticTranslationFuture = supplyAsync(() ->
-        semanticTranslationService.createSemanticTranslation(phrase,
-            event.user().getLanguageLearned(),
-            event.user().getLanguageSpoken()
-        ));
+    Optional<CompletableFuture<SemanticTranslation>> semanticTranslationFuture = Optional.empty();
+    if (event.performSemanticTranslation()) {
+      semanticTranslationFuture = Optional.of(supplyAsync(() ->
+          semanticTranslationService.createSemanticTranslation(phrase,
+              event.getUserLanguageLearned(),
+              event.getUserLanguageSpoken()
+          )));
+    }
 
     if (tokens.size() < MAX_TOKENS) {
       var literalTranslationFuture = supplyAsync(() -> literalTranslationService.translateTokens(phrase, words));
@@ -78,7 +84,7 @@ public class AnalysisRequestService {
       tokens = List.of();
     }
 
-    var semanticTranslation = join(semanticTranslationFuture);
+    var semanticTranslation = semanticTranslationFuture.map(CompletableFuture::join).orElse(null);
 
     return FullAnalysis.builder()
         .semanticTranslation(semanticTranslation)
@@ -87,15 +93,30 @@ public class AnalysisRequestService {
         .build();
   }
 
+  // So that a user can ask "How do I say ... in the language I'm learning?" and get a response
+  // Creates a translation from the spoken language to the learned language, then creates a full analysis
   private FullAnalysis createFullAnalysisForSpokenLanguage(AnalysisRequestEvent event) {
-    var translationIntoLearnedLanguage = semanticTranslationService.createSemanticTranslation(
-        event.phrase(), event.user().getLanguageSpoken(), event.user().getLanguageLearned()
+    var learnedLanguageTranslation = semanticTranslationService.createSemanticTranslation(
+        event.phrase(), event.getUserLanguageSpoken(), event.getUserLanguageLearned()
     );
-    var newEvent = AnalysisRequestEvent.builder()
-        .phrase(translationIntoLearnedLanguage.getTranslatedPhrase())
-        .user(event.user())
+    var learnedLanguageAnalysisEvent = createLearnedLanguageAnalysisEvent(event, learnedLanguageTranslation);
+    var translation = SemanticTranslation.builder()
+        .sourcePhrase(event.phrase())
+        .translatedPhrase(learnedLanguageTranslation.getTranslatedPhrase())
         .build();
-    return createFullAnalysisForLearnedLanguage(newEvent, event.user().getLanguageLearned());
+    return createFullAnalysisForLearnedLanguage(learnedLanguageAnalysisEvent, event.user().getLanguageLearned()).toBuilder()
+        .semanticTranslation(translation)
+        .build();
+  }
+
+  private AnalysisRequestEvent createLearnedLanguageAnalysisEvent(AnalysisRequestEvent event, SemanticTranslation learnedLanguageTranslation) {
+    return AnalysisRequestEvent.builder()
+        .phrase(learnedLanguageTranslation.getTranslatedPhrase())
+        .user(event.user())
+        .performSemanticTranslation(false)
+        .performLiteralTranslation(true)
+        .performMorphologicalAnalysis(true)
+        .build();
   }
 
   public <T> CompletableFuture<T> supplyAsync(Supplier<T> supplier) {

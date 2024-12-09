@@ -5,7 +5,6 @@ import com.grammr.telegram.config.LogContext;
 import com.grammr.telegram.dto.response.TelegramResponse;
 import com.grammr.telegram.dto.update.TelegramUpdate;
 import java.util.concurrent.BlockingQueue;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

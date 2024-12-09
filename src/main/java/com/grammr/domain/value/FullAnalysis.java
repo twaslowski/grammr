@@ -6,7 +6,7 @@ import com.grammr.domain.value.language.TokenTranslation;
 import java.util.List;
 import lombok.Builder;
 
-@Builder
+@Builder(toBuilder = true)
 public record FullAnalysis(
     String sourcePhrase,
     SemanticTranslation semanticTranslation,

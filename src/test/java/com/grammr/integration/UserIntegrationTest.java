@@ -27,6 +27,7 @@ public class UserIntegrationTest extends IntegrationTestBase {
           var user = userRepository.findByTelegramId(1L);
           assertThat(user).isPresent();
 
+          assertThat(outgoingMessageQueue).hasSize(1);
           var message = outgoingMessageQueue.remove();
           assertThat(message.getChatId()).isEqualTo(1L);
           assertThat(message.getText()).isEqualTo(messageUtil.getMessage("command.start.created"));

@@ -12,19 +12,20 @@ import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.TokenTranslation;
-import com.grammr.telegram.dto.response.TelegramResponse;
-import com.grammr.telegram.dto.update.TelegramUpdate;
 import com.grammr.repository.UserRepository;
 import com.grammr.service.AnalysisRequestService;
 import com.grammr.service.TokenService;
 import com.grammr.service.language.recognition.OpenAILanguageRecognitionService;
 import com.grammr.service.language.translation.literal.OpenAILiteralTranslationService;
 import com.grammr.service.language.translation.semantic.OpenAISemanticTranslationService;
+import com.grammr.telegram.dto.response.TelegramResponse;
+import com.grammr.telegram.dto.update.TelegramUpdate;
 import io.github.sashirestela.openai.OpenAI;
 import io.github.sashirestela.openai.SimpleOpenAI;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -71,6 +72,13 @@ public class IntegrationTestBase {
 
   private final OpenAI.ChatCompletions chatCompletionsMock = mock(OpenAI.ChatCompletions.class);
 
+  @BeforeEach
+  public void setUp() {
+    incomingMessageQueue.clear();
+    outgoingMessageQueue.clear();
+    userRepository.deleteAll();
+  }
+
   @SneakyThrows
   protected void mockOpenAIResponse(String promptRegex, Object content) {
     var chat = openAITestUtil.parameterizeResponse(objectMapper.writeValueAsString(content));
@@ -80,9 +88,9 @@ public class IntegrationTestBase {
   }
 
   @SneakyThrows
-  protected void mockSemanticTranslation(String source, String translation) {
+  protected void mockSemanticTranslation(String source, String translation, LanguageCode from, LanguageCode to) {
     mockOpenAIResponse(
-        messageUtil.parameterizeMessage("openai.translation.semantic.prompt.user", source),
+        messageUtil.parameterizeMessage("openai.translation.semantic.prompt.user", from, to, source),
         SemanticTranslation.builder()
             .sourcePhrase(source)
             .translatedPhrase(translation)

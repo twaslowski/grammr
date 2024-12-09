@@ -36,10 +36,7 @@ COPY analysis/ ${APP_DIR}/analysis
 COPY docker/init.sh ${APP_DIR}/init.sh
 COPY docker/download_models.py ${APP_DIR}/download_models.py
 
-ENV SPACY_MODELS=$PREBUILD_WITH_MODELS
-RUN python3 ${APP_DIR}/download_models.py
-
-ENV SPACY_MODEL=""
+ENV SPACY_MODELS=""
 
 EXPOSE 8000
 WORKDIR ${APP_DIR}

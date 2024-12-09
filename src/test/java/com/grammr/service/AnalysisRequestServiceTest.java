@@ -48,7 +48,7 @@ class AnalysisRequestServiceTest {
 
     analysisRequestService.processFullAnalysisRequest(event);
 
-    verify(semanticTranslationService).createSemanticTranslation(phrase);
+    verify(semanticTranslationService).createSemanticTranslation(phrase, LanguageCode.DE, LanguageCode.EN);
     verify(literalTranslationService).translateTokens(phrase, List.of("Hallo", "Welt"));
     verify(morphologicalAnalysisService).analyze(phrase, LanguageCode.DE);
   }
@@ -58,9 +58,11 @@ class AnalysisRequestServiceTest {
     var phrase = "This is a phrase longer than fifteen analyzedTokens a e i o u and sometimes y too";
     var event = AnalysisRequestEventSpec.valid().phrase(phrase).build();
 
+    when(languageRecognitionService.recognizeLanguage(phrase)).thenReturn(LanguageRecognition.of(LanguageCode.DE));
+
     analysisRequestService.processFullAnalysisRequest(event);
 
-    verify(semanticTranslationService).createSemanticTranslation(phrase);
+    verify(semanticTranslationService).createSemanticTranslation(phrase, LanguageCode.DE, LanguageCode.EN);
     verify(literalTranslationService, never()).translateTokens(any(), anyList());
     verify(morphologicalAnalysisService, never()).analyze(any(), any());
   }

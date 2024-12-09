@@ -2,10 +2,10 @@ package com.grammr.telegram.service;
 
 import com.grammr.domain.User;
 import com.grammr.repository.UserRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service

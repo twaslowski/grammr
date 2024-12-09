@@ -4,7 +4,6 @@ import com.grammr.telegram.dto.response.TelegramResponse;
 import com.grammr.telegram.dto.update.TelegramUpdate;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
