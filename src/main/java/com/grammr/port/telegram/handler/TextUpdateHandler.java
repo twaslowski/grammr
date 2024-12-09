@@ -33,6 +33,9 @@ public class TextUpdateHandler implements UpdateHandler {
 
   @Override
   public boolean canHandle(TelegramUpdate update) {
-    return update instanceof TelegramTextUpdate && !update.getText().isEmpty();
+    return update instanceof TelegramTextUpdate
+        && !update.getText().isEmpty()
+        // And update is not a command
+        && !update.getText().startsWith("/");
   }
 }

@@ -12,6 +12,9 @@ import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.TokenTranslation;
+import com.grammr.port.telegram.dto.response.TelegramResponse;
+import com.grammr.port.telegram.dto.update.TelegramUpdate;
+import com.grammr.repository.UserRepository;
 import com.grammr.service.AnalysisRequestService;
 import com.grammr.service.TokenService;
 import com.grammr.service.language.recognition.OpenAILanguageRecognitionService;
@@ -19,6 +22,7 @@ import com.grammr.service.language.translation.literal.OpenAILiteralTranslationS
 import com.grammr.service.language.translation.semantic.OpenAISemanticTranslationService;
 import io.github.sashirestela.openai.OpenAI;
 import io.github.sashirestela.openai.SimpleOpenAI;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +58,16 @@ public class IntegrationTestBase {
   protected ObjectMapper objectMapper;
 
   @Autowired
-  private MessageUtil messageUtil;
+  protected MessageUtil messageUtil;
+
+  @Autowired
+  protected UserRepository userRepository;
+
+  @Autowired
+  protected BlockingQueue<TelegramUpdate> incomingMessageQueue;
+
+  @Autowired
+  protected BlockingQueue<TelegramResponse> outgoingMessageQueue;
 
   private final OpenAI.ChatCompletions chatCompletionsMock = mock(OpenAI.ChatCompletions.class);
 

@@ -17,6 +17,9 @@ spring:
       hibernate:
         default_schema: "\"grammr\""
     open-in-view: false
+  datasource:
+    hikari:
+      driver-class-name: org.postgresql.Driver
 
 management:
   endpoints:

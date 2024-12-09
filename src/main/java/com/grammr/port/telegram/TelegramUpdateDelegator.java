@@ -32,7 +32,7 @@ public class TelegramUpdateDelegator {
     try {
       return handler.handleUpdate(update);
     } catch (Exception e) {
-      log.error("Error while processing update: {}", e.getMessage());
+      log.error("Error while processing update", e);
       return TelegramResponse.error()
           .chatId(update.getChatId())
           .build();
