@@ -88,20 +88,18 @@ public class IntegrationTestBase {
   }
 
   @SneakyThrows
-  protected void mockSemanticTranslation(String source, String translation, LanguageCode from, LanguageCode to) {
-    mockOpenAIResponse(
-        messageUtil.parameterizeMessage("openai.translation.semantic.prompt.user", from, to, source),
-        SemanticTranslation.builder()
-            .sourcePhrase(source)
-            .translatedPhrase(translation)
-            .build());
+  protected void mockSemanticTranslation(String source, String translation, LanguageCode to) {
+    String prompt = semanticTranslationService.generateUserMessage(source, to).getContent().toString();
+    mockOpenAIResponse(prompt, SemanticTranslation.builder()
+        .sourcePhrase(source)
+        .translatedPhrase(translation)
+        .build());
   }
 
   @SneakyThrows
   protected void mockLanguageRecognition(String source, LanguageCode languageCode) {
-    mockOpenAIResponse(
-        messageUtil.parameterizeMessage("openai.language-recognition.prompt.user", source),
-        LanguageRecognition.of(languageCode));
+    String prompt = languageRecognitionService.generateUserMessage(source).getContent().toString();
+    mockOpenAIResponse(prompt, LanguageRecognition.of(languageCode));
   }
 
   @SneakyThrows

@@ -32,8 +32,8 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
         .user(user)
         .build();
 
-    mockLanguageRecognition(sourcePhrase, LanguageCode.DE);
-    mockSemanticTranslation(sourcePhrase, phraseTranslation, LanguageCode.DE, LanguageCode.EN);
+    mockLanguageRecognition(sourcePhrase, user.getLanguageLearned());
+    mockSemanticTranslation(sourcePhrase, phraseTranslation, user.getLanguageSpoken());
     for (String word : words) {
       mockTokenTranslation(sourcePhrase, word, new TokenTranslation(word, "someTranslation"));
     }
@@ -68,7 +68,7 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
         .build();
 
     mockLanguageRecognition(sourcePhrase, LanguageCode.EN);
-    mockSemanticTranslation(sourcePhrase, translation, LanguageCode.EN, LanguageCode.DE);
+    mockSemanticTranslation(sourcePhrase, translation, LanguageCode.DE);
 
     for (String word : words) {
       mockTokenTranslation(translation, word, new TokenTranslation(word, "someTranslation"));
@@ -98,7 +98,7 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
         .build();
 
     mockLanguageRecognition(sourcePhrase, LanguageCode.UNSUPPORTED);
-    mockSemanticTranslation(sourcePhrase, "Where is the library?", LanguageCode.UNSUPPORTED, LanguageCode.EN);
+    mockSemanticTranslation(sourcePhrase, "Where is the library?", LanguageCode.EN);
 
     // when
     var fullAnalysis = analysisRequestService.processFullAnalysisRequest(analysisRequest);

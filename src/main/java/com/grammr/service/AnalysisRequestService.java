@@ -65,10 +65,8 @@ public class AnalysisRequestService {
     Optional<CompletableFuture<SemanticTranslation>> semanticTranslationFuture = Optional.empty();
     if (event.performSemanticTranslation()) {
       semanticTranslationFuture = Optional.of(supplyAsync(() ->
-          semanticTranslationService.createSemanticTranslation(phrase,
-              event.getUserLanguageLearned(),
-              event.getUserLanguageSpoken()
-          )));
+          semanticTranslationService.createSemanticTranslation(phrase, event.getUserLanguageSpoken())
+      ));
     }
 
     if (tokens.size() < MAX_TOKENS) {
@@ -97,7 +95,7 @@ public class AnalysisRequestService {
   // Creates a translation from the spoken language to the learned language, then creates a full analysis
   private FullAnalysis createFullAnalysisForSpokenLanguage(AnalysisRequestEvent event) {
     var learnedLanguageTranslation = semanticTranslationService.createSemanticTranslation(
-        event.phrase(), event.getUserLanguageSpoken(), event.getUserLanguageLearned()
+        event.phrase(), event.getUserLanguageLearned()
     );
     var learnedLanguageAnalysisEvent = createLearnedLanguageAnalysisEvent(event, learnedLanguageTranslation);
     var translation = SemanticTranslation.builder()

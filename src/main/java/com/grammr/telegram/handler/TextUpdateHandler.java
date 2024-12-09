@@ -27,6 +27,9 @@ public class TextUpdateHandler implements UpdateHandler {
         AnalysisRequestEvent.builder()
             .phrase(update.getText())
             .user(user)
+            .performSemanticTranslation(true)
+            .performLiteralTranslation(true)
+            .performMorphologicalAnalysis(true)
             .requestId(UUID.randomUUID().toString())
             .build()
     );

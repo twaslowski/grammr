@@ -19,16 +19,16 @@ public class OpenAISemanticTranslationBenchmarkTest extends AbstractBenchmarkTes
 
   @ParameterizedTest
   @MethodSource("providePhrasePairs")
-  void shouldCreateSemanticTranslation(String sourcePhrase, String translatedPhrase, LanguageCode from, LanguageCode to) {
-    var semanticTranslation = semanticTranslationService.createSemanticTranslation(sourcePhrase, from, to);
+  void shouldCreateSemanticTranslation(String sourcePhrase, String translatedPhrase, LanguageCode to) {
+    var semanticTranslation = semanticTranslationService.createSemanticTranslation(sourcePhrase, to);
     assertThat(semanticTranslation.getSourcePhrase()).isEqualTo(sourcePhrase);
     assertThat(semanticTranslation.getTranslatedPhrase()).isEqualTo(translatedPhrase);
   }
 
   private static Stream<Arguments> providePhrasePairs() {
     return Stream.of(
-        Arguments.of("Wie geht es dir?", "How are you doing?", LanguageCode.DE, LanguageCode.EN),
-        Arguments.of("как у тебя дела?", "How are you doing?", LanguageCode.RU, LanguageCode.EN)
+        Arguments.of("Wie geht es dir?", "How are you doing?", LanguageCode.EN),
+        Arguments.of("как у тебя дела?", "How are you doing?", LanguageCode.EN)
     );
   }
 }

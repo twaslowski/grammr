@@ -16,9 +16,9 @@ public enum Person implements FeatureProperty {
 
   public static Person from(String value) {
     return switch (value) {
-      case "1" -> FIRST;
-      case "2" -> SECOND;
-      case "3" -> THIRD;
+      case "1", "FIRST" -> FIRST;
+      case "2", "SECOND" -> SECOND;
+      case "3", "THIRD" -> THIRD;
       default -> throw new IllegalArgumentException("Unsupported person value: " + value);
     };
   }

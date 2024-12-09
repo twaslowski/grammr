@@ -27,8 +27,8 @@ public class OpenAISemanticTranslationService extends AbstractOpenAIService impl
     super(objectMapper, openAI, messageUtil, modelName);
   }
 
-  public SemanticTranslation createSemanticTranslation(String phrase, LanguageCode from, LanguageCode to) {
-    return openAIChatCompletion(generateUserMessage(phrase, from, to), SemanticTranslation.class);
+  public SemanticTranslation createSemanticTranslation(String phrase, LanguageCode to) {
+    return openAIChatCompletion(generateUserMessage(phrase, to), SemanticTranslation.class);
   }
 
   @Override
@@ -50,8 +50,11 @@ public class OpenAISemanticTranslationService extends AbstractOpenAIService impl
         ))));
   }
 
-  public UserMessage generateUserMessage(String phrase, LanguageCode from, LanguageCode to) {
+  public UserMessage generateUserMessage(String phrase, LanguageCode to) {
     // todo: source (and perhaps target) language should be parameterizable
-    return UserMessage.of(messageUtil.parameterizeMessage("openai.translation.semantic.prompt.user", from, to, phrase));
+    return UserMessage.of(messageUtil.parameterizeMessage("openai.translation.semantic.prompt.user",
+        to.getLanguageName(), phrase));
   }
+
+
 }

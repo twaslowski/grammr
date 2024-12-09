@@ -20,11 +20,11 @@ public class FullAnalysisStringificationService {
   private static final String NEWLINE = "\n";
 
   public String stringifyAnalysis(FullAnalysis fullAnalysis) {
-    return format("%s%s%s%s",
+    return format("%s%s%s",
         stringifySemanticTranslation(fullAnalysis.semanticTranslation()),
         NEWLINE,
-        stringifyTokens(fullAnalysis.analyzedTokens()),
-        stringifyUsage(fullAnalysis));
+        stringifyTokens(fullAnalysis.analyzedTokens()));
+        // stringifyUsage(fullAnalysis));
   }
 
   public String stringifySemanticTranslation(SemanticTranslation translation) {

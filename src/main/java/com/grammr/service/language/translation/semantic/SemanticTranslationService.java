@@ -5,5 +5,5 @@ import com.grammr.domain.value.language.SemanticTranslation;
 
 public interface SemanticTranslationService {
 
-  SemanticTranslation createSemanticTranslation(String phrase, LanguageCode from, LanguageCode to);
+  SemanticTranslation createSemanticTranslation(String phrase, LanguageCode to);
 }

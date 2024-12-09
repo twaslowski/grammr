@@ -48,7 +48,7 @@ class AnalysisRequestServiceTest {
 
     analysisRequestService.processFullAnalysisRequest(event);
 
-    verify(semanticTranslationService).createSemanticTranslation(phrase, LanguageCode.DE, LanguageCode.EN);
+    verify(semanticTranslationService).createSemanticTranslation(phrase, LanguageCode.EN);
     verify(literalTranslationService).translateTokens(phrase, List.of("Hallo", "Welt"));
     verify(morphologicalAnalysisService).analyze(phrase, LanguageCode.DE);
   }
@@ -62,7 +62,7 @@ class AnalysisRequestServiceTest {
 
     analysisRequestService.processFullAnalysisRequest(event);
 
-    verify(semanticTranslationService).createSemanticTranslation(phrase, LanguageCode.DE, LanguageCode.EN);
+    verify(semanticTranslationService).createSemanticTranslation(phrase, LanguageCode.EN);
     verify(literalTranslationService, never()).translateTokens(any(), anyList());
     verify(morphologicalAnalysisService, never()).analyze(any(), any());
   }
