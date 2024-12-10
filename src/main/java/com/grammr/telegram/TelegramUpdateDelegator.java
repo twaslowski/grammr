@@ -2,6 +2,7 @@ package com.grammr.telegram;
 
 import com.grammr.telegram.dto.response.TelegramResponse;
 import com.grammr.telegram.dto.update.TelegramUpdate;
+import com.grammr.telegram.exception.UserNotFoundException;
 import com.grammr.telegram.handler.UpdateHandler;
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 public class TelegramUpdateDelegator {
 
   private final Collection<UpdateHandler> handlers;
+  private final TelegramErrorHandler telegramErrorHandler;
 
   public TelegramResponse delegateUpdate(TelegramUpdate update) {
     var relevantHandler = handlers.stream()
@@ -24,24 +26,19 @@ public class TelegramUpdateDelegator {
         .map(handler -> invokeHandler(handler, update))
         .orElseGet(() -> {
           log.warn("No handler found");
-          return respondToUnhandleableUpdate(update.getChatId());
+          return telegramErrorHandler.noHandlerFound(update.getChatId());
         });
   }
 
   private TelegramResponse invokeHandler(UpdateHandler handler, TelegramUpdate update) {
     try {
       return handler.handleUpdate(update);
+    } catch (UserNotFoundException e) {
+      log.error("User not found", e);
+      return telegramErrorHandler.userUnknown(update.getChatId());
     } catch (Exception e) {
       log.error("Error while processing update", e);
-      return TelegramResponse.error()
-          .chatId(update.getChatId())
-          .build();
+      return telegramErrorHandler.error(update.getChatId());
     }
-  }
-
-  private TelegramResponse respondToUnhandleableUpdate(long chatId) {
-    return TelegramResponse.unhandleableUpdate()
-        .chatId(chatId)
-        .build();
   }
 }

@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.grammr.telegram.TelegramErrorHandler;
 import com.grammr.telegram.TelegramUpdateDelegator;
 import com.grammr.telegram.dto.update.TelegramTextUpdate;
 import com.grammr.telegram.handler.TextUpdateHandler;
@@ -13,9 +14,10 @@ import org.junit.jupiter.api.Test;
 class TelegramUpdateDelegatorTest {
 
   private final TextUpdateHandler textUpdateHandler = mock(TextUpdateHandler.class);
+  private final TelegramErrorHandler telegramErrorHandler = mock(TelegramErrorHandler.class);
 
   private final TelegramUpdateDelegator telegramUpdateDelegator =
-      new TelegramUpdateDelegator(List.of(textUpdateHandler));
+      new TelegramUpdateDelegator(List.of(textUpdateHandler), telegramErrorHandler);
 
   @Test
   void shouldDelegateTextUpdateToTextHandler() {
