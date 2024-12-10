@@ -18,7 +18,7 @@ import com.grammr.service.language.translation.semantic.SemanticTranslationServi
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-class AnalysisRequestServiceTest {
+class FullAnalysisServiceTest {
 
   private final SemanticTranslationService semanticTranslationService = mock(SemanticTranslationService.class);
 
@@ -30,7 +30,7 @@ class AnalysisRequestServiceTest {
 
   private final TokenService tokenService = new TokenService();
 
-  private final AnalysisRequestService analysisRequestService = AnalysisRequestService.builder()
+  private final FullAnalysisService fullAnalysisService = FullAnalysisService.builder()
       .analysisService(morphologicalAnalysisService)
       .languageRecognitionService(languageRecognitionService)
       .literalTranslationService(literalTranslationService)
@@ -46,7 +46,7 @@ class AnalysisRequestServiceTest {
     when(languageRecognitionService.recognizeLanguage(phrase)).thenReturn(new LanguageRecognition(LanguageCode.DE));
     when(morphologicalAnalysisService.analyze(phrase, LanguageCode.DE)).thenReturn(MorphologicalAnalysisSpec.valid().build());
 
-    analysisRequestService.processFullAnalysisRequest(event);
+    fullAnalysisService.processFullAnalysisRequest(event);
 
     verify(semanticTranslationService).createSemanticTranslation(phrase, LanguageCode.EN);
     verify(literalTranslationService).translateTokens(phrase, List.of("Hallo", "Welt"));
@@ -60,7 +60,7 @@ class AnalysisRequestServiceTest {
 
     when(languageRecognitionService.recognizeLanguage(phrase)).thenReturn(LanguageRecognition.of(LanguageCode.DE));
 
-    analysisRequestService.processFullAnalysisRequest(event);
+    fullAnalysisService.processFullAnalysisRequest(event);
 
     verify(semanticTranslationService).createSemanticTranslation(phrase, LanguageCode.EN);
     verify(literalTranslationService, never()).translateTokens(any(), anyList());

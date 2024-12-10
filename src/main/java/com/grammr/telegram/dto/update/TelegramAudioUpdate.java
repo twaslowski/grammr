@@ -1,13 +1,16 @@
 package com.grammr.telegram.dto.update;
 
+import java.nio.file.Path;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import lombok.experimental.SuperBuilder;
 
-@EqualsAndHashCode(callSuper = true)
 @Value
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public class TelegramTextUpdate extends TelegramUpdate {
+public class TelegramAudioUpdate extends TelegramUpdate {
+
+  Path filePath;
 
   @Override
   public boolean hasCallback() {
@@ -16,6 +19,6 @@ public class TelegramTextUpdate extends TelegramUpdate {
 
   @Override
   public boolean hasAudio() {
-    return false;
+    return true;
   }
 }

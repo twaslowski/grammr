@@ -1,6 +1,7 @@
 package com.grammr.telegram.external;
 
 import com.grammr.telegram.dto.update.TelegramUpdate;
+import com.grammr.telegram.exception.UpdateNotProcessableException;
 import com.grammr.telegram.external.factory.TelegramUpdateFactory;
 import java.util.Queue;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +23,21 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class TelegramUpdateProducer implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
 
   private final Queue<TelegramUpdate> incomingMessageQueue;
+  private final TelegramUpdateFactory telegramUpdateFactory;
 
   @Value("${telegram.bot.token}")
   private String botToken;
 
   @Override
   public void consume(Update update) {
-    var telegramUpdate = TelegramUpdateFactory.createTelegramUpdate(update);
-    log.info("Received update: {}, text: {}", telegramUpdate.getChatId(), telegramUpdate.getText());
-    incomingMessageQueue.add(telegramUpdate);
+    try {
+      var telegramUpdate = telegramUpdateFactory.createTelegramUpdate(update);
+      log.info("Received update: {}, text: {}", telegramUpdate.getChatId(), telegramUpdate.getText());
+      incomingMessageQueue.add(telegramUpdate);
+    } catch (Exception e) {
+      log.error("Failed to create TelegramUpdate from incoming update: {}", update, e);
+      throw new UpdateNotProcessableException(e);
+    }
   }
 
   // SpringLongPollingBot boilerplate

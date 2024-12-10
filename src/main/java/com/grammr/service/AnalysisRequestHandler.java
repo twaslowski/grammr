@@ -11,20 +11,20 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class AnalysisRequestHandler extends AbstractConsumer<AnalysisRequestEvent> {
 
-  private final AnalysisRequestService analysisRequestService;
+  private final FullAnalysisService fullAnalysisService;
   private final BlockingQueue<AnalysisCompleteEvent> analysisCompleteEventQueue;
 
   public AnalysisRequestHandler(BlockingQueue<AnalysisRequestEvent> analysisRequestQueue,
                                 BlockingQueue<AnalysisCompleteEvent> analysisCompleteEventQueue,
-                                AnalysisRequestService analysisRequestService) {
+                                FullAnalysisService fullAnalysisService) {
     super(analysisRequestQueue);
     this.analysisCompleteEventQueue = analysisCompleteEventQueue;
-    this.analysisRequestService = analysisRequestService;
+    this.fullAnalysisService = fullAnalysisService;
   }
 
   @Override
   protected void handleItem(AnalysisRequestEvent analysisRequest) {
-    var analysis = analysisRequestService.processFullAnalysisRequest(analysisRequest);
+    var analysis = fullAnalysisService.processFullAnalysisRequest(analysisRequest);
     log.info("Performed analysis: {}", analysis);
     var analysisCompletionEvent = AnalysisCompleteEvent.builder()
         .fullAnalysis(analysis)

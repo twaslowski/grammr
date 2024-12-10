@@ -12,4 +12,6 @@ public abstract class TelegramUpdate {
   protected final String text; // can be empty for InlineKeyboardUpdates
 
   public abstract boolean hasCallback();
+
+  public abstract boolean hasAudio();
 }

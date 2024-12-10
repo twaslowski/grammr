@@ -39,7 +39,7 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
     }
 
     // when
-    var fullAnalysis = analysisRequestService.processFullAnalysisRequest(analysisRequest);
+    var fullAnalysis = fullAnalysisService.processFullAnalysisRequest(analysisRequest);
 
     // then
     assertThat(fullAnalysis).isNotNull();
@@ -75,7 +75,7 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
     }
 
     // when
-    var fullAnalysis = analysisRequestService.processFullAnalysisRequest(analysisRequest);
+    var fullAnalysis = fullAnalysisService.processFullAnalysisRequest(analysisRequest);
 
     // then
     assertThat(fullAnalysis).isNotNull();
@@ -101,7 +101,7 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
     mockSemanticTranslation(sourcePhrase, "Where is the library?", LanguageCode.EN);
 
     // when
-    var fullAnalysis = analysisRequestService.processFullAnalysisRequest(analysisRequest);
+    var fullAnalysis = fullAnalysisService.processFullAnalysisRequest(analysisRequest);
 
     // then
     assertThat(fullAnalysis).isNotNull();

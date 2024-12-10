@@ -13,12 +13,14 @@ public class HandlerConfiguration {
 
   private final TextUpdateHandler textUpdateHandler;
   private final StartHandler startHandler;
+  private final AudioHandler audioHandler;
 
   @Bean
   public Collection<UpdateHandler> handlers() {
     return List.of(
         startHandler,
-        textUpdateHandler
+        textUpdateHandler,
+        audioHandler
     );
   }
 }

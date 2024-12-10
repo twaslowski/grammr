@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Builder
 @Slf4j
-public class AnalysisRequestService {
+public class FullAnalysisService {
 
   private static final int MAX_TOKENS = 15;
 
