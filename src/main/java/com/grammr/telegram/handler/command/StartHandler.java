@@ -1,10 +1,10 @@
 package com.grammr.telegram.handler.command;
 
 import com.grammr.common.MessageUtil;
+import com.grammr.service.UserService;
 import com.grammr.telegram.dto.response.TelegramResponse;
 import com.grammr.telegram.dto.response.TelegramTextResponse;
 import com.grammr.telegram.dto.update.TelegramUpdate;
-import com.grammr.telegram.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

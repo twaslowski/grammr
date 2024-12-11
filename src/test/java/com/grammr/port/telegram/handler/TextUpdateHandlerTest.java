@@ -10,7 +10,7 @@ import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.event.AnalysisRequestEvent;
 import com.grammr.telegram.dto.update.TelegramTextUpdate;
 import com.grammr.telegram.handler.TextUpdateHandler;
-import com.grammr.telegram.service.UserService;
+import com.grammr.service.UserService;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import org.junit.jupiter.api.Test;

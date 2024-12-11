@@ -1,6 +1,5 @@
 package com.grammr.domain.entity;
 
-import com.grammr.domain.User;
 import com.grammr.domain.enums.LanguageCode;
 
 public class UserSpec {

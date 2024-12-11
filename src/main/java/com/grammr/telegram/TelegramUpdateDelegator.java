@@ -1,5 +1,6 @@
 package com.grammr.telegram;
 
+import com.grammr.service.UserService;
 import com.grammr.telegram.dto.response.TelegramResponse;
 import com.grammr.telegram.dto.update.TelegramUpdate;
 import com.grammr.telegram.exception.UserNotFoundException;
@@ -16,6 +17,7 @@ public class TelegramUpdateDelegator {
 
   private final Collection<UpdateHandler> handlers;
   private final TelegramErrorHandler telegramErrorHandler;
+  private final UserService userService;
 
   public TelegramResponse delegateUpdate(TelegramUpdate update) {
     var relevantHandler = handlers.stream()
@@ -32,6 +34,7 @@ public class TelegramUpdateDelegator {
 
   private TelegramResponse invokeHandler(UpdateHandler handler, TelegramUpdate update) {
     try {
+      enrichUpdateWithUser(update);
       return handler.handleUpdate(update);
     } catch (UserNotFoundException e) {
       log.error("User not found", e);
@@ -40,5 +43,11 @@ public class TelegramUpdateDelegator {
       log.error("Error while processing update", e);
       return telegramErrorHandler.error(update.getChatId());
     }
+  }
+
+  private void enrichUpdateWithUser(TelegramUpdate update) {
+    var user = userService.findUserByChatId(update.getChatId()).orElseThrow(() ->
+        new UserNotFoundException(update.getChatId()));
+    update.setUser(user);
   }
 }

@@ -1,29 +1,26 @@
 package com.grammr.service;
 
-import com.grammr.common.AbstractConsumer;
 import com.grammr.domain.event.AnalysisCompleteEvent;
 import com.grammr.domain.event.AnalysisRequestEvent;
-import java.util.concurrent.BlockingQueue;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-@Service
 @Slf4j
-public class AnalysisRequestHandler extends AbstractConsumer<AnalysisRequestEvent> {
+@Service
+@RequiredArgsConstructor
+public class AnalysisRequestHandler {
 
   private final FullAnalysisService fullAnalysisService;
-  private final BlockingQueue<AnalysisCompleteEvent> analysisCompleteEventQueue;
+  private final ApplicationEventPublisher eventPublisher;
 
-  public AnalysisRequestHandler(BlockingQueue<AnalysisRequestEvent> analysisRequestQueue,
-                                BlockingQueue<AnalysisCompleteEvent> analysisCompleteEventQueue,
-                                FullAnalysisService fullAnalysisService) {
-    super(analysisRequestQueue);
-    this.analysisCompleteEventQueue = analysisCompleteEventQueue;
-    this.fullAnalysisService = fullAnalysisService;
-  }
-
-  @Override
+  @Async
+  @EventListener
   protected void handleItem(AnalysisRequestEvent analysisRequest) {
+    log.info("Received analysis request: {}", analysisRequest);
     var analysis = fullAnalysisService.processFullAnalysisRequest(analysisRequest);
     log.info("Performed analysis: {}", analysis);
     var analysisCompletionEvent = AnalysisCompleteEvent.builder()
@@ -31,6 +28,6 @@ public class AnalysisRequestHandler extends AbstractConsumer<AnalysisRequestEven
         .requestId(analysisRequest.requestId())
         .chatId(analysisRequest.user().getTelegramId())
         .build();
-    analysisCompleteEventQueue.add(analysisCompletionEvent);
+    eventPublisher.publishEvent(analysisCompletionEvent);
   }
 }

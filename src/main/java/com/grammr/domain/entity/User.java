@@ -1,4 +1,4 @@
-package com.grammr.domain;
+package com.grammr.domain.entity;
 
 import com.grammr.domain.enums.LanguageCode;
 import jakarta.persistence.Column;

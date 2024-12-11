@@ -18,9 +18,8 @@ public class AudioTranscription extends AIGeneratedContent {
   private String transcription;
 
   public static AudioTranscription from(Transcription transcription) {
-    var audioTranscription = AudioTranscription.builder()
+    return AudioTranscription.builder()
         .transcription(transcription.getText())
         .build();
-    return audioTranscription;
   }
 }

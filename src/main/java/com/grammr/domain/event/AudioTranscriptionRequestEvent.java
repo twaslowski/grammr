@@ -1,14 +1,14 @@
 package com.grammr.domain.event;
 
-import com.grammr.telegram.dto.update.TelegramAudioUpdate;
+import com.grammr.domain.entity.User;
 import java.nio.file.Path;
+import lombok.Builder;
 
+@Builder
 public record AudioTranscriptionRequestEvent(
     Path path,
-    long chatId
+    User user,
+    String requestId
 ) {
 
-  public static AudioTranscriptionRequestEvent from(TelegramAudioUpdate audioUpdate) {
-    return new AudioTranscriptionRequestEvent(audioUpdate.getFilePath(), audioUpdate.getChatId());
-  }
 }

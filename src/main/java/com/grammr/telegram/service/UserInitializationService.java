@@ -1,6 +1,6 @@
 package com.grammr.telegram.service;
 
-import com.grammr.domain.User;
+import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
