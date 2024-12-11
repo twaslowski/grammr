@@ -4,11 +4,13 @@ import com.grammr.domain.event.AnalysisCompleteEvent;
 import com.grammr.domain.event.AnalysisRequestEvent;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import com.grammr.domain.event.AudioTranscriptionRequestEvent;
+import com.grammr.domain.value.language.AudioTranscription;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AnalysisEventQueueConfiguration {
+public class QueueConfiguration {
 
   @Bean
   public BlockingQueue<AnalysisRequestEvent> analysisRequestEventQueue() {
@@ -17,6 +19,16 @@ public class AnalysisEventQueueConfiguration {
 
   @Bean
   public BlockingQueue<AnalysisCompleteEvent> analysisCompleteEventQueue() {
+    return new LinkedBlockingQueue<>();
+  }
+
+  @Bean
+  public BlockingQueue<AudioTranscriptionRequestEvent> audioTranscriptionRequestEventQueue() {
+    return new LinkedBlockingQueue<>();
+  }
+
+  @Bean
+  public BlockingQueue<AudioTranscription> audioTranscriptionCompleteEventQueue() {
     return new LinkedBlockingQueue<>();
   }
 }

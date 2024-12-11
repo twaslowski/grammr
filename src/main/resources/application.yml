@@ -29,8 +29,11 @@ management:
 
 openai:
   api-key: ${OPENAI_API_KEY}
-  model:
-    default-model: gpt-4o-mini
+  completions:
+    model: gpt-4o-mini
+  transcription:
+    model: whisper-1
+    verbose: false
 
 telegram:
   bot:
