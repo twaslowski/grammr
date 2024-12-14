@@ -16,13 +16,13 @@ public class UserInitializationService {
   private final UserRepository userRepository;
 
   @Transactional
-  public User initializeUser(long telegramId) {
+  public User initializeUser(long chatId) {
     var user = userRepository.save(User.builder()
-        .telegramId(telegramId)
+        .chatId(chatId)
         .languageSpoken(LanguageCode.DE)
         .languageLearned(LanguageCode.RU)
         .build());
-    log.info("Created user {}", telegramId);
+    log.info("Created user {}", chatId);
     return user;
   }
 }

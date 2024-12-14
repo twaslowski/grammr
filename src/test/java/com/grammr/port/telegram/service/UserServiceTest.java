@@ -27,9 +27,9 @@ class UserServiceTest {
 
   @Test
   void shouldCreateUserIfNotExists() {
-    when(userRepository.findByTelegramId(1L)).thenReturn(Optional.empty());
+    when(userRepository.findByChatId(1L)).thenReturn(Optional.empty());
 
-    userService.createUserFromTelegramId(1L);
+    userService.createUserFromChatId(1L);
 
     verify(userInitializationService).initializeUser(1L);
   }

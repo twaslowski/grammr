@@ -22,11 +22,12 @@ public class AnalysisInitiationService {
     var requestId = UUID.randomUUID().toString();
     var analysisRequestEvent = AnalysisRequestEvent.full()
         .phrase(phrase)
-        .user(user)
+        .userLanguageLearned(user.getLanguageLearned())
+        .userLanguageSpoken(user.getLanguageSpoken())
         .requestId(requestId)
         .build();
 
-    var request = Request.from(analysisRequestEvent);
+    var request = Request.from(requestId, user.getChatId());
     requestRepository.save(request);
     eventPublisher.publishEvent(analysisRequestEvent);
   }

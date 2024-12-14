@@ -29,7 +29,6 @@ public class AudioTranscriptionRequestHandler {
       var transcription = transcriptionService.createAudioTranscription(event.path());
       AnalysisRequestEvent request = AnalysisRequestEvent.full()
           .phrase(transcription.getTranscription())
-          .user(event.user())
           .requestId(event.requestId()).build();
       eventPublisher.publishEvent(request);
     } catch (Exception e) {

@@ -47,7 +47,7 @@ public class TelegramUpdateDelegator {
 
   private void enrichUpdateWithUser(TelegramUpdate update) {
     var user = userService.findUserByChatId(update.getChatId()).orElseGet(
-        () -> userService.createUserFromTelegramId(update.getChatId()));
+        () -> userService.createUserFromChatId(update.getChatId()));
     update.setUser(user);
   }
 }

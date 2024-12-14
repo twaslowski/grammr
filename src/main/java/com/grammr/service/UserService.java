@@ -16,12 +16,12 @@ public class UserService {
   private final UserRepository userRepository;
   private final UserInitializationService userInitializationService;
 
-  public User createUserFromTelegramId(long telegramId) {
-    return userRepository.findByTelegramId(telegramId).orElseGet(() ->
-        userInitializationService.initializeUser(telegramId));
+  public User createUserFromChatId(long chatId) {
+    return userRepository.findByChatId(chatId).orElseGet(() ->
+        userInitializationService.initializeUser(chatId));
   }
 
-  public Optional<User> findUserByChatId(long telegramId) {
-    return userRepository.findByTelegramId(telegramId);
+  public Optional<User> findUserByChatId(long chatId) {
+    return userRepository.findByChatId(chatId);
   }
 }

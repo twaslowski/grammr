@@ -21,7 +21,7 @@ public class StartHandler extends AbstractCommandHandler {
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
-    userService.createUserFromTelegramId(update.getChatId());
+    userService.createUserFromChatId(update.getChatId());
 
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())

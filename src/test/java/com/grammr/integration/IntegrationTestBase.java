@@ -12,6 +12,7 @@ import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.TokenTranslation;
+import com.grammr.repository.RequestRepository;
 import com.grammr.repository.UserRepository;
 import com.grammr.service.FullAnalysisService;
 import com.grammr.service.TokenService;
@@ -69,10 +70,16 @@ public class IntegrationTestBase {
   protected UserRepository userRepository;
 
   @Autowired
+  protected RequestRepository requestRepository;
+
+  @Autowired
   protected BlockingQueue<TelegramUpdate> incomingMessageQueue;
 
   @Autowired
   protected BlockingQueue<TelegramResponse> outgoingMessageQueue;
+
+  @Autowired
+  protected EventAccumulator eventAccumulator;
 
   private final OpenAI.ChatCompletions chatCompletionsMock = mock(OpenAI.ChatCompletions.class);
 
@@ -81,6 +88,8 @@ public class IntegrationTestBase {
     incomingMessageQueue.clear();
     outgoingMessageQueue.clear();
     userRepository.deleteAll();
+    requestRepository.deleteAll();
+    eventAccumulator.reset();
   }
 
   @SneakyThrows

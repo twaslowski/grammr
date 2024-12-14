@@ -2,6 +2,7 @@ package com.grammr.telegram;
 
 import com.grammr.common.FullAnalysisStringificationService;
 import com.grammr.domain.event.AnalysisCompleteEvent;
+import com.grammr.service.RequestService;
 import com.grammr.telegram.dto.response.TelegramResponse;
 import com.grammr.telegram.dto.response.TelegramTextResponse;
 import java.util.concurrent.BlockingQueue;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class AnalysisCompleteEventHandler {
 
   private final BlockingQueue<TelegramResponse> outgoingMessageQueue;
+  private final RequestService requestService;
   private final FullAnalysisStringificationService fullAnalysisStringificationService;
 
   @Async
@@ -27,8 +29,9 @@ public class AnalysisCompleteEventHandler {
   }
 
   private TelegramTextResponse telegramResponseFrom(AnalysisCompleteEvent event) {
+    var chatId = requestService.retrieveRequestChatId(event.requestId());
     return TelegramTextResponse.builder()
-        .chatId(event.chatId())
+        .chatId(chatId)
         .text(fullAnalysisStringificationService.stringifyAnalysis(event.fullAnalysis()))
         .build();
   }

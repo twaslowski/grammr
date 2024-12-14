@@ -6,7 +6,6 @@ import lombok.Builder;
 @Builder
 public record AnalysisCompleteEvent(
     String requestId,
-    long chatId,
     FullAnalysis fullAnalysis
 ) {
 

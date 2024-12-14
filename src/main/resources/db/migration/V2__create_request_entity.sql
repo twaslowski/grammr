@@ -1,7 +1,8 @@
 CREATE TABLE request
 (
   id                BIGINT PRIMARY KEY,
-  user_id           BIGINT       NOT NULL,
+  request_id        VARCHAR      NOT NULL,
+  chat_id           BIGINT       NOT NULL,
   status            VARCHAR(255) NOT NULL,
   audio_file_path   VARCHAR(255),
   created_timestamp TIMESTAMP    NOT NULL,

@@ -40,13 +40,11 @@ public class FullAnalysisService {
     var sourcePhrase = analysisRequest.phrase();
     log.info("Processing analysis request for source phrase: '{}'", sourcePhrase);
 
-    var user = analysisRequest.user();
-
     var sourceLanguage = languageRecognitionService.recognizeLanguage(sourcePhrase);
 
-    if (sourceLanguage.getLanguageCode().equals(user.getLanguageLearned())) {
+    if (sourceLanguage.getLanguageCode().equals(analysisRequest.userLanguageLearned())) {
       return createFullAnalysisForLearnedLanguage(analysisRequest, sourceLanguage.getLanguageCode());
-    } else if (sourceLanguage.getLanguageCode().equals(user.getLanguageSpoken())) {
+    } else if (sourceLanguage.getLanguageCode().equals(analysisRequest.userLanguageSpoken())) {
       return createFullAnalysisForSpokenLanguage(analysisRequest);
     } else {
       return FullAnalysis.builder()
@@ -65,7 +63,7 @@ public class FullAnalysisService {
     Optional<CompletableFuture<SemanticTranslation>> semanticTranslationFuture = Optional.empty();
     if (event.performSemanticTranslation()) {
       semanticTranslationFuture = Optional.of(supplyAsync(() ->
-          semanticTranslationService.createSemanticTranslation(phrase, event.getUserLanguageSpoken())
+          semanticTranslationService.createSemanticTranslation(phrase, event.userLanguageSpoken())
       ));
     }
 
@@ -95,22 +93,21 @@ public class FullAnalysisService {
   // Creates a translation from the spoken language to the learned language, then creates a full analysis
   private FullAnalysis createFullAnalysisForSpokenLanguage(AnalysisRequestEvent event) {
     var learnedLanguageTranslation = semanticTranslationService.createSemanticTranslation(
-        event.phrase(), event.getUserLanguageLearned()
+        event.phrase(), event.userLanguageLearned()
     );
-    var learnedLanguageAnalysisEvent = createLearnedLanguageAnalysisEvent(event, learnedLanguageTranslation);
+    var learnedLanguageAnalysisEvent = createLearnedLanguageAnalysisEvent(learnedLanguageTranslation);
     var translation = SemanticTranslation.builder()
         .sourcePhrase(event.phrase())
         .translatedPhrase(learnedLanguageTranslation.getTranslatedPhrase())
         .build();
-    return createFullAnalysisForLearnedLanguage(learnedLanguageAnalysisEvent, event.user().getLanguageLearned()).toBuilder()
+    return createFullAnalysisForLearnedLanguage(learnedLanguageAnalysisEvent, event.userLanguageLearned()).toBuilder()
         .semanticTranslation(translation)
         .build();
   }
 
-  private AnalysisRequestEvent createLearnedLanguageAnalysisEvent(AnalysisRequestEvent event, SemanticTranslation learnedLanguageTranslation) {
+  private AnalysisRequestEvent createLearnedLanguageAnalysisEvent(SemanticTranslation learnedLanguageTranslation) {
     return AnalysisRequestEvent.builder()
         .phrase(learnedLanguageTranslation.getTranslatedPhrase())
-        .user(event.user())
         .performSemanticTranslation(false)
         .performLiteralTranslation(true)
         .performMorphologicalAnalysis(true)

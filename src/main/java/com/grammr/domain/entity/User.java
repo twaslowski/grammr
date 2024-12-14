@@ -29,7 +29,7 @@ public class User {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
   private long id;
 
-  private long telegramId;
+  private long chatId;
 
   @Enumerated(EnumType.STRING)
   private LanguageCode languageSpoken;

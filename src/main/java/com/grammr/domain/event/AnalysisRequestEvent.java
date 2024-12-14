@@ -8,8 +8,8 @@ import lombok.Builder;
 public record AnalysisRequestEvent(
     String phrase,
     String requestId,
-    // todo user should be removed eventually, I think?
-    User user,
+    LanguageCode userLanguageSpoken,
+    LanguageCode userLanguageLearned,
     boolean performSemanticTranslation,
     boolean performLiteralTranslation,
     boolean performMorphologicalAnalysis
@@ -22,11 +22,15 @@ public record AnalysisRequestEvent(
         .performSemanticTranslation(true);
   }
 
-  public LanguageCode getUserLanguageSpoken() {
-    return user.getLanguageSpoken();
-  }
-
-  public LanguageCode getUserLanguageLearned() {
-    return user.getLanguageLearned();
+  public AnalysisRequestEvent withLanguageInformation(User user) {
+    return AnalysisRequestEvent.builder()
+        .phrase(phrase)
+        .requestId(requestId)
+        .userLanguageLearned(user.getLanguageLearned())
+        .userLanguageSpoken(user.getLanguageSpoken())
+        .performSemanticTranslation(performSemanticTranslation)
+        .performLiteralTranslation(performLiteralTranslation)
+        .performMorphologicalAnalysis(performMorphologicalAnalysis)
+        .build();
   }
 }

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.event.AnalysisRequestEventSpec;
 import com.grammr.domain.value.language.LanguageRecognition;
@@ -41,7 +42,8 @@ class FullAnalysisServiceTest {
   @Test
   void shouldCallAllServices() {
     var phrase = "Hallo Welt";
-    var event = AnalysisRequestEventSpec.valid().phrase(phrase).build();
+    var user = UserSpec.valid().build();
+    var event = AnalysisRequestEventSpec.valid(user).phrase(phrase).build();
 
     when(languageRecognitionService.recognizeLanguage(phrase)).thenReturn(new LanguageRecognition(LanguageCode.DE));
     when(morphologicalAnalysisService.analyze(phrase, LanguageCode.DE)).thenReturn(MorphologicalAnalysisSpec.valid().build());
@@ -55,8 +57,9 @@ class FullAnalysisServiceTest {
 
   @Test
   void shouldNotPerformExtensiveAnalysisForLongPhrases() {
+    var user = UserSpec.valid().build();
     var phrase = "This is a phrase longer than fifteen analyzedTokens a e i o u and sometimes y too";
-    var event = AnalysisRequestEventSpec.valid().phrase(phrase).build();
+    var event = AnalysisRequestEventSpec.valid(user).phrase(phrase).build();
 
     when(languageRecognitionService.recognizeLanguage(phrase)).thenReturn(LanguageRecognition.of(LanguageCode.DE));
 

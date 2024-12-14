@@ -28,6 +28,7 @@ public class AudioHandler implements UpdateHandler {
     var audioUpdate = (TelegramAudioUpdate) update;
     var user = userService.findUserByChatId(audioUpdate.getChatId())
         .orElseThrow(() -> new UserNotFoundException(audioUpdate.getChatId()));
+
     var audioTranscriptionRequestEvent = AudioTranscriptionRequestEvent.builder()
         .path(audioUpdate.getFilePath())
         .user(user)

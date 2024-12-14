@@ -24,7 +24,7 @@ public class UserIntegrationTest extends IntegrationTestBase {
 
     await().atMost(3, TimeUnit.SECONDS)
         .untilAsserted(() -> {
-          var user = userRepository.findByTelegramId(1L);
+          var user = userRepository.findByChatId(1L);
           assertThat(user).isPresent();
 
           assertThat(outgoingMessageQueue).hasSize(1);

@@ -1,14 +1,16 @@
 package com.grammr.integration;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.event.AnalysisRequestEvent;
-import com.grammr.domain.event.AnalysisRequestEventSpec;
 import com.grammr.domain.value.language.Token;
 import com.grammr.domain.value.language.TokenTranslation;
+import com.grammr.telegram.dto.update.TelegramTextUpdate;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -19,18 +21,12 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
   @Test
   @SneakyThrows
   void shouldPerformCompleteAnalysis() {
-    var sourcePhrase = "Ich lerne heute Deutsch.";
+    var sourcePhrase = "Ich lerne heute Deutsch";
     var phraseTranslation = "I am learning German today";
     var tokens = tokenService.tokenize(sourcePhrase);
     var words = tokens.stream().map(Token::text).toList();
 
     var user = userRepository.save(UserSpec.valid().build());
-
-    // given
-    var analysisRequest = AnalysisRequestEventSpec.valid()
-        .phrase(sourcePhrase)
-        .user(user)
-        .build();
 
     mockLanguageRecognition(sourcePhrase, user.getLanguageLearned());
     mockSemanticTranslation(sourcePhrase, phraseTranslation, user.getLanguageSpoken());
@@ -38,13 +34,27 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
       mockTokenTranslation(sourcePhrase, word, new TokenTranslation(word, "someTranslation"));
     }
 
-    // when
-    var fullAnalysis = fullAnalysisService.processFullAnalysisRequest(analysisRequest);
+    // given a text update
+    incomingMessageQueue.add(TelegramTextUpdate.builder()
+        .text(sourcePhrase)
+        .chatId(user.getChatId())
+        .build());
 
-    // then
-    assertThat(fullAnalysis).isNotNull();
-    assertThat(fullAnalysis.semanticTranslation().getTranslatedPhrase()).isEqualTo(phraseTranslation);
-    assertThat(fullAnalysis.analyzedTokens()).allMatch(token -> token.morphology() != null);
+    await().atMost(5, SECONDS).untilAsserted(() -> {
+      assertThat(requestRepository.count()).isEqualTo(1);
+
+      assertThat(requestRepository.findAll().getFirst()).isNotNull();
+
+      assertThat(outgoingMessageQueue).isNotEmpty();
+      var analysisCompleteEvents = eventAccumulator.getAnalysisCompleteEvents();
+      assertThat(analysisCompleteEvents).isNotEmpty();
+
+      var analysis = analysisCompleteEvents.getFirst().fullAnalysis();
+      assertThat(analysis).isNotNull();
+      assertThat(analysis.semanticTranslation().getSourcePhrase()).isEqualTo(sourcePhrase);
+      assertThat(analysis.semanticTranslation().getTranslatedPhrase()).isEqualTo(phraseTranslation);
+      assertThat(analysis.analyzedTokens()).allMatch(token -> token.morphology() != null);
+    });
   }
 
   @Test
@@ -61,27 +71,32 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
     var tokens = tokenService.tokenize(translation);
     var words = tokens.stream().map(Token::text).toList();
 
-    // given
-    var analysisRequest = AnalysisRequestEvent.builder()
-        .phrase(sourcePhrase)
-        .user(user)
-        .build();
-
     mockLanguageRecognition(sourcePhrase, LanguageCode.EN);
     mockSemanticTranslation(sourcePhrase, translation, LanguageCode.DE);
-
     for (String word : words) {
       mockTokenTranslation(translation, word, new TokenTranslation(word, "someTranslation"));
     }
 
-    // when
-    var fullAnalysis = fullAnalysisService.processFullAnalysisRequest(analysisRequest);
+    incomingMessageQueue.add(TelegramTextUpdate.builder()
+        .text(sourcePhrase)
+        .chatId(user.getChatId())
+        .build());
 
-    // then
-    assertThat(fullAnalysis).isNotNull();
-    assertThat(fullAnalysis.semanticTranslation().getSourcePhrase()).isEqualTo(sourcePhrase);
-    assertThat(fullAnalysis.semanticTranslation().getTranslatedPhrase()).isEqualTo(translation);
-    assertThat(fullAnalysis.analyzedTokens()).allMatch(token -> token.morphology() != null);
+    await().atMost(5, SECONDS).untilAsserted(() -> {
+      assertThat(requestRepository.count()).isEqualTo(1);
+
+      assertThat(requestRepository.findAll().getFirst()).isNotNull();
+
+      assertThat(outgoingMessageQueue).isNotEmpty();
+      var analysisCompleteEvents = eventAccumulator.getAnalysisCompleteEvents();
+      assertThat(analysisCompleteEvents).isNotEmpty();
+
+      var analysis = analysisCompleteEvents.getFirst().fullAnalysis();
+      assertThat(analysis).isNotNull();
+      assertThat(analysis.semanticTranslation().getSourcePhrase()).isEqualTo(sourcePhrase);
+      assertThat(analysis.semanticTranslation().getTranslatedPhrase()).isEqualTo(translation);
+      assertThat(analysis.analyzedTokens()).allMatch(token -> token.morphology() != null);
+    });
   }
 
   @Test
@@ -94,7 +109,6 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
     // given
     var analysisRequest = AnalysisRequestEvent.builder()
         .phrase(sourcePhrase)
-        .user(user)
         .build();
 
     mockLanguageRecognition(sourcePhrase, LanguageCode.UNSUPPORTED);
