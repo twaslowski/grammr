@@ -16,10 +16,9 @@ public class UserService {
   private final UserRepository userRepository;
   private final UserInitializationService userInitializationService;
 
-  public boolean createUserFromTelegramId(long telegramId) {
-    return userRepository.findByTelegramId(telegramId)
-        .map(user -> false)
-        .orElseGet(() -> userInitializationService.initializeUser(telegramId));
+  public User createUserFromTelegramId(long telegramId) {
+    return userRepository.findByTelegramId(telegramId).orElseGet(() ->
+        userInitializationService.initializeUser(telegramId));
   }
 
   public Optional<User> findUserByChatId(long telegramId) {

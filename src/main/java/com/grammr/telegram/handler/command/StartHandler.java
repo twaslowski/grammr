@@ -21,16 +21,11 @@ public class StartHandler extends AbstractCommandHandler {
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
-    var userCreated = userService.createUserFromTelegramId(update.getChatId());
-    if (userCreated) {
-      log.info("User created from chatId {}", update.getChatId());
-    }
+    userService.createUserFromTelegramId(update.getChatId());
 
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
-        .text(userCreated
-            ? messageUtil.getMessage("command.start.created")
-            : messageUtil.getMessage("command.start.exists"))
+        .text(messageUtil.getMessage("command.start.message"))
         .build();
   }
 

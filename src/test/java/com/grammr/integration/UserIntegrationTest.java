@@ -30,7 +30,7 @@ public class UserIntegrationTest extends IntegrationTestBase {
           assertThat(outgoingMessageQueue).hasSize(1);
           var message = outgoingMessageQueue.remove();
           assertThat(message.getChatId()).isEqualTo(1L);
-          assertThat(message.getText()).isEqualTo(messageUtil.getMessage("command.start.created"));
+          assertThat(message.getText()).isEqualTo(messageUtil.getMessage("command.start.message"));
         });
   }
 }

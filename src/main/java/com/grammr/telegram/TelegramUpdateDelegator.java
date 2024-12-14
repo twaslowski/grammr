@@ -27,7 +27,7 @@ public class TelegramUpdateDelegator {
     return relevantHandler
         .map(handler -> invokeHandler(handler, update))
         .orElseGet(() -> {
-          log.warn("No handler found");
+          log.warn("No handler found for update {}", update);
           return telegramErrorHandler.noHandlerFound(update.getChatId());
         });
   }
@@ -46,8 +46,8 @@ public class TelegramUpdateDelegator {
   }
 
   private void enrichUpdateWithUser(TelegramUpdate update) {
-    var user = userService.findUserByChatId(update.getChatId()).orElseThrow(() ->
-        new UserNotFoundException(update.getChatId()));
+    var user = userService.findUserByChatId(update.getChatId()).orElseGet(
+        () -> userService.createUserFromTelegramId(update.getChatId()));
     update.setUser(user);
   }
 }

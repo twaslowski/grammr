@@ -1,15 +1,12 @@
 package com.grammr.port.telegram.service;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.grammr.domain.entity.User;
 import com.grammr.repository.UserRepository;
-import java.util.Optional;
-
-import com.grammr.telegram.service.UserInitializationService;
 import com.grammr.service.UserService;
+import com.grammr.telegram.service.UserInitializationService;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,18 +26,11 @@ class UserServiceTest {
   private UserService userService;
 
   @Test
-  void shouldReturnTrueOnUserCreation() {
+  void shouldCreateUserIfNotExists() {
     when(userRepository.findByTelegramId(1L)).thenReturn(Optional.empty());
 
     userService.createUserFromTelegramId(1L);
 
     verify(userInitializationService).initializeUser(1L);
-  }
-
-  @Test
-  void shouldReturnFalseOnUserCreation() {
-    when(userRepository.findByTelegramId(1L)).thenReturn(Optional.of(new User()));
-
-    assertFalse(userService.createUserFromTelegramId(1L));
   }
 }

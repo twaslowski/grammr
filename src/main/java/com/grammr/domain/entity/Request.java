@@ -3,6 +3,8 @@ package com.grammr.domain.entity;
 import com.grammr.domain.event.AnalysisRequestEvent;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -21,7 +23,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user")
+@Table(name = "request")
 public class Request {
 
   enum Status {
@@ -39,6 +41,7 @@ public class Request {
   private User user;
 
   @NotNull
+  @Enumerated(EnumType.STRING)
   private Status status;
 
   private int promptTokens;
