@@ -21,6 +21,7 @@ public class TextUpdateHandler implements UpdateHandler {
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     var user = userService.findUserByChatId(update.getChatId())
         .orElseThrow(() -> new UserNotFoundException(update.getChatId()));
+
     var phrase = update.getText();
     analysisInitiationService.initiateAnalysis(phrase, user);
     return TelegramTextResponse.builder()

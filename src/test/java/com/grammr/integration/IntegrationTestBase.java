@@ -14,7 +14,7 @@ import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.TokenTranslation;
 import com.grammr.repository.RequestRepository;
 import com.grammr.repository.UserRepository;
-import com.grammr.service.FullAnalysisService;
+import com.grammr.service.AnalysisService;
 import com.grammr.service.TokenService;
 import com.grammr.service.language.recognition.OpenAILanguageRecognitionService;
 import com.grammr.service.language.translation.literal.OpenAILiteralTranslationService;
@@ -52,7 +52,7 @@ public class IntegrationTestBase {
   protected OpenAILanguageRecognitionService languageRecognitionService;
 
   @Autowired
-  protected FullAnalysisService fullAnalysisService;
+  protected AnalysisService fullAnalysisService;
 
   @Autowired
   protected TokenService tokenService;

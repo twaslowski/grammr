@@ -29,6 +29,7 @@ public class AnalysisInitiationService {
 
     var request = Request.from(requestId, user.getChatId());
     requestRepository.save(request);
+    log.info("Saved request with id {}", requestId);
     eventPublisher.publishEvent(analysisRequestEvent);
   }
 }

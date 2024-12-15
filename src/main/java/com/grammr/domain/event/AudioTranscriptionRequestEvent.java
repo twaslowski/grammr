@@ -1,13 +1,14 @@
 package com.grammr.domain.event;
 
-import com.grammr.domain.entity.User;
+import com.grammr.domain.enums.LanguageCode;
 import java.nio.file.Path;
 import lombok.Builder;
 
 @Builder
 public record AudioTranscriptionRequestEvent(
     Path path,
-    User user,
+    LanguageCode userLanguageLearned,
+    LanguageCode userLanguageSpoken,
     String requestId
 ) {
 

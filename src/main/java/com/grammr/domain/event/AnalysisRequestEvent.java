@@ -1,6 +1,5 @@
 package com.grammr.domain.event;
 
-import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.LanguageCode;
 import lombok.Builder;
 
@@ -22,15 +21,14 @@ public record AnalysisRequestEvent(
         .performSemanticTranslation(true);
   }
 
-  public AnalysisRequestEvent withLanguageInformation(User user) {
+  // todo: workaround; eventually the AnalysisService should determine this itself
+  public AnalysisRequestEvent withoutLanguageInformation() {
     return AnalysisRequestEvent.builder()
         .phrase(phrase)
         .requestId(requestId)
-        .userLanguageLearned(user.getLanguageLearned())
-        .userLanguageSpoken(user.getLanguageSpoken())
         .performSemanticTranslation(performSemanticTranslation)
-        .performLiteralTranslation(performLiteralTranslation)
-        .performMorphologicalAnalysis(performMorphologicalAnalysis)
+        .performLiteralTranslation(false)
+        .performMorphologicalAnalysis(false)
         .build();
   }
 }

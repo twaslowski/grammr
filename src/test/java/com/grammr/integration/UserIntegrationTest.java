@@ -33,4 +33,22 @@ public class UserIntegrationTest extends IntegrationTestBase {
           assertThat(message.getText()).isEqualTo(messageUtil.getMessage("command.start.message"));
         });
   }
+
+  @Test
+  void shouldReturnErrorMessageIfUserDoesNotExist() {
+    var update = TelegramTextUpdate.builder()
+        .chatId(1L)
+        .text("Hello")
+        .build();
+
+    incomingMessageQueue.add(update);
+
+    await().atMost(3, TimeUnit.SECONDS)
+        .untilAsserted(() -> {
+          assertThat(outgoingMessageQueue).hasSize(1);
+          var message = outgoingMessageQueue.remove();
+          assertThat(message.getChatId()).isEqualTo(1L);
+          assertThat(message.getText()).isEqualTo(messageUtil.getMessage("telegram.error.user.not-found"));
+        });
+  }
 }

@@ -24,7 +24,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Table(name = "request")
 public class Request {
 
-  enum Status {
+  public enum Status {
     PENDING,
     IN_PROGRESS,
     COMPLETED

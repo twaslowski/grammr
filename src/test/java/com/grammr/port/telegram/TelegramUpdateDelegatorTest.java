@@ -21,7 +21,7 @@ class TelegramUpdateDelegatorTest {
   private final UserService userService = mock(UserService.class);
 
   private final TelegramUpdateDelegator telegramUpdateDelegator =
-      new TelegramUpdateDelegator(List.of(textUpdateHandler), telegramErrorHandler, userService);
+      new TelegramUpdateDelegator(List.of(textUpdateHandler), telegramErrorHandler);
 
   @Test
   void shouldDelegateTextUpdateToTextHandler() {

@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Builder
 @Slf4j
-public class FullAnalysisService {
+public class AnalysisService {
 
   private static final int MAX_TOKENS = 15;
 
@@ -43,9 +43,9 @@ public class FullAnalysisService {
     var sourceLanguage = languageRecognitionService.recognizeLanguage(sourcePhrase);
 
     if (sourceLanguage.getLanguageCode().equals(analysisRequest.userLanguageLearned())) {
-      return createFullAnalysisForLearnedLanguage(analysisRequest, sourceLanguage.getLanguageCode());
+      return createAnalysis(analysisRequest, sourceLanguage.getLanguageCode());
     } else if (sourceLanguage.getLanguageCode().equals(analysisRequest.userLanguageSpoken())) {
-      return createFullAnalysisForSpokenLanguage(analysisRequest);
+      return createReverseAnalysis(analysisRequest);
     } else {
       return FullAnalysis.builder()
           .sourcePhrase(sourcePhrase)
@@ -54,8 +54,8 @@ public class FullAnalysisService {
     }
   }
 
-  private FullAnalysis createFullAnalysisForLearnedLanguage(AnalysisRequestEvent event,
-                                                            LanguageCode languageCode) {
+  private FullAnalysis createAnalysis(AnalysisRequestEvent event,
+                                      LanguageCode languageCode) {
     var phrase = event.phrase();
     var tokens = tokenService.tokenize(phrase);
     var words = tokens.stream().map(Token::text).toList();
@@ -91,7 +91,7 @@ public class FullAnalysisService {
 
   // So that a user can ask "How do I say ... in the language I'm learning?" and get a response
   // Creates a translation from the spoken language to the learned language, then creates a full analysis
-  private FullAnalysis createFullAnalysisForSpokenLanguage(AnalysisRequestEvent event) {
+  private FullAnalysis createReverseAnalysis(AnalysisRequestEvent event) {
     var learnedLanguageTranslation = semanticTranslationService.createSemanticTranslation(
         event.phrase(), event.userLanguageLearned()
     );
@@ -100,7 +100,7 @@ public class FullAnalysisService {
         .sourcePhrase(event.phrase())
         .translatedPhrase(learnedLanguageTranslation.getTranslatedPhrase())
         .build();
-    return createFullAnalysisForLearnedLanguage(learnedLanguageAnalysisEvent, event.userLanguageLearned()).toBuilder()
+    return createAnalysis(learnedLanguageAnalysisEvent, event.userLanguageLearned()).toBuilder()
         .semanticTranslation(translation)
         .build();
   }

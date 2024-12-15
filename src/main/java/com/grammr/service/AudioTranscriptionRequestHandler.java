@@ -24,11 +24,13 @@ public class AudioTranscriptionRequestHandler {
   @EventListener
   @SneakyThrows
   public void handleAudioTranscriptionRequest(AudioTranscriptionRequestEvent event) {
-    log.info("Received audio transcription request for chatId: {}", event.requestId());
+    log.info("Received audio transcription request: {}", event.requestId());
     try {
       var transcription = transcriptionService.createAudioTranscription(event.path());
       AnalysisRequestEvent request = AnalysisRequestEvent.full()
           .phrase(transcription.getTranscription())
+          .userLanguageLearned(event.userLanguageLearned())
+          .userLanguageSpoken(event.userLanguageSpoken())
           .requestId(event.requestId()).build();
       eventPublisher.publishEvent(request);
     } catch (Exception e) {
