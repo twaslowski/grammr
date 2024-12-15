@@ -2,18 +2,18 @@ package com.grammr.port.telegram.external;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import com.grammr.port.telegram.dto.update.TelegramTextUpdate;
-import com.grammr.port.telegram.dto.update.TelegramUpdate;
-import com.grammr.port.telegram.exception.RequiredDataMissingException;
-import com.grammr.port.telegram.external.factory.TelegramUpdateFactory;
+import com.grammr.telegram.dto.update.TelegramTextUpdate;
+import com.grammr.telegram.dto.update.TelegramUpdate;
+import com.grammr.telegram.exception.UpdateNotProcessableException;
+import com.grammr.telegram.external.TelegramUpdateProducer;
+import com.grammr.telegram.external.factory.TelegramUpdateFactory;
 import java.util.Queue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -26,6 +26,9 @@ class TelegramUpdateProducerTest {
   @Mock
   private Queue<TelegramUpdate> incomingQueue;
 
+  @Mock
+  private TelegramUpdateFactory telegramUpdateFactory;
+
   @Test
   void shouldAddUpdateToIncomingQueue() {
     var telegramUpdate = TelegramTextUpdate.builder()
@@ -35,18 +38,16 @@ class TelegramUpdateProducerTest {
         .build();
     var update = new Update();
 
-    try (MockedStatic<TelegramUpdateFactory> telegramUpdateFactory = Mockito.mockStatic(TelegramUpdateFactory.class)) {
-      telegramUpdateFactory.when(() -> TelegramUpdateFactory.createTelegramUpdate(update)).thenReturn(telegramUpdate);
-      // When update is processed
-      telegramPoller.consume(update);
+    when(telegramUpdateFactory.createTelegramUpdate(update)).thenReturn(telegramUpdate);
+    // When update is processed
+    telegramPoller.consume(update);
 
-      // Then telegramUpdate object is added to Queue
-      verify(incomingQueue).add(TelegramTextUpdate.builder()
-          .updateId(1)
-          .text("some text")
-          .chatId(1)
-          .build());
-    }
+    // Then telegramUpdate object is added to Queue
+    verify(incomingQueue).add(TelegramTextUpdate.builder()
+        .updateId(1)
+        .text("some text")
+        .chatId(1)
+        .build());
   }
 
   @Test
@@ -58,6 +59,6 @@ class TelegramUpdateProducerTest {
 
     // When extracting the text
     assertThatThrownBy(() -> telegramPoller.consume(update))
-        .isInstanceOf(RequiredDataMissingException.class);
+        .isInstanceOf(UpdateNotProcessableException.class);
   }
 }

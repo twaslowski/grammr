@@ -4,17 +4,24 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.grammr.port.telegram.dto.update.TelegramTextUpdate;
-import com.grammr.port.telegram.handler.TextUpdateHandler;
+import com.grammr.domain.entity.UserSpec;
+import com.grammr.service.UserService;
+import com.grammr.telegram.TelegramErrorHandler;
+import com.grammr.telegram.TelegramUpdateDelegator;
+import com.grammr.telegram.dto.update.TelegramTextUpdate;
+import com.grammr.telegram.handler.TextUpdateHandler;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 class TelegramUpdateDelegatorTest {
 
   private final TextUpdateHandler textUpdateHandler = mock(TextUpdateHandler.class);
+  private final TelegramErrorHandler telegramErrorHandler = mock(TelegramErrorHandler.class);
+  private final UserService userService = mock(UserService.class);
 
   private final TelegramUpdateDelegator telegramUpdateDelegator =
-      new TelegramUpdateDelegator(List.of(textUpdateHandler));
+      new TelegramUpdateDelegator(List.of(textUpdateHandler), telegramErrorHandler);
 
   @Test
   void shouldDelegateTextUpdateToTextHandler() {
@@ -25,6 +32,7 @@ class TelegramUpdateDelegatorTest {
         .build();
 
     when(textUpdateHandler.canHandle(update)).thenReturn(true);
+    when(userService.findUserByChatId(update.getChatId())).thenReturn(Optional.of(UserSpec.valid().build()));
 
     // when
     telegramUpdateDelegator.delegateUpdate(update);

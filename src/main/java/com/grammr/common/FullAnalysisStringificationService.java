@@ -23,8 +23,8 @@ public class FullAnalysisStringificationService {
     return format("%s%s%s%s",
         stringifySemanticTranslation(fullAnalysis.semanticTranslation()),
         NEWLINE,
-        stringifyTokens(fullAnalysis.analyzedTokens()),
-        stringifyUsage(fullAnalysis));
+        NEWLINE,
+        stringifyTokens(fullAnalysis.analyzedTokens()));
   }
 
   public String stringifySemanticTranslation(SemanticTranslation translation) {
@@ -57,10 +57,10 @@ public class FullAnalysisStringificationService {
     }
     stringBuilder.append(String.format("%s (from %s)", DELIMITER, italic(tokenMorphology.lemma())));
     if (tokenMorphology.partOfSpeechTag() != null) {
-      stringBuilder.append(String.format("%s %s", DELIMITER, italic(tokenMorphology.partOfSpeechTag().getFullIdentifier())));
+      stringBuilder.append(String.format("%s %s", DELIMITER, tokenMorphology.partOfSpeechTag().getFullIdentifier()));
     }
     if (shouldStringifyFeatures(tokenMorphology)) {
-      stringBuilder.append(String.format("%s %s", DELIMITER, stringifyFeatures(tokenMorphology)));
+      stringBuilder.append(String.format("%s %s", DELIMITER, stringifyFeatures(tokenMorphology)).toLowerCase());
     }
 
     return stringBuilder.toString();
@@ -94,15 +94,15 @@ public class FullAnalysisStringificationService {
 
   private String stringifyUsage(FullAnalysis fullAnalysis) {
     return format("Usage: " + NEWLINE
-        + "Completion: %s"
-        + "Prompt: %s",
+            + "Completion: %s"
+            + "Prompt: %s",
         fullAnalysis.completionTokens(),
         fullAnalysis.promptTokens()
     );
   }
 
   private String stringifyTokenTranslation(Token token) {
-    return format("%s -> %s", bold(token.text()), bold(token.translation().getTranslation()));
+    return format("%s -> %s", bold(token.text()), token.translation().getTranslation());
   }
 
   private String bold(String text) {

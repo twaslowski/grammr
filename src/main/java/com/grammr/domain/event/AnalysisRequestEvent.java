@@ -1,15 +1,34 @@
 package com.grammr.domain.event;
 
+import com.grammr.domain.enums.LanguageCode;
 import lombok.Builder;
 
 @Builder
 public record AnalysisRequestEvent(
     String phrase,
     String requestId,
-    // Todo: Most likely, the Telegram Port should eventually have its own database
-    // to link the unique identifier to a Telegram Chat; potentially alongside the capacity
-    // to edit temporary messages. For now, this leaky abstraction will do.
-    long chatId
+    LanguageCode userLanguageSpoken,
+    LanguageCode userLanguageLearned,
+    boolean performSemanticTranslation,
+    boolean performLiteralTranslation,
+    boolean performMorphologicalAnalysis
 ) {
 
+  public static AnalysisRequestEvent.AnalysisRequestEventBuilder full() {
+    return AnalysisRequestEvent.builder()
+        .performMorphologicalAnalysis(true)
+        .performLiteralTranslation(true)
+        .performSemanticTranslation(true);
+  }
+
+  // todo: workaround; eventually the AnalysisService should determine this itself
+  public AnalysisRequestEvent withoutLanguageInformation() {
+    return AnalysisRequestEvent.builder()
+        .phrase(phrase)
+        .requestId(requestId)
+        .performSemanticTranslation(performSemanticTranslation)
+        .performLiteralTranslation(false)
+        .performMorphologicalAnalysis(false)
+        .build();
+  }
 }

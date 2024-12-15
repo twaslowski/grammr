@@ -3,6 +3,7 @@ package com.grammr.benchmark;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.grammr.annotation.BenchmarkTest;
+import com.grammr.domain.enums.LanguageCode;
 import com.grammr.service.language.translation.semantic.OpenAISemanticTranslationService;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,16 +19,16 @@ public class OpenAISemanticTranslationBenchmarkTest extends AbstractBenchmarkTes
 
   @ParameterizedTest
   @MethodSource("providePhrasePairs")
-  void shouldCreateSemanticTranslation(String sourcePhrase, String translatedPhrase) {
-    var semanticTranslation = semanticTranslationService.createSemanticTranslation(sourcePhrase);
+  void shouldCreateSemanticTranslation(String sourcePhrase, String translatedPhrase, LanguageCode to) {
+    var semanticTranslation = semanticTranslationService.createSemanticTranslation(sourcePhrase, to);
     assertThat(semanticTranslation.getSourcePhrase()).isEqualTo(sourcePhrase);
     assertThat(semanticTranslation.getTranslatedPhrase()).isEqualTo(translatedPhrase);
   }
 
   private static Stream<Arguments> providePhrasePairs() {
     return Stream.of(
-        Arguments.of("Wie geht es dir?", "How are you doing?"),
-        Arguments.of("как у тебя дела?", "How are you doing?")
+        Arguments.of("Wie geht es dir?", "How are you doing?", LanguageCode.EN),
+        Arguments.of("как у тебя дела?", "How are you doing?", LanguageCode.EN)
     );
   }
 }

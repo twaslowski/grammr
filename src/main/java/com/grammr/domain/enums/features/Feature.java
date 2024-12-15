@@ -8,7 +8,7 @@ public record Feature(FeatureType type, String value) {
       case GENDER -> Gender.valueOf(value);
       case CASE -> Case.valueOf(value);
       case NUMBER -> Number.valueOf(value);
-      case PERSON -> Person.valueOf(value);
+      case PERSON -> Person.from(value);
       case TENSE -> Tense.valueOf(value);
       case ANIMACY -> Animacy.valueOf(value);
       case MISC -> MiscellaneousFeature.UNSUPPORTED_FEATURE;

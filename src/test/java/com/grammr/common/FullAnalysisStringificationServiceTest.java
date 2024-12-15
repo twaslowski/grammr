@@ -34,7 +34,7 @@ class FullAnalysisStringificationServiceTest {
         .translation(new TokenTranslation("text", "translation"))
         .build());
     var result = fullAnalysisStringificationService.stringifyTokens(tokens);
-    assertEquals("<b>text</b> -> <b>translation</b>", result);
+    assertEquals("<b>text</b> -> translation", result);
   }
 
   @Test
@@ -44,7 +44,7 @@ class FullAnalysisStringificationServiceTest {
         .morphology(morphology)
         .build());
     var result = fullAnalysisStringificationService.stringifyTokens(tokens);
-    assertEquals(", (from <i>lemma</i>), <i>Noun</i>, Nominative Singular Masculine", result);
+    assertEquals(", (from <i>lemma</i>), Noun, nominative singular masculine", result);
   }
 
   @Test
@@ -72,6 +72,6 @@ class FullAnalysisStringificationServiceTest {
         .morphology(morphology)
         .build());
     var result = fullAnalysisStringificationService.stringifyTokens(tokens);
-    assertEquals(", (from <i>someOtherText</i>), <i>Coordinating Conjunction</i>", result);
+    assertEquals(", (from <i>someOtherText</i>), Coordinating Conjunction", result);
   }
 }

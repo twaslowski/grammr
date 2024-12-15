@@ -1,36 +1,43 @@
 package com.grammr.service;
 
-import com.grammr.common.AbstractConsumer;
 import com.grammr.domain.event.AnalysisCompleteEvent;
 import com.grammr.domain.event.AnalysisRequestEvent;
-import java.util.concurrent.BlockingQueue;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-@Service
 @Slf4j
-public class AnalysisRequestHandler extends AbstractConsumer<AnalysisRequestEvent> {
+@Service
+@RequiredArgsConstructor
+public class AnalysisRequestHandler {
 
-  private final AnalysisRequestService analysisRequestService;
-  private final BlockingQueue<AnalysisCompleteEvent> analysisCompleteEventQueue;
+  private final AnalysisService analysisService;
+  private final ApplicationEventPublisher eventPublisher;
 
-  public AnalysisRequestHandler(BlockingQueue<AnalysisRequestEvent> analysisRequestQueue,
-                                BlockingQueue<AnalysisCompleteEvent> analysisCompleteEventQueue,
-                                AnalysisRequestService analysisRequestService) {
-    super(analysisRequestQueue);
-    this.analysisCompleteEventQueue = analysisCompleteEventQueue;
-    this.analysisRequestService = analysisRequestService;
-  }
+  @Async
+  @EventListener
+  public void handleAnalysisRequest(AnalysisRequestEvent analysisRequest) {
+    log.info("Received analysis request: {}", analysisRequest);
 
-  @Override
-  protected void handleItem(AnalysisRequestEvent analysisRequest) {
-    var analysis = analysisRequestService.processFullAnalysisRequest(analysisRequest);
+    if (!hasLanguageInformation(analysisRequest)) {
+      log.warn("Received analysis request without language information, retrieving user: {}", analysisRequest);
+      analysisRequest = analysisRequest.withoutLanguageInformation();
+    }
+
+    var analysis = analysisService.processFullAnalysisRequest(analysisRequest);
     log.info("Performed analysis: {}", analysis);
     var analysisCompletionEvent = AnalysisCompleteEvent.builder()
         .fullAnalysis(analysis)
         .requestId(analysisRequest.requestId())
-        .chatId(analysisRequest.chatId())
         .build();
-    analysisCompleteEventQueue.add(analysisCompletionEvent);
+    eventPublisher.publishEvent(analysisCompletionEvent);
+  }
+
+  private boolean hasLanguageInformation(AnalysisRequestEvent analysisRequest) {
+    return analysisRequest.userLanguageLearned() != null
+        && analysisRequest.userLanguageSpoken() != null;
   }
 }

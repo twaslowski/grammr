@@ -23,7 +23,7 @@ public class OpenAITokenTranslationService extends AbstractOpenAIService {
       ObjectMapper objectMapper,
       SimpleOpenAI openAI,
       MessageUtil messageUtil,
-      @Value("${openai.model.default-model}")
+      @Value("${openai.completions.model}")
       String modelName
   ) {
     super(objectMapper, openAI, messageUtil, modelName);

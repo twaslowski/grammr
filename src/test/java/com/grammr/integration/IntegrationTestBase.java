@@ -12,18 +12,25 @@ import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.TokenTranslation;
-import com.grammr.service.AnalysisRequestService;
+import com.grammr.repository.RequestRepository;
+import com.grammr.repository.UserRepository;
+import com.grammr.service.AnalysisService;
 import com.grammr.service.TokenService;
 import com.grammr.service.language.recognition.OpenAILanguageRecognitionService;
 import com.grammr.service.language.translation.literal.OpenAILiteralTranslationService;
 import com.grammr.service.language.translation.semantic.OpenAISemanticTranslationService;
+import com.grammr.telegram.dto.response.TelegramResponse;
+import com.grammr.telegram.dto.update.TelegramUpdate;
 import io.github.sashirestela.openai.OpenAI;
 import io.github.sashirestela.openai.SimpleOpenAI;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 @IntegrationTest
 @SpringBootTest
@@ -31,6 +38,9 @@ public class IntegrationTestBase {
 
   @MockBean
   protected SimpleOpenAI openAIClient;
+
+  @MockBean
+  protected TelegramClient telegramClient;
 
   @Autowired
   protected OpenAISemanticTranslationService semanticTranslationService;
@@ -42,7 +52,7 @@ public class IntegrationTestBase {
   protected OpenAILanguageRecognitionService languageRecognitionService;
 
   @Autowired
-  protected AnalysisRequestService analysisRequestService;
+  protected AnalysisService fullAnalysisService;
 
   @Autowired
   protected TokenService tokenService;
@@ -54,9 +64,33 @@ public class IntegrationTestBase {
   protected ObjectMapper objectMapper;
 
   @Autowired
-  private MessageUtil messageUtil;
+  protected MessageUtil messageUtil;
+
+  @Autowired
+  protected UserRepository userRepository;
+
+  @Autowired
+  protected RequestRepository requestRepository;
+
+  @Autowired
+  protected BlockingQueue<TelegramUpdate> incomingMessageQueue;
+
+  @Autowired
+  protected BlockingQueue<TelegramResponse> outgoingMessageQueue;
+
+  @Autowired
+  protected EventAccumulator eventAccumulator;
 
   private final OpenAI.ChatCompletions chatCompletionsMock = mock(OpenAI.ChatCompletions.class);
+
+  @BeforeEach
+  public void setUp() {
+    incomingMessageQueue.clear();
+    outgoingMessageQueue.clear();
+    userRepository.deleteAll();
+    requestRepository.deleteAll();
+    eventAccumulator.reset();
+  }
 
   @SneakyThrows
   protected void mockOpenAIResponse(String promptRegex, Object content) {
@@ -67,20 +101,18 @@ public class IntegrationTestBase {
   }
 
   @SneakyThrows
-  protected void mockSemanticTranslation(String source, String translation) {
-    mockOpenAIResponse(
-        messageUtil.parameterizeMessage("openai.translation.semantic.prompt.user", source),
-        SemanticTranslation.builder()
-            .sourcePhrase(source)
-            .translatedPhrase(translation)
-            .build());
+  protected void mockSemanticTranslation(String source, String translation, LanguageCode to) {
+    String prompt = semanticTranslationService.generateUserMessage(source, to).getContent().toString();
+    mockOpenAIResponse(prompt, SemanticTranslation.builder()
+        .sourcePhrase(source)
+        .translatedPhrase(translation)
+        .build());
   }
 
   @SneakyThrows
   protected void mockLanguageRecognition(String source, LanguageCode languageCode) {
-    mockOpenAIResponse(
-        messageUtil.parameterizeMessage("openai.language-recognition.prompt.user", source),
-        LanguageRecognition.of(languageCode));
+    String prompt = languageRecognitionService.generateUserMessage(source).getContent().toString();
+    mockOpenAIResponse(prompt, LanguageRecognition.of(languageCode));
   }
 
   @SneakyThrows
