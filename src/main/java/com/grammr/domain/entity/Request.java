@@ -1,5 +1,6 @@
 package com.grammr.domain.entity;
 
+import com.grammr.domain.event.AnalysisCompleteEvent;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -60,5 +61,11 @@ public class Request {
         .chatId(chatId)
         .status(Status.PENDING)
         .build();
+  }
+
+  public void complete(AnalysisCompleteEvent event) {
+    this.status = Status.COMPLETED;
+    this.completionTokens += event.fullAnalysis().completionTokens();
+    this.promptTokens += event.fullAnalysis().promptTokens();
   }
 }

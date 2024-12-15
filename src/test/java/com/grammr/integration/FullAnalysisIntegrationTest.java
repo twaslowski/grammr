@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 import com.grammr.annotation.IntegrationTest;
+import com.grammr.domain.entity.Request.Status;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.event.AnalysisRequestEvent;
@@ -43,7 +44,10 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
     await().atMost(5, SECONDS).untilAsserted(() -> {
       assertThat(requestRepository.count()).isEqualTo(1);
 
-      assertThat(requestRepository.findAll().getFirst()).isNotNull();
+      var request = requestRepository.findAll().getFirst();
+      assertThat(request.getCompletionTokens()).isNotZero();
+      assertThat(request.getPromptTokens()).isNotZero();
+      assertThat(request.getStatus()).isEqualTo(Status.COMPLETED);
 
       assertThat(outgoingMessageQueue).isNotEmpty();
       var analysisCompleteEvents = eventAccumulator.getAnalysisCompleteEvents();

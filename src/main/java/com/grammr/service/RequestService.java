@@ -1,13 +1,14 @@
 package com.grammr.service;
 
-import com.grammr.domain.entity.User;
+import com.grammr.domain.event.AnalysisCompleteEvent;
 import com.grammr.domain.exception.RequestNotFoundException;
 import com.grammr.repository.RequestRepository;
-import com.grammr.repository.UserRepository;
-import com.grammr.telegram.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 public class RequestService {
 
   private final RequestRepository requestRepository;
-  private final UserRepository userRepository;
 
   public long retrieveRequestChatId(String requestId) {
     return requestRepository.findByRequestId(requestId)
@@ -23,8 +23,12 @@ public class RequestService {
         .getChatId();
   }
 
-  public User retrieveUser(String requestId) {
-    var chatId = retrieveRequestChatId(requestId);
-    return userRepository.findByChatId(chatId).orElseThrow(() -> new UserNotFoundException(chatId));
+  @Async
+  @EventListener
+  @Transactional
+  public void update(AnalysisCompleteEvent event) {
+    requestRepository.findByRequestId(event.requestId())
+        .orElseThrow(() -> new RequestNotFoundException(event.requestId()))
+        .complete(event);
   }
 }

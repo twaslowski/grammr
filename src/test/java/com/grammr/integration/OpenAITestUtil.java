@@ -3,6 +3,7 @@ package com.grammr.integration;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.github.sashirestela.openai.domain.audio.Transcription;
 import io.github.sashirestela.openai.domain.chat.Chat;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.ChatRole;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.UserMessage;
@@ -35,14 +36,27 @@ public class OpenAITestUtil {
   }
 
   @SneakyThrows
-  public Chat parameterizeResponse(String responseContent) {
-    JsonNode mockResponseNode = objectMapper.readTree(getMockResponse());
+  public Chat parameterizeChatResponse(String responseContent) {
+    JsonNode mockResponseNode = objectMapper.readTree(getChatMockResponse());
     ((ObjectNode) mockResponseNode.path("choices").get(0).path("message")).put("content", responseContent);
     return objectMapper.readValue(mockResponseNode.toString(), Chat.class);
   }
 
   @SneakyThrows
-  private String getMockResponse() {
+  public Transcription parameterizeTranscription(String output) {
+    return objectMapper.readValue(String.format(getAudioMockResponse(), output), Transcription.class);
+  }
+
+  private String getAudioMockResponse() {
+    return """
+        {
+          "text": "%s."
+        }
+        """;
+  }
+
+  @SneakyThrows
+  private String getChatMockResponse() {
     return new String(Files.readAllBytes(Paths.get(MOCK_FILE_PATH)));
   }
 }

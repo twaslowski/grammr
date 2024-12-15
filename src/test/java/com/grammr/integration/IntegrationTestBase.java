@@ -1,6 +1,7 @@
 package com.grammr.integration;
 
 import static com.grammr.integration.OpenAITestUtil.chatRequestMatcher;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -82,6 +83,7 @@ public class IntegrationTestBase {
   protected EventAccumulator eventAccumulator;
 
   private final OpenAI.ChatCompletions chatCompletionsMock = mock(OpenAI.ChatCompletions.class);
+  private final OpenAI.Audios audioMock = mock(OpenAI.Audios.class);
 
   @BeforeEach
   public void setUp() {
@@ -94,7 +96,7 @@ public class IntegrationTestBase {
 
   @SneakyThrows
   protected void mockOpenAIResponse(String promptRegex, Object content) {
-    var chat = openAITestUtil.parameterizeResponse(objectMapper.writeValueAsString(content));
+    var chat = openAITestUtil.parameterizeChatResponse(objectMapper.writeValueAsString(content));
     when(chatCompletionsMock.create(argThat(chatRequestMatcher(promptRegex))))
         .thenReturn(CompletableFuture.supplyAsync(() -> chat));
     when(openAIClient.chatCompletions()).thenReturn(chatCompletionsMock);
@@ -120,5 +122,12 @@ public class IntegrationTestBase {
     mockOpenAIResponse(
         messageUtil.parameterizeMessage("openai.translation.literal.prompt.user", phrase, word),
         tokenTranslation);
+  }
+
+  @SneakyThrows
+  protected void mockAudioTranscription(String output) {
+    var transcription = openAITestUtil.parameterizeTranscription(output);
+    when(audioMock.transcribe(any())).thenReturn(CompletableFuture.supplyAsync(() -> transcription));
+    when(openAIClient.audios()).thenReturn(audioMock);
   }
 }

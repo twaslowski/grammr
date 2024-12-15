@@ -9,8 +9,8 @@ import lombok.Setter;
 public abstract class AIGeneratedContent {
 
   @JsonIgnore
-  protected long completionTokens;
+  protected int completionTokens;
 
   @JsonIgnore
-  protected long promptTokens;
+  protected int promptTokens;
 }

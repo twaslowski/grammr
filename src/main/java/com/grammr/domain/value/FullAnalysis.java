@@ -13,19 +13,19 @@ public record FullAnalysis(
     List<Token> analyzedTokens
 ) {
 
-  public long completionTokens() {
+  public int completionTokens() {
     return semanticTranslation.getCompletionTokens()
         + analyzedTokens.stream()
         .map(Token::translation)
         .map(TokenTranslation::getCompletionTokens)
-        .reduce(0L, Long::sum);
+        .reduce(0, Integer::sum);
   }
 
-  public long promptTokens() {
+  public int promptTokens() {
     return semanticTranslation.getPromptTokens()
         + analyzedTokens.stream()
         .map(Token::translation)
         .map(TokenTranslation::getPromptTokens)
-        .reduce(0L, Long::sum);
+        .reduce(0, Integer::sum);
   }
 }

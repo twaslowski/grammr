@@ -20,7 +20,7 @@ public class EventAccumulator {
 
   @EventListener
   @Async
-  public void saveEvent(AnalysisCompleteEvent analysisCompleteEvent) {
+  public void save(AnalysisCompleteEvent analysisCompleteEvent) {
     analysisCompleteEvents.add(analysisCompleteEvent);
   }
 }
