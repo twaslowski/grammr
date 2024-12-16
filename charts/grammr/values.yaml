@@ -14,6 +14,10 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+openai_api_key: ""
+telegram_token: ""
+datasource_password: ""
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: false
@@ -73,12 +77,12 @@ resources: {}
 
 livenessProbe:
   httpGet:
-    path: /
-    port: http
+    path: /actuator/health
+    port: 8080
 readinessProbe:
   httpGet:
-    path: /
-    port: http
+    path: /actuator/health
+    port: 8080
 
 autoscaling:
   enabled: false

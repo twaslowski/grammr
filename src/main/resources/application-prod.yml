@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: "${DATASOURCE_URL}"
+    username: grammr
+    password: ${DATASOURCE_PASSWORD}
+
+analysis:
+  rest:
+    base-url: ${MORPHOLOGY_API_URL}

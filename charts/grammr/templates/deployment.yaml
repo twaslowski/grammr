@@ -40,6 +40,26 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          env:
+            - name: DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-auth
+                  key: datasource_password
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-auth
+                  key: openai_api_key
+            - name: TELEGRAM_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-auth
+                  key: telegram_token
+            - name: DATASOURCE_URL
+              value: "jdbc:postgresql://postgres.{{ .Release.Namespace }}.svc.cluster.local:5432/grammr?currentSchema=grammr"
+            - name: MORPHOLOGY_API_URL
+              value: "http://grammr-morphology.{{ .Release.Namespace }}.svc.cluster.local:8000"
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
