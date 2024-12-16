@@ -1,5 +1,6 @@
 package com.grammr.service;
 
+import com.grammr.domain.entity.Request;
 import com.grammr.domain.event.AnalysisCompleteEvent;
 import com.grammr.domain.exception.RequestNotFoundException;
 import com.grammr.repository.RequestRepository;
@@ -21,6 +22,11 @@ public class RequestService {
     return requestRepository.findByRequestId(requestId)
         .orElseThrow(() -> new RequestNotFoundException(requestId))
         .getChatId();
+  }
+
+  public Request findRequest(String requestId) {
+    return requestRepository.findByRequestId(requestId)
+        .orElseThrow(() -> new RequestNotFoundException(requestId));
   }
 
   @Async

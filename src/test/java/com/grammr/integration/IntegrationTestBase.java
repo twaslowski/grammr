@@ -4,6 +4,7 @@ import static com.grammr.integration.OpenAITestUtil.chatRequestMatcher;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -92,6 +93,7 @@ public class IntegrationTestBase {
     userRepository.deleteAll();
     requestRepository.deleteAll();
     eventAccumulator.reset();
+    reset(audioMock, chatCompletionsMock);
   }
 
   @SneakyThrows

@@ -11,7 +11,6 @@ import com.grammr.telegram.TelegramUpdateDelegator;
 import com.grammr.telegram.dto.update.TelegramTextUpdate;
 import com.grammr.telegram.handler.TextUpdateHandler;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 class TelegramUpdateDelegatorTest {
@@ -32,7 +31,7 @@ class TelegramUpdateDelegatorTest {
         .build();
 
     when(textUpdateHandler.canHandle(update)).thenReturn(true);
-    when(userService.findUserByChatId(update.getChatId())).thenReturn(Optional.of(UserSpec.valid().build()));
+    when(userService.findUserByChatId(update.getChatId())).thenReturn(UserSpec.valid().build());
 
     // when
     telegramUpdateDelegator.delegateUpdate(update);

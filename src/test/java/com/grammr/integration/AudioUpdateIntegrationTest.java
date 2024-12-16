@@ -31,8 +31,8 @@ public class AudioUpdateIntegrationTest extends IntegrationTestBase {
     var transcriptionOutput = "Ich lerne Deutsch";
     var translation = "I am learning German";
     var words = List.of("Ich", "lerne", "Deutsch");
-    mockAudioTranscription(transcriptionOutput);
 
+    mockAudioTranscription(transcriptionOutput);
     mockLanguageRecognition(transcriptionOutput, user.getLanguageLearned());
     mockSemanticTranslation(transcriptionOutput, translation, user.getLanguageSpoken());
     for (String word : words) {
@@ -54,7 +54,7 @@ public class AudioUpdateIntegrationTest extends IntegrationTestBase {
       var analysis = analysisCompleteEvents.getFirst().fullAnalysis();
       assertThat(analysis).isNotNull();
       assertThat(analysis.semanticTranslation().getSourcePhrase()).isEqualTo(transcriptionOutput);
-      assertThat(analysis.semanticTranslation().getTranslatedPhrase()).isEqualTo(transcriptionOutput);
+      assertThat(analysis.semanticTranslation().getTranslatedPhrase()).isEqualTo(translation);
       assertThat(analysis.analyzedTokens()).allMatch(token -> token.morphology() != null);
     });
   }

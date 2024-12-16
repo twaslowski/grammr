@@ -5,7 +5,6 @@ import com.grammr.telegram.dto.response.TelegramResponse;
 import com.grammr.telegram.dto.response.TelegramTextResponse;
 import com.grammr.telegram.dto.update.TelegramTextUpdate;
 import com.grammr.telegram.dto.update.TelegramUpdate;
-import com.grammr.telegram.exception.UserNotFoundException;
 import com.grammr.telegram.service.AnalysisInitiationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +18,7 @@ public class TextUpdateHandler implements UpdateHandler {
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
-    var user = userService.findUserByChatId(update.getChatId())
-        .orElseThrow(() -> new UserNotFoundException(update.getChatId()));
+    var user = userService.findUserByChatId(update.getChatId());
 
     var phrase = update.getText();
     analysisInitiationService.initiateAnalysis(phrase, user);

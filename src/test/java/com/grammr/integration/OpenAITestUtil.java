@@ -50,7 +50,7 @@ public class OpenAITestUtil {
   private String getAudioMockResponse() {
     return """
         {
-          "text": "%s."
+          "text": "%s"
         }
         """;
   }

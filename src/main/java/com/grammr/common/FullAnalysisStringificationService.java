@@ -92,15 +92,6 @@ public class FullAnalysisStringificationService {
         morphology.getFullFeatureIdentifier(FeatureType.GENDER));
   }
 
-  private String stringifyUsage(FullAnalysis fullAnalysis) {
-    return format("Usage: " + NEWLINE
-            + "Completion: %s"
-            + "Prompt: %s",
-        fullAnalysis.completionTokens(),
-        fullAnalysis.promptTokens()
-    );
-  }
-
   private String stringifyTokenTranslation(Token token) {
     return format("%s -> %s", bold(token.text()), token.translation().getTranslation());
   }

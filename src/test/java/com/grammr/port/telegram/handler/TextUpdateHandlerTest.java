@@ -10,7 +10,6 @@ import com.grammr.service.UserService;
 import com.grammr.telegram.dto.update.TelegramTextUpdate;
 import com.grammr.telegram.handler.TextUpdateHandler;
 import com.grammr.telegram.service.AnalysisInitiationService;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -54,7 +53,7 @@ class TextUpdateHandlerTest {
         .text("someText")
         .build();
     var user = UserSpec.valid().build();
-    when(userService.findUserByChatId(1)).thenReturn(Optional.of(user));
+    when(userService.findUserByChatId(1)).thenReturn(user);
 
     textUpdateHandler.handleUpdate(update);
     verify(analysisInitiationService).initiateAnalysis(update.getText(), user);

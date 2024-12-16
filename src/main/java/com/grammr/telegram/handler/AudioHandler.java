@@ -10,7 +10,6 @@ import com.grammr.telegram.dto.response.TelegramResponse;
 import com.grammr.telegram.dto.response.TelegramTextResponse;
 import com.grammr.telegram.dto.update.TelegramAudioUpdate;
 import com.grammr.telegram.dto.update.TelegramUpdate;
-import com.grammr.telegram.exception.UserNotFoundException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +29,7 @@ public class AudioHandler implements UpdateHandler {
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     var audioUpdate = (TelegramAudioUpdate) update;
-    var user = userService.findUserByChatId(audioUpdate.getChatId())
-        .orElseThrow(() -> new UserNotFoundException(audioUpdate.getChatId()));
+    var user = userService.findUserByChatId(audioUpdate.getChatId());
 
     var request = requestRepository.save(Request.builder()
         .requestId(UUID.randomUUID().toString())

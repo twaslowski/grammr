@@ -37,10 +37,20 @@ public class User {
   @Enumerated(EnumType.STRING)
   private LanguageCode languageLearned;
 
+  private boolean debug;
+
   @CreationTimestamp
   @Column(updatable = false)
   private ZonedDateTime createdTimestamp;
 
   @UpdateTimestamp
   private ZonedDateTime updatedTimestamp;
+
+  public boolean debug() {
+    return debug;
+  }
+
+  public void toggleDebug() {
+    debug = !debug;
+  }
 }

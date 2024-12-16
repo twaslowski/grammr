@@ -25,14 +25,14 @@ function deploy() {
     --set global.postgresql.auth.password="$DATASOURCE_PASSWORD" \
     --values ./charts/values/postgres-values.yaml \
     --namespace grammr --create-namespace \
-    --wait --timeout 60 \
+    --wait --timeout 60s \
     postgres oci://registry-1.docker.io/bitnamicharts/postgresql
 
   helm upgrade --install \
     --set image.tag=latest \
     --set spacyModels=ru_core_news_sm \
     --namespace grammr --create-namespace \
-    --wait --timeout 60 \
+    --wait --timeout 60s \
     grammr-morphology ./charts/sidecar-analysis
 
     helm upgrade --install \
