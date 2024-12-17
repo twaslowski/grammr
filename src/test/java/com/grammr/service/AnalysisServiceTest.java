@@ -1,7 +1,6 @@
 package com.grammr.service;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -10,13 +9,15 @@ import static org.mockito.Mockito.when;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.event.AnalysisRequestEventSpec;
+import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.language.LanguageRecognition;
+import com.grammr.domain.value.language.LiteralTranslationSpec;
 import com.grammr.domain.value.language.MorphologicalAnalysisSpec;
+import com.grammr.domain.value.language.SemanticTranslationSpec;
 import com.grammr.service.language.morphology.MorphologicalAnalysisService;
 import com.grammr.service.language.recognition.LanguageRecognitionService;
 import com.grammr.service.language.translation.literal.LiteralTranslationService;
 import com.grammr.service.language.translation.semantic.SemanticTranslationService;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class AnalysisServiceTest {
@@ -32,7 +33,7 @@ class AnalysisServiceTest {
   private final TokenService tokenService = new TokenService();
 
   private final AnalysisService analysisService = AnalysisService.builder()
-      .analysisService(morphologicalAnalysisService)
+      .morphologicalAnalysisService(morphologicalAnalysisService)
       .languageRecognitionService(languageRecognitionService)
       .literalTranslationService(literalTranslationService)
       .semanticTranslationService(semanticTranslationService)
@@ -45,14 +46,16 @@ class AnalysisServiceTest {
     var user = UserSpec.valid().build();
     var event = AnalysisRequestEventSpec.valid(user).phrase(phrase).build();
 
-    when(languageRecognitionService.recognizeLanguage(phrase)).thenReturn(new LanguageRecognition(LanguageCode.DE));
-    when(morphologicalAnalysisService.analyze(phrase, LanguageCode.DE)).thenReturn(MorphologicalAnalysisSpec.valid().build());
+    when(languageRecognitionService.createAnalysisComponent(any(AnalysisComponentRequest.class))).thenReturn(new LanguageRecognition(LanguageCode.DE));
+    when(morphologicalAnalysisService.createAnalysisComponent(any(AnalysisComponentRequest.class))).thenReturn(MorphologicalAnalysisSpec.valid().build());
+    when(literalTranslationService.createAnalysisComponent(any(AnalysisComponentRequest.class))).thenReturn(LiteralTranslationSpec.valid().build());
+    when(semanticTranslationService.createAnalysisComponent(any(AnalysisComponentRequest.class))).thenReturn(SemanticTranslationSpec.valid().build());
 
     analysisService.processFullAnalysisRequest(event);
 
-    verify(semanticTranslationService).createSemanticTranslation(phrase, LanguageCode.EN);
-    verify(literalTranslationService).translateTokens(phrase, List.of("hallo", "welt"));
-    verify(morphologicalAnalysisService).analyze(phrase, LanguageCode.DE);
+    verify(semanticTranslationService).createAnalysisComponent(any(AnalysisComponentRequest.class));
+    verify(literalTranslationService).createAnalysisComponent(any(AnalysisComponentRequest.class));
+    verify(morphologicalAnalysisService).createAnalysisComponent(any(AnalysisComponentRequest.class));
   }
 
   @Test
@@ -60,13 +63,15 @@ class AnalysisServiceTest {
     var user = UserSpec.valid().build();
     var phrase = "This is a phrase longer than fifteen analyzedTokens a e i o u and sometimes y too";
     var event = AnalysisRequestEventSpec.valid(user).phrase(phrase).build();
+    var analysisComponentRequest = AnalysisComponentRequest.from(event);
 
-    when(languageRecognitionService.recognizeLanguage(phrase)).thenReturn(LanguageRecognition.of(LanguageCode.DE));
+    when(languageRecognitionService.createAnalysisComponent(analysisComponentRequest))
+        .thenReturn(LanguageRecognition.of(LanguageCode.DE));
 
     analysisService.processFullAnalysisRequest(event);
 
-    verify(semanticTranslationService).createSemanticTranslation(phrase, LanguageCode.EN);
-    verify(literalTranslationService, never()).translateTokens(any(), anyList());
-    verify(morphologicalAnalysisService, never()).analyze(any(), any());
+    verify(semanticTranslationService).createAnalysisComponent(any(AnalysisComponentRequest.class));
+    verify(literalTranslationService, never()).createAnalysisComponent(any(AnalysisComponentRequest.class));
+    verify(morphologicalAnalysisService, never()).createAnalysisComponent(any(AnalysisComponentRequest.class));
   }
 }

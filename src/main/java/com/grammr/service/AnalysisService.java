@@ -1,10 +1,9 @@
 package com.grammr.service;
 
-import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.event.AnalysisRequestEvent;
+import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.FullAnalysis;
 import com.grammr.domain.value.language.SemanticTranslation;
-import com.grammr.domain.value.language.Token;
 import com.grammr.service.language.morphology.MorphologicalAnalysisService;
 import com.grammr.service.language.recognition.LanguageRecognitionService;
 import com.grammr.service.language.translation.literal.LiteralTranslationService;
@@ -29,23 +28,25 @@ public class AnalysisService {
   private static final int MAX_TOKENS = 15;
 
   private final ExecutorService executorService = Executors.newCachedThreadPool();
-
   private final SemanticTranslationService semanticTranslationService;
   private final LanguageRecognitionService languageRecognitionService;
   private final LiteralTranslationService literalTranslationService;
-  private final MorphologicalAnalysisService analysisService;
   private final TokenService tokenService;
+  private final MorphologicalAnalysisService morphologicalAnalysisService;
 
   public FullAnalysis processFullAnalysisRequest(AnalysisRequestEvent analysisRequest) {
     var sourcePhrase = analysisRequest.phrase();
     log.info("Processing analysis request for source phrase: '{}'", sourcePhrase);
 
-    var sourceLanguage = languageRecognitionService.recognizeLanguage(sourcePhrase);
+    var analyisComponentRequest = AnalysisComponentRequest.from(analysisRequest);
+    var sourceLanguage = languageRecognitionService.createAnalysisComponent(analyisComponentRequest);
 
-    if (sourceLanguage.getLanguageCode().equals(analysisRequest.userLanguageLearned())) {
-      return createAnalysis(analysisRequest, sourceLanguage.getLanguageCode());
+    // If detected language is learned language
+    if (sourceLanguage.getLanguageCode().equals(analyisComponentRequest.getSourceLanguage())) {
+      return createAnalysis(analysisRequest, analyisComponentRequest);
+    // If detected language is spoken language
     } else if (sourceLanguage.getLanguageCode().equals(analysisRequest.userLanguageSpoken())) {
-      return createReverseAnalysis(analysisRequest);
+      return createReverseAnalysis(analysisRequest, analyisComponentRequest.reverseLanguages());
     } else {
       return FullAnalysis.builder()
           .sourcePhrase(sourcePhrase)
@@ -55,27 +56,24 @@ public class AnalysisService {
   }
 
   private FullAnalysis createAnalysis(AnalysisRequestEvent event,
-                                      LanguageCode languageCode) {
+                                      AnalysisComponentRequest analysisComponentRequest) {
     var phrase = event.phrase();
     var tokens = tokenService.tokenize(phrase);
-    var words = tokens.stream()
-        .map(Token::text)
-        .map(String::toLowerCase)
-        .distinct().toList();
+    analysisComponentRequest.setTokens(tokens);
 
     Optional<CompletableFuture<SemanticTranslation>> semanticTranslationFuture = Optional.empty();
     if (event.performSemanticTranslation()) {
       semanticTranslationFuture = Optional.of(supplyAsync(() ->
-          semanticTranslationService.createSemanticTranslation(phrase, event.userLanguageSpoken())
+          semanticTranslationService.createAnalysisComponent(analysisComponentRequest)
       ));
     }
 
     if (tokens.size() < MAX_TOKENS) {
-      var literalTranslationFuture = supplyAsync(() -> literalTranslationService.translateTokens(phrase, words));
-      var grammaticalAnalysisFuture = supplyAsync(() -> analysisService.analyze(phrase, languageCode));
+      var literalTranslationFuture = supplyAsync(() -> literalTranslationService.createAnalysisComponent(analysisComponentRequest));
+      var grammaticalAnalysisFuture = supplyAsync(() -> morphologicalAnalysisService.createAnalysisComponent(analysisComponentRequest));
       awaitAll(literalTranslationFuture, grammaticalAnalysisFuture);
 
-      var literalTranslation = join(literalTranslationFuture);
+      var literalTranslation = join(literalTranslationFuture).getTokenTranslations();
       var grammaticalAnalysis = join(grammaticalAnalysisFuture);
       tokens = tokenService.enrichTokens(tokens, literalTranslation, grammaticalAnalysis);
     } else {
@@ -94,16 +92,16 @@ public class AnalysisService {
 
   // So that a user can ask "How do I say ... in the language I'm learning?" and get a response
   // Creates a translation from the spoken language to the learned language, then creates a full analysis
-  private FullAnalysis createReverseAnalysis(AnalysisRequestEvent event) {
-    var learnedLanguageTranslation = semanticTranslationService.createSemanticTranslation(
-        event.phrase(), event.userLanguageLearned()
-    );
+  private FullAnalysis createReverseAnalysis(AnalysisRequestEvent event, AnalysisComponentRequest request) {
+    var learnedLanguageTranslation = semanticTranslationService.createAnalysisComponent(request);
     var learnedLanguageAnalysisEvent = createLearnedLanguageAnalysisEvent(learnedLanguageTranslation);
     var translation = SemanticTranslation.builder()
         .sourcePhrase(event.phrase())
         .translatedPhrase(learnedLanguageTranslation.getTranslatedPhrase())
         .build();
-    return createAnalysis(learnedLanguageAnalysisEvent, event.userLanguageLearned()).toBuilder()
+    request.reverseLanguages();
+    request.setPhrase(learnedLanguageTranslation.getTranslatedPhrase());
+    return createAnalysis(learnedLanguageAnalysisEvent, request.reverseLanguages()).toBuilder()
         .semanticTranslation(translation)
         .build();
   }

@@ -4,6 +4,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.grammr.annotation.BenchmarkTest;
 import com.grammr.domain.enums.LanguageCode;
+import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.service.language.translation.semantic.OpenAISemanticTranslationService;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,7 +21,11 @@ public class OpenAISemanticTranslationBenchmarkTest extends AbstractBenchmarkTes
   @ParameterizedTest
   @MethodSource("providePhrasePairs")
   void shouldCreateSemanticTranslation(String sourcePhrase, String translatedPhrase, LanguageCode to) {
-    var semanticTranslation = semanticTranslationService.createSemanticTranslation(sourcePhrase, to);
+    var analysisComponentRequest = AnalysisComponentRequest.builder()
+        .phrase(sourcePhrase)
+        .targetLanguage(to)
+        .build();
+    var semanticTranslation = semanticTranslationService.createAnalysisComponent(analysisComponentRequest);
     assertThat(semanticTranslation.getSourcePhrase()).isEqualTo(sourcePhrase);
     assertThat(semanticTranslation.getTranslatedPhrase()).isEqualTo(translatedPhrase);
   }

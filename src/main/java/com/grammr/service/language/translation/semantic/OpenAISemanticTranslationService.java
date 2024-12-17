@@ -3,6 +3,7 @@ package com.grammr.service.language.translation.semantic;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.common.MessageUtil;
 import com.grammr.domain.enums.LanguageCode;
+import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.service.language.AbstractOpenAIService;
 import io.github.sashirestela.openai.SimpleOpenAI;
@@ -27,8 +28,10 @@ public class OpenAISemanticTranslationService extends AbstractOpenAIService impl
     super(objectMapper, openAI, messageUtil, modelName);
   }
 
-  public SemanticTranslation createSemanticTranslation(String phrase, LanguageCode to) {
-    return openAIChatCompletion(generateUserMessage(phrase, to), SemanticTranslation.class).join();
+  public SemanticTranslation createAnalysisComponent(AnalysisComponentRequest request) {
+    return openAIChatCompletion(generateUserMessage(
+        request.getPhrase(), request.getTargetLanguage()), SemanticTranslation.class)
+        .join();
   }
 
   @Override

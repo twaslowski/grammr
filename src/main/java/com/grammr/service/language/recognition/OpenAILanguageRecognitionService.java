@@ -3,8 +3,10 @@ package com.grammr.service.language.recognition;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.common.MessageUtil;
 import com.grammr.domain.enums.LanguageCode;
+import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.service.language.AbstractOpenAIService;
+import com.grammr.service.language.AnalysisComponentProvider;
 import io.github.sashirestela.openai.SimpleOpenAI;
 import io.github.sashirestela.openai.common.ResponseFormat;
 import io.github.sashirestela.openai.common.ResponseFormat.JsonSchema;
@@ -27,8 +29,9 @@ public class OpenAILanguageRecognitionService extends AbstractOpenAIService impl
     super(objectMapper, openAI, messageUtil, modelName);
   }
 
-  public LanguageRecognition recognizeLanguage(String phrase) {
-    return openAIChatCompletion(generateUserMessage(phrase), LanguageRecognition.class).join();
+  @Override
+  public LanguageRecognition createAnalysisComponent(AnalysisComponentRequest request) {
+    return openAIChatCompletion(generateUserMessage(request.getPhrase()), LanguageRecognition.class).join();
   }
 
   @Override

@@ -1,6 +1,7 @@
 package com.grammr.integration;
 
-import static com.grammr.integration.OpenAITestUtil.chatRequestMatcher;
+import static com.grammr.integration.OpenAITestUtil.chatRequestContains;
+import static com.grammr.integration.OpenAITestUtil.chatRequestEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
@@ -97,9 +98,17 @@ public class IntegrationTestBase {
   }
 
   @SneakyThrows
-  protected void mockOpenAIResponse(String promptRegex, Object content) {
+  protected void mockOpenAIResponseExactly(String exactPrompt, Object content) {
     var chat = openAITestUtil.parameterizeChatResponse(objectMapper.writeValueAsString(content));
-    when(chatCompletionsMock.create(argThat(chatRequestMatcher(promptRegex))))
+    when(chatCompletionsMock.create(argThat(chatRequestEquals(exactPrompt))))
+        .thenReturn(CompletableFuture.supplyAsync(() -> chat));
+    when(openAIClient.chatCompletions()).thenReturn(chatCompletionsMock);
+  }
+
+  @SneakyThrows
+  protected void mockOpenAIResponseFuzzy(String promptRegex, Object content) {
+    var chat = openAITestUtil.parameterizeChatResponse(objectMapper.writeValueAsString(content));
+    when(chatCompletionsMock.create(argThat(chatRequestContains(promptRegex))))
         .thenReturn(CompletableFuture.supplyAsync(() -> chat));
     when(openAIClient.chatCompletions()).thenReturn(chatCompletionsMock);
   }
@@ -107,7 +116,7 @@ public class IntegrationTestBase {
   @SneakyThrows
   protected void mockSemanticTranslation(String source, String translation, LanguageCode to) {
     String prompt = semanticTranslationService.generateUserMessage(source, to).getContent().toString();
-    mockOpenAIResponse(prompt, SemanticTranslation.builder()
+    mockOpenAIResponseExactly(prompt, SemanticTranslation.builder()
         .sourcePhrase(source)
         .translatedPhrase(translation)
         .build());
@@ -116,13 +125,13 @@ public class IntegrationTestBase {
   @SneakyThrows
   protected void mockLanguageRecognition(String source, LanguageCode languageCode) {
     String prompt = languageRecognitionService.generateUserMessage(source).getContent().toString();
-    mockOpenAIResponse(prompt, LanguageRecognition.of(languageCode));
+    mockOpenAIResponseExactly(prompt, LanguageRecognition.of(languageCode));
   }
 
   @SneakyThrows
   protected void mockTokenTranslation(String phrase, String word, TokenTranslation tokenTranslation) {
-    mockOpenAIResponse(
-        messageUtil.parameterizeMessage("openai.translation.literal.prompt.user", phrase, word),
+    mockOpenAIResponseFuzzy(
+        "in the context of the following sentence",
         tokenTranslation);
   }
 

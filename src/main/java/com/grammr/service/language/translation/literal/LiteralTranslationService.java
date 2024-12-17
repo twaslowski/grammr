@@ -1,10 +1,11 @@
 package com.grammr.service.language.translation.literal;
 
-import com.grammr.domain.value.language.TokenTranslation;
-import java.util.List;
+import com.grammr.domain.value.AnalysisComponentRequest;
+import com.grammr.domain.value.language.LiteralTranslation;
+import com.grammr.service.language.AnalysisComponentProvider;
 
-public interface LiteralTranslationService {
+public interface LiteralTranslationService extends AnalysisComponentProvider {
 
-  List<TokenTranslation> translateTokens(String phrase, List<String> words);
+  LiteralTranslation createAnalysisComponent(AnalysisComponentRequest request);
 }
 

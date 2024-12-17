@@ -1,7 +1,8 @@
 package com.grammr.service.language.translation.literal;
 
-import com.grammr.domain.value.language.TokenTranslation;
-import java.util.List;
+import com.grammr.domain.value.AnalysisComponentRequest;
+import com.grammr.domain.value.language.LiteralTranslation;
+import com.grammr.domain.value.language.Token;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,16 @@ public class OpenAILiteralTranslationService implements LiteralTranslationServic
   private final OpenAITokenTranslationService openAITokenTranslationService;
 
   @Override
-  public List<TokenTranslation> translateTokens(String phrase, List<String> words) {
+  public LiteralTranslation createAnalysisComponent(AnalysisComponentRequest request) {
+    var words = request.getTokens().stream()
+        .map(Token::text)
+        .map(String::toLowerCase)
+        .distinct()
+        .toList();
+
     log.info("Translating {} unique words: {}", words.size(), words);
     var translationFutures = words.stream()
-        .map(word -> openAITokenTranslationService.createTranslation(phrase, word))
+        .map(word -> openAITokenTranslationService.createTranslation(request.getPhrase(), word))
         .toList();
 
     var translatedTokens = translationFutures.stream()
@@ -27,6 +34,9 @@ public class OpenAILiteralTranslationService implements LiteralTranslationServic
         .collect(Collectors.toList());
 
     log.info("Retrieved translated analyzedTokens: {}", translatedTokens);
-    return translatedTokens;
+    return LiteralTranslation.builder()
+        .sourcePhrase(request.getPhrase())
+        .tokenTranslations(translatedTokens)
+        .build();
   }
 }

@@ -2,6 +2,7 @@ package com.grammr.service.language;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.common.MessageUtil;
+import com.grammr.domain.exception.ErroneousOpenAIResponse;
 import com.grammr.domain.exception.UnparsableOpenAIResponse;
 import io.github.sashirestela.openai.SimpleOpenAI;
 import io.github.sashirestela.openai.common.ResponseFormat;
@@ -36,6 +37,9 @@ public abstract class AbstractOpenAIService {
       enrichWithTokenUsage(parsed, response);
       log.info("{} produced response from OpenAI: {}", userMessage.getContent(), content);
       return parsed;
+    }).exceptionally(e -> {
+      log.error("Failed to get response from OpenAI", e);
+      throw new ErroneousOpenAIResponse(e);
     });
   }
 

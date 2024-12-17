@@ -1,7 +1,8 @@
-package com.grammr.service;
+package com.grammr.service.eventhandler;
 
 import com.grammr.domain.event.AnalysisCompleteEvent;
 import com.grammr.domain.event.AnalysisRequestEvent;
+import com.grammr.service.AnalysisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;

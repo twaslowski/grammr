@@ -1,4 +1,4 @@
-package com.grammr.service;
+package com.grammr.service.eventhandler;
 
 import com.grammr.domain.event.AnalysisRequestEvent;
 import com.grammr.domain.event.AudioTranscriptionRequestEvent;

@@ -3,7 +3,8 @@ package com.grammr.benchmark;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.grammr.annotation.BenchmarkTest;
-import com.grammr.domain.value.language.Token;
+import com.grammr.domain.enums.LanguageCode;
+import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.service.TokenService;
 import com.grammr.service.language.translation.literal.OpenAILiteralTranslationService;
 import org.junit.jupiter.api.Test;
@@ -21,11 +22,16 @@ class OpenAILiteralTranslationServiceBenchmarkTest extends AbstractBenchmarkTest
   @Test
   void benchmarkOpenAILiteralTranslation() {
     var phrase = "Wie geht es dir?";
-    var tokens = tokenService.tokenize(phrase).stream()
-        .map(Token::text)
-        .toList();
+    var tokens = tokenService.tokenize(phrase);
 
-    var translatedTokens = openAILiteralTranslationService.translateTokens("Wie geht es dir?", tokens);
+    var analysisComponentRequest = AnalysisComponentRequest.builder()
+        .phrase(phrase)
+        .sourceLanguage(LanguageCode.DE)
+        .tokens(tokens)
+        .build();
+
+    var literalTranslation = openAILiteralTranslationService.createAnalysisComponent(analysisComponentRequest);
+    var translatedTokens = literalTranslation.getTokenTranslations();
 
     assertThat(translatedTokens.size()).isEqualTo(4);
     assertThat(translatedTokens.getFirst().getSource()).isEqualTo("Wie");

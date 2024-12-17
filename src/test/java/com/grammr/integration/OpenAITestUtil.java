@@ -23,9 +23,14 @@ public class OpenAITestUtil {
 
   private final ObjectMapper objectMapper;
 
-  public static ArgumentMatcher<ChatRequest> chatRequestMatcher(String prompt) {
+  public static ArgumentMatcher<ChatRequest> chatRequestEquals(String prompt) {
     return request -> request != null
         && getUserMessage(request).getContent().toString().equals(prompt);
+  }
+
+  public static ArgumentMatcher<ChatRequest> chatRequestContains(String partialPrompt) {
+    return request -> request != null
+        && getUserMessage(request).getContent().toString().contains(partialPrompt);
   }
 
   private static UserMessage getUserMessage(ChatRequest request) {

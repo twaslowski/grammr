@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.grammr.annotation.BenchmarkTest;
 import com.grammr.domain.enums.LanguageCode;
+import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.service.language.recognition.OpenAILanguageRecognitionService;
 import java.util.stream.Stream;
@@ -23,7 +24,11 @@ public class OpenAILanguageRecognitionBenchmarkTest extends AbstractBenchmarkTes
   @ParameterizedTest
   @MethodSource("providePhraseLanguageCodePairs")
   void shouldCorrectlyRecognizeKnownLanguagePhrases(String phrase, LanguageCode languageCode) {
-    assertThat(languageRecognitionService.recognizeLanguage(phrase)).isEqualTo(new LanguageRecognition(languageCode));
+    var analysisComponentRequest = AnalysisComponentRequest.builder()
+        .phrase(phrase)
+        .build();
+    assertThat(languageRecognitionService.createAnalysisComponent(analysisComponentRequest))
+        .isEqualTo(new LanguageRecognition(languageCode));
   }
 
   private static Stream<Arguments> providePhraseLanguageCodePairs() {
