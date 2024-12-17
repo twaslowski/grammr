@@ -28,7 +28,7 @@ public class OpenAISemanticTranslationService extends AbstractOpenAIService impl
   }
 
   public SemanticTranslation createSemanticTranslation(String phrase, LanguageCode to) {
-    return openAIChatCompletion(generateUserMessage(phrase, to), SemanticTranslation.class);
+    return openAIChatCompletion(generateUserMessage(phrase, to), SemanticTranslation.class).join();
   }
 
   @Override

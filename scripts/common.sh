@@ -13,7 +13,7 @@ function package() {
 
 function deploy() {
   if [ -z "$TAG" ]; then
-    TAG="sha-$(git rev-parse --short HEAD)"
+    TAG="$(git rev-parse HEAD)"
   fi
 
   if [ -z "$OPENAI_API_KEY" ] || [ -z "$DATASOURCE_PASSWORD" ] || [ -z "$TELEGRAM_TOKEN_PROD" ]; then

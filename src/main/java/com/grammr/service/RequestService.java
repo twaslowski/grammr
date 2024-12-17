@@ -6,10 +6,7 @@ import com.grammr.domain.exception.RequestNotFoundException;
 import com.grammr.repository.RequestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -29,12 +26,8 @@ public class RequestService {
         .orElseThrow(() -> new RequestNotFoundException(requestId));
   }
 
-  @Async
-  @EventListener
-  @Transactional
-  public void update(AnalysisCompleteEvent event) {
-    requestRepository.findByRequestId(event.requestId())
-        .orElseThrow(() -> new RequestNotFoundException(event.requestId()))
-        .complete(event);
+  public Request complete(AnalysisCompleteEvent event, Request request) {
+    request.complete(event);
+    return requestRepository.save(request);
   }
 }

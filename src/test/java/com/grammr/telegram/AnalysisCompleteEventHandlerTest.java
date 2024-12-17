@@ -63,8 +63,9 @@ class AnalysisCompleteEventHandlerTest {
 
     when(userService.findUserByChatId(1L)).thenReturn(user);
     when(requestService.findRequest("requestId")).thenReturn(request);
+    when(requestService.complete(analysisCompleteEvent, request)).thenReturn(request);
 
-    analysisCompleteEventHandler.handleItem(analysisCompleteEvent);
+    analysisCompleteEventHandler.handleAnalysisCompleteEvent(analysisCompleteEvent);
 
     var captor = ArgumentCaptor.forClass(TelegramTextResponse.class);
     verify(outgoingMessageQueue, times(2)).add(captor.capture());

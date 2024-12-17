@@ -115,7 +115,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./sidecars/analysis
-          dockerfile: sidecars/analysis/docker/Dockerfile
+          file: sidecars/analysis/docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.docker-metadata.outputs.tags }}

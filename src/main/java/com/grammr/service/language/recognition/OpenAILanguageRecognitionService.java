@@ -28,7 +28,7 @@ public class OpenAILanguageRecognitionService extends AbstractOpenAIService impl
   }
 
   public LanguageRecognition recognizeLanguage(String phrase) {
-    return openAIChatCompletion(generateUserMessage(phrase), LanguageRecognition.class);
+    return openAIChatCompletion(generateUserMessage(phrase), LanguageRecognition.class).join();
   }
 
   @Override

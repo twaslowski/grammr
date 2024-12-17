@@ -58,7 +58,10 @@ public class AnalysisService {
                                       LanguageCode languageCode) {
     var phrase = event.phrase();
     var tokens = tokenService.tokenize(phrase);
-    var words = tokens.stream().map(Token::text).toList();
+    var words = tokens.stream()
+        .map(Token::text)
+        .map(String::toLowerCase)
+        .distinct().toList();
 
     Optional<CompletableFuture<SemanticTranslation>> semanticTranslationFuture = Optional.empty();
     if (event.performSemanticTranslation()) {

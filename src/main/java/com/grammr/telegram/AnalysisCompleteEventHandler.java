@@ -28,13 +28,14 @@ public class AnalysisCompleteEventHandler {
 
   @Async
   @EventListener
-  protected void handleItem(AnalysisCompleteEvent analysisCompleteEvent) {
+  protected void handleAnalysisCompleteEvent(AnalysisCompleteEvent analysisCompleteEvent) {
     var request = requestService.findRequest(analysisCompleteEvent.requestId());
+    request = requestService.complete(analysisCompleteEvent, request);
 
     var telegramResponse = telegramResponseFrom(analysisCompleteEvent, request.getChatId());
     outgoingMessageQueue.add(telegramResponse);
 
-    sendDebugInformation(request).ifPresent(outgoingMessageQueue::add);
+    createDebugResponse(request).ifPresent(outgoingMessageQueue::add);
   }
 
   private TelegramTextResponse telegramResponseFrom(AnalysisCompleteEvent event, long chatId) {
@@ -44,7 +45,7 @@ public class AnalysisCompleteEventHandler {
         .build();
   }
 
-  private Optional<TelegramResponse> sendDebugInformation(Request request) {
+  private Optional<TelegramResponse> createDebugResponse(Request request) {
     var user = userService.findUserByChatId(request.getChatId());
     if (user.debug()) {
       var requestStats = RequestStats.from(request);

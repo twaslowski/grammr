@@ -10,6 +10,7 @@ import io.github.sashirestela.openai.common.ResponseFormat;
 import io.github.sashirestela.openai.common.ResponseFormat.JsonSchema;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.SystemMessage;
 import io.github.sashirestela.openai.domain.chat.ChatMessage.UserMessage;
+import java.util.concurrent.CompletableFuture;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,14 +30,14 @@ public class OpenAITokenTranslationService extends AbstractOpenAIService {
     super(objectMapper, openAI, messageUtil, modelName);
   }
 
-  public TokenTranslation createTranslation(String phrase, String word) {
+  public CompletableFuture<TokenTranslation> createTranslation(String phrase, String word) {
     return openAIChatCompletion(generateUserMessage(phrase, word), TokenTranslation.class);
   }
 
   protected UserMessage generateUserMessage(String phrase, String token) {
     return UserMessage.of(messageUtil.parameterizeMessage(
         "openai.translation.literal.prompt.user",
-        phrase, token
+        token, phrase
     ));
   }
 
