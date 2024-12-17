@@ -15,6 +15,40 @@ The primary means of interacting with the application as of now is through Teleg
 designed in such a way as to make the addition of a frontend, either through a website or an app,
 relatively straightforward.
 
+There is a sample bot that I'm running that translates exactly Russian to German. You can text it
+either text it a phrase in Russian and get a translation and analysis of the grammar. _Or_ you can
+text it in German, and it will translate the phrase to Russian and explain it to you.
+I personally find that very handy.
+
+[![Example Image](docs/example.png)]
+
+I realize the visualization of the data right now is not great. This is the main thing I'm looking
+to improve on in the future. For more, see the plans for [features](#features) and the [Roadmap](#roadmap). 
+
+## Features
+
+- Translation of texts.
+- Literal translations for each word in a text.
+- Morphological analysis of each word in a text.
+
+Currently, the phrase length for literal translations and morphological analysis is limited to 15 words.
+
+The morphological analysis is done using [spaCy](https://spacy.io/),
+and contains the following information for each word:
+
+- The part of speech (POS) of a word.
+- The features of a word, including the Case, Number, Gender, Tense, Person, depending on word type,
+as well as its lemma, its basic form.
+For more information on this, see the [Universal Dependencies](https://universaldependencies.org/u/feat/index.html).
+
+I'm looking to add more features in the near future. These may include:
+
+- [ ] Error correction
+- [ ] A solid frontend, in addition to the Telegram bot currently available
+- [ ] More languages
+- [ ] Inflection tables
+- [ ] Anki flash card export
+
 ## Running
 
 I tried to make running the project yourself as straightforward as possible. What you'll need:
@@ -45,11 +79,23 @@ report is generated, which you can access at `target/site/jacoco/index.html`.
 
 ## Roadmap
 
-- [ ] A frontend
-- [ ] Error correction
-- [ ] More languages
-- [ ] Benchmarking
-- [ ] Faster alternatives for language detection and different translation services as alternatives to OpenAI
+Beyond the features mentioned above, I'm also looking to make the technology stack more robust.
+I believe that this application should _really_ be able to scale to complexity, so I'm investing
+a lot of time and energy into keeping the architecture as clean as possible.
+
+Features and improvements will include:
+
+- [ ] A proper CI/CD pipeline, including automated deployment (halfway there)
+- [ ] Building a frontend. Possibly web-app, possibly cross-platform apps.
+- [ ] Benchmarking against quality regression of prompts
+- [ ] A fully event-driven architecture, where the Telegram Bot runs as an entirely different
+service only passing messages to the rest of the application. The _core_ will simply be a server
+responding to events and HTTP requests.
+- [ ] Adding several more languages, which means creating additional sidecars for morphological
+analyis. This might mean moving to an event-driven architecture here as well.
+
+I'll likely experiment with RabbitMQ in the near future to implement a more robust decoupling
+of the components.
 
 ## Domain Language
 
