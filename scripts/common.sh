@@ -12,10 +12,9 @@ function package() {
 }
 
 function deploy() {
-  if [ -z "$TAG" ]; then
-    TAG="$(git rev-parse HEAD)"
-  fi
-
+#  if [ -z "$TAG" ]; then
+#    TAG="sha-$(git rev-parse --short HEAD)"
+#  fi
   if [ -z "$OPENAI_API_KEY" ] || [ -z "$DATASOURCE_PASSWORD" ] || [ -z "$TELEGRAM_TOKEN_PROD" ]; then
     echo "Please set OPENAI_API_KEY, DATASOURCE_PASSWORD and TELEGRAM_TOKEN_PROD environment variables"
     exit 1
