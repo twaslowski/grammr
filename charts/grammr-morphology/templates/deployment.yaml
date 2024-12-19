@@ -2,25 +2,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .code }}-grammr-morphology
+  name: {{ .code }}-{{ $.Release.Name }}
   labels:
-    app: grammr-morphology
+    app: {{ $.Release.Name }}
     language: {{ .code }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: grammr-morphology
+      app: {{ $.Release.Name }}
       language: {{ .code }}
   template:
     metadata:
       labels:
-        app: grammr-morphology
+        app: {{ $.Release.Name }}
         language: {{ .code }}
     spec:
       containers:
-        - name: {{ .code }}-grammr-morphology
-          image: {{ $.Values.image.repository }}:{{ $.Values.image.tag }}
+        - name: {{ .code }}-{{ $.Release.Name }}
+          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
           ports:
             - containerPort: 8000
           env:

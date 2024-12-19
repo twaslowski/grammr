@@ -6,4 +6,6 @@ spring:
 
 analysis:
   rest:
-    host: ${MORPHOLOGY_API_HOST}
+    host: "${MORPHOLOGY_API_HOST}"
+    uri-resolution:
+      mechanism: SUBDOMAIN

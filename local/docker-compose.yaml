@@ -43,3 +43,10 @@ services:
       timeout: 5s
       retries: 3
     command: [ "postgres", "-c", "log_statement=all" ]
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf

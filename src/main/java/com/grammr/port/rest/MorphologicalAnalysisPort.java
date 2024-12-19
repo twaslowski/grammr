@@ -2,7 +2,6 @@ package com.grammr.port.rest;
 
 import com.grammr.domain.event.MorphologicalAnalysisRequest;
 import com.grammr.domain.value.language.MorphologicalAnalysis;
-import com.grammr.port.rest.uri.local.MorphologyURIProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,10 +13,10 @@ import org.springframework.web.client.RestClient;
 public class MorphologicalAnalysisPort {
 
   private final RestClient restClient;
-  private final MorphologyURIProvider defautMorphologyURIProvider;
+  private final EnvironmentAwareMorphologicalAnalysisURIResolver uriResolver;
 
   public MorphologicalAnalysis performAnalysis(MorphologicalAnalysisRequest analysisRequest) {
-    var uri = defautMorphologyURIProvider.provideUri(analysisRequest.languageCode());
+    var uri = uriResolver.resolveUri(analysisRequest.languageCode());
     log.info("Performing analysis for phrase '{}' at '{}'", analysisRequest.phrase(), uri);
     try {
       return restClient
@@ -28,8 +27,7 @@ public class MorphologicalAnalysisPort {
           .body(MorphologicalAnalysis.class);
     } catch (Exception e) {
       log.error("Error performing analysis for phrase: {}", analysisRequest.phrase(), e);
-      // todo custom exception
-      return null;
+      throw e;
     }
   }
 }

@@ -11,3 +11,5 @@ spring:
 analysis:
   rest:
     host: localhost
+    uri-resolution:
+      mechanism: PATH

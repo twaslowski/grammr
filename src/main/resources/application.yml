@@ -47,5 +47,5 @@ telegram:
 
 analysis:
   rest:
-    host: ${ANALYSIS_ENDPOINT}
     port: 8000
+    endpoint: /morphological-analysis
