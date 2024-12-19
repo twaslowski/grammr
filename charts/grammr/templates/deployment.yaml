@@ -44,8 +44,8 @@ spec:
             - name: DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-auth
-                  key: datasource_password
+                  name: postgres
+                  key: password
             - name: OPENAI_API_KEY
               valueFrom:
                 secretKeyRef:

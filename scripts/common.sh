@@ -14,6 +14,7 @@ function package() {
 function deploy() {
 
   export TAG="sha-$(git rev-parse --short HEAD)"
+  export DATASOURCE_PASSWORD=$(openssl rand -base64 32)
 
   if [ -z "$OPENAI_API_KEY" ] || [ -z "$DATASOURCE_PASSWORD" ] || [ -z "$TELEGRAM_TOKEN" ]; then
     echo "Please set OPENAI_API_KEY, DATASOURCE_PASSWORD and TELEGRAM_TOKEN environment variables"

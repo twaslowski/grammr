@@ -129,7 +129,6 @@ jobs:
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-      DATASOURCE_PASSWORD: test
     steps:
       - name: Checkout
         uses: actions/checkout@v4
