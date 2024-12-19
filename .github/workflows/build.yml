@@ -19,7 +19,7 @@ jobs:
           cache: maven
 
       - name: Unit tests
-        run: ./scripts/unit-test.sh
+        run: ./scripts/qa.sh
 
       - name: Upload jar artifact
         uses: actions/upload-artifact@v4
@@ -129,6 +129,7 @@ jobs:
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+      SPACY_MODELS: "ru_core_news_sm,de_core_news_sm,en_core_web_sm"
     steps:
       - name: Checkout
         uses: actions/checkout@v4

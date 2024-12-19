@@ -26,9 +26,11 @@ function deploy() {
     --wait --timeout 300s \
     postgres oci://registry-1.docker.io/bitnamicharts/postgresql
 
+  # escape commas for helm
+  export SPACY_MODELS=$(echo "$SPACY_MODELS" | sed 's/,/\\,/g')
   helm upgrade --install \
     --set image.tag=latest \
-    --set spacyModels=ru_core_news_sm \
+    --set spacyModels="$SPACY_MODELS" \
     --set image.tag="$TAG" \
     --namespace grammr --create-namespace \
     --wait --timeout 300s \

@@ -10,6 +10,7 @@ def main():
         sys.exit(1)
 
     models = spacy_models.split(",")
+    print(f"Downloading models: {models}")
 
     processes = []
     for model in models:
@@ -18,6 +19,7 @@ def main():
 
     for process in processes:
         process.wait()
+    print("Models downloaded.")
 
 
 if __name__ == "__main__":
