@@ -4,9 +4,7 @@ from fastapi.responses import JSONResponse
 
 from analysis.domain.analysis_request import AnalysisRequest
 from analysis.service import analysis_service
-from analysis.service.model_service import construct_models_map
 
-construct_models_map()
 logger = logging.getLogger(__name__)
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"

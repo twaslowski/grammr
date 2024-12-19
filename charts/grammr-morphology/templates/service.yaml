@@ -1,0 +1,17 @@
+{{- range .Values.languages }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .code }}-grammr-morphology
+  labels:
+    app: grammr-morphology
+    language: {{ .code }}
+spec:
+  selector:
+    app: grammr-morphology
+    language: {{ .code }}
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+{{- end }}

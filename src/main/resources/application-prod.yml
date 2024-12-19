@@ -6,4 +6,4 @@ spring:
 
 analysis:
   rest:
-    base-url: ${MORPHOLOGY_API_URL}
+    host: ${MORPHOLOGY_API_HOST}

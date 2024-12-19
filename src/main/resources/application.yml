@@ -47,4 +47,5 @@ telegram:
 
 analysis:
   rest:
-    base-url: ${ANALYSIS_ENDPOINT}
+    host: ${ANALYSIS_ENDPOINT}
+    port: 8000

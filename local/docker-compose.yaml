@@ -1,8 +1,8 @@
 services:
-  analysis:
+  analysis-de:
     image: tobiaswaslowski/grammatical-analysis
     build:
-      context: ../sidecars/analysis
+      context: ../sidecars/morphology
       dockerfile: docker/Dockerfile
     healthcheck:
       test: [ "CMD", "curl", "--fail", "http://localhost:8000/health" ]
@@ -10,9 +10,24 @@ services:
       timeout: 5s
       retries: 10
     ports:
-      - "8000:8000"
+      - "8001:8000"
     environment:
-      - SPACY_MODELS=de_core_news_sm,ru_core_news_sm
+      - SPACY_MODEL=de_core_news_sm
+
+  analysis-ru:
+    image: tobiaswaslowski/grammatical-analysis
+    build:
+      context: ../sidecars/morphology
+      dockerfile: docker/Dockerfile
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:8000/health" ]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "8002:8000"
+    environment:
+      - SPACY_MODEL=ru_core_news_sm
 
   postgresql:
     image: postgres:14.7

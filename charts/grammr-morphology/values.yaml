@@ -1,4 +1,4 @@
-# Default values for sidecar-analysis.
+# Default values for grammr-morphology.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -14,7 +14,13 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-spacyModels: "ru_core_news_sm"
+languages:
+  - code: de
+    model: de_core_news_sm
+  - code: en
+    model: en_core_web_sm
+  - code: ru
+    model: ru_core_news_sm
 
 serviceAccount:
   # Specifies whether a service account should be created

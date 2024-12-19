@@ -1,5 +1,5 @@
 function stop_environment() {
-  docker compose -f local/docker-compose.yaml logs --timestamps analysis > target/docker.log
+  docker compose -f local/docker-compose.yaml logs --timestamps analysis-de > target/docker.log
   docker compose -f local/docker-compose.yaml down
 }
 
@@ -30,7 +30,7 @@ function deploy() {
     --set image.tag="$TAG" \
     --namespace grammr --create-namespace \
     --wait --timeout "$HELM_TIMEOUT" \
-    grammr-morphology ./charts/sidecar-analysis
+    grammr-morphology ./charts/grammr-morphology
 
     helm upgrade --install \
       --set openai_api_key="$OPENAI_API_KEY" \

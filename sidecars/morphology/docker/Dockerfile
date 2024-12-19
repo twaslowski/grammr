@@ -34,9 +34,8 @@ ENV APP_DIR=/app
 
 COPY analysis/ ${APP_DIR}/analysis
 COPY docker/init.sh ${APP_DIR}/init.sh
-COPY docker/download_models.py ${APP_DIR}/download_models.py
 
-ENV SPACY_MODELS=""
+ENV SPACY_MODEL=""
 
 EXPOSE 8000
 WORKDIR ${APP_DIR}

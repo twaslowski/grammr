@@ -114,8 +114,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./sidecars/analysis
-          file: sidecars/analysis/docker/Dockerfile
+          context: ./sidecars/morphology
+          file: sidecars/morphology/docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.docker-metadata.outputs.tags }}

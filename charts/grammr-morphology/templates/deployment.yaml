@@ -1,0 +1,33 @@
+{{- range .Values.languages }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .code }}-grammr-morphology
+  labels:
+    app: grammr-morphology
+    language: {{ .code }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grammr-morphology
+      language: {{ .code }}
+  template:
+    metadata:
+      labels:
+        app: grammr-morphology
+        language: {{ .code }}
+    spec:
+      containers:
+        - name: {{ .code }}-grammr-morphology
+          image: {{ $.Values.image.repository }}:{{ $.Values.image.tag }}
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SPACY_MODEL
+              value: {{ .model }}
+          livenessProbe:
+            {{- toYaml $.Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml $.Values.readinessProbe | nindent 12 }}
+{{- end }}

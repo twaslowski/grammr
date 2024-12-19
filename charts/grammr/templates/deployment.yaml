@@ -58,8 +58,10 @@ spec:
                   key: telegram_token
             - name: DATASOURCE_URL
               value: "jdbc:postgresql://postgres.{{ .Release.Namespace }}.svc.cluster.local:5432/grammr?currentSchema=grammr"
-            - name: MORPHOLOGY_API_URL
-              value: "http://grammr-morphology.{{ .Release.Namespace }}.svc.cluster.local:8000"
+            - name: MORPHOLOGY_API_HOST
+              value: "grammr-morphology.{{ .Release.Namespace }}.svc.cluster.local"
+            - name: MORPHOLOGY_API_PORT
+              value: "8000"
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:

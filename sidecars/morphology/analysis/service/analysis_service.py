@@ -1,14 +1,17 @@
-from analysis.service.token_mapper import from_spacy_token
+import os
+import spacy
 
+from analysis.service.token_mapper import from_spacy_token
 from analysis.domain.analysis_request import AnalysisRequest
 from analysis.domain.morphological_analysis import (
     MorphologicalAnalysis,
 )
-from analysis.service import model_service
+
+
+model = spacy.load(os.getenv("SPACY_MODEL"))
 
 
 def perform_analysis(request: AnalysisRequest) -> list:
-    model = model_service.retrieve_model_for_language_code(request.language_code)
     spacy_tokens = model(request.phrase)
     return MorphologicalAnalysis(
         source_phrase=request.phrase,
