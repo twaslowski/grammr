@@ -12,11 +12,11 @@ function package() {
 }
 
 function deploy() {
-#  if [ -z "$TAG" ]; then
-#    TAG="sha-$(git rev-parse --short HEAD)"
-#  fi
-  if [ -z "$OPENAI_API_KEY" ] || [ -z "$DATASOURCE_PASSWORD" ] || [ -z "$TELEGRAM_TOKEN_PROD" ]; then
-    echo "Please set OPENAI_API_KEY, DATASOURCE_PASSWORD and TELEGRAM_TOKEN_PROD environment variables"
+
+  export TAG="sha-$(git rev-parse --short HEAD)"
+
+  if [ -z "$OPENAI_API_KEY" ] || [ -z "$DATASOURCE_PASSWORD" ] || [ -z "$TELEGRAM_TOKEN" ]; then
+    echo "Please set OPENAI_API_KEY, DATASOURCE_PASSWORD and TELEGRAM_TOKEN environment variables"
     exit 1
   fi
 
@@ -36,7 +36,7 @@ function deploy() {
 
     helm upgrade --install \
       --set openai_api_key="$OPENAI_API_KEY" \
-      --set telegram_token="$TELEGRAM_TOKEN_PROD" \
+      --set telegram_token="$TELEGRAM_TOKEN" \
       --set datasource_password="$DATASOURCE_PASSWORD" \
       --set image.tag="$TAG" \
       --namespace grammr --create-namespace \
