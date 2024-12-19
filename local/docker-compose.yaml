@@ -11,6 +11,7 @@ services:
       retries: 10
     ports:
       - "8000:8000"
+    network_mode: host
     environment:
       - SPACY_MODELS=de_core_news_sm,ru_core_news_sm
 
@@ -27,4 +28,5 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
+    network_mode: host
     command: [ "postgres", "-c", "log_statement=all" ]

@@ -14,31 +14,29 @@ function package() {
 function deploy() {
 
   export TAG="sha-$(git rev-parse --short HEAD)"
-  export DATASOURCE_PASSWORD=$(openssl rand -base64 32)
 
-  if [ -z "$OPENAI_API_KEY" ] || [ -z "$DATASOURCE_PASSWORD" ] || [ -z "$TELEGRAM_TOKEN" ]; then
-    echo "Please set OPENAI_API_KEY, DATASOURCE_PASSWORD and TELEGRAM_TOKEN environment variables"
+  if [ -z "$OPENAI_API_KEY" ] || [ -z "$TELEGRAM_TOKEN" ]; then
+    echo "Please set OPENAI_API_KEY and TELEGRAM_TOKEN environment variables"
     exit 1
   fi
 
   helm upgrade --install \
-    --set global.postgresql.auth.password="$DATASOURCE_PASSWORD" \
     --values ./charts/values/postgres-values.yaml \
     --namespace grammr --create-namespace \
-    --wait --timeout 60s \
+    --wait --timeout 300s \
     postgres oci://registry-1.docker.io/bitnamicharts/postgresql
 
   helm upgrade --install \
     --set image.tag=latest \
     --set spacyModels=ru_core_news_sm \
+    --set image.tag="$TAG" \
     --namespace grammr --create-namespace \
-    --wait --timeout 60s \
+    --wait --timeout 300s \
     grammr-morphology ./charts/sidecar-analysis
 
     helm upgrade --install \
       --set openai_api_key="$OPENAI_API_KEY" \
       --set telegram_token="$TELEGRAM_TOKEN" \
-      --set datasource_password="$DATASOURCE_PASSWORD" \
       --set image.tag="$TAG" \
       --namespace grammr --create-namespace \
       grammr-core ./charts/grammr
