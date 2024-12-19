@@ -35,6 +35,12 @@ openai:
     model: whisper-1
     verbose: false
 
+grammr:
+  default:
+    user:
+      language_spoken: EN
+      language_learned: DE
+
 telegram:
   bot:
     token: ${TELEGRAM_TOKEN}

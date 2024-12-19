@@ -7,13 +7,9 @@ function start_environment() {
   docker compose -f local/docker-compose.yaml up -d --build --wait
 }
 
-function package() {
-  ./mvnw package -DskipTests
-}
-
 function deploy() {
-
   export TAG="sha-$(git rev-parse --short HEAD)"
+  export HELM_TIMEOUT=300s
 
   if [ -z "$OPENAI_API_KEY" ] || [ -z "$TELEGRAM_TOKEN" ]; then
     echo "Please set OPENAI_API_KEY and TELEGRAM_TOKEN environment variables"
@@ -23,7 +19,7 @@ function deploy() {
   helm upgrade --install \
     --values ./charts/values/postgres-values.yaml \
     --namespace grammr --create-namespace \
-    --wait --timeout 300s \
+    --wait --timeout "$HELM_TIMEOUT" \
     postgres oci://registry-1.docker.io/bitnamicharts/postgresql
 
   # escape commas for helm
@@ -33,7 +29,7 @@ function deploy() {
     --set spacyModels="$SPACY_MODELS" \
     --set image.tag="$TAG" \
     --namespace grammr --create-namespace \
-    --wait --timeout 300s \
+    --wait --timeout "$HELM_TIMEOUT" \
     grammr-morphology ./charts/sidecar-analysis
 
     helm upgrade --install \
@@ -41,12 +37,8 @@ function deploy() {
       --set telegram_token="$TELEGRAM_TOKEN" \
       --set image.tag="$TAG" \
       --namespace grammr --create-namespace \
+      --wait --timeout "$HELM_TIMEOUT" \
       grammr-core ./charts/grammr
-}
-
-function activate_minikube() {
-  minikube start
-  eval "$(minikube docker-env)"
 }
 
 function unit_test() {

@@ -24,13 +24,14 @@ public class UserIntegrationTest extends IntegrationTestBase {
 
     await().atMost(3, TimeUnit.SECONDS)
         .untilAsserted(() -> {
-          var user = userRepository.findByChatId(1L);
-          assertThat(user).isPresent();
+          var user = userRepository.findByChatId(1L).orElseThrow();
 
           assertThat(outgoingMessageQueue).hasSize(1);
           var message = outgoingMessageQueue.remove();
           assertThat(message.getChatId()).isEqualTo(1L);
-          assertThat(message.getText()).isEqualTo(messageUtil.getMessage("command.start.message"));
+          assertThat(message.getText()).isEqualTo(
+              messageUtil.parameterizeMessage("command.start.message",
+                  user.getLanguageSpoken().getLanguageName(), user.getLanguageLearned().getLanguageName()));
         });
   }
 

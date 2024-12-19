@@ -1,6 +1,7 @@
 package com.grammr.telegram.handler.command;
 
 import com.grammr.common.MessageUtil;
+import com.grammr.domain.entity.User;
 import com.grammr.service.UserService;
 import com.grammr.telegram.dto.response.TelegramResponse;
 import com.grammr.telegram.dto.response.TelegramTextResponse;
@@ -21,12 +22,18 @@ public class StartHandler extends AbstractCommandHandler {
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
-    userService.createUserFromChatId(update.getChatId());
+    var user = userService.createUserFromChatId(update.getChatId());
 
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
-        .text(messageUtil.getMessage("command.start.message"))
+        .text(introductoryMessage(user))
         .build();
+  }
+
+  private String introductoryMessage(User user) {
+    return messageUtil.parameterizeMessage("command.start.message",
+        user.getLanguageSpoken().getLanguageName(), user.getLanguageLearned().getLanguageName()
+    );
   }
 
   @Override
