@@ -12,7 +12,7 @@ public class EnvironmentAwareMorphologicalAnalysisURIResolver {
   // Path example:      localhost:8000/de/analysis
   public enum Mechanism {
     PATH,
-    SUBDOMAIN
+    PREFIX
   }
 
   @Value("${analysis.rest.uri-resolution.mechanism}")
@@ -30,7 +30,7 @@ public class EnvironmentAwareMorphologicalAnalysisURIResolver {
   public String resolveUri(String languageCode) {
     return switch (mechanism) {
       case PATH -> buildPathUri(languageCode);
-      case SUBDOMAIN -> buildSubdomainUri(languageCode);
+      case PREFIX -> buildPrefixedUri(languageCode);
     };
   }
 
@@ -38,7 +38,7 @@ public class EnvironmentAwareMorphologicalAnalysisURIResolver {
     return String.format("http://%s:%s/%s/%s", host, port, languageCode.toLowerCase(), endpoint);
   }
 
-  private String buildSubdomainUri(String languageCode) {
-    return String.format("http://%s.%s:%s/%s", languageCode.toLowerCase(), host, port, endpoint);
+  private String buildPrefixedUri(String languageCode) {
+    return String.format("http://%s-%s:%s/%s", languageCode.toLowerCase(), host, port, endpoint);
   }
 }

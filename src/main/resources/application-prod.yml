@@ -8,4 +8,4 @@ analysis:
   rest:
     host: "${MORPHOLOGY_API_HOST}"
     uri-resolution:
-      mechanism: SUBDOMAIN
+      mechanism: PREFIX
