@@ -15,7 +15,6 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-@Disabled
 @IntegrationTest
 public class AudioUpdateIntegrationTest extends IntegrationTestBase {
 

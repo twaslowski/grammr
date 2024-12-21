@@ -27,12 +27,13 @@ class OpenAILiteralTranslationServiceBenchmarkTest extends AbstractBenchmarkTest
     var analysisComponentRequest = AnalysisComponentRequest.builder()
         .phrase(phrase)
         .sourceLanguage(LanguageCode.DE)
+        .targetLanguage(LanguageCode.EN)
         .tokens(tokens)
         .build();
 
     var literalTranslation = openAILiteralTranslationService.createAnalysisComponent(analysisComponentRequest);
-    var translatedTokens = literalTranslation.getTokenTranslations();
 
+    var translatedTokens = literalTranslation.getTokenTranslations();
     assertThat(translatedTokens.size()).isEqualTo(4);
     assertThat(translatedTokens.getFirst().getSource()).isEqualTo("Wie");
     assertThat(translatedTokens.getFirst().getTranslation()).isEqualToIgnoringCase("How");
@@ -40,5 +41,30 @@ class OpenAILiteralTranslationServiceBenchmarkTest extends AbstractBenchmarkTest
     assertThat(translatedTokens.get(1).getSource()).isEqualToIgnoringCase("geht");
     assertThat(translatedTokens.get(2).getSource()).isEqualToIgnoringCase("es");
     assertThat(translatedTokens.get(3).getSource()).isEqualToIgnoringCase("dir");
+  }
+
+  @Test
+  void benchmarkTranslationToRussian() {
+    var phrase = "How are you doing?";
+    var tokens = tokenService.tokenize(phrase);
+
+    var analysisComponentRequest = AnalysisComponentRequest.builder()
+        .phrase(phrase)
+        .sourceLanguage(LanguageCode.EN)
+        .targetLanguage(LanguageCode.RU)
+        .tokens(tokens)
+        .build();
+
+    var literalTranslation = openAILiteralTranslationService.createAnalysisComponent(analysisComponentRequest);
+
+    var translatedTokens = literalTranslation.getTokenTranslations();
+    assertThat(translatedTokens.size()).isEqualTo(4);
+    assertThat(translatedTokens.getFirst().getSource()).isEqualTo("How");
+    assertThat(translatedTokens.getFirst().getTranslation()).isEqualToIgnoringCase("как");
+
+    assertThat(translatedTokens.get(1).getSource()).isEqualToIgnoringCase("are");
+    assertThat(translatedTokens.get(2).getSource()).isEqualToIgnoringCase("you");
+    assertThat(translatedTokens.get(2).getTranslation()).isEqualToIgnoringCase("тебя");
+    assertThat(translatedTokens.get(3).getSource()).isEqualToIgnoringCase("doing");
   }
 }

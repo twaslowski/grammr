@@ -26,7 +26,7 @@ public class OpenAILiteralTranslationService implements LiteralTranslationServic
 
     log.info("Translating {} unique words: {}", words.size(), words);
     var translationFutures = words.stream()
-        .map(word -> openAITokenTranslationService.createTranslation(request.getPhrase(), word))
+        .map(word -> openAITokenTranslationService.createTranslation(request.getPhrase(), word, request.getTargetLanguage()))
         .toList();
 
     var translatedTokens = translationFutures.stream()

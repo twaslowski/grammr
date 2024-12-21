@@ -48,4 +48,4 @@ telegram:
 analysis:
   rest:
     port: 8000
-    endpoint: /morphological-analysis
+    endpoint: morphological-analysis
