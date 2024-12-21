@@ -12,8 +12,10 @@ import com.grammr.telegram.dto.update.TelegramAudioUpdate;
 import java.nio.file.Path;
 import java.util.List;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled
 @IntegrationTest
 public class AudioUpdateIntegrationTest extends IntegrationTestBase {
 

@@ -15,11 +15,11 @@ nameOverride: ""
 fullnameOverride: ""
 
 languages:
-  - code: de
+  - languageCode: de
     model: de_core_news_sm
-  - code: en
+  - languageCode: en
     model: en_core_web_sm
-  - code: ru
+  - languageCode: ru
     model: ru_core_news_sm
 
 serviceAccount:

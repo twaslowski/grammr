@@ -2,14 +2,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .code }}-grammr-morphology
+  name: {{ .languageCode }}-grammr-morphology
   labels:
-    app: grammr-morphology
-    language: {{ .code }}
+    app: {{ .languageCode }}-grammr-morphology
+    language: {{ .languageCode }}
 spec:
   selector:
-    app: grammr-morphology
-    language: {{ .code }}
+    app: {{ .languageCode }}-grammr-morphology
+    language: {{ .languageCode }}
   ports:
     - protocol: TCP
       port: 8000
