@@ -1,5 +1,6 @@
 package com.grammr.domain.value.language;
 
+import com.grammr.domain.enums.AnalysisComponentType;
 import com.grammr.service.language.AIGeneratedContent;
 import io.github.sashirestela.openai.domain.audio.Transcription;
 import lombok.AllArgsConstructor;
@@ -21,5 +22,10 @@ public class AudioTranscription extends AIGeneratedContent {
     return AudioTranscription.builder()
         .transcription(transcription.getText())
         .build();
+  }
+
+  @Override
+  public AnalysisComponentType type() {
+    return AnalysisComponentType.AUDIO_TRANSCRIPTION;
   }
 }

@@ -1,0 +1,10 @@
+package com.grammr.domain.enums;
+
+public enum AnalysisComponentType {
+
+  AUDIO_TRANSCRIPTION,
+  LANGUAGE_RECOGNITION,
+  SEMANTIC_TRANSLATION,
+  LITERAL_TRANSLATION,
+  MORPHOLOGICAL_ANALYSIS
+}

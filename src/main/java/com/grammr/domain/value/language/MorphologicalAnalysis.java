@@ -1,5 +1,6 @@
 package com.grammr.domain.value.language;
 
+import com.grammr.domain.enums.AnalysisComponentType;
 import com.grammr.domain.value.AnalysisComponent;
 import java.util.List;
 import java.util.Optional;
@@ -24,5 +25,10 @@ public class MorphologicalAnalysis extends AnalysisComponent {
     return tokens.stream()
         .filter(tokenMorphology -> tokenMorphology.text().equals(token))
         .findFirst();
+  }
+
+  @Override
+  public AnalysisComponentType type() {
+    return AnalysisComponentType.MORPHOLOGICAL_ANALYSIS;
   }
 }

@@ -4,6 +4,7 @@ import com.grammr.domain.event.AnalysisRequestEvent;
 import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.FullAnalysis;
 import com.grammr.domain.value.language.SemanticTranslation;
+import com.grammr.service.language.AnalysisComponentProvider;
 import com.grammr.service.language.morphology.MorphologicalAnalysisService;
 import com.grammr.service.language.recognition.LanguageRecognitionService;
 import com.grammr.service.language.translation.literal.LiteralTranslationService;

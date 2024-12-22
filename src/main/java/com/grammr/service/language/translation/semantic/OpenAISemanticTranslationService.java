@@ -54,10 +54,12 @@ public class OpenAISemanticTranslationService extends AbstractOpenAIService impl
   }
 
   public UserMessage generateUserMessage(String phrase, LanguageCode to) {
-    // todo: source (and perhaps target) language should be parameterizable
     return UserMessage.of(messageUtil.parameterizeMessage("openai.translation.semantic.prompt.user",
         to.getLanguageName(), phrase));
   }
 
-
+  @Override
+  public boolean shouldCreateAnalysisComponent(AnalysisComponentRequest request) {
+    return request.hasPhrase() && request.hasTargetLanguage();
+  }
 }

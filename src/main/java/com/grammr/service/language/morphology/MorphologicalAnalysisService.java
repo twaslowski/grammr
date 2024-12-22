@@ -24,4 +24,10 @@ public class MorphologicalAnalysisService implements AnalysisComponentProvider {
     log.info("Analysis for phrase '{}' is: {}", request.getPhrase(), analysis);
     return analysis;
   }
+
+  @Override
+  public boolean shouldCreateAnalysisComponent(AnalysisComponentRequest request) {
+    // todo add languages
+    return request.hasTokens() && request.hasPhrase() && request.hasSourceLanguage();
+  }
 }

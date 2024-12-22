@@ -6,4 +6,6 @@ import com.grammr.domain.value.AnalysisComponentRequest;
 public interface AnalysisComponentProvider {
 
   AnalysisComponent createAnalysisComponent(AnalysisComponentRequest request);
+
+  boolean shouldCreateAnalysisComponent(AnalysisComponentRequest request);
 }

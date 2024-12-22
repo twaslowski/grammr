@@ -1,5 +1,6 @@
 package com.grammr.domain.value.language;
 
+import com.grammr.domain.enums.AnalysisComponentType;
 import com.grammr.service.language.AIGeneratedContent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,5 +26,10 @@ public class TokenTranslation extends AIGeneratedContent {
     }
     TokenTranslation that = (TokenTranslation) obj;
     return source.equalsIgnoreCase(that.source) && translation.equalsIgnoreCase(that.translation);
+  }
+
+  @Override
+  public AnalysisComponentType type() {
+    return AnalysisComponentType.LITERAL_TRANSLATION;
   }
 }

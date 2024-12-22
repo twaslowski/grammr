@@ -6,7 +6,6 @@ import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.service.language.AbstractOpenAIService;
-import com.grammr.service.language.AnalysisComponentProvider;
 import io.github.sashirestela.openai.SimpleOpenAI;
 import io.github.sashirestela.openai.common.ResponseFormat;
 import io.github.sashirestela.openai.common.ResponseFormat.JsonSchema;
@@ -54,5 +53,10 @@ public class OpenAILanguageRecognitionService extends AbstractOpenAIService impl
     return UserMessage.of(messageUtil.parameterizeMessage(
         "openai.language-recognition.prompt.user", phrase
     ));
+  }
+
+  @Override
+  public boolean shouldCreateAnalysisComponent(AnalysisComponentRequest request) {
+    return true;
   }
 }

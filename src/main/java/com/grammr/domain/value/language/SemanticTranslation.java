@@ -1,5 +1,6 @@
 package com.grammr.domain.value.language;
 
+import com.grammr.domain.enums.AnalysisComponentType;
 import com.grammr.service.language.AIGeneratedContent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,4 +17,9 @@ public class SemanticTranslation extends AIGeneratedContent {
 
   private String sourcePhrase;
   private String translatedPhrase;
+
+  @Override
+  public AnalysisComponentType type() {
+    return AnalysisComponentType.SEMANTIC_TRANSLATION;
+  }
 }

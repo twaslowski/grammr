@@ -24,6 +24,22 @@ public class AnalysisComponentRequest {
   @Nullable
   private List<Token> tokens;
 
+  public boolean hasTokens() {
+    return tokens != null && !tokens.isEmpty();
+  }
+
+  public boolean hasPhrase() {
+    return phrase != null && !phrase.isBlank();
+  }
+
+  public boolean hasSourceLanguage() {
+    return sourceLanguage != null;
+  }
+
+  public boolean hasTargetLanguage() {
+    return targetLanguage != null;
+  }
+
   public static AnalysisComponentRequest from(AnalysisRequestEvent analysisRequest) {
     return AnalysisComponentRequest.builder()
         .phrase(analysisRequest.phrase())

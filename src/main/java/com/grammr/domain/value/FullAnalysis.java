@@ -11,7 +11,8 @@ import lombok.Builder;
 public record FullAnalysis(
     String sourcePhrase,
     SemanticTranslation semanticTranslation,
-    List<Token> analyzedTokens
+    List<Token> analyzedTokens,
+    List<AnalysisComponent> analysisComponents
 ) {
 
   public int completionTokens() {

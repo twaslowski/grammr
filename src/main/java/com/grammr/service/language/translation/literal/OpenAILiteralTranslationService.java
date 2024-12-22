@@ -39,4 +39,9 @@ public class OpenAILiteralTranslationService implements LiteralTranslationServic
         .tokenTranslations(translatedTokens)
         .build();
   }
+
+  @Override
+  public boolean shouldCreateAnalysisComponent(AnalysisComponentRequest request) {
+    return request.hasTokens() && request.hasPhrase() && request.hasTargetLanguage();
+  }
 }

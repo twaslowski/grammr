@@ -1,5 +1,6 @@
 package com.grammr.domain.value.language;
 
+import com.grammr.domain.enums.AnalysisComponentType;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.service.language.AIGeneratedContent;
 import lombok.AllArgsConstructor;
@@ -17,5 +18,10 @@ public class LanguageRecognition extends AIGeneratedContent {
 
   public static LanguageRecognition of(LanguageCode languageCode) {
     return new LanguageRecognition(languageCode);
+  }
+
+  @Override
+  public AnalysisComponentType type() {
+    return AnalysisComponentType.LANGUAGE_RECOGNITION;
   }
 }

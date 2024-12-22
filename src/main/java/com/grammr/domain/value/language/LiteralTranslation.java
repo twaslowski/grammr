@@ -1,5 +1,6 @@
 package com.grammr.domain.value.language;
 
+import com.grammr.domain.enums.AnalysisComponentType;
 import com.grammr.service.language.AIGeneratedContent;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -15,4 +16,9 @@ public class LiteralTranslation extends AIGeneratedContent {
 
   String sourcePhrase;
   List<TokenTranslation> tokenTranslations;
+
+  @Override
+  public AnalysisComponentType type() {
+    return AnalysisComponentType.LITERAL_TRANSLATION;
+  }
 }
