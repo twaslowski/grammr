@@ -10,20 +10,16 @@ Learning languages is hard. This projects aim is to help.
 It allows you to translate sentences between languages, either explaining what a sentence
 means in the language you're learning, or providing a translation for an unknown sentence.
 
-Currently, I'm focusing on Russian and German, because I am learning the former and speak the latter.
-The primary means of interacting with the application as of now is through Telegram, but it is
-designed in such a way as to make the addition of a frontend, either through a website or an app,
-relatively straightforward.
-
-There is a sample bot that I'm running that translates exactly Russian to German. You can text it
-either text it a phrase in Russian and get a translation and analysis of the grammar. _Or_ you can
-text it in German, and it will translate the phrase to Russian and explain it to you.
-I personally find that very handy.
+Currently, this application can be accessed as a Telegram bot only because I suck at building
+frontends. However, this is my number one priority for this project right now. You can text the
+bot phrases in English, German, Portuguese and Russian to get translations including grammatical
+analyses between any of those languages.
 
 [![Example Image](docs/example.png)]
 
-I realize the visualization of the data right now is not great. This is the main thing I'm looking
-to improve on in the future. For more, see the plans for [features](#features) and the [Roadmap](#roadmap). 
+You can try the bot here:
+
+https://t.me/lingolift_bot
 
 ## Features
 
@@ -45,9 +41,38 @@ I'm looking to add more features in the near future. These may include:
 
 - [ ] Error correction
 - [ ] A solid frontend, in addition to the Telegram bot currently available
-- [ ] More languages
+- [x] More languages
 - [ ] Inflection tables
 - [ ] Anki flash card export
+
+## Roadmap
+
+Beyond the features mentioned above, I'm also looking to make the technology stack more robust.
+I believe that this application should _really_ be able to scale to complexity, so I'm investing
+a lot of time and energy into keeping the architecture as clean as possible.
+
+Features and improvements will include:
+
+- [x] A proper CI/CD pipeline, including automated deployment (halfway there)
+- [ ] Building a frontend. Possibly web-app, possibly cross-platform apps.
+- [ ] Benchmarking against quality regression of prompts
+- [ ] A fully event-driven architecture, where the Telegram Bot runs as an entirely different
+service only passing messages to the rest of the application. The _core_ will simply be a server
+responding to events and HTTP requests.
+- [ ] Adding several more languages, which means creating additional sidecars for morphological
+analyis. This might mean moving to an event-driven architecture here as well.
+
+I'll likely experiment with RabbitMQ in the near future to implement a more robust decoupling
+of the components.
+
+### On the Frontend
+
+I really like a project that is very similar to this one: @SalahEddineGhamri's [textile]([url](https://github.com/SalahEddineGhamri/textile)).
+Unfortunately, the only way to interact with [textile]([url](https://github.com/SalahEddineGhamri/textile)) is through the CLI, making
+it inaccessible for a huge amount of people. I'm would prefer to create the frontend for this language in some JS flavour (Angular, React, Vue etc.)
+to create a more accessible Web Application with portability potential.
+
+![Reference image from Textile, taken from the original repository](https://github.com/user-attachments/assets/e7204e91-be4f-4d52-b99e-a33497c55b6b)
 
 ## Running
 
@@ -76,26 +101,6 @@ PRs are welcome! I'm happy to help you get started with the project, so feel fre
 You can run unit tests with `./scripts/unit-test.sh` and integration tests with `./scripts/integration-test.sh`.
 Alternatively, run both with `./scripts/qa.sh`. This will also ensure the most accurate test coverage
 report is generated, which you can access at `target/site/jacoco/index.html`.
-
-## Roadmap
-
-Beyond the features mentioned above, I'm also looking to make the technology stack more robust.
-I believe that this application should _really_ be able to scale to complexity, so I'm investing
-a lot of time and energy into keeping the architecture as clean as possible.
-
-Features and improvements will include:
-
-- [ ] A proper CI/CD pipeline, including automated deployment (halfway there)
-- [ ] Building a frontend. Possibly web-app, possibly cross-platform apps.
-- [ ] Benchmarking against quality regression of prompts
-- [ ] A fully event-driven architecture, where the Telegram Bot runs as an entirely different
-service only passing messages to the rest of the application. The _core_ will simply be a server
-responding to events and HTTP requests.
-- [ ] Adding several more languages, which means creating additional sidecars for morphological
-analyis. This might mean moving to an event-driven architecture here as well.
-
-I'll likely experiment with RabbitMQ in the near future to implement a more robust decoupling
-of the components.
 
 ## Domain Language
 
