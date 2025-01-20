@@ -20,6 +20,11 @@ spring:
   datasource:
     hikari:
       driver-class-name: org.postgresql.Driver
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 management:
   endpoints:

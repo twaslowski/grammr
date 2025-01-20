@@ -13,6 +13,7 @@ services:
       - "8001:8000"
     environment:
       - SPACY_MODEL=de_core_news_sm
+      - LANGUAGE_CODE=de
 
   analysis-ru:
     image: tobiaswaslowski/grammatical-analysis
@@ -28,6 +29,7 @@ services:
       - "8002:8000"
     environment:
       - SPACY_MODEL=ru_core_news_sm
+      - LANGUAGE_CODE=ru
 
   inflection-ru:
     image: slowprog/pymorphy-api
@@ -48,6 +50,15 @@ services:
       timeout: 5s
       retries: 3
     command: [ "postgres", "-c", "log_statement=all" ]
+
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: 'rabbitmq'
+    environment:
+      - 'RABBITMQ_DEFAULT_PASS=guest'
+      - 'RABBITMQ_DEFAULT_USER=guest'
+    ports:
+      - 5672:5672
 
   nginx:
     image: nginx:latest
