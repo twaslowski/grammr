@@ -13,3 +13,9 @@ analysis:
     host: localhost
     uri-resolution:
       mechanism: PATH
+
+inflection:
+  rest:
+    host: localhost
+    uri-resolution:
+      mechanism: PATH

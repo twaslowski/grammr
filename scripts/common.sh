@@ -39,6 +39,10 @@ function deploy() {
       --namespace grammr --create-namespace \
       --wait --timeout "$HELM_TIMEOUT" \
       grammr-core ./charts/grammr
+
+    helm upgrade --install \
+      --namespace grammr --create-namespace \
+      inflection-ru ./charts/inflection-ru
 }
 
 function unit_test() {
