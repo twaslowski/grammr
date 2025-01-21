@@ -7,10 +7,11 @@ from analysis.domain.morphological_analysis import (
     MorphologicalAnalysis,
 )
 
+
 model = spacy.load(os.getenv("SPACY_MODEL"))
 
 
-def perform_analysis(request: AnalysisRequest) -> MorphologicalAnalysis:
+def perform_analysis(request: AnalysisRequest) -> list:
     spacy_tokens = model(request.phrase)
     return MorphologicalAnalysis(
         source_phrase=request.phrase,

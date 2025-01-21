@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EnvironmentAwareMorphologicalAnalysisURIResolver {
 
-  // This is a terribly ugly hack until I finally switch to a Message Broker.
   // Subdomain example: de.localhost:8000/analysis
   // Path example:      localhost:8000/de/analysis
   public enum Mechanism {

@@ -1,5 +1,5 @@
 # The builder image, used to build the virtual environment
-FROM python:3.12-slim AS builder
+FROM python:3.12-slim as builder
 
 RUN pip install poetry==1.4.2
 
@@ -31,7 +31,6 @@ ENV VIRTUAL_ENV=/app/.venv \
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 ENV APP_DIR=/app
-ENV PYTHONPATH=${APP_DIR}
 
 COPY analysis/ ${APP_DIR}/analysis
 COPY docker/init.sh ${APP_DIR}/init.sh

@@ -10,7 +10,6 @@ python = "^3.12.4"
 spacy = "3.7.0"
 uvicorn = "^0.32.0"
 fastapi = "^0.115.4"
-pika = "^1.3.2"
 
 # Sensitive Cython dependencies that need to be pinned due to cross-system compilation issues
 thinc = "8.2.4"

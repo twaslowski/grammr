@@ -20,11 +20,6 @@ spring:
   datasource:
     hikari:
       driver-class-name: org.postgresql.Driver
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
 
 management:
   endpoints:
@@ -54,9 +49,3 @@ analysis:
   rest:
     port: 8000
     endpoint: morphological-analysis
-  messaging:
-    exchange: morphological_analysis
-    queue: core-morphological-analysis-complete
-    routing-key:
-      complete: morphological-analysis.complete
-      requested: morphological-analysis.requested

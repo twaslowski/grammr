@@ -15,7 +15,6 @@ import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.TokenTranslation;
-import com.grammr.port.rest.InflectionGeneratorPort;
 import com.grammr.repository.RequestRepository;
 import com.grammr.repository.UserRepository;
 import com.grammr.service.AnalysisService;
@@ -84,9 +83,6 @@ public class IntegrationTestBase {
 
   @Autowired
   protected EventAccumulator eventAccumulator;
-
-  @Autowired
-  protected InflectionGeneratorPort inflectionGeneratorPort;
 
   private final OpenAI.ChatCompletions chatCompletionsMock = mock(OpenAI.ChatCompletions.class);
   private final OpenAI.Audios audioMock = mock(OpenAI.Audios.class);

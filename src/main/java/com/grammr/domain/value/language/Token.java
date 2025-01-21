@@ -9,10 +9,6 @@ public record Token(
     TokenMorphology morphology
 ) {
 
-  public String lemma() {
-    return morphology.lemma();
-  }
-
   public static Token fromString(String text) {
     return new Token(text, null, null);
   }
