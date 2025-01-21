@@ -23,4 +23,4 @@ def test_should_generate_verbal_features():
 def test_should_generate_noun_features():
     part_of_speech = "NOUN"
     features = retrieve_features(part_of_speech)
-    assert len(features) == 2 * 3 * 6
+    assert len(features) == 12
