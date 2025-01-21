@@ -76,6 +76,7 @@ jobs:
 
 
   build_morphology_sidecar:
+    needs: [ compile_and_test ]
     uses: ./.github/workflows/build_sidecar.yml
     secrets:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -87,6 +88,7 @@ jobs:
 
   build_ru_inflection_sidecar:
     uses: ./.github/workflows/build_sidecar.yml
+    needs: [ compile_and_test ]
     secrets:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}

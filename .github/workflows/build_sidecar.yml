@@ -7,7 +7,7 @@ on:
       directory:
         required: true
         type: string
-      tests_directory:
+      test_directory:
         required: true
         type: string
     secrets:
@@ -17,7 +17,6 @@ on:
           required: true
 
 jobs:
-
   test:
     runs-on: ubuntu-latest
     steps:
@@ -28,14 +27,15 @@ jobs:
         uses: snok/install-poetry@v1
 
       - name: Install dependencies
-        run: cd ${{ inputs.directory }} && poetry install
+        run: cd ${{ inputs.directory }} && poetry install --no-root
 
       - name: Run tests
         env:
           PYTHONPATH: ${{ inputs.directory }}
-        run: poetry run pytest ${{ inputs.tests_directory }}
+        run: poetry run pytest ${{ inputs.test_directory }}
 
   build_morphology_sidecar:
+    needs: [ test ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
