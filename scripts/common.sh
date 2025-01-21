@@ -22,6 +22,14 @@ function deploy() {
     --wait --timeout "$HELM_TIMEOUT" \
     postgres oci://registry-1.docker.io/bitnamicharts/postgresql
 
+  helm upgrade --install \
+    --set openai_api_key="$OPENAI_API_KEY" \
+    --set telegram_token="$TELEGRAM_TOKEN" \
+    --set image.tag="$TAG" \
+    --namespace grammr --create-namespace \
+    --wait --timeout "$HELM_TIMEOUT" \
+    grammr-core ./charts/grammr
+
   # escape commas for helm
   export SPACY_MODELS=$(echo "$SPACY_MODELS" | sed 's/,/\\,/g')
   helm upgrade --install \
@@ -31,14 +39,6 @@ function deploy() {
     --namespace grammr --create-namespace \
     --wait --timeout "$HELM_TIMEOUT" \
     grammr-morphology ./charts/grammr-morphology
-
-    helm upgrade --install \
-      --set openai_api_key="$OPENAI_API_KEY" \
-      --set telegram_token="$TELEGRAM_TOKEN" \
-      --set image.tag="$TAG" \
-      --namespace grammr --create-namespace \
-      --wait --timeout "$HELM_TIMEOUT" \
-      grammr-core ./charts/grammr
 
     helm upgrade --install \
       --namespace grammr --create-namespace \

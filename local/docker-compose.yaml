@@ -14,6 +14,8 @@ services:
     environment:
       - SPACY_MODEL=de_core_news_sm
       - LANGUAGE_CODE=de
+      - RABBITMQ_HOST=rabbitmq
+      - EXCHANGE=morphological_analysis
 
   analysis-ru:
     image: tobiaswaslowski/grammatical-analysis
@@ -30,6 +32,8 @@ services:
     environment:
       - SPACY_MODEL=ru_core_news_sm
       - LANGUAGE_CODE=ru
+      - RABBITMQ_HOST=rabbitmq
+      - EXCHANGE=morphological_analysis
 
   inflection-ru:
     image: slowprog/pymorphy-api
@@ -52,13 +56,14 @@ services:
     command: [ "postgres", "-c", "log_statement=all" ]
 
   rabbitmq:
-    image: rabbitmq:latest
+    image: rabbitmq:3-management
     container_name: 'rabbitmq'
-    environment:
-      - 'RABBITMQ_DEFAULT_PASS=guest'
-      - 'RABBITMQ_DEFAULT_USER=guest'
+    volumes:
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./definitions.json:/etc/rabbitmq/definitions.json:ro
     ports:
       - 5672:5672
+      - 15672:15672
 
   nginx:
     image: nginx:latest

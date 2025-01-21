@@ -1,11 +1,13 @@
 package com.grammr.port.amqp;
 
-import com.grammr.config.QueueConfiguration;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grammr.domain.event.MorphologicalAnalysisRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -15,11 +17,19 @@ import org.springframework.stereotype.Service;
 public class EventPublisher {
 
   private final RabbitTemplate rabbitTemplate;
+  private final ObjectMapper objectMapper;
 
-  @Scheduled(fixedDelay = 1000, initialDelay = 500)
-  public void send() {
-    String message = "Hello World!";
-    rabbitTemplate.convertAndSend(QueueConfiguration.EXCHANGE_NAME, "routing.key", message);
-    log.info(" [x] Sent '{}'", message);
+  @Value("${analysis.messaging.exchange}")
+  private String morphologicalAnalysisRequestExchange;
+
+  @Value("${analysis.messaging.routing-key.requested}")
+  private String morphologicalAnalysisRequestRoutingKey;
+
+  @SneakyThrows
+  public void publish(MorphologicalAnalysisRequest request) {
+    var string = objectMapper.writeValueAsString(request);
+    var routingKey = morphologicalAnalysisRequestRoutingKey + "." + request.languageCode();
+    log.info("Publishing morphological analysis request with requestId {}", request.requestId());
+    rabbitTemplate.convertAndSend(morphologicalAnalysisRequestExchange, routingKey, string);
   }
 }

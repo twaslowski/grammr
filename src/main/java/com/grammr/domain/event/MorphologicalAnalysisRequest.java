@@ -2,7 +2,9 @@ package com.grammr.domain.event;
 
 import com.grammr.domain.enums.LanguageCode;
 import java.util.UUID;
+import lombok.Builder;
 
+@Builder
 public record MorphologicalAnalysisRequest(
     String phrase,
     String languageCode,
