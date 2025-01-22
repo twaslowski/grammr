@@ -23,6 +23,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
+
       - name: Install Poetry
         uses: snok/install-poetry@v1
 
@@ -32,7 +37,7 @@ jobs:
       - name: Run tests
         env:
           PYTHONPATH: ${{ inputs.directory }}
-        run: poetry run pytest ${{ inputs.test_directory }}
+        run: pytest ${{ inputs.test_directory }}
 
   build_morphology_sidecar:
     needs: [ test ]
