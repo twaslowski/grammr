@@ -5,7 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: tobiaswaslowski/grammr-core
+  core:
+    repository: tobiaswaslowski/grammr-core
+  morphology:
+    repository: tobiaswaslowski/grammr-morphology
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
@@ -14,20 +17,10 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+languages: []
 openai_api_key: ""
 telegram_token: ""
 datasource_password: ""
-
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: false
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
 
 podAnnotations: {}
 podLabels: {}
@@ -92,17 +85,17 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 # Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
+volumes:
+  - name: languages-config-volume
+    configMap:
+      name: languages-config
+      items:
+        - key: languages.yml
+          path: languages.yml
 
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
+volumeMounts:
+  - name: languages-config-volume
+    mountPath: /app/languages-config
 
 nodeSelector: {}
 

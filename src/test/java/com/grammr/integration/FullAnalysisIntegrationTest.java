@@ -104,7 +104,7 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
   }
 
   @Test
-  @Disabled("Will build feature to default to translations to English in the future")
+  @Disabled("Will build type to default to translations to English in the future")
   void shouldOnlyReturnSemanticTranslationIfUnknownLanguageCode() {
     var sourcePhrase = "Donde esta la biblioteca?";
 

@@ -5,6 +5,9 @@ import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.domain.enums.LanguageCode;
+import com.grammr.domain.enums.features.Case;
+import com.grammr.domain.enums.features.Feature;
+import com.grammr.domain.enums.features.Person;
 import com.grammr.domain.event.MorphologicalAnalysisRequest;
 import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.domain.value.language.SemanticTranslation;
@@ -68,5 +71,17 @@ public class ObjectMapperTest {
     var translation = objectMapper.readValue(json, SemanticTranslation.class);
     assertThat(translation.getSourcePhrase()).isEqualTo("How are you doing");
     assertThat(translation.getTranslatedPhrase()).isEqualTo("Wie geht es dir?");
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldDeserializeFeature() {
+    var json = "{\"type\":\"CASE\", \"value\":\"NOM\"}";
+    var feature = objectMapper.readValue(json, Feature.class);
+    assertThat(feature.getEnumValue()).isEqualTo(Case.NOM);
+
+    json = "{\"type\": \"PERSON\", \"value\": \"FIRST\"}";
+    feature = objectMapper.readValue(json, Feature.class);
+    assertThat(feature.getEnumValue()).isEqualTo(Person.FIRST);
   }
 }

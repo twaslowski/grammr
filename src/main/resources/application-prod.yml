@@ -3,9 +3,3 @@ spring:
     url: "${DATASOURCE_URL}"
     username: grammr
     password: ${DATASOURCE_PASSWORD}
-
-analysis:
-  rest:
-    host: "${MORPHOLOGY_API_HOST}"
-    uri-resolution:
-      mechanism: PREFIX

@@ -4,7 +4,7 @@ from spacy.tokens import Token
 
 def extract_features(token: Token) -> list[Feature]:
     """
-    Extracts a dict of features from the universal feature tags of a Token.
+    Extracts a dict of features from the universal type tags of a Token.
     :param token: A spaCy token with a token.morph string like "Case=Nom|Number=Plur"
     :return: The features, e.g. {'Case': 'Nom', 'Number': 'Plur'}
     """

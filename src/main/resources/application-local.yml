@@ -4,8 +4,6 @@ spring:
     username: user
     password: password
 
-analysis:
-  rest:
-    host: localhost
-    uri-resolution:
-      mechanism: PATH
+grammr:
+  languages:
+    mount-path: src/test/resources/languages.yml

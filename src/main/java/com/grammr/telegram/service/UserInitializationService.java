@@ -15,10 +15,10 @@ public class UserInitializationService {
 
   private final UserRepository userRepository;
 
-  @Value("${grammr.default.user.language_spoken}")
+  @Value("${grammr.default.user.language-spoken}")
   private LanguageCode defaultLanguageSpoken;
 
-  @Value("${grammr.default.user.language_learned}")
+  @Value("${grammr.default.user.language-learned}")
   private LanguageCode defaultLanguageLearned;
 
   public User initializeUser(long chatId) {

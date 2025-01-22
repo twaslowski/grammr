@@ -1,6 +1,9 @@
 import logging
 
 from fastapi import FastAPI
+import json
+
+from inflection.domain.inflection import Inflections
 from inflection.service import inflector
 from inflection.service import feature_retriever
 from inflection.domain.inflection_request import InflectionRequest
@@ -15,7 +18,11 @@ app = FastAPI()
 @app.post("/inflect")
 async def inflect(request: InflectionRequest):
     features = feature_retriever.retrieve_features(request.part_of_speech)
-    return inflector.inflect(request.lemma, features)
+    inflections = inflector.inflect(request.lemma, features)
+    inflections_container = Inflections(lemma=request.lemma, inflections=inflections)
+    result = json.dumps(inflections_container.json())
+    logging.info(result)
+    return inflections_container.json()
 
 
 @app.get("/health")

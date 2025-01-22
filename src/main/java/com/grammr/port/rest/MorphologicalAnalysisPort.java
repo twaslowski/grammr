@@ -1,5 +1,6 @@
 package com.grammr.port.rest;
 
+import com.grammr.config.value.LanguageConfiguration;
 import com.grammr.domain.event.MorphologicalAnalysisRequest;
 import com.grammr.domain.value.language.MorphologicalAnalysis;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,10 @@ import org.springframework.web.client.RestClient;
 public class MorphologicalAnalysisPort {
 
   private final RestClient restClient;
-  private final EnvironmentAwareMorphologicalAnalysisURIResolver uriResolver;
+  private final LanguageConfiguration languageConfiguration;
 
   public MorphologicalAnalysis performAnalysis(MorphologicalAnalysisRequest analysisRequest) {
-    var uri = uriResolver.resolveUri(analysisRequest.languageCode());
+    var uri = languageConfiguration.getMorphologyUri(analysisRequest.languageCode());
     log.info("Performing analysis for phrase '{}' at '{}'", analysisRequest.phrase(), uri);
     try {
       return restClient

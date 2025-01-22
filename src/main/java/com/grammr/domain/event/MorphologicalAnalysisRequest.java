@@ -5,11 +5,11 @@ import java.util.UUID;
 
 public record MorphologicalAnalysisRequest(
     String phrase,
-    String languageCode,
+    LanguageCode languageCode,
     String requestId
 ) {
 
   public static MorphologicalAnalysisRequest from(String phrase, LanguageCode languageCode) {
-    return new MorphologicalAnalysisRequest(phrase, languageCode.toString(), UUID.randomUUID().toString());
+    return new MorphologicalAnalysisRequest(phrase, languageCode, UUID.randomUUID().toString());
   }
 }

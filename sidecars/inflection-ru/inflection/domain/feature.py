@@ -1,33 +1,40 @@
 from enum import Enum
 
 
-class Case(Enum):
-    NOMINATIVE = "nomn"
-    GENITIVE = "gent"
-    DATIVE = "datv"
-    ACCUSATIVE = "accs"
-    INSTRUMENTAL = "ablt"
-    LOCATIVE = "loct"
+class Feature(Enum):
+    pass
+
+    def json(self):
+        return {"type": self.__class__.__name__.upper(), "value": self.name}
 
 
-class Number(Enum):
-    SINGULAR = "sing"
-    PLURAL = "plur"
+class Case(Feature):
+    NOM = "nomn"
+    GEN = "gent"
+    DAT = "datv"
+    ACC = "accs"
+    ABL = "ablt"
+    LOC = "loct"
 
 
-class Gender(Enum):
-    MASCULINE = "masc"
-    FEMININE = "femn"
-    NEUTER = "neut"
+class Number(Feature):
+    SING = "sing"
+    PLUR = "plur"
 
 
-class Person(Enum):
+class Gender(Feature):
+    MASC = "masc"
+    FEM = "femn"
+    NEUT = "neut"
+
+
+class Person(Feature):
     FIRST = "1per"
     SECOND = "2per"
     THIRD = "3per"
 
 
-class Tense(Enum):
+class Tense(Feature):
     PAST = "past"
-    PRESENT = "pres"
-    FUTURE = "futr"
+    PRES = "pres"
+    FUT = "futr"
