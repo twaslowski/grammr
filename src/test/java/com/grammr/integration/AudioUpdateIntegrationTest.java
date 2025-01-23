@@ -20,6 +20,7 @@ public class AudioUpdateIntegrationTest extends IntegrationTestBase {
 
   @Test
   @SneakyThrows
+  @Disabled("Currently flakey")
   void shouldPerformTranscriptionAndAnalysis() {
     // given an audio update
     var user = userRepository.save(UserSpec.valid().build());

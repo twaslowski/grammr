@@ -29,12 +29,12 @@ jobs:
         uses: snok/install-poetry@v1
 
       - name: Install dependencies
-        run: cd ${{ inputs.directory }} && poetry install --no-root
+        run: cd ${{ inputs.directory }} && poetry install --with dev --no-root
 
       - name: Run tests
         env:
-          PYTHONPATH: ${{ inputs.directory }}
-        run: poetry run pytest test/
+          PYTHONPATH: .
+        run: cd ${{ inputs.directory }} && poetry run pytest test/
 
   build_morphology_sidecar:
     needs: [ test ]
