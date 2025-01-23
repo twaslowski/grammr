@@ -1,27 +1,28 @@
-- code: ru
-  model: ru_core_news_sm
-  morphology:
-    enabled: true
-    host: "localhost"
-    port: 8010
-  inflection:
-    enabled: true
-    host: "localhost"
-    port: 8020
-    repository: tobiaswaslowski/grammr-inflections-ru
-- code: de
-  model: de_core_news_sm
-  morphology:
-    enabled: true
-    host: "localhost"
-    port: 8011
-  inflections:
-    enabled: false
-- code: en
-  model: en_core_web_sm
-  morphology:
-    false: true
-    host: "localhost"
-    port: 8012
-  inflections:
-    enabled: false
+languages:
+  - code: ru
+    model: ru_core_news_sm
+    morphology:
+      enabled: true
+      host: "localhost"
+      port: 8010
+    inflection:
+      enabled: true
+      host: "localhost"
+      port: 8020
+      repository: tobiaswaslowski/grammr-inflections-ru
+  - code: de
+    model: de_core_news_sm
+    morphology:
+      enabled: true
+      host: "localhost"
+      port: 8011
+    inflections:
+      enabled: false
+  - code: en
+    model: en_core_web_sm
+    morphology:
+      false: true
+      host: "localhost"
+      port: 8012
+    inflections:
+      enabled: false

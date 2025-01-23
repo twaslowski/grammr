@@ -1,0 +1,31 @@
+global:
+  image:
+    tag: latest
+  languages:
+    - code: ru
+      model: ru_core_news_sm
+      morphology:
+        enabled: true
+        host: "ru-morphology.grammr.svc.cluster.local"
+        port: 8000
+      inflection:
+        enabled: true
+        host: "ru-inflection.grammr.svc.cluster.local"
+        port: 8000
+        repository: tobiaswaslowski/grammr-inflection-ru
+    - code: de
+      model: de_core_news_sm
+      morphology:
+        enabled: true
+        host: "de-morphology.grammr.svc.cluster.local"
+        port: 8000
+      inflection:
+        enabled: false
+    - code: en
+      model: en_core_web_sm
+      morphology:
+        false: true
+        host: "en-morphology.grammr.svc.cluster.local"
+        port: 8000
+      inflection:
+        enabled: false

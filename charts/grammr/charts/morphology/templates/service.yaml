@@ -1,0 +1,20 @@
+{{ range $.Values.global.languages }}
+{{ if .morphology.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${{ $.Release.Name }}-${{ .code }}
+  labels:
+    {{ .code | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8000
+      targetPort: 8000
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ .code }}-${{ $.Release.Name }}
+    language: {{ .code }}
+{{- end }}
+{{- end }}

@@ -1,40 +1,35 @@
-{{- range .Values.languages }}
+{{- range $.Values.global.languages }}
 {{- if .morphology.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .code }}-morphology
+  name: {{ .code }}-${{ $.Release.Name }}
   labels:
-    app: {{.code }}-morphology
+    app: {{.code }}-${{ $.Release.Name }}
     language: {{ .code }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .code }}-morphology
+      app: {{ .code }}-${{ $.Release.Name }}
       language: {{ .code }}
   template:
     metadata:
       labels:
-        app: {{ .code}}-morphology
+        app: {{ .code}}-${{ $.Release.Name }}
         language: {{ .code }}
     spec:
       containers:
-        - name: {{ .code}}-morphology
-          image: "{{ $.Values.image.morphology.repository }}:{{ $.Values.image.tag }}"
+        - name: {{ .code}}-${{ $.Release.Name }}
+          image: "{{ $.Values.image.repository }}:{{ $.Values.global.image.tag }}"
           ports:
             - containerPort: 8000
           env:
             - name: SPACY_MODEL
               value: {{ .model }}
           livenessProbe:
-            httpGet:
-              path: /health
-              port: {{ .morphology.port }}
+            {{- toYaml $.Values.livenessProbe | nindent 12 }}
           readinessProbe:
-            httpGet:
-              path: /health
-              port: 8080
             {{- toYaml $.Values.readinessProbe | nindent 12 }}
 {{- end }}
 {{- end }}

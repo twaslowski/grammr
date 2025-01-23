@@ -1,58 +1,22 @@
-# Default values for lingolift-core.
+# Default values for inflection-ru.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 image:
-  repository: tobiaswaslowski/grammr-core
+  repository: tobiaswaslowski/grammr-inflection-ru
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
-imagePullSecrets: []
 nameOverride: ""
-fullnameOverride: ""
-
-global:
-  image:
-    tag: ""
-  languages:
-    - code: ru
-      model: ru_core_news_sm
-      morphology:
-        enabled: true
-        host: "ru-morphology.grammr.svc.cluster.local"
-        port: 8000
-      inflection:
-        enabled: true
-        host: "ru-inflection.grammr.svc.cluster.local"
-        port: 8000
-        repository: tobiaswaslowski/grammr-inflection-ru
-    - code: de
-      model: de_core_news_sm
-      morphology:
-        enabled: true
-        host: "de-morphology.grammr.svc.cluster.local"
-        port: 8000
-      inflection:
-        enabled: false
-    - code: en
-      model: en_core_web_sm
-      morphology:
-        false: true
-        host: "en-morphology.grammr.svc.cluster.local"
-        port: 8000
-      inflection:
-        enabled: false
-
-openai_api_key: ""
-telegram_token: ""
-datasource_password: ""
+fullnameOverride: "inflection-ru"
+languageCode: ru
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: false
+  create: true
   # Automatically mount a ServiceAccount's API credentials?
   automount: true
   # Annotations to add to the service account
@@ -77,7 +41,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 8000
 
 ingress:
   enabled: false
@@ -109,12 +73,12 @@ resources: {}
 
 livenessProbe:
   httpGet:
-    path: /actuator/health
-    port: 8080
+    path: /health
+    port: 8000
 readinessProbe:
   httpGet:
-    path: /actuator/health
-    port: 8080
+    path: /health
+    port: 8000
 
 autoscaling:
   enabled: false
@@ -124,17 +88,17 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 # Additional volumes on the output Deployment definition.
-volumes:
-  - name: languages-config-volume
-    configMap:
-      name: languages-config
-      items:
-        - key: languages.yml
-          path: languages.yml
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
 
-volumeMounts:
-  - name: languages-config-volume
-    mountPath: /app/config
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
 
 nodeSelector: {}
 

@@ -25,7 +25,8 @@ function deploy() {
   helm upgrade --install \
     --set openai_api_key="$OPENAI_API_KEY" \
     --set telegram_token="$TELEGRAM_TOKEN" \
-    --set image.tag="$TAG" \
+    --set global.image.tag="latest" \
+    --values ./charts/values/grammr-values.yaml \
     --namespace grammr --create-namespace \
     --wait --timeout "$HELM_TIMEOUT" \
     grammr-core ./charts/grammr
