@@ -84,7 +84,6 @@ jobs:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     with:
       directory: "./sidecars/morphology"
-      test_directory: "./sidecars/morphology/analysis/test"
       image_name: "tobiaswaslowski/grammr-morphology"
 
   build_ru_inflection_sidecar:
@@ -95,7 +94,6 @@ jobs:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     with:
       directory: "./sidecars/inflection-ru"
-      test_directory: "./sidecars/inflection-ru/inflection/test"
       image_name: "tobiaswaslowski/grammr-inflection-ru"
 
   deploy:
@@ -104,7 +102,6 @@ jobs:
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-      SPACY_MODELS: "ru_core_news_sm,de_core_news_sm,en_core_web_sm"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
