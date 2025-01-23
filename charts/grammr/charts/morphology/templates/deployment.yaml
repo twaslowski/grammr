@@ -1,26 +1,27 @@
 {{- range $.Values.global.languages }}
 {{- if .morphology.enabled }}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $.Release.Name }}-{{ .code }}
+  name: {{ include "morphology.fullname" $ }}-{{ .code }}
   labels:
-    app: {{ $.Release.Name }}
+    app: {{ include "morphology.fullname" $ }}-{{ .code }}
     language: {{ .code }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ $.Release.Name }}
+      app: {{ include "morphology.fullname" $ }}-{{ .code }}
       language: {{ .code }}
   template:
     metadata:
       labels:
-        app: {{ $.Release.Name }}
+        app: {{ include "morphology.fullname" $ }}-{{ .code }}
         language: {{ .code }}
     spec:
       containers:
-        - name: {{ $.Release.Name }}-{{ .code }}
+        - name: {{ include "morphology.fullname" $ }}-{{ .code }}
           image: "{{ $.Values.image.repository }}:{{ $.Values.global.image.tag }}"
           ports:
             - containerPort: 8000

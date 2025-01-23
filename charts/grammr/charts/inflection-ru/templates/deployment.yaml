@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ include "inflection-ru.fullname" . }}
   labels:
-    app: {{ .Release.Name }}
+    app: {{ include "inflection-ru.fullname" . }}
     language: {{ .Values.languageCode }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: {{ include "inflection-ru.fullname" . }}
       language: {{ .Values.languageCode }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
+        app: {{ include "inflection-ru.fullname" . }}
         language: {{ .Values.languageCode }}
     spec:
       containers:
-        - name: {{ .Release.Name }}
+        - name: {{ include "inflection-ru.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ $.Values.global.image.tag }}"
           ports:
             - containerPort: 8000
