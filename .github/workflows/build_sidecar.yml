@@ -37,7 +37,7 @@ jobs:
       - name: Run tests
         env:
           PYTHONPATH: ${{ inputs.directory }}
-        run: pytest ${{ inputs.test_directory }}
+        run: poetry run pytest test/
 
   build_morphology_sidecar:
     needs: [ test ]
