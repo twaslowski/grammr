@@ -3,24 +3,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .code }}-${{ $.Release.Name }}
+  name: {{ $.Release.Name }}-{{ .code }}
   labels:
-    app: {{.code }}-${{ $.Release.Name }}
+    app: {{ $.Release.Name }}
     language: {{ .code }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .code }}-${{ $.Release.Name }}
+      app: {{ $.Release.Name }}
       language: {{ .code }}
   template:
     metadata:
       labels:
-        app: {{ .code}}-${{ $.Release.Name }}
+        app: {{ $.Release.Name }}
         language: {{ .code }}
     spec:
       containers:
-        - name: {{ .code}}-${{ $.Release.Name }}
+        - name: {{ $.Release.Name }}-{{ .code }}
           image: "{{ $.Values.image.repository }}:{{ $.Values.global.image.tag }}"
           ports:
             - containerPort: 8000
