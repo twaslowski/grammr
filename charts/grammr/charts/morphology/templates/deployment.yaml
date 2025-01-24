@@ -6,18 +6,18 @@ kind: Deployment
 metadata:
   name: {{ include "morphology.fullname" $ }}-{{ .code }}
   labels:
-    app: {{ include "morphology.fullname" $ }}-{{ .code }}
+    app: {{ include "morphology.fullname" $ }}
     language: {{ .code }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ include "morphology.fullname" $ }}-{{ .code }}
+      app: {{ include "morphology.fullname" $ }}
       language: {{ .code }}
   template:
     metadata:
       labels:
-        app: {{ include "morphology.fullname" $ }}-{{ .code }}
+        app: {{ include "morphology.fullname" $ }}
         language: {{ .code }}
     spec:
       containers:

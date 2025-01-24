@@ -15,7 +15,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: {{ $.Release.Name }}
+    app: {{ include "morphology.fullname" $ }}
     language: {{ .code }}
 {{- end }}
 {{- end }}

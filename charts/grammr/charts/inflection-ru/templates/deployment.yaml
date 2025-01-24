@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "inflection-ru.fullname" . }}
+  name: {{ include "inflection-ru.fullname" . }}-{{ .Values.languageCode }}
   labels:
     app: {{ include "inflection-ru.fullname" . }}
     language: {{ .Values.languageCode }}
@@ -18,7 +18,7 @@ spec:
         language: {{ .Values.languageCode }}
     spec:
       containers:
-        - name: {{ include "inflection-ru.fullname" . }}
+        - name: {{ include "inflection-ru.fullname" . }}-{{ .Values.languageCode }}
           image: "{{ .Values.image.repository }}:{{ $.Values.global.image.tag }}"
           ports:
             - containerPort: 8000
