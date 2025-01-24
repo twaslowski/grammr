@@ -1,6 +1,6 @@
 package com.grammr.service.eventhandler;
 
-import com.grammr.domain.event.AnalysisRequestEvent;
+import com.grammr.domain.event.AnalysisRequest;
 import com.grammr.domain.event.AudioTranscriptionRequestEvent;
 import com.grammr.service.language.transcription.OpenAITranscriptionService;
 import java.nio.file.Files;
@@ -27,7 +27,7 @@ public class AudioTranscriptionRequestHandler {
     log.info("Received audio transcription request: {}", event.requestId());
     try {
       var transcription = transcriptionService.createAudioTranscription(event.path());
-      AnalysisRequestEvent request = AnalysisRequestEvent.full()
+      AnalysisRequest request = AnalysisRequest.full()
           .phrase(transcription.getTranscription())
           .userLanguageLearned(event.userLanguageLearned())
           .userLanguageSpoken(event.userLanguageSpoken())

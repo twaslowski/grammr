@@ -1,4 +1,4 @@
-package com.grammr.port.rest;
+package com.grammr.port.outbound;
 
 import com.grammr.config.value.LanguageConfiguration;
 import com.grammr.domain.enums.LanguageCode;

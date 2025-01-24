@@ -1,7 +1,7 @@
 package com.grammr.domain.value;
 
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.domain.event.AnalysisRequestEvent;
+import com.grammr.domain.event.AnalysisRequest;
 import com.grammr.domain.value.language.Token;
 import java.util.List;
 import lombok.Builder;
@@ -24,7 +24,7 @@ public class AnalysisComponentRequest {
   @Nullable
   private List<Token> tokens;
 
-  public static AnalysisComponentRequest from(AnalysisRequestEvent analysisRequest) {
+  public static AnalysisComponentRequest from(AnalysisRequest analysisRequest) {
     return AnalysisComponentRequest.builder()
         .phrase(analysisRequest.phrase())
         .sourceLanguage(analysisRequest.userLanguageLearned())
@@ -33,7 +33,7 @@ public class AnalysisComponentRequest {
         .build();
   }
 
-  public static AnalysisComponentRequest from(AnalysisRequestEvent analysisRequest, List<Token> tokens) {
+  public static AnalysisComponentRequest from(AnalysisRequest analysisRequest, List<Token> tokens) {
     return AnalysisComponentRequest.builder()
         .phrase(analysisRequest.phrase())
         .sourceLanguage(analysisRequest.userLanguageSpoken())

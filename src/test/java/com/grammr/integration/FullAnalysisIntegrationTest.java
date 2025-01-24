@@ -1,23 +1,27 @@
 package com.grammr.integration;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.grammr.annotation.IntegrationTest;
-import com.grammr.domain.entity.Request.Status;
-import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.domain.event.AnalysisRequestEvent;
+import com.grammr.domain.event.AnalysisRequest;
 import com.grammr.domain.value.language.Token;
 import com.grammr.domain.value.language.TokenTranslation;
-import com.grammr.telegram.dto.update.TelegramTextUpdate;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @IntegrationTest
+@AutoConfigureMockMvc
 public class FullAnalysisIntegrationTest extends IntegrationTestBase {
+
+  @Autowired
+  private MockMvc mockMvc;
 
   @Test
   @SneakyThrows
@@ -27,48 +31,36 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
     var tokens = tokenService.tokenize(sourcePhrase);
     var words = tokens.stream().map(Token::text).toList();
 
-    var user = userRepository.save(UserSpec.valid().build());
+    mockLanguageRecognition(sourcePhrase, LanguageCode.DE);
+    mockSemanticTranslation(sourcePhrase, phraseTranslation, LanguageCode.EN);
 
-    mockLanguageRecognition(sourcePhrase, user.getLanguageLearned());
-    mockSemanticTranslation(sourcePhrase, phraseTranslation, user.getLanguageSpoken());
     for (String word : words) {
       mockTokenTranslation(sourcePhrase, word, new TokenTranslation(word, "someTranslation"));
     }
 
     // given a text update
-    incomingMessageQueue.add(TelegramTextUpdate.builder()
-        .text(sourcePhrase)
-        .chatId(user.getChatId())
-        .build());
+    var analysisRequest = AnalysisRequest.builder()
+        .userLanguageLearned(LanguageCode.DE)
+        .userLanguageSpoken(LanguageCode.EN)
+        .phrase(sourcePhrase)
+        .performSemanticTranslation(true)
+        .build();
 
-    await().atMost(5, SECONDS).untilAsserted(() -> {
-      assertThat(requestRepository.count()).isEqualTo(1);
-
-      var request = requestRepository.findAll().getFirst();
-      assertThat(request.getCompletionTokens()).isNotZero();
-      assertThat(request.getPromptTokens()).isNotZero();
-      assertThat(request.getStatus()).isEqualTo(Status.COMPLETED);
-
-      assertThat(outgoingMessageQueue).isNotEmpty();
-      var analysisCompleteEvents = eventAccumulator.getAnalysisCompleteEvents();
-      assertThat(analysisCompleteEvents).isNotEmpty();
-
-      var analysis = analysisCompleteEvents.getFirst().fullAnalysis();
-      assertThat(analysis).isNotNull();
-      assertThat(analysis.semanticTranslation().getSourcePhrase()).isEqualTo(sourcePhrase);
-      assertThat(analysis.semanticTranslation().getTranslatedPhrase()).isEqualTo(phraseTranslation);
-      assertThat(analysis.analyzedTokens()).allMatch(token -> token.morphology() != null);
-    });
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/analysis")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(analysisRequest)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.sourcePhrase").value(sourcePhrase))
+        .andExpect(jsonPath("$.semanticTranslation.translatedPhrase").value(phraseTranslation))
+        .andExpect(jsonPath("$.analyzedTokens").isArray())
+        .andExpect(jsonPath("$.analyzedTokens[*].morphology").exists())
+        .andExpect(jsonPath("$.analyzedTokens[*].translation").exists())
+        .andReturn();
   }
 
   @Test
   @SneakyThrows
   void shouldPerformCompleteAnalysisWhenReceivingPhraseInUserSpokenLanguage() {
-    var user = userRepository.save(UserSpec.valid()
-        .languageLearned(LanguageCode.DE)
-        .languageSpoken(LanguageCode.EN)
-        .build());
-
     var sourcePhrase = "I am learning German today";
     var translation = "Ich lerne heute Deutsch";
 
@@ -81,50 +73,22 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
       mockTokenTranslation(translation, word, new TokenTranslation(word, "someTranslation"));
     }
 
-    incomingMessageQueue.add(TelegramTextUpdate.builder()
-        .text(sourcePhrase)
-        .chatId(user.getChatId())
-        .build());
-
-    await().atMost(5, SECONDS).untilAsserted(() -> {
-      assertThat(requestRepository.count()).isEqualTo(1);
-
-      assertThat(requestRepository.findAll().getFirst()).isNotNull();
-
-      assertThat(outgoingMessageQueue).isNotEmpty();
-      var analysisCompleteEvents = eventAccumulator.getAnalysisCompleteEvents();
-      assertThat(analysisCompleteEvents).isNotEmpty();
-
-      var analysis = analysisCompleteEvents.getFirst().fullAnalysis();
-      assertThat(analysis).isNotNull();
-      assertThat(analysis.semanticTranslation().getSourcePhrase()).isEqualTo(sourcePhrase);
-      assertThat(analysis.semanticTranslation().getTranslatedPhrase()).isEqualTo(translation);
-      assertThat(analysis.analyzedTokens()).allMatch(token -> token.morphology() != null);
-    });
-  }
-
-  @Test
-  @Disabled("Will build type to default to translations to English in the future")
-  void shouldOnlyReturnSemanticTranslationIfUnknownLanguageCode() {
-    var sourcePhrase = "Donde esta la biblioteca?";
-
-    var user = userRepository.save(UserSpec.valid().build());
-
-    // given
-    var analysisRequest = AnalysisRequestEvent.builder()
+    var request = AnalysisRequest.builder()
+        .userLanguageLearned(LanguageCode.DE)
+        .userLanguageSpoken(LanguageCode.EN)
         .phrase(sourcePhrase)
+        .performSemanticTranslation(true)
         .build();
 
-    mockLanguageRecognition(sourcePhrase, LanguageCode.UNSUPPORTED);
-    mockSemanticTranslation(sourcePhrase, "Where is the library?", LanguageCode.EN);
-
-    // when
-    var fullAnalysis = fullAnalysisService.processFullAnalysisRequest(analysisRequest);
-
-    // then
-    assertThat(fullAnalysis).isNotNull();
-    assertThat(fullAnalysis.analyzedTokens()).isEmpty();
-    assertThat(fullAnalysis.semanticTranslation()).isNotNull();
-    assertThat(fullAnalysis.semanticTranslation().getTranslatedPhrase()).isEqualTo("Where is the library?");
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/analysis")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.sourcePhrase").value(translation))
+        .andExpect(jsonPath("$.semanticTranslation.translatedPhrase").value(translation))
+        .andExpect(jsonPath("$.analyzedTokens").isArray())
+        .andExpect(jsonPath("$.analyzedTokens[*].morphology").exists())
+        .andExpect(jsonPath("$.analyzedTokens[*].translation").exists())
+        .andReturn();
   }
 }

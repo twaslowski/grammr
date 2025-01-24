@@ -1,7 +1,7 @@
 package com.grammr.service.eventhandler;
 
 import com.grammr.domain.event.AnalysisCompleteEvent;
-import com.grammr.domain.event.AnalysisRequestEvent;
+import com.grammr.domain.event.AnalysisRequest;
 import com.grammr.service.AnalysisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,13 +20,8 @@ public class AnalysisRequestHandler {
 
   @Async
   @EventListener
-  public void handleAnalysisRequest(AnalysisRequestEvent analysisRequest) {
+  public void handleAnalysisRequest(AnalysisRequest analysisRequest) {
     log.info("Received analysis request: {}", analysisRequest);
-
-    if (!hasLanguageInformation(analysisRequest)) {
-      log.warn("Received analysis request without language information, retrieving user: {}", analysisRequest);
-      analysisRequest = analysisRequest.withoutLanguageInformation();
-    }
 
     var analysis = analysisService.processFullAnalysisRequest(analysisRequest);
     log.info("Performed analysis: {}", analysis);
@@ -35,10 +30,5 @@ public class AnalysisRequestHandler {
         .requestId(analysisRequest.requestId())
         .build();
     eventPublisher.publishEvent(analysisCompletionEvent);
-  }
-
-  private boolean hasLanguageInformation(AnalysisRequestEvent analysisRequest) {
-    return analysisRequest.userLanguageLearned() != null
-        && analysisRequest.userLanguageSpoken() != null;
   }
 }

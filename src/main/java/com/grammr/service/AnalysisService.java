@@ -1,6 +1,6 @@
 package com.grammr.service;
 
-import com.grammr.domain.event.AnalysisRequestEvent;
+import com.grammr.domain.event.AnalysisRequest;
 import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.FullAnalysis;
 import com.grammr.domain.value.language.SemanticTranslation;
@@ -34,7 +34,7 @@ public class AnalysisService {
   private final TokenService tokenService;
   private final MorphologicalAnalysisService morphologicalAnalysisService;
 
-  public FullAnalysis processFullAnalysisRequest(AnalysisRequestEvent analysisRequest) {
+  public FullAnalysis processFullAnalysisRequest(AnalysisRequest analysisRequest) {
     var sourcePhrase = analysisRequest.phrase();
     log.info("Processing analysis request for source phrase: '{}'", sourcePhrase);
 
@@ -55,7 +55,7 @@ public class AnalysisService {
     }
   }
 
-  private FullAnalysis createAnalysis(AnalysisRequestEvent event,
+  private FullAnalysis createAnalysis(AnalysisRequest event,
                                       AnalysisComponentRequest analysisComponentRequest) {
     var phrase = event.phrase();
     var tokens = tokenService.tokenize(phrase);
@@ -92,7 +92,7 @@ public class AnalysisService {
 
   // So that a user can ask "How do I say ... in the language I'm learning?" and get a response
   // Creates a translation from the spoken language to the learned language, then creates a full analysis
-  private FullAnalysis createReverseAnalysis(AnalysisRequestEvent event, AnalysisComponentRequest request) {
+  private FullAnalysis createReverseAnalysis(AnalysisRequest event, AnalysisComponentRequest request) {
     var learnedLanguageTranslation = semanticTranslationService.createAnalysisComponent(request);
     var learnedLanguageAnalysisEvent = createLearnedLanguageAnalysisEvent(learnedLanguageTranslation);
     var translation = SemanticTranslation.builder()
@@ -106,12 +106,10 @@ public class AnalysisService {
         .build();
   }
 
-  private AnalysisRequestEvent createLearnedLanguageAnalysisEvent(SemanticTranslation learnedLanguageTranslation) {
-    return AnalysisRequestEvent.builder()
+  private AnalysisRequest createLearnedLanguageAnalysisEvent(SemanticTranslation learnedLanguageTranslation) {
+    return AnalysisRequest.builder()
         .phrase(learnedLanguageTranslation.getTranslatedPhrase())
         .performSemanticTranslation(false)
-        .performLiteralTranslation(true)
-        .performMorphologicalAnalysis(true)
         .build();
   }
 

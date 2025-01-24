@@ -15,7 +15,7 @@ import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.TokenTranslation;
-import com.grammr.port.rest.InflectionPort;
+import com.grammr.port.outbound.InflectionPort;
 import com.grammr.repository.RequestRepository;
 import com.grammr.repository.UserRepository;
 import com.grammr.service.AnalysisService;
@@ -34,6 +34,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 @IntegrationTest

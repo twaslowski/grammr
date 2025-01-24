@@ -2,7 +2,7 @@ package com.grammr.telegram.service;
 
 import com.grammr.domain.entity.Request;
 import com.grammr.domain.entity.User;
-import com.grammr.domain.event.AnalysisRequestEvent;
+import com.grammr.domain.event.AnalysisRequest;
 import com.grammr.repository.RequestRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class AnalysisInitiationService {
 
   public void initiateAnalysis(String phrase, User user) {
     var requestId = UUID.randomUUID().toString();
-    var analysisRequestEvent = AnalysisRequestEvent.full()
+    var analysisRequestEvent = AnalysisRequest.full()
         .phrase(phrase)
         .userLanguageLearned(user.getLanguageLearned())
         .userLanguageSpoken(user.getLanguageSpoken())

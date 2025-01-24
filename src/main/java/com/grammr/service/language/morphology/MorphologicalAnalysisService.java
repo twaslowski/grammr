@@ -3,7 +3,7 @@ package com.grammr.service.language.morphology;
 import com.grammr.domain.event.MorphologicalAnalysisRequest;
 import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.language.MorphologicalAnalysis;
-import com.grammr.port.rest.MorphologicalAnalysisPort;
+import com.grammr.port.outbound.MorphologicalAnalysisPort;
 import com.grammr.service.language.AnalysisComponentProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
