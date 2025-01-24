@@ -1,5 +1,5 @@
 spring:
   datasource:
-    url: "${DATASOURCE_URL}"
+    url: jdbc:postgresql://postgres.grammr.svc.cluster.local:5432/grammr?currentSchema=grammr
     username: grammr
     password: ${DATASOURCE_PASSWORD}
