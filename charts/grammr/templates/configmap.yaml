@@ -4,4 +4,5 @@ metadata:
   name: languages-config
 data:
   languages.yml: |
-    {{ toYaml .Values.global.languages | nindent 4 }}
+    languages:
+      {{ toYaml .Values.global.languages | nindent 6 }}
