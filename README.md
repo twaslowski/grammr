@@ -1,19 +1,33 @@
 # grammr
 
-Note: This is a clean rewrite of [lingolift](https://github.com/twaslowski/lingolift-core).
-
-Learning languages is hard. This projects aim is to help.
+`grammr` is a language learning tool that aims to make understanding the grammar of a variety
+of primarily Indo-European languages easier.
 
 ## About
 
-`grammr` is an open-source project with the aim of making learning languages easier.
-It allows you to translate sentences between languages, either explaining what a sentence
-means in the language you're learning, or providing a translation for an unknown sentence.
+While there are too many great language learning apps to count, standardized grammatical references
+for languages can be hard to come by. It is possible to find dictionaries and inflection tables for
+different languages by googling; however, there is no standardized tool so far that does this
+for a variety of languages.
 
-Currently, this application can be accessed as a Telegram bot only because I suck at building
-frontends. However, this is my number one priority for this project right now. You can text the
-bot phrases in English, German, Portuguese and Russian to get translations including grammatical
-analyses between any of those languages.
+The aim of this project is to create a unified API to provide several tools for language learners
+across multiple languages:
+
+- Translations of texts, including the literal translations of individual words
+- Morphological analysis of words, including their part-of-speech tags and features
+- Inflection (conjugation and declension) of words
+- Anki Flashcard export to make learning easier
+
+I have more ideas for this project, which you can find in the [Features](#Features) and
+[Roadmap](#Roadmap) sections.
+
+This project, therefore, does not take a didactic approach to learning languages, and should
+not be compared to an app like Duolingo; it rather aims to be a comprehensive, open reference
+tool that can be arbitrarily extended for different languages.
+
+The biggest issue right now is data visualization. For prototyping and personal use, I've created
+a Telegram Bot; however, there is only so much information that fits into a message. Therefore,
+the creation of a frontend is the highest priority for this project at the moment.
 
 [![Example Image](docs/example.png)]
 
@@ -26,11 +40,9 @@ https://t.me/lingolift_bot
 - Translation of texts.
 - Literal translations for each word in a text.
 - Morphological analysis of each word in a text.
+- Creation of inflections for words.
 
-Currently, the phrase length for literal translations and morphological analysis is limited to 15 words.
-
-The morphological analysis is done using [spaCy](https://spacy.io/),
-and contains the following information for each word:
+The morphological analysis is done using [spaCy](https://spacy.io/), and contains the following information for each word:
 
 - The part of speech (POS) of a word.
 - The features of a word, including the Case, Number, Gender, Tense, Person, depending on word type,
@@ -39,13 +51,12 @@ For more information on this, see the [Universal Dependencies](https://universal
 
 I'm looking to add more features in the near future. These may include:
 
-- [ ] Error correction
+- [x] The ability to arbitrarily add languages (solved via [Configmaps](https://github.com/twaslowski/grammr/commit/889284f0#diff-782f304121c40d11b8bcd8db123db62a7a8192bbcc8b8098cf07064774cc7c24))
 - [ ] A solid frontend, in addition to the Telegram bot currently available
-- [x] More languages
 - [ ] Inflection tables
 - [ ] Anki flash card export
 
-## Roadmap
+## Technical Roadmap
 
 Beyond the features mentioned above, I'm also looking to make the technology stack more robust.
 I believe that this application should _really_ be able to scale to complexity, so I'm investing
@@ -54,16 +65,12 @@ a lot of time and energy into keeping the architecture as clean as possible.
 Features and improvements will include:
 
 - [x] A proper CI/CD pipeline, including automated deployment (halfway there)
+- [x] Adding several more languages, which means creating additional sidecars for morphological
+analyis.
 - [ ] Building a frontend. Possibly web-app, possibly cross-platform apps.
 - [ ] Benchmarking against quality regression of prompts
-- [ ] A fully event-driven architecture, where the Telegram Bot runs as an entirely different
-service only passing messages to the rest of the application. The _core_ will simply be a server
-responding to events and HTTP requests.
-- [ ] Adding several more languages, which means creating additional sidecars for morphological
-analyis. This might mean moving to an event-driven architecture here as well.
-
-I'll likely experiment with RabbitMQ in the near future to implement a more robust decoupling
-of the components.
+- [ ] Extract the Telegram Bot entirely from the core service. It was useful for prototyping, but
+should not be tied to the main application.
 
 ### On the Frontend
 
@@ -73,6 +80,24 @@ it inaccessible for a huge amount of people. I'm would prefer to create the fron
 to create a more accessible Web Application with portability potential.
 
 ![Reference image from Textile, taken from the original repository](https://github.com/user-attachments/assets/e7204e91-be4f-4d52-b99e-a33497c55b6b)
+
+## Related projects
+
+Listed here are projects that I am either using or would consider integrating into this project.
+
+- [spaCy](https://spacy.io/): Morphological analysis for a variety of languages.
+- [pymorphy3](https://github.com/no-plagiarism/pymorphy3): Fork of the currently unmaintained [pymorphy2](https://github.com/pymorphy2/pymorphy2).
+Provides inflections for Russian.
+
+Interesting related projects:
+
+- [textile](https://github.com/SalahEddineGhamri/textile): Inspiration for a potential UI
+- [mathigatti/spanish_inflections](https://github.com/mathigatti/spanish_inflections?tab=readme-ov-file): Inflections for Spanish
+- [DuyguA/DEMorphy](https://github.com/DuyguA/DEMorphy): Inflections for German. Technically, this library
+only provides _morphological analysis_, but it does use a comprehensive lexicon under the hood,
+so creating inflections should be possible.
+- [TimoBechtel/satzbau](https://github.com/TimoBechtel/satzbau): Creation of natural language German texts, including declension and conjugation.
+- [verbecc](https://github.com/bretttolbert/verbecc): Verb conjugation for a variety of roman languages.
 
 ## Running
 
@@ -104,6 +129,13 @@ report is generated, which you can access at `target/site/jacoco/index.html`.
 
 ## Domain Language
 
+Different projects use different terms to describe similar concepts. For instance, while
+[pymorphy2](https://github.com/pymorphy2/pymorphy2) refers to the root form of a word as the `lexeme`,
+[spaCy](https://spacy.io/) refers to it as the `lemma`. I've tried to standardize the terms used in
+a unified domain language that is to be used across the application and in the APIs it exposes.
+
+The design is a work in progress, but I do think it offers some genuine value.
+
 - `Token` refers to a singular word of a phrase, that contains
   - a `source_text`
   - a `lemma`
@@ -129,7 +161,10 @@ which are coalesced into `Tokens` that ultimately make up a `Phrase`.
 Therefore, a `Analysis` consists of a set of `Tokens` holding their literal translation
 and grammatical analysis, as well as the semantic translation of the phrase.
 
-## Part of Speech & Features
+### Part of Speech & Features
+
+I've decided to use the [Universal Dependencies](https://universaldependencies.org/) as reference
+for my part-of-speech and feature definitions as well as the domain language defined above.
 
 - `Part of Speech` (POS) is a grammatical category of words that have similar grammatical properties.
 Read more: https://universaldependencies.org/u/pos/index.html

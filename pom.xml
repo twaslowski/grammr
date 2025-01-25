@@ -211,7 +211,6 @@
                         <exclude>**/exception/**</exclude>
                         <exclude>**/repository/**</exclude>
                         <exclude>**/config/**</exclude>
-                        <exclude>**/MoodTracker*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
