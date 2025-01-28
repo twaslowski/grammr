@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "inflection-de"
+version = "0.1.0"
+description = "Inflections for German"
+authors = ["Tobias Waslowski <tobiaswaslowski@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.7"
+spacy = "3.7.0"
+derbi2 = {path = "/Users/tobias.waslowski/projects/personal/derbi"}
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+black = "^24.10.0"
+autoflake = "^2.3.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
