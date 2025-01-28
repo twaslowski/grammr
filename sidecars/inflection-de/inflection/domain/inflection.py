@@ -6,7 +6,7 @@ from inflection.domain.feature import Feature
 class Inflection(BaseModel):
     lemma: str
     inflected: str
-    features: set[Feature] | str
+    features: set[Feature]
 
     def json(self, **kwargs) -> dict:
         return {

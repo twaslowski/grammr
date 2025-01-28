@@ -22,8 +22,3 @@ async def inflect(request: InflectionRequest):
 # @app.get("/health")
 async def health():
     return {"status": "UP"}
-
-
-if __name__ == "__main__":
-    features = feature_provider.provide_features(request.part_of_speech)
-    inflections = inflector.inflect(request.lemma, features)

@@ -366,18 +366,16 @@ name = "derbi2"
 version = "0.1.0"
 description = "Fork of DERBI (https://github.com/maxschmaltz/DERBI)"
 optional = false
-python-versions = "^3.12"
-files = []
-develop = false
+python-versions = "<4.0,>=3.12"
+files = [
+    {file = "derbi2-0.1.0-py3-none-any.whl", hash = "sha256:73a4db272686ccb9780766e62f2c612fcac79c7e3e85b770e9e6005c69278428"},
+    {file = "derbi2-0.1.0.tar.gz", hash = "sha256:7732eb25b73960e8bcd42138d29dfee8fe99abd0ed8a415053941baf9f9a5562"},
+]
 
 [package.dependencies]
-nltk = "^3.9.1"
+nltk = ">=3.9.1,<4.0.0"
 numpy = "1.26.4"
 spacy = "3.7.0"
-
-[package.source]
-type = "directory"
-url = "../../../derbi"
 
 [[package]]
 name = "fastapi"
@@ -1599,4 +1597,4 @@ wasabi = ">=0.9.1,<1.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "fbdbcfacb9040b414ed02a62669b2220cdd54aa8bace775980e417310e474da6"
+content-hash = "aeeac88d4faf3d38ab5a173be16219b830aee825b8c844689b0d1c3c60245a8a"
