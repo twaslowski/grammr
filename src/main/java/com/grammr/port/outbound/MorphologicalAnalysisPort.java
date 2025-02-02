@@ -18,7 +18,7 @@ public class MorphologicalAnalysisPort {
 
   public MorphologicalAnalysis performAnalysis(MorphologicalAnalysisRequest analysisRequest) {
     var uri = languageConfiguration.getMorphologyUri(analysisRequest.languageCode());
-    log.info("Performing analysis for phrase '{}' at '{}'", analysisRequest.phrase(), uri);
+    log.info("Retrieving morphology for phrase '{}' at '{}'", analysisRequest.phrase(), uri);
     try {
       return restClient
           .post()
