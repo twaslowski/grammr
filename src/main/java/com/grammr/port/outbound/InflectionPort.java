@@ -18,10 +18,9 @@ public class InflectionPort {
   private final RestClient restClient;
   private final LanguageConfiguration languageConfiguration;
 
-  public Inflections performInflections(LanguageCode languageCode, Token token) {
+  public Inflections retrieveInflections(LanguageCode languageCode, InflectionRequest request) {
     var uri = languageConfiguration.getInflectionUri(languageCode);
-    var request = InflectionRequest.from(token);
-    log.info("Performing analysis for phrase '{}' at '{}'", token.text(), uri);
+    log.info("Performing analysis for phrase '{}' at '{}'", request.lemma(), uri);
     try {
       return restClient
           .post()

@@ -4,6 +4,8 @@ import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.language.LiteralTranslation;
 import com.grammr.domain.value.language.Token;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,7 @@ public class OpenAILiteralTranslationService implements LiteralTranslationServic
         .toList();
 
     var translatedTokens = translationFutures.stream()
+        .parallel()
         .map(CompletableFuture::join)
         .collect(Collectors.toList());
 

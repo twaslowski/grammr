@@ -19,7 +19,7 @@ public record TokenMorphology(
 ) {
 
   // If a Feature is available on a Token, return its value. Includes validation.
-  public Optional<? extends Enum<? extends FeatureProperty>> getFeature(FeatureType featureType) {
+  public Optional<FeatureProperty> getFeature(FeatureType featureType) {
     return features.stream()
         .filter(feature -> feature.type().equals(featureType))
         .map(Feature::getEnumValue)

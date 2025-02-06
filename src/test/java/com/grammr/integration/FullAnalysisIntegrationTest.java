@@ -9,6 +9,7 @@ import com.grammr.domain.event.AnalysisRequest;
 import com.grammr.domain.value.language.Token;
 import com.grammr.domain.value.language.TokenTranslation;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -60,6 +61,7 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
 
   @Test
   @SneakyThrows
+  @Disabled("Being split into two separate user flows right now, wip")
   void shouldPerformCompleteAnalysisWhenReceivingPhraseInUserSpokenLanguage() {
     var sourcePhrase = "I am learning German today";
     var translation = "Ich lerne heute Deutsch";

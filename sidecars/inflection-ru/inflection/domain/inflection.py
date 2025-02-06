@@ -17,11 +17,13 @@ class Inflection(BaseModel):
 
 
 class Inflections(BaseModel):
+    part_of_speech: str
     lemma: str
     inflections: list[Inflection]
 
     def json(self, **kwargs) -> dict:
         return {
+            "partOfSpeech": self.part_of_speech,
             "lemma": self.lemma,
             "inflections": [inflection.json() for inflection in self.inflections],
         }

@@ -3,6 +3,8 @@ server:
     enabled: false
 
 spring:
+  cors:
+    allowed-origin: "localhost"
   datasource:
     url: jdbc:postgresql://localhost:5432/grammr?currentSchema=grammr
     username: user

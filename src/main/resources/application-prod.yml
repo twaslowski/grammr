@@ -1,4 +1,6 @@
 spring:
+  cors:
+    allowed-origin: "${ALLOWED_ORIGIN}"
   datasource:
     url: jdbc:postgresql://postgres.grammr.svc.cluster.local:5432/grammr?currentSchema=grammr
     username: grammr

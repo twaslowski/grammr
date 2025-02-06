@@ -19,7 +19,11 @@ app = FastAPI()
 async def inflect(request: InflectionRequest):
     features = feature_retriever.retrieve_features(request.part_of_speech)
     inflections = inflector.inflect(request.lemma, features)
-    inflections_container = Inflections(lemma=request.lemma, inflections=inflections)
+    inflections_container = Inflections(
+        part_of_speech=request.part_of_speech,
+        lemma=request.lemma,
+        inflections=inflections
+    )
     result = json.dumps(inflections_container.json())
     logging.info(result)
     return inflections_container.json()
