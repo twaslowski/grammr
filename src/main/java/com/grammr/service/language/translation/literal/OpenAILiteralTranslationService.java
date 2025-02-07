@@ -3,9 +3,8 @@ package com.grammr.service.language.translation.literal;
 import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.language.LiteralTranslation;
 import com.grammr.domain.value.language.Token;
+import io.micrometer.core.annotation.Timed;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +18,7 @@ public class OpenAILiteralTranslationService implements LiteralTranslationServic
   private final OpenAITokenTranslationService openAITokenTranslationService;
 
   @Override
+  @Timed("analysis.literal_translation")
   public LiteralTranslation createAnalysisComponent(AnalysisComponentRequest request) {
     var words = request.getTokens().stream()
         .map(Token::text)

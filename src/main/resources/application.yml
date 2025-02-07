@@ -25,7 +25,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: health,prometheus,metrics
 
 openai:
   api-key: ${OPENAI_API_KEY}

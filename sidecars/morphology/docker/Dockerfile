@@ -1,5 +1,5 @@
 # The builder image, used to build the virtual environment
-FROM python:3.12-slim as builder
+FROM python:3.12-slim AS builder
 
 RUN pip install poetry==1.4.2
 

@@ -3,6 +3,7 @@ package com.grammr.port.inbound;
 import com.grammr.domain.event.AnalysisRequest;
 import com.grammr.domain.value.FullAnalysis;
 import com.grammr.service.AnalysisService;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class AnalysisController {
     return ResponseEntity.ok(fullAnalysis);
   }
 
+  @Timed(value = "rest.translation", description = "Time taken to translate and analyze text")
   @PostMapping(value = "/translation", produces = "application/json")
   public ResponseEntity<FullAnalysis> translateAndAnalyze(@RequestBody AnalysisRequest request) {
     log.info("Processing translation/analysis request {}", request);
