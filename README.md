@@ -1,7 +1,8 @@
 # grammr
 
 `grammr` is a language learning tool that aims to make understanding the grammar of a variety
-of primarily Indo-European languages easier.
+of primarily Indo-European languages easier. The frontend is available on
+[Vercel](https://grmmr.vercel.app/).
 
 ## About
 
@@ -25,16 +26,6 @@ This project, therefore, does not take a didactic approach to learning languages
 not be compared to an app like Duolingo; it rather aims to be a comprehensive, open reference
 tool that can be arbitrarily extended for different languages.
 
-The biggest issue right now is data visualization. For prototyping and personal use, I've created
-a Telegram Bot; however, there is only so much information that fits into a message. Therefore,
-the creation of a frontend is the highest priority for this project at the moment.
-
-[![Example Image](docs/example.png)]
-
-You can try the bot here:
-
-https://t.me/lingolift_bot
-
 ## Features
 
 - Translation of texts.
@@ -52,7 +43,7 @@ For more information on this, see the [Universal Dependencies](https://universal
 I'm looking to add more features in the near future. These may include:
 
 - [x] The ability to arbitrarily add languages (solved via [Configmaps](https://github.com/twaslowski/grammr/commit/889284f0#diff-782f304121c40d11b8bcd8db123db62a7a8192bbcc8b8098cf07064774cc7c24))
-- [ ] A solid frontend, in addition to the Telegram bot currently available
+- [x] A solid frontend, in addition to the Telegram bot currently available
 - [ ] Inflection tables
 - [ ] Anki flash card export
 
@@ -67,19 +58,10 @@ Features and improvements will include:
 - [x] A proper CI/CD pipeline, including automated deployment (halfway there)
 - [x] Adding several more languages, which means creating additional sidecars for morphological
 analyis.
-- [ ] Building a frontend. Possibly web-app, possibly cross-platform apps.
+- [x] Building a frontend. Possibly web-app, possibly cross-platform apps.
 - [ ] Benchmarking against quality regression of prompts
 - [ ] Extract the Telegram Bot entirely from the core service. It was useful for prototyping, but
 should not be tied to the main application.
-
-### On the Frontend
-
-I really like a project that is very similar to this one: @SalahEddineGhamri's [textile]([url](https://github.com/SalahEddineGhamri/textile)).
-Unfortunately, the only way to interact with [textile]([url](https://github.com/SalahEddineGhamri/textile)) is through the CLI, making
-it inaccessible for a huge amount of people. I'm would prefer to create the frontend for this language in some JS flavour (Angular, React, Vue etc.)
-to create a more accessible Web Application with portability potential.
-
-![Reference image from Textile, taken from the original repository](https://github.com/user-attachments/assets/e7204e91-be4f-4d52-b99e-a33497c55b6b)
 
 ## Related projects
 
