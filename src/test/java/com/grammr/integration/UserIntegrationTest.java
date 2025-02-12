@@ -1,55 +1,40 @@
 package com.grammr.integration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
-
 import com.grammr.annotation.IntegrationTest;
-import com.grammr.telegram.dto.update.TelegramTextUpdate;
-import java.util.concurrent.TimeUnit;
+import com.grammr.port.dto.UserRegistrationRequest;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-@SpringBootTest
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @IntegrationTest
-public class UserIntegrationTest extends IntegrationTestBase {
+@AutoConfigureMockMvc
+class UserIntegrationTest extends IntegrationTestBase {
+
+  @Autowired
+  private MockMvc mockMvc;
 
   @Test
-  void shouldCreateUserOnStartCommandIfNotExists() {
-    var update = TelegramTextUpdate.builder()
-        .chatId(1L)
-        .text("/start")
-        .build();
+  @SneakyThrows
+  void shouldCreateUserWithValidSessionToken() {
+    var registrationRequest = new UserRegistrationRequest("user@email.com", "correct-battery-horse-staple");
 
-    incomingMessageQueue.add(update);
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/user")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(registrationRequest)))
+        .andExpect(status().is(201))
+        .andExpect(jsonPath("$.userId").isNumber())
+        .andExpect(cookie().exists("session_token"));
 
-    await().atMost(3, TimeUnit.SECONDS)
-        .untilAsserted(() -> {
-          var user = userRepository.findByChatId(1L).orElseThrow();
-
-          assertThat(outgoingMessageQueue).hasSize(1);
-          var message = outgoingMessageQueue.remove();
-          assertThat(message.getChatId()).isEqualTo(1L);
-          assertThat(message.getText()).isEqualTo(
-              messageUtil.parameterizeMessage("command.start.message",
-                  user.getLanguageSpoken().getLanguageName(), user.getLanguageLearned().getLanguageName()));
-        });
-  }
-
-  @Test
-  void shouldReturnErrorMessageIfUserDoesNotExist() {
-    var update = TelegramTextUpdate.builder()
-        .chatId(1L)
-        .text("Hello")
-        .build();
-
-    incomingMessageQueue.add(update);
-
-    await().atMost(3, TimeUnit.SECONDS)
-        .untilAsserted(() -> {
-          assertThat(outgoingMessageQueue).hasSize(1);
-          var message = outgoingMessageQueue.remove();
-          assertThat(message.getChatId()).isEqualTo(1L);
-          assertThat(message.getText()).isEqualTo(messageUtil.getMessage("telegram.error.user.not-found"));
-        });
+    assertThat(userRepository.findByEmail("user@email.com")).isPresent();
+    assertThat(userSessionRepository.findAll()).hasSize(1);
   }
 }

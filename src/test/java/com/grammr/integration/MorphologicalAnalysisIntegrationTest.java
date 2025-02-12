@@ -10,7 +10,7 @@ import com.grammr.domain.enums.features.Number;
 import com.grammr.domain.enums.features.Person;
 import com.grammr.domain.enums.features.Tense;
 import com.grammr.domain.value.AnalysisComponentRequest;
-import com.grammr.service.language.morphology.MorphologicalAnalysisService;
+import com.grammr.service.language.morphology.MorphologyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class MorphologicalAnalysisIntegrationTest extends IntegrationTestBase {
 
   @Autowired
-  private MorphologicalAnalysisService analysisService;
+  private MorphologyService analysisService;
 
   @Test
   void shouldCreateAnalysis() {

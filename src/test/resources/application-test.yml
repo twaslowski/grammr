@@ -5,6 +5,11 @@ server:
 spring:
   cors:
     allowed-origin: "localhost"
+  security:
+    observability:
+      password: password
+    hashing:
+      pepper: pepper
   datasource:
     url: jdbc:postgresql://localhost:5432/grammr?currentSchema=grammr
     username: user

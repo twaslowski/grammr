@@ -1,7 +1,7 @@
 package com.grammr.port.inbound;
 
-import com.grammr.domain.event.InflectionsRequest;
 import com.grammr.domain.value.language.Inflections;
+import com.grammr.port.dto.InflectionsRequest;
 import com.grammr.service.InflectionService;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;

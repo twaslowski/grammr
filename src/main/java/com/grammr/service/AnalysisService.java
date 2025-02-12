@@ -4,7 +4,7 @@ import com.grammr.domain.event.AnalysisRequest;
 import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.FullAnalysis;
 import com.grammr.domain.value.language.SemanticTranslation;
-import com.grammr.service.language.morphology.MorphologicalAnalysisService;
+import com.grammr.service.language.morphology.MorphologyService;
 import com.grammr.service.language.recognition.LanguageRecognitionService;
 import com.grammr.service.language.translation.literal.LiteralTranslationService;
 import com.grammr.service.language.translation.semantic.SemanticTranslationService;
@@ -32,7 +32,7 @@ public class AnalysisService {
   private final LanguageRecognitionService languageRecognitionService;
   private final LiteralTranslationService literalTranslationService;
   private final TokenService tokenService;
-  private final MorphologicalAnalysisService morphologicalAnalysisService;
+  private final MorphologyService morphologyService;
 
   /**
    * User speaks Language A and learns Language B, and that the source phrase is in Language B.
@@ -54,7 +54,7 @@ public class AnalysisService {
 
     var semanticTranslationFuture = supplyAsync(() -> semanticTranslationService.createAnalysisComponent(analysisComponentRequest));
     var literalTranslationFuture = supplyAsync(() -> literalTranslationService.createAnalysisComponent(analysisComponentRequest));
-    var grammaticalAnalysisFuture = supplyAsync(() -> morphologicalAnalysisService.createAnalysisComponent(analysisComponentRequest));
+    var grammaticalAnalysisFuture = supplyAsync(() -> morphologyService.createAnalysisComponent(analysisComponentRequest));
 
     awaitAll(literalTranslationFuture, grammaticalAnalysisFuture);
 
@@ -100,7 +100,7 @@ public class AnalysisService {
         .build();
 
     var literalTranslationFuture = supplyAsync(() -> literalTranslationService.createAnalysisComponent(analysisComponentRequest));
-    var grammaticalAnalysisFuture = supplyAsync(() -> morphologicalAnalysisService.createAnalysisComponent(analysisComponentRequest));
+    var grammaticalAnalysisFuture = supplyAsync(() -> morphologyService.createAnalysisComponent(analysisComponentRequest));
     awaitAll(literalTranslationFuture, grammaticalAnalysisFuture);
     var literalTranslation = join(literalTranslationFuture).getTokenTranslations();
     var grammaticalAnalysis = join(grammaticalAnalysisFuture);
@@ -156,7 +156,7 @@ public class AnalysisService {
 
     if (tokens.size() < MAX_TOKENS) {
       var literalTranslationFuture = supplyAsync(() -> literalTranslationService.createAnalysisComponent(analysisComponentRequest));
-      var grammaticalAnalysisFuture = supplyAsync(() -> morphologicalAnalysisService.createAnalysisComponent(analysisComponentRequest));
+      var grammaticalAnalysisFuture = supplyAsync(() -> morphologyService.createAnalysisComponent(analysisComponentRequest));
       awaitAll(literalTranslationFuture, grammaticalAnalysisFuture);
 
       var literalTranslation = join(literalTranslationFuture).getTokenTranslations();

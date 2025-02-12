@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "anki"
+version = "0.1.0"
+description = "Anki flashcard generator"
+authors = ["Tobias Waslowski <tobiaswaslowski@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+genanki = "^0.13.1"
+fastapi = "^0.115.8"
+uvicorn = "^0.34.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+isort = "^6.0.0"
+pytest = "^8.3.4"
+autoflake = "^2.3.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

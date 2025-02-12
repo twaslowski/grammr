@@ -1,14 +1,12 @@
 package com.grammr.domain.entity;
 
-import com.grammr.domain.enums.LanguageCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,22 +20,18 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user")
+@Table(name = "app_user")
 public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
   private long id;
 
-  private long chatId;
+  @NotNull
+  private String email;
 
-  @Enumerated(EnumType.STRING)
-  private LanguageCode languageSpoken;
-
-  @Enumerated(EnumType.STRING)
-  private LanguageCode languageLearned;
-
-  private boolean debug;
+  @NotNull
+  private String password;
 
   @CreationTimestamp
   @Column(updatable = false)
@@ -45,12 +39,4 @@ public class User {
 
   @UpdateTimestamp
   private ZonedDateTime updatedTimestamp;
-
-  public boolean debug() {
-    return debug;
-  }
-
-  public void toggleDebug() {
-    debug = !debug;
-  }
 }

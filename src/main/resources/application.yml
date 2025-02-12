@@ -17,6 +17,12 @@ spring:
       hibernate:
         default_schema: "\"grammr\""
     open-in-view: false
+  security:
+    observability:
+      password: ${OBSERVABILITY_PASSWORD}
+      user: observability
+    hashing:
+      pepper: ${PEPPER_SECRET}
   datasource:
     hikari:
       driver-class-name: org.postgresql.Driver
@@ -36,6 +42,13 @@ openai:
     verbose: false
 
 grammr:
+  anki:
+    api:
+      host: http://localhost:8030
+      endpoint: /create
+  telegram:
+    bot:
+      token: ${TELEGRAM_TOKEN}
   default:
     user:
       language-spoken: EN
@@ -43,11 +56,9 @@ grammr:
   languages:
     mount-path: /app/config/languages.yml
 
-telegram:
-  bot:
-    token: ${TELEGRAM_TOKEN}
-
-analysis:
-  rest:
-    port: 8000
-    endpoint: morphological-analysis
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          DEBUG

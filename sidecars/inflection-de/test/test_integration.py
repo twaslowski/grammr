@@ -7,3 +7,11 @@ def test_should_create_inflections():
     features = feature_provider.provide_features(pos)
     inflections = inflector.inflect(word, features)
     assert len(inflections) == 6
+
+
+def test_should_decline_noun():
+    word = "Hund"
+    pos = "NOUN"
+    features = feature_provider.provide_features(pos)
+    inflections = inflector.inflect(word, features)
+    assert len(inflections) == 8

@@ -6,7 +6,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.event.AnalysisRequestEventSpec;
 import com.grammr.domain.value.AnalysisComponentRequest;
@@ -14,7 +13,7 @@ import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.domain.value.language.LiteralTranslationSpec;
 import com.grammr.domain.value.language.MorphologicalAnalysisSpec;
 import com.grammr.domain.value.language.SemanticTranslationSpec;
-import com.grammr.service.language.morphology.MorphologicalAnalysisService;
+import com.grammr.service.language.morphology.MorphologyService;
 import com.grammr.service.language.recognition.LanguageRecognitionService;
 import com.grammr.service.language.translation.literal.LiteralTranslationService;
 import com.grammr.service.language.translation.semantic.SemanticTranslationService;
@@ -28,12 +27,12 @@ class AnalysisServiceTest {
 
   private final LanguageRecognitionService languageRecognitionService = mock(LanguageRecognitionService.class);
 
-  private final MorphologicalAnalysisService morphologicalAnalysisService = mock(MorphologicalAnalysisService.class);
+  private final MorphologyService morphologyService = mock(MorphologyService.class);
 
   private final TokenService tokenService = new TokenService();
 
   private final AnalysisService analysisService = AnalysisService.builder()
-      .morphologicalAnalysisService(morphologicalAnalysisService)
+      .morphologyService(morphologyService)
       .languageRecognitionService(languageRecognitionService)
       .literalTranslationService(literalTranslationService)
       .semanticTranslationService(semanticTranslationService)
@@ -43,11 +42,10 @@ class AnalysisServiceTest {
   @Test
   void shouldCallAllServices() {
     var phrase = "Hallo Welt";
-    var user = UserSpec.valid().build();
-    var event = AnalysisRequestEventSpec.valid(user).phrase(phrase).build();
+    var event = AnalysisRequestEventSpec.valid().phrase(phrase).build();
 
     when(languageRecognitionService.createAnalysisComponent(any(AnalysisComponentRequest.class))).thenReturn(new LanguageRecognition(LanguageCode.DE));
-    when(morphologicalAnalysisService.createAnalysisComponent(any(AnalysisComponentRequest.class))).thenReturn(MorphologicalAnalysisSpec.valid().build());
+    when(morphologyService.createAnalysisComponent(any(AnalysisComponentRequest.class))).thenReturn(MorphologicalAnalysisSpec.valid().build());
     when(literalTranslationService.createAnalysisComponent(any(AnalysisComponentRequest.class))).thenReturn(LiteralTranslationSpec.valid().build());
     when(semanticTranslationService.createAnalysisComponent(any(AnalysisComponentRequest.class))).thenReturn(SemanticTranslationSpec.valid().build());
 
@@ -55,14 +53,13 @@ class AnalysisServiceTest {
 
     verify(semanticTranslationService).createAnalysisComponent(any(AnalysisComponentRequest.class));
     verify(literalTranslationService).createAnalysisComponent(any(AnalysisComponentRequest.class));
-    verify(morphologicalAnalysisService).createAnalysisComponent(any(AnalysisComponentRequest.class));
+    verify(morphologyService).createAnalysisComponent(any(AnalysisComponentRequest.class));
   }
 
   @Test
   void shouldNotPerformExtensiveAnalysisForLongPhrases() {
-    var user = UserSpec.valid().build();
     var phrase = "This is a phrase longer than fifteen analyzedTokens a e i o u and sometimes y too";
-    var event = AnalysisRequestEventSpec.valid(user).phrase(phrase).build();
+    var event = AnalysisRequestEventSpec.valid().phrase(phrase).build();
     var analysisComponentRequest = AnalysisComponentRequest.from(event);
 
     when(languageRecognitionService.createAnalysisComponent(analysisComponentRequest))
@@ -72,6 +69,6 @@ class AnalysisServiceTest {
 
     verify(semanticTranslationService).createAnalysisComponent(any(AnalysisComponentRequest.class));
     verify(literalTranslationService, never()).createAnalysisComponent(any(AnalysisComponentRequest.class));
-    verify(morphologicalAnalysisService, never()).createAnalysisComponent(any(AnalysisComponentRequest.class));
+    verify(morphologyService, never()).createAnalysisComponent(any(AnalysisComponentRequest.class));
   }
 }

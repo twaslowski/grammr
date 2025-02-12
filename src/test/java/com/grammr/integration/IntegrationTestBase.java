@@ -11,31 +11,30 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.common.MessageUtil;
+import com.grammr.domain.entity.UserSession;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.TokenTranslation;
-import com.grammr.port.outbound.InflectionPort;
+import com.grammr.repository.DeckRepository;
+import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.RequestRepository;
 import com.grammr.repository.UserRepository;
+import com.grammr.repository.UserSessionRepository;
 import com.grammr.service.AnalysisService;
 import com.grammr.service.InflectionService;
 import com.grammr.service.TokenService;
 import com.grammr.service.language.recognition.OpenAILanguageRecognitionService;
 import com.grammr.service.language.translation.literal.OpenAILiteralTranslationService;
 import com.grammr.service.language.translation.semantic.OpenAISemanticTranslationService;
-import com.grammr.telegram.dto.response.TelegramResponse;
-import com.grammr.telegram.dto.update.TelegramUpdate;
 import io.github.sashirestela.openai.OpenAI;
 import io.github.sashirestela.openai.SimpleOpenAI;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 @IntegrationTest
@@ -44,9 +43,6 @@ public class IntegrationTestBase {
 
   @MockBean
   protected SimpleOpenAI openAIClient;
-
-  @MockBean
-  protected TelegramClient telegramClient;
 
   @Autowired
   protected OpenAISemanticTranslationService semanticTranslationService;
@@ -79,13 +75,13 @@ public class IntegrationTestBase {
   protected RequestRepository requestRepository;
 
   @Autowired
-  protected BlockingQueue<TelegramUpdate> incomingMessageQueue;
+  protected DeckRepository deckRepository;
 
   @Autowired
-  protected BlockingQueue<TelegramResponse> outgoingMessageQueue;
+  protected FlashcardRepository flashcardRepository;
 
   @Autowired
-  protected EventAccumulator eventAccumulator;
+  protected UserSessionRepository userSessionRepository;
 
   @Autowired
   protected InflectionService inflectionService;
@@ -95,11 +91,11 @@ public class IntegrationTestBase {
 
   @BeforeEach
   public void setUp() {
-    incomingMessageQueue.clear();
-    outgoingMessageQueue.clear();
+    flashcardRepository.deleteAll();
+    deckRepository.deleteAll();
+    userSessionRepository.deleteAll();
     userRepository.deleteAll();
     requestRepository.deleteAll();
-    eventAccumulator.reset();
     reset(audioMock, chatCompletionsMock);
   }
 

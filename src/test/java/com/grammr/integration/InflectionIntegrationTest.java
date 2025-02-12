@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.enums.PartOfSpeechTag;
-import com.grammr.domain.event.InflectionsRequest;
+import com.grammr.port.dto.InflectionsRequest;
 import com.grammr.domain.value.language.Token;
 import com.grammr.domain.value.language.TokenMorphology;
 import lombok.SneakyThrows;

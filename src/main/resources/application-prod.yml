@@ -5,3 +5,8 @@ spring:
     url: jdbc:postgresql://postgres.grammr.svc.cluster.local:5432/grammr?currentSchema=grammr
     username: grammr
     password: ${DATASOURCE_PASSWORD}
+
+grammr:
+  anki:
+    api:
+      host: http://anki.grammr.svc.cluster.local:8000

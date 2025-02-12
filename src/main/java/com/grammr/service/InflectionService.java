@@ -2,10 +2,10 @@ package com.grammr.service;
 
 import com.grammr.config.value.LanguageConfiguration;
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.domain.event.InflectionRequest;
 import com.grammr.domain.exception.InflectionNotAvailableForLanguageException;
 import com.grammr.domain.value.language.Inflections;
 import com.grammr.domain.value.language.Token;
+import com.grammr.port.dto.InflectionRequest;
 import com.grammr.port.outbound.InflectionPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

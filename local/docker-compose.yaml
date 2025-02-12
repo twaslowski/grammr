@@ -42,6 +42,19 @@ services:
     ports:
       - "8020:8000"
 
+  anki:
+    image: tobiaswaslowski/grammr-anki
+    build:
+      context: ../sidecars/anki
+      dockerfile: docker/Dockerfile
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:8000/health" ]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "8030:8000"
+
   postgresql:
     image: postgres:14.7
     ports:

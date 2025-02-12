@@ -1,15 +1,15 @@
 package com.grammr.domain.event;
 
-import com.grammr.domain.entity.User;
+import com.grammr.domain.enums.LanguageCode;
 
 public class AnalysisRequestEventSpec {
 
-  public static AnalysisRequest.AnalysisRequestBuilder valid(User user) {
+  public static AnalysisRequest.AnalysisRequestBuilder valid() {
     return AnalysisRequest.builder()
         .phrase("Hallo Welt")
         .requestId("123")
-        .userLanguageLearned(user.getLanguageLearned())
-        .userLanguageSpoken(user.getLanguageSpoken())
+        .userLanguageLearned(LanguageCode.DE)
+        .userLanguageSpoken(LanguageCode.EN)
         .performSemanticTranslation(true);
   }
 }
