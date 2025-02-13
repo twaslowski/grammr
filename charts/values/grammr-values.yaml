@@ -30,4 +30,4 @@ global:
       inflection:
         enabled: false
 
-# allowedOrigin: "https://grammr.vercel.app"
+allowedOrigin: "https://grmmr.vercel.app"
