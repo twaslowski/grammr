@@ -51,11 +51,18 @@ spec:
                 secretKeyRef:
                   name: {{ .Release.Name }}-auth
                   key: openai_api_key
-            - name: TELEGRAM_TOKEN
+            - name: ALLOWED_ORIGIN
+              value: {{ .Values.allowedOrigin }}
+            - name: PEPPER_SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ .Release.Name }}-auth
-                  key: telegram_token
+                  key: pepper
+            - name: OBSERVABILITY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-auth
+                  key: observability_password
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:

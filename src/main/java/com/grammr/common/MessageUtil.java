@@ -11,10 +11,6 @@ public class MessageUtil {
 
   private final MessageSource messageSource;
 
-  public String getMessage(String code) {
-    return messageSource.getMessage(code, null, Locale.ENGLISH);
-  }
-
   public String parameterizeMessage(String code, Object... args) {
     return messageSource.getMessage(code, args, Locale.ENGLISH);
   }

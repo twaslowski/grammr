@@ -11,14 +11,12 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.common.MessageUtil;
-import com.grammr.domain.entity.UserSession;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.TokenTranslation;
 import com.grammr.repository.DeckRepository;
 import com.grammr.repository.FlashcardRepository;
-import com.grammr.repository.RequestRepository;
 import com.grammr.repository.UserRepository;
 import com.grammr.repository.UserSessionRepository;
 import com.grammr.service.AnalysisService;
@@ -35,7 +33,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 @IntegrationTest
 @SpringBootTest
@@ -72,9 +69,6 @@ public class IntegrationTestBase {
   protected UserRepository userRepository;
 
   @Autowired
-  protected RequestRepository requestRepository;
-
-  @Autowired
   protected DeckRepository deckRepository;
 
   @Autowired
@@ -95,7 +89,6 @@ public class IntegrationTestBase {
     deckRepository.deleteAll();
     userSessionRepository.deleteAll();
     userRepository.deleteAll();
-    requestRepository.deleteAll();
     reset(audioMock, chatCompletionsMock);
   }
 

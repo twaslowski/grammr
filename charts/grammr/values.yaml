@@ -15,8 +15,8 @@ nameOverride: ""
 fullnameOverride: ""
 
 openai_api_key: ""
-telegram_token: ""
 datasource_password: ""
+allowedOrigin: "localhost"
 
 serviceAccount:
   # Specifies whether a service account should be created

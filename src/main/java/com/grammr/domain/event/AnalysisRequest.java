@@ -14,8 +14,4 @@ public record AnalysisRequest(
     @Nullable boolean performSemanticTranslation
 ) {
 
-  public static AnalysisRequest.AnalysisRequestBuilder full() {
-    return AnalysisRequest.builder()
-        .performSemanticTranslation(true);
-  }
 }

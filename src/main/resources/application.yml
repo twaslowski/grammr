@@ -46,19 +46,9 @@ grammr:
     api:
       host: http://localhost:8030
       endpoint: /create
-  telegram:
-    bot:
-      token: ${TELEGRAM_TOKEN}
   default:
     user:
       language-spoken: EN
       language-learned: DE
   languages:
     mount-path: /app/config/languages.yml
-
-logging:
-  level:
-    org:
-      springframework:
-        security:
-          DEBUG

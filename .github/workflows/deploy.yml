@@ -101,7 +101,6 @@ jobs:
     needs: [ build_grammr, build_morphology_sidecar, build_ru_inflection_sidecar ]
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

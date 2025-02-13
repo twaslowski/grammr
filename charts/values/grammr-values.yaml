@@ -29,3 +29,5 @@ global:
         port: 8000
       inflection:
         enabled: false
+
+# allowedOrigin: "https://grammr.vercel.app"

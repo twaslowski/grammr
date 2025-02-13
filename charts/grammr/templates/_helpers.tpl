@@ -60,3 +60,20 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{- define "utils.secret.keepOrCreate" -}}
+{{- /*
+    Template function to lookup a secret value or generate a new one if it doesn't exist.
+
+    Parameters:
+      - .name: The name of the secret to lookup
+      - .key: The key within the secret to look up
+
+    Usage:
+    {{ include "utils.secret.lookup" (dict "namespace" "my-namespace" "name" "my-secret" "key" "secret-key") }}
+*/}}
+{{- $secretObj := (lookup "v1" "Secret" .namespace .name) | default dict }}
+{{- $secretData := (get $secretObj "data") | default dict }}
+{{- $value := (get $secretData .key) | default (randAlphaNum 64 | b64enc) }}
+{{- $value | quote }}
+{{- end }}

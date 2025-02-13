@@ -11,8 +11,8 @@ function deploy() {
   export TAG="sha-$(git rev-parse --short HEAD)"
   export HELM_TIMEOUT=300s
 
-  if [ -z "$OPENAI_API_KEY" ] || [ -z "$TELEGRAM_TOKEN" ]; then
-    echo "Please set OPENAI_API_KEY and TELEGRAM_TOKEN environment variables"
+  if [ -z "$OPENAI_API_KEY" ]; then
+    echo "Please set OPENAI_API_KEY environment variable"
     exit 1
   fi
 
@@ -24,7 +24,6 @@ function deploy() {
 
   helm upgrade --install \
     --set openai_api_key="$OPENAI_API_KEY" \
-    --set telegram_token="$TELEGRAM_TOKEN" \
     --set global.image.tag="$TAG" \
     --values ./charts/values/grammr-values.yaml \
     --namespace grammr --create-namespace \
