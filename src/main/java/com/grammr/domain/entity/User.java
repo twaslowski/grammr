@@ -1,5 +1,6 @@
 package com.grammr.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,15 +29,17 @@ public class User {
   private long id;
 
   @NotNull
-  private String email;
+  private String username;
 
   @NotNull
   private String password;
 
+  @JsonIgnore
   @CreationTimestamp
   @Column(updatable = false)
   private ZonedDateTime createdTimestamp;
 
+  @JsonIgnore
   @UpdateTimestamp
   private ZonedDateTime updatedTimestamp;
 }

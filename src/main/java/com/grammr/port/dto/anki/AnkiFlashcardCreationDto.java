@@ -1,9 +1,11 @@
 package com.grammr.port.dto.anki;
 
+import jakarta.validation.constraints.NotNull;
+
 public record AnkiFlashcardCreationDto(
-    long deckId,
-    String question,
-    String answer
+    @NotNull long deckId,
+    @NotNull String question,
+    @NotNull String answer
 ) {
 
 }

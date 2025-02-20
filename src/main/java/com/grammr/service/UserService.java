@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -28,21 +29,18 @@ public class UserService {
 
   @SneakyThrows
   public UserRegistrationResponse registerUser(UserRegistrationRequest request) {
-    if (!isValidEmail(request.email())) {
-      throw new InvalidInputException("Invalid email format");
-    }
-
     validatePassword(request.password());
 
     // Check if user already exists
-    if (userRepository.findByEmail(request.email()).isPresent()) {
-      throw new UserAlreadyExistsException(request.email());
+    if (userRepository.findByUsername(request.username()).isPresent()) {
+      log.info("Rejecting user registration due to existing user: {}", request.username());
+      throw new UserAlreadyExistsException(request.username());
     }
 
     String hashedPassword = passwordEncoder.encode(request.password() + pepper);
 
     var user = User.builder()
-        .email(request.email())
+        .username(request.username())
         .password(hashedPassword)
         .build();
     userRepository.save(user);
@@ -53,14 +51,27 @@ public class UserService {
     return new UserRegistrationResponse(user.getId(), session.getSessionToken());
   }
 
+  public String login(UserRegistrationRequest request) throws InvalidInputException {
+    var user = userRepository.findByUsername(request.username())
+        .orElseThrow(() -> new InvalidInputException("User not found"));
+
+    if (!passwordEncoder.matches(request.password() + pepper, user.getPassword())) {
+      throw new InvalidInputException("Invalid password");
+    }
+
+    var session = sessionManager.createSession(user);
+    return session.getSessionToken();
+  }
+
+  @Transactional
+  public void logout(User user) {
+    sessionManager.deleteSession(user);
+  }
+
   private void validatePassword(String password) {
-    if (password.length() < 16) {
-      throw new InvalidPasswordException("Password must be at least 16 characters long");
+    if (password.length() < 8) {
+      log.info("Rejecting user registration due to insecure password");
+      throw new InvalidPasswordException("Password must be at least 8 characters long");
     }
   }
-
-  private boolean isValidEmail(String email) {
-    return email != null && email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
-  }
-
 }

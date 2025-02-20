@@ -2,12 +2,14 @@ package com.grammr.service;
 
 import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
+import com.grammr.domain.enums.ExportDataType;
 import com.grammr.domain.exception.DeckNotFoundException;
 import com.grammr.domain.exception.UserNotFoundException;
 import com.grammr.port.outbound.AnkiPort;
 import com.grammr.repository.DeckRepository;
 import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,14 +23,21 @@ public class AnkiService {
   private final FlashcardRepository flashcardRepository;
   private final DeckRepository deckRepository;
   private final AnkiPort ankiPort;
+  private final AnkiCsvExportService ankiCsvExportService;
   private final UserRepository userRepository;
 
   @Transactional
-  public byte[] exportDeck(long id) {
+  public byte[] exportDeck(long id, ExportDataType exportDataType) {
     var deck = deckRepository.findById(id)
         .orElseThrow(() -> new DeckNotFoundException(id));
     var flashcards = flashcardRepository.findByDeckId(deck.getId());
-    return ankiPort.exportDeck(deck, flashcards);
+    if (exportDataType == null) {
+      exportDataType = ExportDataType.CSV;
+    }
+    return switch (exportDataType) {
+      case CSV -> ankiCsvExportService.exportDeck(flashcards);
+      case APKG, DB -> ankiPort.exportDeck(deck, flashcards);
+    };
   }
 
   @Transactional
@@ -51,5 +60,9 @@ public class AnkiService {
         .user(user)
         .build();
     return deckRepository.save(deck);
+  }
+
+  public List<Deck> getDecks(long userId) {
+    return deckRepository.findAllByUserId(userId);
   }
 }

@@ -2,16 +2,17 @@ package com.grammr.service;
 
 import com.grammr.domain.entity.User;
 import com.grammr.domain.entity.UserSession;
-import com.grammr.domain.exception.InvalidSessionException;
 import com.grammr.repository.UserSessionRepository;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Base64;
-import java.util.UUID;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SessionManager {
@@ -36,22 +37,24 @@ public class SessionManager {
     return sessionRepository.save(session);
   }
 
-  public User validateSession(String sessionToken) {
-    // Find the session in the database
-    UserSession session = sessionRepository.findBySessionToken(sessionToken)
-        .orElseThrow(() -> new InvalidSessionException("Session not found"));
+  public Optional<User> validateSessionToken(String sessionToken) {
+    return sessionRepository.findBySessionToken(sessionToken)
+        .flatMap(this::validateSessionExpiry)
+        .map(UserSession::getUser);
+  }
 
-    // Check if the session has expired
+  public Optional<UserSession> validateSessionExpiry(UserSession session) {
     if (LocalDateTime.now().isAfter(session.getExpiresAt())) {
+      log.info("Expiring session {} for user {}", session.getId(), session.getUser().getId());
       sessionRepository.delete(session);
-      throw new InvalidSessionException("Session has expired");
+      return Optional.empty();
     }
 
-    // Update last accessed time
     session.setLastAccessedAt(LocalDateTime.now());
     sessionRepository.save(session);
-
-    return session.getUser();
+    log.debug("Updated session {} for user {}, new expiry: {}",
+        session.getId(), session.getUser().getId(), session.getExpiresAt());
+    return Optional.of(session);
   }
 
   private String generateSecureToken() {
@@ -62,6 +65,11 @@ public class SessionManager {
 
   @Scheduled(fixedRate = 3600000)
   public void cleanupExpiredSessions() {
+    log.info("Running job to clean up expired sessions");
     sessionRepository.deleteAllByExpiresAtBefore(LocalDateTime.now());
+  }
+
+  public void deleteSession(User user) {
+    sessionRepository.deleteByUser(user);
   }
 }

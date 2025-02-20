@@ -44,8 +44,11 @@ I'm looking to add more features in the near future. These may include:
 
 - [x] The ability to arbitrarily add languages (solved via [Configmaps](https://github.com/twaslowski/grammr/commit/889284f0#diff-782f304121c40d11b8bcd8db123db62a7a8192bbcc8b8098cf07064774cc7c24))
 - [x] A solid frontend, in addition to the Telegram bot currently available
-- [ ] Inflection tables
-- [ ] Anki flash card export
+- [x] Inflection tables (for Russian only right now)
+- [x] Anki flash card export
+- [ ] Instead of solely relying on LLMs for translation, maybe fetch translations via Wiktionary
+or a related project and use them as a reference for the LLMs. For one, all meanings of a word
+could be covered; also this would protect against wonky LLM responses.
 
 ## Technical Roadmap
 
@@ -60,7 +63,7 @@ Features and improvements will include:
 analyis.
 - [x] Building a frontend. Possibly web-app, possibly cross-platform apps.
 - [ ] Benchmarking against quality regression of prompts
-- [ ] Extract the Telegram Bot entirely from the core service. It was useful for prototyping, but
+- [x] ~~Extract~~ Delete the Telegram Bot entirely from the core service. It was useful for prototyping, but
 should not be tied to the main application.
 
 ## Related projects

@@ -3,6 +3,7 @@ package com.grammr.config.value;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.exception.ConfigurationNotAvailableException;
 import java.util.List;
+import java.util.Optional;
 
 public record LanguageConfiguration(
     List<Language> languages
@@ -20,10 +21,9 @@ public record LanguageConfiguration(
   public boolean isInflectionAvailable(LanguageCode languageCode) {
     return languages.stream()
         .filter(language -> language.code().equals(languageCode))
-        .map(Language::inflection)
-        .map(InflectionConfiguration::enabled)
         .findFirst()
-        .orElse(false);
+        .flatMap(language -> Optional.ofNullable(language.inflection()))
+        .map(InflectionConfiguration::enabled).orElse(false);
   }
 
   public String getMorphologyUri(LanguageCode languageCode) {

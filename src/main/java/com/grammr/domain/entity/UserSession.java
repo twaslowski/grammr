@@ -24,10 +24,10 @@ import lombok.NoArgsConstructor;
 public class UserSession {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_session_id_seq")
-  private long id;
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private String id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 

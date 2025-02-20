@@ -1,9 +1,9 @@
 package com.grammr.config.value;
 
-import static java.lang.String.format;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
 
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record MorphologyConfiguration(
     boolean enabled,
@@ -11,7 +11,9 @@ public record MorphologyConfiguration(
     int port
 ) {
 
+  private static final String ENDPOINT = "/morphological-analysis";
+
   public String uri() {
-    return format("http://%s:%d/morphological-analysis", host, port);
+    return "http://" + host + ":" + port + ENDPOINT;
   }
 }

@@ -1,5 +1,6 @@
 package com.grammr.port.inbound;
 
+import com.grammr.domain.exception.InflectionNotAvailableForLanguageException;
 import com.grammr.domain.value.language.Inflections;
 import com.grammr.port.dto.InflectionsRequest;
 import com.grammr.service.InflectionService;
@@ -24,7 +25,12 @@ public class InflectionController {
   @PostMapping(value = "/inflection", produces = "application/json")
   public ResponseEntity<Inflections> performInflection(@RequestBody InflectionsRequest request) {
     log.info("Processing inflection request {}", request);
-    var inflections = inflectionService.inflect(request.languageCode(), request.token());
-    return ResponseEntity.ok(inflections);
+    try {
+      var inflections = inflectionService.inflect(request.languageCode(), request.token());
+      return ResponseEntity.ok(inflections);
+    } catch (InflectionNotAvailableForLanguageException e) {
+      log.error("Rejecting inflection request due to unsupported language: {}", request.languageCode());
+      return ResponseEntity.badRequest().build();
+    }
   }
 }

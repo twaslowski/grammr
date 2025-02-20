@@ -19,7 +19,7 @@ public class InflectionPort {
 
   public Inflections retrieveInflections(LanguageCode languageCode, InflectionRequest request) {
     var uri = languageConfiguration.getInflectionUri(languageCode);
-    log.info("Performing analysis for phrase '{}' at '{}'", request.lemma(), uri);
+    log.info("Inflecting word '{}'", request.lemma());
     try {
       return restClient
           .post()

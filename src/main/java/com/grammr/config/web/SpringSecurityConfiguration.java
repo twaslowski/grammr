@@ -1,4 +1,4 @@
-package com.grammr.config;
+package com.grammr.config.web;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.NEVER;
 
@@ -12,13 +12,10 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -34,11 +31,16 @@ public class SpringSecurityConfiguration {
   private String allowedOrigin;
 
   @Bean
-  public SecurityFilterChain configureWebSecurity(HttpSecurity httpSecurity) throws Exception {
+  public SecurityFilterChain configureWebSecurity(HttpSecurity httpSecurity,
+                                                  CustomUserDetailsService userDetailsService,
+                                                  SessionCookieFilter sessionCookieFilter
+  ) throws Exception {
     return httpSecurity
         .csrf(AbstractHttpConfigurer::disable)
         .httpBasic(Customizer.withDefaults())
         .authorizeHttpRequests(this::configureRestAuthorizations)
+        .addFilterBefore(sessionCookieFilter, UsernamePasswordAuthenticationFilter.class)
+        .userDetailsService(userDetailsService)
         .sessionManagement(session -> session.sessionCreationPolicy(NEVER))
         .build();
   }
@@ -53,7 +55,7 @@ public class SpringSecurityConfiguration {
     return source;
   }
 
-//   todo: this needs to go, but the above cors configuration is not working
+  //   todo: this needs to go, but the above cors configuration is not working
   @Bean
   public WebMvcConfigurer corsConfigurer() {
     return new WebMvcConfigurer() {
@@ -72,23 +74,11 @@ public class SpringSecurityConfiguration {
   private void configureRestAuthorizations(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorizationRegistry) {
     authorizationRegistry
         .requestMatchers("/actuator/health").permitAll()
+        .requestMatchers("/api/v1/*").permitAll()
+        .requestMatchers("/api/v1/anki/*").authenticated()
         .requestMatchers("/actuator/metrics").hasRole(OBSERVABILITY_ROLE)
         .requestMatchers("/actuator/prometheus").hasRole(OBSERVABILITY_ROLE)
-        .requestMatchers("/api/v1/**").permitAll()
         .anyRequest().authenticated();
-  }
-
-  @Bean
-  public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder,
-                                               @Value("${spring.security.observability.password}") String observabilityUserPassword,
-                                               @Value("${spring.security.observability.user}") String observabilityUserName
-  ) {
-    UserDetails user = User.builder()
-        .username(observabilityUserName)
-        .password(passwordEncoder.encode(observabilityUserPassword))
-        .roles(OBSERVABILITY_ROLE).build();
-
-    return new InMemoryUserDetailsManager(user);
   }
 
   @Bean
