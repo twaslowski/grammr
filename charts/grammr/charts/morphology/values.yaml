@@ -16,12 +16,12 @@ livenessProbe:
   httpGet:
     path: /health
     port: 8000
-  initialDelaySeconds: 15
+  initialDelaySeconds: 60
 readinessProbe:
   httpGet:
     path: /health
     port: 8000
-  initialDelaySeconds: 15
+  initialDelaySeconds: 60
 
 imagePullSecrets: [ ]
 nameOverride: ""

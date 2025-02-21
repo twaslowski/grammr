@@ -58,8 +58,8 @@ public class AnkiController {
   }
 
   @GetMapping(value = "/decks", produces = APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<Deck>> getDecks(Authentication authentication) {
-    var decks = ankiService.getDecks((long) authentication.getPrincipal());
+  public ResponseEntity<List<Deck>> getDecks(@AuthenticationPrincipal User user) {
+    var decks = ankiService.getDecks(user.getId());
     return ResponseEntity.status(200).body(decks);
   }
 
