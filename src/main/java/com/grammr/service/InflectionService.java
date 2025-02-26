@@ -2,7 +2,7 @@ package com.grammr.service;
 
 import com.grammr.config.value.LanguageConfiguration;
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.domain.exception.InflectionNotAvailableForLanguageException;
+import com.grammr.domain.exception.InflectionNotAvailable;
 import com.grammr.domain.value.language.Inflections;
 import com.grammr.domain.value.language.Token;
 import com.grammr.port.dto.InflectionRequest;
@@ -24,7 +24,7 @@ public class InflectionService {
       var inflectionRequest = InflectionRequest.from(token);
       return inflectionPort.retrieveInflections(languageCode, inflectionRequest);
     } else {
-      throw new InflectionNotAvailableForLanguageException(languageCode);
+      throw new InflectionNotAvailable(languageCode);
     }
   }
 }

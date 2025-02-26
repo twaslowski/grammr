@@ -14,6 +14,13 @@ public class TokenTranslation extends AIGeneratedContent {
 
   private String source;
   private String translation;
+  private boolean ambiguous;
+
+  public TokenTranslation(String source, String translation) {
+    this.source = source;
+    this.translation = translation;
+    this.ambiguous = false;
+  }
 
   @Override
   public boolean equals(Object obj) {

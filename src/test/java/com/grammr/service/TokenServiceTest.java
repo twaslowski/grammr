@@ -16,7 +16,7 @@ class TokenServiceTest {
   @Test
   void shouldCreateAndPopulateToken() {
     var morphologicalAnalysis = MorphologicalAnalysisSpec.valid().build();
-    List<TokenTranslation> translations = List.of(new TokenTranslation("hola", "hello"));
+    List<TokenTranslation> translations = List.of(new TokenTranslation("hola", "hello", false));
 
     var tokens = List.of(
         Token.fromString("hola"),

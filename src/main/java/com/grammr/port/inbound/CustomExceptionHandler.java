@@ -1,5 +1,6 @@
 package com.grammr.port.inbound;
 
+import com.grammr.domain.exception.InflectionNotAvailable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,11 @@ import org.springframework.web.server.MethodNotAllowedException;
 @Slf4j
 @ControllerAdvice
 public class CustomExceptionHandler {
+
+  @ExceptionHandler(InflectionNotAvailable.class)
+  public final ResponseEntity<ErrorResponse> handleExceptionError(Exception ex) {
+    return new ResponseEntity<>(ErrorResponse.withMessage(ex.getMessage()), HttpStatus.BAD_REQUEST);
+  }
 
   @ExceptionHandler(Exception.class)
   public final ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex) {

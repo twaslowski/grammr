@@ -3,13 +3,10 @@ package com.grammr.service;
 import com.grammr.domain.event.AnalysisRequest;
 import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.FullAnalysis;
-import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.service.language.morphology.MorphologyService;
 import com.grammr.service.language.recognition.LanguageRecognitionService;
-import com.grammr.service.language.translation.literal.LiteralTranslationService;
+import com.grammr.service.language.translation.literal.OpenAILiteralTranslationService;
 import com.grammr.service.language.translation.semantic.SemanticTranslationService;
-import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,7 +27,7 @@ public class AnalysisService {
   private final ExecutorService executorService = Executors.newCachedThreadPool();
   private final SemanticTranslationService semanticTranslationService;
   private final LanguageRecognitionService languageRecognitionService;
-  private final LiteralTranslationService literalTranslationService;
+  private final OpenAILiteralTranslationService literalTranslationService;
   private final TokenService tokenService;
   private final MorphologyService morphologyService;
 
@@ -110,92 +107,6 @@ public class AnalysisService {
         .sourcePhrase(sourcePhrase)
         .semanticTranslation(semanticTranslation)
         .analyzedTokens(tokens)
-        .build();
-  }
-
-  /**
-   * Deprecated. Achieves language agnosticism by detecting the language of the source phrase,
-   * at the cost of speed at clarity as to what the application actually does.
-   * @param analysisRequest AnalysisRequest object containing the source phrase and user languages.
-   * @return FullAnalysis object containing translation and enriched tokens.
-   */
-  @Deprecated
-  public FullAnalysis processFullAnalysisRequest(AnalysisRequest analysisRequest) {
-    var sourcePhrase = analysisRequest.phrase();
-    log.info("Processing analysis request for source phrase: '{}'", sourcePhrase);
-
-    var analyisComponentRequest = AnalysisComponentRequest.from(analysisRequest);
-    var sourceLanguage = languageRecognitionService.createAnalysisComponent(analyisComponentRequest);
-
-    // If detected language is learned language
-    if (sourceLanguage.getLanguageCode().equals(analyisComponentRequest.getSourceLanguage())) {
-      return createAnalysis(analysisRequest, analyisComponentRequest);
-      // If detected language is spoken language
-    } else if (sourceLanguage.getLanguageCode().equals(analysisRequest.userLanguageSpoken())) {
-      return createReverseAnalysis(analysisRequest, analyisComponentRequest.reverseLanguages());
-    } else {
-      return FullAnalysis.builder()
-          .sourcePhrase(sourcePhrase)
-          .analyzedTokens(List.of())
-          .build();
-    }
-  }
-
-  private FullAnalysis createAnalysis(AnalysisRequest event,
-                                      AnalysisComponentRequest analysisComponentRequest) {
-    var phrase = event.phrase();
-    var tokens = tokenService.tokenize(phrase);
-    analysisComponentRequest.setTokens(tokens);
-
-    Optional<CompletableFuture<SemanticTranslation>> semanticTranslationFuture = Optional.empty();
-    if (event.performSemanticTranslation()) {
-      semanticTranslationFuture = Optional.of(supplyAsync(() ->
-          semanticTranslationService.createAnalysisComponent(analysisComponentRequest)
-      ));
-    }
-
-    if (tokens.size() < MAX_TOKENS) {
-      var literalTranslationFuture = supplyAsync(() -> literalTranslationService.createAnalysisComponent(analysisComponentRequest));
-      var grammaticalAnalysisFuture = supplyAsync(() -> morphologyService.createAnalysisComponent(analysisComponentRequest));
-      awaitAll(literalTranslationFuture, grammaticalAnalysisFuture);
-
-      var literalTranslation = join(literalTranslationFuture).getTokenTranslations();
-      var grammaticalAnalysis = join(grammaticalAnalysisFuture);
-      tokens = tokenService.enrichTokens(tokens, literalTranslation, grammaticalAnalysis);
-    } else {
-      log.info("Skipping literal translation and grammatical analysis for phrase '{}'", phrase);
-      tokens = List.of();
-    }
-
-    var semanticTranslation = semanticTranslationFuture.map(CompletableFuture::join).orElse(null);
-
-    return FullAnalysis.builder()
-        .semanticTranslation(semanticTranslation)
-        .sourcePhrase(phrase)
-        .analyzedTokens(tokens)
-        .build();
-  }
-
-  // So that a user can ask "How do I say ... in the language I'm learning?" and get a response
-  // Creates a translation from the spoken language to the learned language, then creates a full analysis
-  private FullAnalysis createReverseAnalysis(AnalysisRequest event, AnalysisComponentRequest request) {
-    var learnedLanguageTranslation = semanticTranslationService.createAnalysisComponent(request);
-    var learnedLanguageAnalysisEvent = createLearnedLanguageAnalysisEvent(learnedLanguageTranslation);
-    var translation = SemanticTranslation.builder()
-        .sourcePhrase(event.phrase())
-        .translatedPhrase(learnedLanguageTranslation.getTranslatedPhrase())
-        .build();
-    request.reverseLanguages();
-    request.setPhrase(learnedLanguageTranslation.getTranslatedPhrase());
-    return createAnalysis(learnedLanguageAnalysisEvent, request.reverseLanguages()).toBuilder()
-        .semanticTranslation(translation)
-        .build();
-  }
-
-  private AnalysisRequest createLearnedLanguageAnalysisEvent(SemanticTranslation learnedLanguageTranslation) {
-    return AnalysisRequest.builder()
-        .phrase(learnedLanguageTranslation.getTranslatedPhrase())
-        .performSemanticTranslation(false)
         .build();
   }
 

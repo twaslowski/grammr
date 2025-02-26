@@ -44,4 +44,40 @@ public class InflectionIntegrationTest extends IntegrationTestBase {
         .andExpect(jsonPath("$.partOfSpeech").value("NOUN"))
         .andReturn();
   }
+
+  @Test
+  @SneakyThrows
+  void shouldReturnBadRequestForUnsupportedPartOfSpeech() {
+    String lemma = "дело";
+    var morphology = TokenMorphology.builder().lemma(lemma).partOfSpeechTag(PartOfSpeechTag.PRON).build();
+    var token = Token.builder()
+        .text("дела")
+        .morphology(morphology)
+        .build();
+    var request = new InflectionsRequest(LanguageCode.RU, token);
+
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/inflection")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andReturn();
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldReturnBadRequestForLanguageWithNoInflectionsAvailable() {
+    String lemma = "дело";
+    var morphology = TokenMorphology.builder().lemma(lemma).partOfSpeechTag(PartOfSpeechTag.NOUN).build();
+    var token = Token.builder()
+        .text("дела")
+        .morphology(morphology)
+        .build();
+    var request = new InflectionsRequest(LanguageCode.EN, token);
+
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/inflection")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isBadRequest())
+        .andReturn();
+  }
 }
