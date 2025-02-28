@@ -9,7 +9,7 @@ function start_environment() {
 
 function deploy() {
   export TAG="sha-$(git rev-parse --short HEAD)"
-  export HELM_TIMEOUT=300s
+  export HELM_TIMEOUT=600s
 
   if [ -z "$OPENAI_API_KEY" ]; then
     echo "Please set OPENAI_API_KEY environment variable"

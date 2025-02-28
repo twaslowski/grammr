@@ -11,6 +11,10 @@ public enum LanguageCode {
   RU("Russian"),
   EN("English"),
   DE("German"),
+  IT("Italian"),
+  ES("Spanish"),
+  PT("Portuguese"),
+  FR("French"),
 
   @JsonEnumDefaultValue
   UNSUPPORTED("Unsupported");
