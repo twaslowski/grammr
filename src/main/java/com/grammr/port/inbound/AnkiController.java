@@ -6,6 +6,7 @@ import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.ExportDataType;
+import com.grammr.domain.value.DeckWithCards;
 import com.grammr.port.dto.anki.AnkiDeckCreationDto;
 import com.grammr.port.dto.anki.AnkiFlashcardCreationDto;
 import com.grammr.port.dto.anki.InboundAnkiDeckExportDto;
@@ -16,9 +17,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,10 +58,20 @@ public class AnkiController {
     return ResponseEntity.status(201).body(deck);
   }
 
-  @GetMapping(value = "/decks", produces = APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/deck", produces = APPLICATION_JSON_VALUE)
   public ResponseEntity<List<Deck>> getDecks(@AuthenticationPrincipal User user) {
     var decks = ankiService.getDecks(user.getId());
     return ResponseEntity.status(200).body(decks);
+  }
+
+  @GetMapping(value = "/deck/{deckId}", produces = APPLICATION_JSON_VALUE)
+  public ResponseEntity<DeckWithCards> getDeck(@AuthenticationPrincipal User user, @PathVariable long deckId) {
+    var deck = ankiService.getDeck(user.getId(), deckId);
+    var flashcards = ankiService.getFlashcards(deck.getId());
+    return ResponseEntity.status(200).body(DeckWithCards.builder()
+        .deck(deck)
+        .flashcards(flashcards)
+        .build());
   }
 
   private String deriveFilename(long deckId, ExportDataType exportDataType) {

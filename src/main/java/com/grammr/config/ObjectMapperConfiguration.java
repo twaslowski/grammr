@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ public class ObjectMapperConfiguration {
         .enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE)
         .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
         .enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION)
+        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         .build();
   }
 

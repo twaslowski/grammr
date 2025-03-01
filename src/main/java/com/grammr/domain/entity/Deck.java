@@ -35,6 +35,8 @@ public class Deck {
   @NotNull
   private String name;
 
+  // private String description;
+
   @JsonIgnore
   @CreationTimestamp
   @Column(updatable = false)

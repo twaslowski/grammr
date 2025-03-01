@@ -62,7 +62,17 @@ public class AnkiService {
     return deckRepository.save(deck);
   }
 
+  public Deck getDeck(long userId, long deckId) {
+    return deckRepository.findById(deckId)
+        .filter(deck -> deck.getUser().getId() == userId)
+        .orElseThrow(() -> new DeckNotFoundException(deckId));
+  }
+
   public List<Deck> getDecks(long userId) {
     return deckRepository.findAllByUserId(userId);
+  }
+
+  public List<Flashcard> getFlashcards(long deckId) {
+    return flashcardRepository.findByDeckId(deckId);
   }
 }
