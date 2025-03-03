@@ -25,8 +25,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SpringSecurityConfiguration {
 
-  private static final String OBSERVABILITY_ROLE = "OBSERVABILITY";
-
   @Value("${spring.cors.allowed-origin}")
   private String allowedOrigin;
 
@@ -73,11 +71,9 @@ public class SpringSecurityConfiguration {
 
   private void configureRestAuthorizations(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorizationRegistry) {
     authorizationRegistry
-        .requestMatchers("/actuator/health").permitAll()
+        .requestMatchers("/actuator/*").permitAll()
         .requestMatchers("/api/v1/*").permitAll()
         .requestMatchers("/api/v1/anki/*").authenticated()
-        .requestMatchers("/actuator/metrics").hasRole(OBSERVABILITY_ROLE)
-        .requestMatchers("/actuator/prometheus").hasRole(OBSERVABILITY_ROLE)
         .anyRequest().authenticated();
   }
 
