@@ -4,6 +4,10 @@ metadata:
   name: {{ include "lingolift-core.fullname" . }}
   labels:
     {{- include "lingolift-core.labels" . | nindent 4 }}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /actuator/prometheus
+    prometheus.io/port: "8443"
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
