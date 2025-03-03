@@ -5,6 +5,7 @@ import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.enums.ExportDataType;
 import com.grammr.domain.exception.DeckNotFoundException;
 import com.grammr.domain.exception.UserNotFoundException;
+import com.grammr.port.dto.DeckDTO;
 import com.grammr.port.outbound.AnkiPort;
 import com.grammr.repository.DeckRepository;
 import com.grammr.repository.FlashcardRepository;
@@ -68,11 +69,21 @@ public class AnkiService {
         .orElseThrow(() -> new DeckNotFoundException(deckId));
   }
 
-  public List<Deck> getDecks(long userId) {
-    return deckRepository.findAllByUserId(userId);
+  public List<DeckDTO> getDecks(long userId) {
+    var decks = deckRepository.findAllByUserId(userId);
+    return decks.stream()
+        .map(deck -> new DeckDTO(deck, flashcardRepository.findByDeckId(deck.getId())))
+        .toList();
   }
 
   public List<Flashcard> getFlashcards(long deckId) {
     return flashcardRepository.findByDeckId(deckId);
+  }
+
+  public void deleteDeck(long userId, long deckId) {
+    deckRepository.findById(deckId)
+        .filter(d -> d.getUser().getId() == userId)
+        .orElseThrow(() -> new DeckNotFoundException(deckId));
+    deckRepository.deleteById(deckId);
   }
 }

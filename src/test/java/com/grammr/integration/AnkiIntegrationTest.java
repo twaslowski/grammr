@@ -38,7 +38,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @Test
   @SneakyThrows
   void shouldReturnUnauthorized() {
-    var creationDto = new AnkiDeckCreationDto("Test Deck");
+    var creationDto = new AnkiDeckCreationDto("Test Deck", null);
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/anki/deck")
             .with(anonymous())
             .contentType(MediaType.APPLICATION_JSON)
@@ -51,7 +51,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldCreateDeck() {
     var auth = createUserAuthentication();
-    var creationDto = new AnkiDeckCreationDto("Test Deck");
+    var creationDto = new AnkiDeckCreationDto("Test Deck", null);
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/anki/deck")
             .with(authentication(auth))
             .contentType(MediaType.APPLICATION_JSON)
@@ -66,8 +66,6 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
 
   @Test
   @SneakyThrows
-  @Transactional
-    // to avoid issues with the user object being detached
   void shouldCreateFlashcard() {
     var user = userRepository.save(UserSpec.valid().build());
     var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
@@ -92,7 +90,6 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
 
   @Test
   @SneakyThrows
-  @Transactional
   void shouldExportDeck() {
     var user = userRepository.save(UserSpec.valid().build());
     var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
@@ -112,6 +109,29 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
         .andReturn();
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldDeleteDeck() {
+    var user = userRepository.save(UserSpec.valid().build());
+    var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
+    var authentication = createUserAuthentication(user);
+    flashcardRepository.save(Flashcard.builder()
+        .question("Question")
+        .answer("Answer")
+        .deck(deck)
+        .build()
+    );
+
+    mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/anki/deck/" + deck.getId())
+            .with(authentication(authentication))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNoContent())
+        .andReturn();
+
+    assertThat(deckRepository.findAll()).isEmpty();
+    assertThat(flashcardRepository.findAll()).isEmpty();
   }
 
   private Authentication createUserAuthentication() {

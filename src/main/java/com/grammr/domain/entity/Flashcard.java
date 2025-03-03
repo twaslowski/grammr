@@ -44,11 +44,9 @@ public class Flashcard {
 
   @CreationTimestamp
   @Column(updatable = false)
-  @JsonIgnore
   private ZonedDateTime createdTimestamp;
 
   @UpdateTimestamp
-  @JsonIgnore
   private ZonedDateTime updatedTimestamp;
 
 }

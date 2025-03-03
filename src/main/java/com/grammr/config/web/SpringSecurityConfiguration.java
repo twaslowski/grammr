@@ -63,7 +63,7 @@ public class SpringSecurityConfiguration {
       public void addCorsMappings(@NotNull CorsRegistry registry) {
         registry.addMapping("/api/**")
             .allowedOrigins(allowedOrigin)
-            .allowedMethods("GET", "POST", "OPTIONS")
+            .allowedMethods("GET", "POST", "OPTIONS", "DELETE")
             .allowedHeaders("*")
             .allowCredentials(true)
             .maxAge(3600); // 1 hour

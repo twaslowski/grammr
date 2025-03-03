@@ -1,5 +1,6 @@
 package com.grammr.port.inbound;
 
+import com.grammr.domain.exception.DeckNotFoundException;
 import com.grammr.domain.exception.InflectionNotAvailable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,11 @@ import org.springframework.web.server.MethodNotAllowedException;
 @Slf4j
 @ControllerAdvice
 public class CustomExceptionHandler {
+
+  @ExceptionHandler(DeckNotFoundException.class)
+  public final ResponseEntity<ErrorResponse> handleDeckNotFound(Exception ex) {
+    return new ResponseEntity<>(ErrorResponse.withMessage(ex.getMessage()), HttpStatus.NOT_FOUND);
+  }
 
   @ExceptionHandler(InflectionNotAvailable.class)
   public final ResponseEntity<ErrorResponse> handleExceptionError(Exception ex) {

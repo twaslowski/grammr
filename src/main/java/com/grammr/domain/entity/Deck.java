@@ -35,19 +35,17 @@ public class Deck {
   @NotNull
   private String name;
 
-  // private String description;
+  private String description;
 
-  @JsonIgnore
   @CreationTimestamp
   @Column(updatable = false)
   private ZonedDateTime createdTimestamp;
 
-  @JsonIgnore
   @UpdateTimestamp
   private ZonedDateTime updatedTimestamp;
 
   @JsonIgnore
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinColumn
+  @ManyToOne
+  @JoinColumn(name = "user_id")
   private User user;
 }

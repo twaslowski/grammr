@@ -6,7 +6,7 @@ import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.ExportDataType;
-import com.grammr.domain.value.DeckWithCards;
+import com.grammr.port.dto.DeckDTO;
 import com.grammr.port.dto.anki.AnkiDeckCreationDto;
 import com.grammr.port.dto.anki.AnkiFlashcardCreationDto;
 import com.grammr.port.dto.anki.InboundAnkiDeckExportDto;
@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,26 +53,30 @@ public class AnkiController {
   }
 
   @PostMapping(value = "/deck", produces = APPLICATION_JSON_VALUE)
-  public ResponseEntity<Deck> createDeck(@RequestBody @Valid AnkiDeckCreationDto data,
+  public ResponseEntity<DeckDTO> createDeck(@RequestBody @Valid AnkiDeckCreationDto data,
                                          @AuthenticationPrincipal User user) {
     var deck = ankiService.createDeck(user.getId(), data.name());
-    return ResponseEntity.status(201).body(deck);
+    var deckDto = new DeckDTO(deck, List.of());
+    return ResponseEntity.status(201).body(deckDto);
   }
 
   @GetMapping(value = "/deck", produces = APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<Deck>> getDecks(@AuthenticationPrincipal User user) {
+  public ResponseEntity<List<DeckDTO>> getDecks(@AuthenticationPrincipal User user) {
     var decks = ankiService.getDecks(user.getId());
     return ResponseEntity.status(200).body(decks);
   }
 
   @GetMapping(value = "/deck/{deckId}", produces = APPLICATION_JSON_VALUE)
-  public ResponseEntity<DeckWithCards> getDeck(@AuthenticationPrincipal User user, @PathVariable long deckId) {
+  public ResponseEntity<DeckDTO> getDeck(@AuthenticationPrincipal User user, @PathVariable long deckId) {
     var deck = ankiService.getDeck(user.getId(), deckId);
     var flashcards = ankiService.getFlashcards(deck.getId());
-    return ResponseEntity.status(200).body(DeckWithCards.builder()
-        .deck(deck)
-        .flashcards(flashcards)
-        .build());
+    return ResponseEntity.status(200).body(new DeckDTO(deck, flashcards));
+  }
+
+  @DeleteMapping(value = "/deck/{deckId}")
+  public ResponseEntity<?> deleteDeck(@AuthenticationPrincipal User user, @PathVariable long deckId) {
+    ankiService.deleteDeck(user.getId(), deckId);
+    return ResponseEntity.status(204).build();
   }
 
   private String deriveFilename(long deckId, ExportDataType exportDataType) {
