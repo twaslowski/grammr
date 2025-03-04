@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "inflection-ru"
+version = "0.1.0"
+description = "Inflections for multiple romanic languages"
+authors = ["Tobias Waslowski <tobiaswaslowski@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.6"
+setuptools = "^75.8.0"
+uvicorn = "^0.34.0"
+verbecc = "^1.9.7"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+black = "^24.10.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
