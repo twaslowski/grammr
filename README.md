@@ -76,7 +76,7 @@ Provides inflections for Russian.
 
 Interesting related projects:
 
-- [textile](https://github.com/SalahEddineGhamri/textile): Inspiration for a potential UI
+- [textile](https://github.com/SalahEddineGhamri/textile): Inspiration for the UI
 - [mathigatti/spanish_inflections](https://github.com/mathigatti/spanish_inflections?tab=readme-ov-file): Inflections for Spanish
 - [DuyguA/DEMorphy](https://github.com/DuyguA/DEMorphy): Inflections for German. Technically, this library
 only provides _morphological analysis_, but it does use a comprehensive lexicon under the hood,

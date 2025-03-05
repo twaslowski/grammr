@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "inflection-ru"
+name = "inflection-multi"
 version = "0.1.0"
 description = "Inflections for multiple romanic languages"
 authors = ["Tobias Waslowski <tobiaswaslowski@gmail.com>"]

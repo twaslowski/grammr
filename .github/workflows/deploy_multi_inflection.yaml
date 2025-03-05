@@ -1,0 +1,30 @@
+name: Deploy multi-languge inflection image
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'charts/multi-inflection/**'
+      - 'sidecars/multi-inflection/**'
+
+jobs:
+  build_multi_inflection_sidecar:
+    uses: ./.github/workflows/build_sidecar.yml
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+    with:
+      directory: "./sidecars/multi-inflection"
+      image_name: "tobiaswaslowski/multi-inflection"
+
+  deploy:
+    runs-on: self-hosted
+    needs:
+      - build_multi_inflection_sidecar
+    steps:
+      - name: deploy
+        uses: 'deliverybot/helm@v1'
+        with:
+          release: 'multi-inflection'
+          namespace: 'grammr'
+          chart: './charts/multi-inflection'

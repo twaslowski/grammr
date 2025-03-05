@@ -3,6 +3,12 @@
 This microservice enables inflection of words for French, Italian, Spanish and Italian.
 It is powered by [verbecc](https://github.com/bretttolbert/verbecc).
 
+## Deployment
+
+It is important to keep the pyproject.toml `version` in sync with the Chart.yaml `appVersion`.
+The `version` generates a Docker image tag, which ends up being used in the Chart by default,
+although it can be overridden if you supply `Values.image.tag`.
+
 ## Usage
 
 You can run the application locally or via Docker:
@@ -23,11 +29,8 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-  "word": "уметь",
+  "word": "essere",
   "part_of_speech": "VERB"
 }'
 ```
 
-This will automatically generate all different inflections for the word "уметь".
-Supplying the part_of_speech tag is important in order to determine whether to conjugate or
-decline the word.

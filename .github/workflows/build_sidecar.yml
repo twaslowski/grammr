@@ -55,16 +55,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Docker meta
-        id: docker-metadata
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ inputs.image_name }}
-          flavor: |
-            latest=true
-          tags: |
-            type=semver,pattern={{version}}
-            type=sha
+      - name: derive version
+        id: version
+        run: |
+          echo "VERSION=$(cd ${{ inputs.directory }} && poetry version -s)" >> $GITHUB_ENV
 
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -73,7 +67,7 @@ jobs:
           file:  ${{ inputs.directory }}/docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ steps.docker-metadata.outputs.tags }}
+          tags: ${{ input.image_name }}/${{ env.VERSION }}
           labels: ${{ steps.docker-metadata.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

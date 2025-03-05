@@ -1,0 +1,34 @@
+{{ range $languageCode := $.Values.languageCodes }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "multi-inflection.fullname" $ }}-{{ $languageCode }}
+  labels:
+    app: {{ include "multi-inflection.fullname" $ }}
+    language: {{ $languageCode }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "multi-inflection.fullname" $ }}
+      language: {{ $languageCode }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "multi-inflection.fullname" $ }}
+        language: {{ $languageCode }}
+    spec:
+      containers:
+        - name: {{ include "multi-inflection.fullname" $ }}-{{ $languageCode }}
+          image: "{{ $.Values.image.repository }}:{{ default $.Chart.AppVersion $.Values.image.tag }}"
+          ports:
+            - containerPort: 8000
+          livenessProbe:
+            {{- toYaml $.Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml $.Values.readinessProbe | nindent 12 }}
+          env:
+            - name: LANGUAGE_CODE
+              value: {{ $languageCode }}
+  {{ end }}

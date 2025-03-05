@@ -1,0 +1,18 @@
+{{ range $languageCode := $.Values.languageCodes }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "multi-inflection.fullname" $ }}-{{ $languageCode }}
+  labels:
+    {{- include "multi-inflection.labels" $ | nindent 4 }}
+spec:
+  type: {{ $.Values.service.type }}
+  ports:
+    - port: {{ $.Values.service.port }}
+      targetPort: 8000
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ include "multi-inflection.fullname" $ }}
+    language: {{ $languageCode }}
+  {{ end }}
