@@ -1,4 +1,5 @@
-{{ range $languageCode := $.Values.languageCodes }}
+{{ range $languageCode := $.Values.multiInflection.languageCodes }}
+---
 apiVersion: v1
 kind: Service
 metadata:

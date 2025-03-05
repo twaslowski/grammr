@@ -30,9 +30,7 @@ jobs:
 
       - name: deploy
         run: |
-          helm upgrade --install \
-            --namespace grammr --create-namespace \ 
-            --values ./charts/values/prod.morphology.values.yaml \
-            --wait --timeout 600s \
+          helm upgrade --install --namespace grammr \
+            --values charts/values/grammr.values.yaml --wait --timeout 600s \
             morphology ./charts/morphology
         

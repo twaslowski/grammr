@@ -33,5 +33,6 @@ jobs:
           helm upgrade --install \
             --namespace grammr --create-namespace \
             --wait --timeout 600s \
+            --values ./charts/values/grammr.values.yaml \
             multi-inflection ./charts/multi-inflection
         

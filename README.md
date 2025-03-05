@@ -1,3 +1,8 @@
+[![Russian inflections](https://github.com/twaslowski/grammr/actions/workflows/deploy_inflection_ru.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_inflection_ru.yaml)
+[![Russian inflections](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_multi_inflection.yaml)
+[![Russian inflections](https://github.com/twaslowski/grammr/actions/workflows/deploy_multi_inflection.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology.yaml)
+[![Russian inflections](https://github.com/twaslowski/grammr/actions/workflows/deploy_core.yml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_core.yml)
+
 # grammr
 
 `grammr` is a language learning tool that aims to make understanding the grammar of a variety
