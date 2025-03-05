@@ -1,12 +1,14 @@
 name: Deploy multi-languge inflection image
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
     paths:
       - 'charts/multi-inflection/**'
       - 'sidecars/multi-inflection/**'
-  workflow_dispatch:
+      - '.github/workflows/build_sidecar.yml'
+      - '.github/workflows/deploy_multi_inflection.yaml'
 
 jobs:
   build_multi_inflection_sidecar:
