@@ -8,11 +8,28 @@ on:
       - 'charts/inflection-ru/**'
       - 'sidecars/inflection-ru/**'
       - '.github/workflows/build_sidecar.yml'
-      - '.github/workflows/deploy_multi_inflection.yaml'
+      - '.github/workflows/deploy_inflection_ru.yaml'
 
 jobs:
-  build_multi_inflection_sidecar:
+  check_changes:
+    runs-on: ubuntu-latest
+    outputs:
+      sidecar_changed: ${{ steps.filter.outputs.sidecar_changed }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            sidecar_changed:
+              - 'sidecars/inflection-ru/**'
+
+  build_ru_inflection_sidecar:
     uses: ./.github/workflows/build_sidecar.yml
+    if: ${{ needs.check_changes.outputs.sidecar_changed == 'true' }}
     secrets:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -23,7 +40,9 @@ jobs:
   deploy:
     runs-on: self-hosted
     needs:
-      - build_multi_inflection_sidecar
+      - build_ru_inflection_sidecar
+      - check_changes
+    if: always()
     steps:
       - name: Checkout
         uses: actions/checkout@v4
