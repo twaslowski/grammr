@@ -33,4 +33,5 @@ curl -X 'POST' \
   "part_of_speech": "VERB"
 }'
 ```
-
+Note that since only conjugation is supported, the `part_of_speech` does not actually serve any purpose;
+however, it is required by the API.

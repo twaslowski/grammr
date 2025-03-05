@@ -67,7 +67,7 @@ jobs:
           file:  ${{ inputs.directory }}/docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ input.image_name }}/${{ env.VERSION }}
+          tags: ${{ inputs.image_name }}/${{ env.VERSION }}
           labels: ${{ steps.docker-metadata.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

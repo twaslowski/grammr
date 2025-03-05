@@ -6,6 +6,7 @@ on:
     paths:
       - 'charts/multi-inflection/**'
       - 'sidecars/multi-inflection/**'
+  workflow_dispatch:
 
 jobs:
   build_multi_inflection_sidecar:
