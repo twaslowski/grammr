@@ -1,4 +1,4 @@
-{{ range $languageCode := $.Values.languageCodes }}
+{{ range $languageCode := $.Values.multiInflection.languageCodes }}
 ---
 apiVersion: apps/v1
 kind: Deployment

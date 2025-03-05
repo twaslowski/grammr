@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - src/**
+      - charts/grammr/**
+      - charts/values/**
+      - pom.xml
+      - Dockerfile
+      - .github/workflows/deploy_core.yml
 
 jobs:
   compile_and_test:
