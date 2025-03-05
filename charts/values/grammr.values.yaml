@@ -1,0 +1,62 @@
+languages:
+  - code: ru
+    model: ru_core_news_sm
+    morphology:
+      enabled: true
+      host: "morphology-ru.grammr.svc.cluster.local"
+      port: 8000
+    inflection:
+      enabled: true
+      host: "inflection-ru.grammr.svc.cluster.local"
+      port: 8000
+      repository: tobiaswaslowski/grammr-inflection-ru
+  - code: de
+    model: de_core_news_sm
+    morphology:
+      enabled: true
+      host: "morphology-de.grammr.svc.cluster.local"
+      port: 8000
+    inflection:
+      enabled: false
+  - code: en
+    model: en_core_web_sm
+    morphology:
+      enabled: true
+      host: "morphology-en.grammr.svc.cluster.local"
+      port: 8000
+    inflection:
+      enabled: false
+  - code: it
+    model: it_core_news_sm
+    morphology:
+      enabled: true
+      host: "morphology-it.grammr.svc.cluster.local"
+      port: 8000
+    inflection:
+      enabled: false
+  - code: es
+    model: es_core_news_sm
+    morphology:
+      enabled: true
+      host: "morphology-es.grammr.svc.cluster.local"
+      port: 8000
+    inflection:
+      enabled: false
+  - code: pt
+    model: pt_core_news_sm
+    morphology:
+      enabled: true
+      host: "morphology-pt.grammr.svc.cluster.local"
+      port: 8000
+    inflection:
+      enabled: false
+  - code: fr
+    model: fr_core_news_sm
+    morphology:
+      enabled: true
+      host: "morphology-fr.grammr.svc.cluster.local"
+      port: 8000
+    inflection:
+      enabled: false
+
+allowedOrigin: "https://grmmr.vercel.app"

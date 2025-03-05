@@ -5,25 +5,25 @@ on:
     branches:
       - main
     paths:
-      - 'charts/multi-inflection/**'
-      - 'sidecars/multi-inflection/**'
+      - 'charts/morphology/**'
+      - 'sidecars/morphology/**'
       - '.github/workflows/build_sidecar.yml'
-      - '.github/workflows/deploy_multi_inflection.yaml'
+      - '.github/workflows/deploy_morphology.yaml'
 
 jobs:
-  build_multi_inflection_sidecar:
+  build_morphology_sidecar:
     uses: ./.github/workflows/build_sidecar.yml
     secrets:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     with:
-      directory: "./sidecars/multi-inflection"
-      image_name: "tobiaswaslowski/grammr-multi-inflection"
+      directory: "./sidecars/morphology"
+      image_name: "tobiaswaslowski/grammr-morphology"
 
   deploy:
     runs-on: self-hosted
     needs:
-      - build_multi_inflection_sidecar
+      - build_morphology_sidecar
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,7 +31,8 @@ jobs:
       - name: deploy
         run: |
           helm upgrade --install \
-            --namespace grammr --create-namespace \
+            --namespace grammr --create-namespace \ 
+            --values ./charts/values/prod.morphology.values.yaml \
             --wait --timeout 600s \
-            multi-inflection ./charts/multi-inflection
+            morphology ./charts/morphology
         

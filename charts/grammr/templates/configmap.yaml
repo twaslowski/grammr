@@ -5,4 +5,4 @@ metadata:
 data:
   languages.yml: |
     languages:
-      {{ toYaml .Values.global.languages | nindent 6 }}
+      {{ toYaml .Values.languages | nindent 6 }}

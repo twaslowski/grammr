@@ -50,17 +50,6 @@ app.kubernetes.io/name: {{ include "lingolift-core.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "lingolift-core.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "lingolift-core.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
-
 {{- define "utils.secret.keepOrCreate" -}}
 {{- /*
     Template function to lookup a secret value or generate a new one if it doesn't exist.

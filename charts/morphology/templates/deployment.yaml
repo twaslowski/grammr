@@ -1,4 +1,4 @@
-{{- range $.Values.global.languages }}
+{{- range $.Values.languages }}
 {{- if .morphology.enabled }}
 ---
 apiVersion: apps/v1
@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: {{ include "morphology.fullname" $ }}-{{ .code }}
-          image: "{{ $.Values.image.repository }}:{{ $.Values.global.image.tag }}"
+          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
           ports:
             - containerPort: 8000
           env:

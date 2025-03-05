@@ -1,4 +1,4 @@
-{{ range $.Values.global.languages }}
+{{ range $.Values.languages }}
 {{ if .morphology.enabled }}
 ---
 apiVersion: v1

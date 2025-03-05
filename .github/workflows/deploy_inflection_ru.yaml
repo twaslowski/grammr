@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'charts/multi-inflection/**'
-      - 'sidecars/multi-inflection/**'
+      - 'charts/inflection-ru/**'
+      - 'sidecars/inflection-ru/**'
       - '.github/workflows/build_sidecar.yml'
       - '.github/workflows/deploy_multi_inflection.yaml'
 
@@ -17,8 +17,8 @@ jobs:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     with:
-      directory: "./sidecars/multi-inflection"
-      image_name: "tobiaswaslowski/grammr-multi-inflection"
+      directory: "./sidecars/inflection-ru"
+      image_name: "tobiaswaslowski/grammr-inflection-ru"
 
   deploy:
     runs-on: self-hosted
@@ -33,5 +33,5 @@ jobs:
           helm upgrade --install \
             --namespace grammr --create-namespace \
             --wait --timeout 600s \
-            multi-inflection ./charts/multi-inflection
+            inflection-ru ./charts/inflection-ru
         
