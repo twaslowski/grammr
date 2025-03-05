@@ -51,5 +51,4 @@ jobs:
         run: |
           helm upgrade --install \
             --namespace grammr --create-namespace \
-            --wait --timeout 600s \
             inflection-ru ./charts/inflection-ru

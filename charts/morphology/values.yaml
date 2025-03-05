@@ -28,6 +28,12 @@ readinessProbe:
     path: /health
     port: 8000
   initialDelaySeconds: 60
+startupProbe:
+  httpGet:
+    path: /health
+    port: 8000
+  failureThreshold: 30
+  periodSeconds: 20
 
 imagePullSecrets: [ ]
 nameOverride: ""
