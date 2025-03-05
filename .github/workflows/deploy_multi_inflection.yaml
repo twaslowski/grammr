@@ -18,16 +18,17 @@ jobs:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     with:
       directory: "./sidecars/multi-inflection"
-      image_name: "tobiaswaslowski/multi-inflection"
+      image_name: "tobiaswaslowski/grammr-multi-inflection"
 
   deploy:
     runs-on: self-hosted
     needs:
       - build_multi_inflection_sidecar
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: deploy
-        uses: 'deliverybot/helm@v1'
-        with:
-          release: 'multi-inflection'
-          namespace: 'grammr'
-          chart: './charts/multi-inflection'
+        run: |
+          helm upgrade --install --namespace grammr multi-inflection ./charts/multi-inflection
+        
