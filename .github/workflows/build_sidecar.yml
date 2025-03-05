@@ -43,6 +43,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Derive and store version
+        id: version
+        run: |
+          echo "VERSION=$(cd ${{ inputs.directory }} && poetry version -s)" >> $GITHUB_ENV
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -55,11 +63,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: derive version
-        id: version
-        run: |
-          echo "VERSION=$(cd ${{ inputs.directory }} && poetry version -s)" >> $GITHUB_ENV
-
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -67,7 +70,7 @@ jobs:
           file:  ${{ inputs.directory }}/docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ inputs.image_name }}/${{ env.VERSION }}
+          tags: ${{ inputs.image_name }}:${{ env.VERSION }}
           labels: ${{ steps.docker-metadata.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
