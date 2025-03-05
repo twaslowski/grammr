@@ -1,4 +1,4 @@
-name: Deploy multi-languge inflection image
+name: Build and deploy morphology
 on:
   workflow_dispatch:
   push:

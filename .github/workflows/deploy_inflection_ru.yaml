@@ -1,4 +1,4 @@
-name: Deploy multi-languge inflection image
+name: Build and deploy russian inflections
 on:
   workflow_dispatch:
   push:
@@ -34,4 +34,3 @@ jobs:
             --namespace grammr --create-namespace \
             --wait --timeout 600s \
             inflection-ru ./charts/inflection-ru
-        

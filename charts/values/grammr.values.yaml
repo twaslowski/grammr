@@ -33,7 +33,9 @@ languages:
       host: "morphology-it.grammr.svc.cluster.local"
       port: 8000
     inflection:
-      enabled: false
+      enabled: true
+      host: "inflection-it.grammr.svc.cluster.local"
+      port: 8000
   - code: es
     model: es_core_news_sm
     morphology:
@@ -41,7 +43,9 @@ languages:
       host: "morphology-es.grammr.svc.cluster.local"
       port: 8000
     inflection:
-      enabled: false
+      enabled: true
+      host: "inflection-es.grammr.svc.cluster.local"
+      port: 8000
   - code: pt
     model: pt_core_news_sm
     morphology:
@@ -49,7 +53,9 @@ languages:
       host: "morphology-pt.grammr.svc.cluster.local"
       port: 8000
     inflection:
-      enabled: false
+      enabled: true
+      host: "inflection-pt.grammr.svc.cluster.local"
+      port: 8000
   - code: fr
     model: fr_core_news_sm
     morphology:
@@ -57,6 +63,11 @@ languages:
       host: "morphology-fr.grammr.svc.cluster.local"
       port: 8000
     inflection:
-      enabled: false
+      enabled: true
+      host: "inflection-fr.grammr.svc.cluster.local"
+      port: 8000
+
+multiInflection:
+  languageCodes: ["it", "es", "pt", "fr"]
 
 allowedOrigin: "https://grmmr.vercel.app"
