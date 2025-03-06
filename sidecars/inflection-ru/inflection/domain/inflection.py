@@ -1,6 +1,5 @@
-from pydantic import BaseModel
-
 from inflection.domain.feature import Feature
+from pydantic import BaseModel
 
 
 class Inflection(BaseModel):

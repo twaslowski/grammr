@@ -15,3 +15,7 @@ def retrieve_features() -> list[set[Feature]]:
         {Person.SECOND, Number.PLUR},
         {Person.THIRD, Number.PLUR},
     ]
+
+
+def is_word_inflectable(part_of_speech: str) -> bool:
+    return part_of_speech == "VERB"

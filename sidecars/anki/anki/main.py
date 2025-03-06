@@ -23,7 +23,9 @@ def create_deck(deck_data: Deck):
     temp_file_path = temp_file.name
 
     return FileResponse(
-        temp_file_path, filename=f"{deck_data.name}.apkg", media_type="application/octet-stream"
+        temp_file_path,
+        filename=f"{deck_data.name}.apkg",
+        media_type="application/octet-stream",
     )
 
 

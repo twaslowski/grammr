@@ -1,4 +1,8 @@
-from inflection.domain.feature import Person, Number
+import pytest
+from fastapi import HTTPException
+from inflection.domain.feature import Number, Person
+from inflection.domain.inflection_request import InflectionRequest
+from inflection.main import _check_processable
 from inflection.service import feature_retriever
 
 
@@ -43,3 +47,11 @@ def test_should_return_none_if_enum_entry_not_available():
     value = "foo"
     result = feature_retriever._get_enum_member(Person, value)
     assert result is None
+
+
+def test_should_raise_http_exception_for_adverb():
+    request = InflectionRequest(partOfSpeechTag="ADV", lemma="test")
+    with pytest.raises(HTTPException) as exc_info:
+        _check_processable(request)
+    assert exc_info.value.status_code == 422
+    assert exc_info.value.detail == "part-of-speech cannot be processed"

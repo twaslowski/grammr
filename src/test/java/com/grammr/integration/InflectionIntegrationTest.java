@@ -60,6 +60,7 @@ public class InflectionIntegrationTest extends IntegrationTestBase {
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value("Inflections are not available for pronouns in Russian"))
         .andReturn();
   }
 
@@ -78,6 +79,7 @@ public class InflectionIntegrationTest extends IntegrationTestBase {
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value("Inflections are not available in English"))
         .andReturn();
   }
 }

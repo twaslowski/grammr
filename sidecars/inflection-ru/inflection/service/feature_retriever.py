@@ -1,7 +1,7 @@
 from itertools import product
 from typing import Iterable
 
-from inflection.domain.feature import Person, Number, Case, Gender, Tense, Feature
+from inflection.domain.feature import Case, Feature, Gender, Number, Person, Tense
 
 
 def retrieve_features(part_of_speech: str) -> list[set[str]]:
@@ -28,6 +28,10 @@ def map_to_standardized_features(features: set) -> set[Feature]:
     :return:
     """
     return {feature for feature in map(_get_feature, features) if feature is not None}
+
+
+def is_word_inflectable(part_of_speech: str) -> bool:
+    return True if part_of_speech in ["NOUN", "ADJ", "VERB", "AUX"] else False
 
 
 def _get_feature(value: str) -> Feature | None:

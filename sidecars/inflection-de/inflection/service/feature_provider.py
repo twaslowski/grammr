@@ -1,7 +1,6 @@
 from itertools import product
 
-from inflection.domain.feature import Number, Case, Person, Feature, Gender, \
-  Tense
+from inflection.domain.feature import Number, Case, Person, Feature, Gender, Tense
 
 
 def provide_features(part_of_speech: str) -> list[dict]:

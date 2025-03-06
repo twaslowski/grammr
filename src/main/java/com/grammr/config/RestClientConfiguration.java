@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestClient;
@@ -24,5 +25,6 @@ public class RestClientConfiguration {
   private void customizeConverters(List<HttpMessageConverter<?>> converters) {
     converters.clear();
     converters.add(mappingJackson2HttpMessageConverter);
+    converters.add(new ByteArrayHttpMessageConverter());
   }
 }

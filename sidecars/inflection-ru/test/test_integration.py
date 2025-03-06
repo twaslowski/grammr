@@ -1,5 +1,4 @@
-from inflection.service import inflector
-from inflection.service import feature_retriever
+from inflection.service import feature_retriever, inflector
 
 
 def test_should_perform_full_inflection_for_verb():

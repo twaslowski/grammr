@@ -1,10 +1,9 @@
 import logging
 
 import pymorphy3
-from pymorphy3.analyzer import Parse
-from inflection.service import feature_retriever
-
 from inflection.domain.inflection import Inflection
+from inflection.service import feature_retriever
+from pymorphy3.analyzer import Parse
 
 morph = pymorphy3.MorphAnalyzer()
 
