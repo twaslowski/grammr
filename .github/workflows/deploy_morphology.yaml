@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'charts/morphology/**'
+      - 'charts/values/**'
       - 'sidecars/morphology/**'
       - '.github/workflows/build_sidecar.yml'
       - '.github/workflows/deploy_morphology.yaml'
