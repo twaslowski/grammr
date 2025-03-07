@@ -5,17 +5,18 @@ import lombok.Builder;
 
 @Builder
 public record Token(
+    long index,
     String text,
     TokenTranslation translation,
     TokenMorphology morphology
 ) {
 
-  public static Token fromString(String text) {
-    return new Token(text, null, null);
+  public static Token fromString(String text, long index) {
+    return new Token(index, text, null, null);
   }
 
   public Token withTranslation(TokenTranslation tokenTranslation) {
-    return new Token(text, tokenTranslation, morphology);
+    return new Token(index, text, tokenTranslation, morphology);
   }
 
   public String lemma() {
@@ -27,6 +28,6 @@ public record Token(
   }
 
   public Token withMorphology(TokenMorphology morphology) {
-    return new Token(text, translation, morphology);
+    return new Token(index, text, translation, morphology);
   }
 }

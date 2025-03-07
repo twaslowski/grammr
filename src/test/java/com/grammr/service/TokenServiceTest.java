@@ -16,17 +16,23 @@ class TokenServiceTest {
   @Test
   void shouldCreateAndPopulateToken() {
     var morphologicalAnalysis = MorphologicalAnalysisSpec.valid().build();
-    List<TokenTranslation> translations = List.of(new TokenTranslation("hola", "hello", false));
+    List<TokenTranslation> translations = List.of(
+        new TokenTranslation(1, "hola", "hello", false),
+        new TokenTranslation(2, "mundo", "world", false),
+        new TokenTranslation(3, "hola", "hello again!", false)
+    );
 
     var tokens = List.of(
-        Token.fromString("hola"),
-        Token.fromString("mundo")
+        Token.fromString("hola", 1),
+        Token.fromString("mundo", 2),
+        Token.fromString("hola", 3)
     );
 
     var enrichedTokens = tokenService.enrichTokens(tokens, translations, morphologicalAnalysis);
-    assertThat(enrichedTokens).hasSize(2);
+    assertThat(enrichedTokens).hasSize(3);
 
     assertThat(enrichedTokens.getFirst().translation().getTranslation()).isEqualTo("hello");
+    assertThat(enrichedTokens.getLast().translation().getTranslation()).isEqualTo("hello again!");
   }
 
   @Test
@@ -35,8 +41,8 @@ class TokenServiceTest {
     var analysis = MorphologicalAnalysisSpec.valid().build();
 
     var tokens = List.of(
-        Token.fromString("hello"),
-        Token.fromString("world")
+        Token.fromString("hello", 1),
+        Token.fromString("world",2)
     );
 
     var enrichedTokens = tokenService.enrichTokens(tokens, translations, analysis);

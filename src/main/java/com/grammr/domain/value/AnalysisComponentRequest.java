@@ -41,13 +41,4 @@ public class AnalysisComponentRequest {
         .tokens(tokens)
         .build();
   }
-
-  public AnalysisComponentRequest reverseLanguages() {
-    return AnalysisComponentRequest.builder()
-        .phrase(phrase)
-        .sourceLanguage(targetLanguage)
-        .targetLanguage(sourceLanguage)
-        .tokens(tokens)
-        .build();
-  }
 }

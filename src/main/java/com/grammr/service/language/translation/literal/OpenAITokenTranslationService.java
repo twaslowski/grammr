@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.common.MessageUtil;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.ExampleValues;
+import com.grammr.domain.value.language.Token;
 import com.grammr.domain.value.language.TokenTranslation;
 import com.grammr.service.language.AbstractOpenAIService;
 import io.github.sashirestela.openai.SimpleOpenAI;
@@ -31,8 +32,11 @@ public class OpenAITokenTranslationService extends AbstractOpenAIService {
     super(objectMapper, openAI, messageUtil, modelName);
   }
 
-  public CompletableFuture<TokenTranslation> createTranslation(String phrase, String word, LanguageCode targetLanguage) {
-    return openAIChatCompletion(generateUserMessage(phrase, word, targetLanguage), TokenTranslation.class);
+  public TokenTranslation createTranslation(String phrase, Token token, LanguageCode targetLanguage) {
+    var completionFuture = openAIChatCompletion(generateUserMessage(phrase, token.text(), targetLanguage), TokenTranslation.class);
+    var tokenTranslation = completionFuture.join();
+    tokenTranslation.setIndex(token.index());
+    return tokenTranslation;
   }
 
   protected UserMessage generateUserMessage(String phrase, String token, LanguageCode targetLanguage) {

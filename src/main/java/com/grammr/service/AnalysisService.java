@@ -22,8 +22,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AnalysisService {
 
-  private static final int MAX_TOKENS = 15;
-
   private final ExecutorService executorService = Executors.newCachedThreadPool();
   private final SemanticTranslationService semanticTranslationService;
   private final LanguageRecognitionService languageRecognitionService;
@@ -38,6 +36,7 @@ public class AnalysisService {
    * @param analysisRequest AnalysisRequest object containing the source phrase and user languages.
    * @return FullAnalysis object containing translation and enriched tokens.
    */
+
   public FullAnalysis simpleAnalyze(AnalysisRequest analysisRequest) {
     var sourcePhrase = analysisRequest.phrase();
     var tokens = tokenService.tokenize(sourcePhrase);

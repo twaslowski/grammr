@@ -4,6 +4,7 @@ import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.language.LiteralTranslation;
 import com.grammr.domain.value.language.Token;
 import io.micrometer.core.annotation.Timed;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -15,31 +16,34 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OpenAILiteralTranslationService implements LiteralTranslationService {
 
+  private static final int MAX_TOKENS = 15;
+
   private final OpenAITokenTranslationService openAITokenTranslationService;
 
   @Override
   @Timed("analysis.literal_translation")
   public LiteralTranslation createAnalysisComponent(AnalysisComponentRequest request) {
-    var words = request.getTokens().stream()
-        .map(Token::text)
-        .map(String::toLowerCase)
-        .distinct()
+    if (request.getTokens().size() > MAX_TOKENS) {
+      return LiteralTranslation.builder()
+          .sourcePhrase(request.getPhrase())
+          .tokenTranslations(List.of())
+          .build();
+    }
+
+    log.info("Performing translations for {} tokens", request.getTokens().size());
+
+    var completableFutures = request.getTokens().stream()
+        .map(token -> CompletableFuture.supplyAsync(() -> openAITokenTranslationService.createTranslation(request.getPhrase(), token, request.getTargetLanguage())))
         .toList();
 
-    log.info("Translating {} unique words: {}", words.size(), words);
-    var translationFutures = words.stream()
-        .map(word -> openAITokenTranslationService.createTranslation(request.getPhrase(), word, request.getTargetLanguage()))
-        .toList();
-
-    var translatedTokens = translationFutures.stream()
+    var tokenTranslations = completableFutures.stream()
         .parallel()
         .map(CompletableFuture::join)
         .collect(Collectors.toList());
 
-    log.info("Retrieved translated analyzedTokens: {}", translatedTokens);
     return LiteralTranslation.builder()
         .sourcePhrase(request.getPhrase())
-        .tokenTranslations(translatedTokens)
+        .tokenTranslations(tokenTranslations)
         .build();
   }
 }

@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TokenTranslation extends AIGeneratedContent {
 
+  // The index maps to a Token
+  private long index;
   private String source;
   private String translation;
   private boolean ambiguous;

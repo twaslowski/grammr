@@ -20,8 +20,8 @@ public class CustomExceptionHandler {
   }
 
   @ExceptionHandler(InflectionNotAvailable.class)
-  public final ResponseEntity<ErrorResponse> handleExceptionError(Exception ex) {
-    return new ResponseEntity<>(ErrorResponse.withMessage(ex.getMessage()), HttpStatus.BAD_REQUEST);
+  public final ResponseEntity<ErrorResponse> handleInflectionNotAvailable(Exception ex) {
+    return new ResponseEntity<>(ErrorResponse.withMessage(ex.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
   }
 
   @ExceptionHandler(Exception.class)

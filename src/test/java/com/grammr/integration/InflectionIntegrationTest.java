@@ -59,7 +59,7 @@ public class InflectionIntegrationTest extends IntegrationTestBase {
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/inflection")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
-        .andExpect(status().isBadRequest())
+        .andExpect(status().isUnprocessableEntity())
         .andExpect(jsonPath("$.message").value("Inflections are not available for pronouns in Russian"))
         .andReturn();
   }
@@ -78,7 +78,7 @@ public class InflectionIntegrationTest extends IntegrationTestBase {
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/inflection")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
-        .andExpect(status().isBadRequest())
+        .andExpect(status().isUnprocessableEntity())
         .andExpect(jsonPath("$.message").value("Inflections are not available in English"))
         .andReturn();
   }
