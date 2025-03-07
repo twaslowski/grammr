@@ -40,6 +40,9 @@ openai:
   transcription:
     model: whisper-1
     verbose: false
+  tts:
+    model: tts-1
+    voice: nova
 
 grammr:
   anki:

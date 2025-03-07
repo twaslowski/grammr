@@ -23,7 +23,7 @@ public class MorphologyService implements AnalysisComponentProvider {
     var analysis = analysisPort.performAnalysis(
         MorphologicalAnalysisRequest.from(request.getPhrase(), request.getSourceLanguage())
     );
-    log.info("Analysis for phrase '{}' is: {}", request.getPhrase(), analysis);
+    log.info("Successfully retrieved morphology for phrase '{}'", request.getPhrase());
     return analysis;
   }
 }

@@ -35,7 +35,7 @@ public abstract class AbstractOpenAIService {
       String content = response.firstContent();
       var parsed = readSafe(content, responseType);
       enrichWithTokenUsage(parsed, response);
-      log.info("{} produced response from OpenAI: {}", userMessage.getContent(), content);
+      log.debug("{} produced response from OpenAI: {}", userMessage.getContent(), content);
       return parsed;
     }).exceptionally(e -> {
       log.error("Failed to get response from OpenAI", e);
