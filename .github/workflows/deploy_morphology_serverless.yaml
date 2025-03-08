@@ -30,18 +30,32 @@ jobs:
       - name: Parse YAML and create build matrix
         id: set-matrix
         run: |
-          pip install pyyaml
-          export MATRIX=$(python ./sidecars/morphology/docker/image_generation_helper.py)
-          echo "Generated matrix for building images: $MATRIX"
-          echo "matrix=$MATRIX" | tee -a "$GITHUB_OUTPUT"
+          # pip install pyyaml
+          # export MATRIX=$(python ./sidecars/morphology/docker/image_generation_helper.py)
+          # echo "Generated matrix for building images: $MATRIX"
+          # echo "matrix=$MATRIX" | tee -a "$GITHUB_OUTPUT"
+          echo "matrix={\"include\":[{\"code\":\"ru\",\"model\":\"ru_core_news_md\"},{\"code\":\"de\",\"model\":\"de_core_news_sm\"},{\"code\":\"en\",\"model\":\"en_core_web_sm\"},{\"code\":\"it\",\"model\":\"it_core_news_md\"},{\"code\":\"es\",\"model\":\"es_core_news_sm\"},{\"code\":\"pt\",\"model\":\"pt_core_news_md\"},{\"code\":\"fr\",\"model\":\"fr_core_news_sm\"}]}" >> $GITHUB_OUTPUT
 
   build:
     needs: prepare
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        language: ${{ fromJson(needs.prepare.outputs.matrix) }}
-      # Allow other jobs to continue even if one fails
+        include:
+          - code: "ru"
+            model: "ru_core_news_md"
+          - code: "de"
+            model: "de_core_news_sm"
+          - code: "en"
+            model: "en_core_web_sm"
+          - code: "it"
+            model: "it_core_news_md"
+          - code: "es"
+            model: "es_core_news_sm"
+          - code: "pt"
+            model: "pt_core_news_md"
+          - code: "fr"
+            model: "fr_core_news_sm"
       fail-fast: false
 
     steps:
