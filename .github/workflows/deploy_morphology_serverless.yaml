@@ -1,4 +1,4 @@
-name: Build Docker Images
+name: Build AWS Lambda Docker images
 
 on:
   pull_request:
@@ -8,8 +8,8 @@ on:
     branches: [main]
     paths:
       - 'config.yaml'
-      - 'Dockerfile'
-      - '.github/workflows/build-images.yml'
+      - 'sidecars/morphology/**'
+      - '.github/workflows/deploy_morphology_serverless.yaml'
   workflow_dispatch:
 
 jobs:
@@ -22,16 +22,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
       - name: Parse YAML and create build matrix
         id: set-matrix
         run: |
-          # Install yq for YAML parsing
-          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
-          sudo chmod +x /usr/local/bin/yq
-          
-          MATRIX=$(yq eval -o=json '.languages' config.yaml)
-          echo "matrix=${MATRIX}" >> $GITHUB_OUTPUT
-          echo "Generated matrix: ${MATRIX}"
+          pip install pyyaml
+          export MATRIX=$(python ./sidecars/morphology/docker/image_generation_helper.py)
+          echo "Generated matrix for building images: $MATRIX"
+          echo "matrix=$MATRIX" | tee -a "$GITHUB_OUTPUT"
 
   build:
     needs: prepare
