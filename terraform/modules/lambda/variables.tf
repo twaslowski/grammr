@@ -23,3 +23,11 @@ variable "timeout" {
   type    = number
   default = 15
 }
+
+variable "root_resource_id" {
+  type = string
+}
+
+variable "api_gateway_id" {
+  type = string
+}

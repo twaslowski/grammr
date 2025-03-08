@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - 'config.yaml'
       - 'charts/inflection-ru/**'
       - 'sidecars/inflection-ru/**'
       - '.github/workflows/build_sidecar.yml'

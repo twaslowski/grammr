@@ -1,9 +1,9 @@
 import os
 import spacy
 
-from analysis.service.token_mapper import from_spacy_token
-from analysis.domain.analysis_request import AnalysisRequest
-from analysis.domain.morphological_analysis import (
+from morphology.service.token_mapper import from_spacy_token
+from morphology.domain.analysis_request import AnalysisRequest
+from morphology.domain.morphological_analysis import (
     MorphologicalAnalysis,
 )
 

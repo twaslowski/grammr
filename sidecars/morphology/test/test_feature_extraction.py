@@ -1,6 +1,6 @@
 import spacy
 
-from analysis.service import feature_extraction
+from morphology.service import feature_extraction
 
 nlp = spacy.load("de_core_news_sm")
 

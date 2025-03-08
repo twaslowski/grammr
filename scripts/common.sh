@@ -25,7 +25,7 @@ function deploy() {
   helm upgrade --install \
     --set openai_api_key="$OPENAI_API_KEY" \
     --set image.tag="$TAG" \
-    --values ./charts/values/grammr.values.yaml \
+    --values config.yaml \
     --namespace grammr --create-namespace \
     --wait --timeout "$HELM_TIMEOUT" \
     grammr-core ./charts/grammr

@@ -7,32 +7,25 @@ ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_CREATE=1 \
     POETRY_CACHE_DIR=/tmp/poetry_cache
 
-ARG PREBUILD_WITH_MODEL
-
 WORKDIR /app
 
 COPY pyproject.toml poetry.lock ./
 
-RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
+RUN poetry export -f requirements.txt -o requirements.txt && \
+    pip install -r requirements.txt --target ${LAMBDA_TASK_ROOT} && \
+    rm -rf $POETRY_CACHE_DIR
 
-# Use the official Python image from the Docker Hub
-FROM python:3.12-slim
 
-# Set up dependencies
-ENV VIRTUAL_ENV=/app/.venv \
-    PATH="/app/.venv/bin:$PATH"
+FROM public.ecr.aws/lambda/python:3.12
 
-COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+ARG SPACY_MODEL
 
-ENV APP_DIR=/app
+COPY --from=builder ${LAMBDA_TASK_ROOT}/ ${LAMBDA_TASK_ROOT}/
 
-COPY analysis/ ${APP_DIR}/analysis
-COPY docker/init.sh ${APP_DIR}/init.sh
+COPY morphology/ ${LAMBDA_TASK_ROOT}/morphology/
+COPY morphology/lambda_handler.py ${LAMBDA_TASK_ROOT}/
 
-ENV SPACY_MODEL=""
+RUN python -m spacy download ${SPACY_MODEL}
+ENV SPACY_MODEL=${SPACY_MODEL}
 
-EXPOSE 8000
-WORKDIR ${APP_DIR}
-
-# Command to run the FastAPI server
-CMD [ "lambda_function.handler" ]
+CMD [ "lambda_handler.handler" ]

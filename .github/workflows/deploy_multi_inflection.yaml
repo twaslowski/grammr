@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - 'config.yaml'
       - 'charts/multi-inflection/**'
       - 'sidecars/multi-inflection/**'
       - '.github/workflows/build_sidecar.yml'
@@ -53,6 +54,6 @@ jobs:
           helm upgrade --install \
             --namespace grammr --create-namespace \
             --wait --timeout 600s \
-            --values ./charts/values/grammr.values.yaml \
+            --values config.yaml \
             multi-inflection ./charts/multi-inflection
         

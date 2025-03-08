@@ -23,7 +23,7 @@ The aim of this project is to create a unified API to provide several tools for 
 across multiple languages:
 
 - Translations of texts, including the literal translations of individual words
-- Morphological analysis of words, including their part-of-speech tags and features
+- Morphological morphology of words, including their part-of-speech tags and features
 - Inflection (conjugation and declension) of words
 - Anki Flashcard export to make learning easier
 
@@ -38,10 +38,10 @@ tool that can be arbitrarily extended for different languages.
 
 - Translation of texts.
 - Literal translations for each word in a text.
-- Morphological analysis of each word in a text.
+- Morphological morphology of each word in a text.
 - Creation of inflections for words.
 
-The morphological analysis is done using [spaCy](https://spacy.io/), and contains the following information for each word:
+The morphological morphology is done using [spaCy](https://spacy.io/), and contains the following information for each word:
 
 - The part of speech (POS) of a word.
 - The features of a word, including the Case, Number, Gender, Tense, Person, depending on word type,
@@ -78,7 +78,7 @@ should not be tied to the main application.
 
 Listed here are projects that I am either using or would consider integrating into this project.
 
-- [spaCy](https://spacy.io/): Morphological analysis for a variety of languages.
+- [spaCy](https://spacy.io/): Morphological morphology for a variety of languages.
 - [pymorphy3](https://github.com/no-plagiarism/pymorphy3): Fork of the currently unmaintained [pymorphy2](https://github.com/pymorphy2/pymorphy2).
 Provides inflections for Russian.
 
@@ -152,7 +152,7 @@ tokens: `(Ich, I)`, `(bin, am)`, `(ein, a)`, `(Student, student)`.
 phrases. These processes return Sets of `TokenTranslations` and `TokenMorphology` respectively,
 which are coalesced into `Tokens` that ultimately make up a `Phrase`.
 Therefore, a `Analysis` consists of a set of `Tokens` holding their literal translation
-and grammatical analysis, as well as the semantic translation of the phrase.
+and grammatical morphology, as well as the semantic translation of the phrase.
 
 ### Part of Speech & Features
 

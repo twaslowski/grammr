@@ -12,6 +12,9 @@ module "lambda" {
 
   cloudwatch_logs_retention_in_days = 14
 
+  # https://github.com/terraform-aws-modules/terraform-aws-lambda/issues/36#issuecomment-650217274
+  create_current_version_allowed_triggers = false
+
   timeout          = var.timeout
   allowed_triggers = local.allowed_triggers
 
@@ -40,6 +43,10 @@ resource "aws_cloudwatch_event_target" "keep_warm" {
 
 locals {
   allowed_triggers = {
+    apigateway = {
+      service    = "apigateway"
+      source_arn = "arn:aws:execute-api:eu-central-1:${data.aws_caller_identity.current.account_id}:*"
+    },
     events = {
       service    = "events"
       source_arn = "arn:aws:events:eu-central-1:${data.aws_caller_identity.current.account_id}:rule/*"

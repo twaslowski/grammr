@@ -1,9 +1,9 @@
 import json
 import logging
 
-from analysis.domain.analysis_request import AnalysisRequest
-from analysis.service import analysis_service
-from analysis.lambda_util import ok, check_pre_warm
+from morphology.domain.analysis_request import AnalysisRequest
+from morphology.service import analysis_service
+from morphology.lambda_util import ok, check_pre_warm
 
 
 """
@@ -18,11 +18,11 @@ logger = logging.getLogger("root")
 logger.setLevel(logging.INFO)
 
 
-def syntactical_analysis_handler(event, _) -> dict:
+def handler(event, _) -> dict:
+    logger.info(event)
     if pre_warm_response := check_pre_warm(event):
         return pre_warm_response
     body = AnalysisRequest(**json.loads(event.get("body")))
     logger.info(f"Received sentence, language: {body.phrase}")
     analysis = analysis_service.perform_analysis(body)
     return ok(analysis.model_dump())
-
