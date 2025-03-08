@@ -1,4 +1,4 @@
-from analysis.domain.morphological_analysis import Feature
+from morphology.domain.morphological_analysis import Feature
 from spacy.tokens import Token
 
 

@@ -1,7 +1,7 @@
 from spacy.tokens import Token
 
-from analysis.domain.morphological_analysis import TokenMorphology
-from analysis.service.feature_extraction import extract_features
+from morphology.domain.morphological_analysis import TokenMorphology
+from morphology.service.feature_extraction import extract_features
 
 
 def from_spacy_token(token: Token) -> TokenMorphology:

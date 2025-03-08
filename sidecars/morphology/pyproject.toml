@@ -1,12 +1,13 @@
 [tool.poetry]
-name = "analysis"
-version = "0.1.0"
+name = "morphology"
+version = "0.2.0"
 description = ""
 authors = ["Tobias Waslowski <tobiaswaslowski@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
+# todo: i know this was required for SOME compatibility reasons. figure out the specifics.
 spacy = "3.7.0"
 uvicorn = "^0.32.0"
 fastapi = "^0.115.4"

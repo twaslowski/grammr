@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'charts/morphology/**'
-      - 'charts/values/**'
+      - 'config.yaml'
       - 'sidecars/morphology/**'
       - '.github/workflows/build_sidecar.yml'
       - '.github/workflows/deploy_morphology.yaml'
@@ -51,6 +51,6 @@ jobs:
       - name: deploy
         run: |
           helm upgrade --install --namespace grammr \
-            --values charts/values/grammr.values.yaml --wait --timeout 600s \
+            --values config.yaml --wait --timeout 600s \
             morphology ./charts/morphology
         
