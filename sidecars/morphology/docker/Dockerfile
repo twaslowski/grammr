@@ -32,7 +32,7 @@ COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 ENV APP_DIR=/app
 
-COPY analysis/ ${APP_DIR}/morphology
+COPY morphology/ ${APP_DIR}/morphology
 COPY docker/init.sh ${APP_DIR}/init.sh
 
 ENV SPACY_MODEL=""
