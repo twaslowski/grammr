@@ -1,4 +1,4 @@
-package com.grammr.port.inbound;
+package com.grammr.port.dto;
 
 public record ErrorResponse(
     String message

@@ -39,6 +39,14 @@ public class OpenAITokenTranslationService extends AbstractOpenAIService {
     return tokenTranslation;
   }
 
+  public TokenTranslation createTranslationForSingleWord(String phrase, String word, LanguageCode targetLanguage) {
+    var completionFuture = openAIChatCompletion(generateUserMessage(phrase, word, targetLanguage), TokenTranslation.class);
+    var tokenTranslation = completionFuture.join();
+    tokenTranslation.setIndex(-1);
+    return tokenTranslation;
+  }
+
+
   protected UserMessage generateUserMessage(String phrase, String token, LanguageCode targetLanguage) {
     return UserMessage.of(messageUtil.parameterizeMessage(
         "openai.translation.literal.prompt.user",

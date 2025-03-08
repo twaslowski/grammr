@@ -72,7 +72,7 @@ public class SpringSecurityConfiguration {
   private void configureRestAuthorizations(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorizationRegistry) {
     authorizationRegistry
         .requestMatchers("/actuator/*").permitAll()
-        .requestMatchers("/api/v1/*").permitAll()
+        .requestMatchers("/api/v1/**").permitAll()
         .requestMatchers("/api/v1/anki/*").authenticated()
         .anyRequest().authenticated();
   }
