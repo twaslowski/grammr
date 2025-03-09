@@ -95,7 +95,7 @@ jobs:
           provenance: false
           context: sidecars/morphology/
           file: sidecars/morphology/docker/lambda.Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: true
