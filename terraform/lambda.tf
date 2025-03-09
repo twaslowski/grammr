@@ -1,4 +1,4 @@
-module "morphology" {
+module "morphology_lambda" {
   source = "./modules/lambda"
 
   for_each = {

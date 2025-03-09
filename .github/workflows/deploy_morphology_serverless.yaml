@@ -104,7 +104,7 @@ jobs:
             SPACY_MODEL=${{ matrix.model }}
 
   deploy:
-    needs: build
+    needs: [ prepare, build ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -123,6 +123,8 @@ jobs:
 
       - name: Deploy Terraform
         working-directory: terraform
+        env:
+          TF_VAR_morphology_image_version: ${{ needs.prepare.outputs.version }}
         run: |
-          terraform init
-          terraform plan
+          terraform init -backend-config=config/dev.hcl
+          terraform apply -auto-approve
