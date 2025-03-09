@@ -56,19 +56,19 @@ jobs:
       matrix:
         include:
           - code: "ru"
-            model: "ru_core_news_md"
+            model: "ru_core_news_lg"
           - code: "de"
-            model: "de_core_news_sm"
+            model: "de_core_news_lg"
           - code: "en"
-            model: "en_core_web_sm"
+            model: "en_core_web_lg"
           - code: "it"
-            model: "it_core_news_md"
+            model: "it_core_news_lg"
           - code: "es"
-            model: "es_core_news_sm"
+            model: "es_core_news_lg"
           - code: "pt"
-            model: "pt_core_news_md"
+            model: "pt_core_news_lg"
           - code: "fr"
-            model: "fr_core_news_sm"
+            model: "fr_core_news_lg"
       fail-fast: false
 
     steps:
@@ -91,6 +91,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
+          # required for ECR, see: https://github.com/serverless/serverless/issues/12808
+          provenance: false
           context: sidecars/morphology/
           file: sidecars/morphology/docker/lambda.Dockerfile
           platforms: linux/amd64,linux/arm64
@@ -100,3 +102,27 @@ jobs:
           tags: 246770851643.dkr.ecr.eu-central-1.amazonaws.com/morphology:${{ needs.prepare.outputs.version }}-${{ matrix.code }}
           build-args: |
             SPACY_MODEL=${{ matrix.model }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::246770851643:role/github-actions
+          aws-region: eu-central-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.11.1
+
+      - name: Deploy Terraform
+        working-directory: terraform
+        run: |
+          terraform init
+          terraform plan

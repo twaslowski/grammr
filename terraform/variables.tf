@@ -1,7 +1,6 @@
-variable "morphology_image_tag" {
+variable "morphology_image_version" {
   description = "The tag of the image to deploy"
   type        = string
-  default     = "latest"
 }
 
 variable "environment" {

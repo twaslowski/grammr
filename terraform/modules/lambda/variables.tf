@@ -6,12 +6,12 @@ variable "name" {
 variable "environment_variables" {
   type = map(string)
   description = "Environment variables to set for the Lambda"
+  default = {}
 }
 
 variable "image_uri" {
   type    = string
   description = "The image to run"
-  default = null
 }
 
 variable "memory" {

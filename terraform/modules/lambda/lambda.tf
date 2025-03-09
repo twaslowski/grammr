@@ -4,7 +4,7 @@ module "lambda" {
   description   = "Provides ${var.name} container"
 
   package_type                            = "Image"
-  architectures                           = ["x86_64"]
+  architectures                           = ["arm64"]
   create_package                          = false
 
   image_uri              = var.image_uri
