@@ -1,6 +1,6 @@
 languages:
   - code: ru
-    model: ru_core_news_md
+    model: ru_core_news_lg
     morphology:
       enabled: true
       host: "morphology-ru.grammr.svc.cluster.local"
@@ -11,7 +11,7 @@ languages:
       port: 8000
       repository: tobiaswaslowski/grammr-inflection-ru
   - code: de
-    model: de_core_news_sm
+    model: de_core_news_lg
     morphology:
       enabled: true
       host: "morphology-de.grammr.svc.cluster.local"
@@ -19,7 +19,7 @@ languages:
     inflection:
       enabled: false
   - code: en
-    model: en_core_web_sm
+    model: en_core_web_lg
     morphology:
       enabled: true
       host: "morphology-en.grammr.svc.cluster.local"
@@ -27,7 +27,7 @@ languages:
     inflection:
       enabled: false
   - code: it
-    model: it_core_news_md
+    model: it_core_news_lg
     morphology:
       enabled: true
       host: "morphology-it.grammr.svc.cluster.local"
@@ -37,7 +37,7 @@ languages:
       host: "inflection-it.grammr.svc.cluster.local"
       port: 8000
   - code: es
-    model: es_core_news_sm
+    model: es_core_news_lg
     morphology:
       enabled: true
       host: "morphology-es.grammr.svc.cluster.local"
@@ -57,7 +57,7 @@ languages:
       host: "inflection-pt.grammr.svc.cluster.local"
       port: 8000
   - code: fr
-    model: fr_core_news_sm
+    model: fr_core_news_lg
     morphology:
       enabled: true
       host: "morphology-fr.grammr.svc.cluster.local"

@@ -11,6 +11,10 @@ on:
       - '.github/workflows/build_sidecar.yml'
       - '.github/workflows/deploy_morphology.yaml'
 
+# Note: This workflow is still run for building the updated images, but they are currently not
+# being deployed. The serverless deployment workflow is used instead due to memory constraints
+# on the initial system.
+
 jobs:
   check_changes:
     runs-on: ubuntu-latest
@@ -44,7 +48,7 @@ jobs:
     needs:
       - build_morphology_sidecar
       - check_changes
-    if: always()
+    if: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4

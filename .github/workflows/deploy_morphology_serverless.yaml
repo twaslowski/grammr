@@ -31,6 +31,14 @@ jobs:
         with:
           python-version: '3.10'
 
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Derive and store version
+        id: version
+        run: |
+          echo "version=$(cd ${{ inputs.directory }} && poetry version -s)" >> $GITHUB_OUTPUT
+
       - name: Parse YAML and create build matrix
         id: set-matrix
         run: |
@@ -88,6 +96,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: true
-          tags: 246770851643.dkr.ecr.eu-central-1.amazonaws.com/morphology:latest-${{ matrix.code }}
+          tags: 246770851643.dkr.ecr.eu-central-1.amazonaws.com/morphology:${{ needs.prepare.outputs.version }}-${{ matrix.code }}
           build-args: |
             SPACY_MODEL=${{ matrix.model }}
