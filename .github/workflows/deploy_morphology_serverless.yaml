@@ -21,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+      version: ${{ steps.version.outputs.version }}
 
     steps:
       - name: Checkout code
@@ -37,7 +38,7 @@ jobs:
       - name: Derive and store version
         id: version
         run: |
-          echo "version=$(cd ${{ inputs.directory }} && poetry version -s)" >> $GITHUB_OUTPUT
+          echo "version=$(cd ./sidecars/morphology && poetry version -s)" >> $GITHUB_OUTPUT
 
       - name: Parse YAML and create build matrix
         id: set-matrix
