@@ -35,7 +35,7 @@ resource "aws_cloudwatch_event_target" "keep_warm" {
   input_transformer {
     input_template = <<JSON
     {
-      "body": "{\"pre_warm\": \"true\"}"
+      "body": "{\"keep-warm\": \"true\"}"
     }
   JSON
   }

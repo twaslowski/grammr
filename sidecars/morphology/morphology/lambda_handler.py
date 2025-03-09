@@ -3,7 +3,7 @@ import logging
 
 from morphology.domain.analysis_request import AnalysisRequest
 from morphology.service import analysis_service
-from morphology.lambda_util import ok, check_pre_warm
+from morphology.lambda_util import ok, check_keep_warm
 
 
 """
@@ -20,7 +20,7 @@ logger.setLevel(logging.INFO)
 
 def handler(event, _) -> dict:
     logger.info(event)
-    if pre_warm_response := check_pre_warm(event):
+    if pre_warm_response := check_keep_warm(event):
         return pre_warm_response
     body = AnalysisRequest(**json.loads(event.get("body")))
     logger.info(f"Received sentence, language: {body.phrase}")
