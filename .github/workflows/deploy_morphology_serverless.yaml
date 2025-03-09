@@ -88,6 +88,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: true
-          tags: 246770851643.dkr.ecr.eu-central-1.amazonaws.com/morphology:latest-${{ matrix.language.code }}
+          tags: 246770851643.dkr.ecr.eu-central-1.amazonaws.com/morphology:latest-${{ matrix.code }}
           build-args: |
-            SPACY_MODEL=${{ matrix.language.model }}
+            SPACY_MODEL=${{ matrix.model }}
