@@ -12,6 +12,10 @@ on:
       - '.github/workflows/deploy_morphology_serverless.yaml'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   prepare:
     runs-on: ubuntu-latest
@@ -78,8 +82,12 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: sidecars/morphology/
+          file: sidecars/morphology/docker/lambda.Dockerfile
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           push: true
           tags: 246770851643.dkr.ecr.eu-central-1.amazonaws.com/morphology:latest-${{ matrix.language.code }}
           build-args: |
-            MODEL=${{ matrix.language.model }}
+            SPACY_MODEL=${{ matrix.language.model }}
