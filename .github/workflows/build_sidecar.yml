@@ -29,7 +29,7 @@ jobs:
         uses: snok/install-poetry@v1
 
       - name: Install dependencies
-        run: cd ${{ inputs.directory }} && poetry install --with dev --no-root
+        run: cd ${{ inputs.directory }} && poetry install --all-groups --no-root
 
       - name: Run tests
         env:
