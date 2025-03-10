@@ -1,5 +1,4 @@
 import json
-from morphology.service.analysis_service import keep_warm
 
 
 def ok(res: dict | list) -> dict:
@@ -21,6 +20,5 @@ def fail(status: int) -> dict:
 def check_keep_warm(event: dict[str, str]) -> dict | None:
     body = json.loads(event.get("body", "{}"))
     if body.get("keep-warm") is not None:
-        keep_warm()
         return ok({"keep-warm": "success"})
     return None

@@ -8,7 +8,7 @@ module "morphology_lambda" {
 
   name      = "morphology-${each.key}"
   image_uri = "246770851643.dkr.ecr.eu-central-1.amazonaws.com/morphology:${var.morphology_image_version}-${each.key}"
-  memory    = 3072
+  memory    = 3008
   timeout   = 90
 
   api_gateway_id   = aws_api_gateway_rest_api.grammr_api.id

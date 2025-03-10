@@ -23,11 +23,5 @@ def perform_analysis(request: AnalysisRequest) -> list:
         ],
     )
 
-
-def keep_warm():
-    global model
-    model = spacy.load(os.getenv("SPACY_MODEL"))
-
-
 def _token_is_punctuation(token):
     return token.pos_ == "PUNCT"
