@@ -4,10 +4,7 @@ module "morphology_repository" {
   repository_name                 = "morphology"
   repository_image_tag_mutability = "MUTABLE"
 
-  repository_read_write_access_arns = concat(
-    [for lambda_instance in module.morphology_lambda : lambda_instance.lambda_role_arn],
-    [data.aws_caller_identity.current.arn]
-  )
+  repository_read_access_arns = [for lambda_instance in module.morphology_lambda : lambda_instance.lambda_role_arn]
 
   repository_lifecycle_policy = local.repository_lifecycle_policy
 }
@@ -21,7 +18,7 @@ locals {
         selection = {
           tagStatus   = "any",
           countType   = "imageCountMoreThan",
-          countNumber = 2
+          countNumber = 14
         },
         action = {
           type = "expire"

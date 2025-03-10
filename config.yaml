@@ -3,69 +3,56 @@ languages:
     model: ru_core_news_lg
     morphology:
       enabled: true
-      host: "morphology-ru.grammr.svc.cluster.local"
-      port: 8000
+      host: "https://xqybdr4e07.execute-api.eu-central-1.amazonaws.com/dev/morphology-ru"
     inflection:
       enabled: true
-      host: "inflection-ru.grammr.svc.cluster.local"
-      port: 8000
-      repository: tobiaswaslowski/grammr-inflection-ru
+      uri: "inflection-ru.grammr.svc.cluster.local"
   - code: de
     model: de_core_news_lg
     morphology:
       enabled: true
-      host: "morphology-de.grammr.svc.cluster.local"
-      port: 8000
+      host: "https://xqybdr4e07.execute-api.eu-central-1.amazonaws.com/dev/morphology-de"
     inflection:
       enabled: false
   - code: en
     model: en_core_web_lg
     morphology:
       enabled: true
-      host: "morphology-en.grammr.svc.cluster.local"
-      port: 8000
+      uri: "https://xqybdr4e07.execute-api.eu-central-1.amazonaws.com/dev/morphology-en"
     inflection:
       enabled: false
   - code: it
     model: it_core_news_lg
     morphology:
       enabled: true
-      host: "morphology-it.grammr.svc.cluster.local"
-      port: 8000
+      uri: "https://xqybdr4e07.execute-api.eu-central-1.amazonaws.com/dev/morphology-it"
     inflection:
       enabled: true
-      host: "inflection-it.grammr.svc.cluster.local"
-      port: 8000
+      uri: "inflection-it.grammr.svc.cluster.local"
   - code: es
     model: es_core_news_lg
     morphology:
       enabled: true
-      host: "morphology-es.grammr.svc.cluster.local"
-      port: 8000
+      uri: "https://xqybdr4e07.execute-api.eu-central-1.amazonaws.com/dev/morphology-es"
     inflection:
       enabled: true
-      host: "inflection-es.grammr.svc.cluster.local"
-      port: 8000
+      uri: "inflection-es.grammr.svc.cluster.local"
   - code: pt
     model: pt_core_news_md
     morphology:
       enabled: true
-      host: "morphology-pt.grammr.svc.cluster.local"
-      port: 8000
+      uri: "https://xqybdr4e07.execute-api.eu-central-1.amazonaws.com/dev/morphology-pt"
     inflection:
       enabled: true
-      host: "inflection-pt.grammr.svc.cluster.local"
-      port: 8000
+      uri: "inflection-pt.grammr.svc.cluster.local"
   - code: fr
     model: fr_core_news_lg
     morphology:
       enabled: true
-      host: "morphology-fr.grammr.svc.cluster.local"
-      port: 8000
+      uri: "https://xqybdr4e07.execute-api.eu-central-1.amazonaws.com/dev/morphology-fr"
     inflection:
       enabled: true
-      host: "inflection-fr.grammr.svc.cluster.local"
-      port: 8000
+      uri: "http://inflection-fr.grammr.svc.cluster.local:8000/inflect"
 
 multiInflection:
   languageCodes: ["it", "es", "pt", "fr"]

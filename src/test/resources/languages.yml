@@ -3,26 +3,20 @@ languages:
     model: ru_core_news_sm
     morphology:
       enabled: true
-      host: "localhost"
-      port: 8010
+      uri: "http://localhost:8010/morphological-analysis"
     inflection:
       enabled: true
-      host: "localhost"
-      port: 8020
-      repository: tobiaswaslowski/grammr-inflections-ru
+      uri: "http://localhost:8020/inflect"
   - code: de
     model: de_core_news_sm
     morphology:
       enabled: true
-      host: "localhost"
-      port: 8011
+      uri: "http://localhost:8011/morphological-analysis"
     inflections:
       enabled: false
   - code: en
     model: en_core_web_sm
     morphology:
-      false: true
-      host: "localhost"
-      port: 8012
+      enabled: false
     inflections:
       enabled: false

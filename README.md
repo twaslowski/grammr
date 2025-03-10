@@ -1,6 +1,8 @@
 [![Core](https://github.com/twaslowski/grammr/actions/workflows/deploy_core.yml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_core.yml)
 
-[![Morphology](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_multi_inflection.yaml)
+[![Morphology images](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_multi_inflection.yaml)
+
+[![Serverless morphology](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology_serverless.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology_serverless.yaml)
 
 [![Multi-language inflections](https://github.com/twaslowski/grammr/actions/workflows/deploy_multi_inflection.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology.yaml)
 

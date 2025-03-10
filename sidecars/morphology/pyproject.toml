@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "morphology"
-version = "0.3.0"
+version = "0.4.0"
 description = ""
 authors = ["Tobias Waslowski <tobiaswaslowski@gmail.com>"]
 readme = "README.md"
@@ -9,14 +9,19 @@ readme = "README.md"
 python = "^3.12"
 # todo: i know this was required for SOME compatibility reasons. figure out the specifics.
 spacy = "3.7.0"
-uvicorn = "^0.32.0"
-fastapi = "^0.115.4"
 
 # Sensitive Cython dependencies that need to be pinned due to cross-system compilation issues
 thinc = "8.2.4"
 numpy = "1.26.4"
 cymem = "2.0.8"
 murmurhash = "1.0.10"
+
+[tool.poetry.group.webserver]
+optional = true
+
+[tool.poetry.group.webserver.dependencies]
+uvicorn = "^0.32.0"
+fastapi = "^0.115.4"
 
 [tool.poetry.group.dev]
 optional = true
