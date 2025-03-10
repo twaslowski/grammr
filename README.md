@@ -1,18 +1,35 @@
-[![Core](https://github.com/twaslowski/grammr/actions/workflows/deploy_core.yml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_core.yml)
-
-[![Morphology images](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_multi_inflection.yaml)
-
-[![Serverless morphology](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology_serverless.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology_serverless.yaml)
-
-[![Multi-language inflections](https://github.com/twaslowski/grammr/actions/workflows/deploy_multi_inflection.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology.yaml)
-
-[![Russian inflections](https://github.com/twaslowski/grammr/actions/workflows/deploy_inflection_ru.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_inflection_ru.yaml)
-
 # grammr
 
 `grammr` is a language learning tool that aims to make understanding the grammar of a variety
-of primarily Indo-European languages easier. The frontend is available on
-[Vercel](https://grmmr.vercel.app/).
+of languages easier.
+
+- 🌍 Translate texts
+- 📖 Get translations for every word in the text in-context
+- 🔎 Get a grammatical analysis for every word in the text
+- 💡 Conjugate and decline words
+- 📚 Create flashcards to memorize words and phrases
+- 🌈 Many more features coming! Check out the [Roadmap](#Features) for more information.
+
+### 👉🏼 [Try it out](https://grammr.twaslowski.com).
+
+---
+
+[![Core](https://github.com/twaslowski/grammr/actions/workflows/deploy_core.yml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_core.yml)
+[![Morphology](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology_serverless.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology_serverless.yaml)
+[![Generic inflections](https://github.com/twaslowski/grammr/actions/workflows/deploy_multi_inflection.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology.yaml)
+[![Russian inflections](https://github.com/twaslowski/grammr/actions/workflows/deploy_inflection_ru.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_inflection_ru.yaml)
+
+---
+
+## In this doc
+
+- [About](#About)
+- [Features](#Features)
+- [Technical Roadmap](#Technical-Roadmap)
+- [Related projects](#Related-projects)
+- [Running](#Running)
+- [Developing](#Developing)
+- [Domain Language](#Domain-Language)
 
 ## About
 
@@ -38,27 +55,21 @@ tool that can be arbitrarily extended for different languages.
 
 ## Features
 
-- Translation of texts.
-- Literal translations for each word in a text.
-- Morphological morphology of each word in a text.
-- Creation of inflections for words.
+- [x] Translate sentences across arbitrary languages
+- [x] Get literal translations for words
+  - [ ] Could use some improvements: Instead of solely relying on LLMs for translation, maybe fetch translations via Wiktionary
+    or a related project and use them as a reference for the LLMs. For one, all meanings of a word
+    could be covered; also this would protect against wonky LLM responses.
+- [x] Inflection tables (supported: 🇷🇺🇮🇹🇫🇷🇪🇸🇵🇹)
+- [ ] Anki flash card export
+  - [x] Flashcard creation
+  - [ ] Flashcard editing
+  - [ ] Flashcard export
+- [ ] Named-entity recognition and explanation of terms
+- [ ] Translations of phrases and sayings (which often do not translate literally and may
+or may not have equivalents in different languages)
 
-The morphological morphology is done using [spaCy](https://spacy.io/), and contains the following information for each word:
-
-- The part of speech (POS) of a word.
-- The features of a word, including the Case, Number, Gender, Tense, Person, depending on word type,
-as well as its lemma, its basic form.
-For more information on this, see the [Universal Dependencies](https://universaldependencies.org/u/feat/index.html).
-
-I'm looking to add more features in the near future. These may include:
-
-- [x] The ability to arbitrarily add languages (solved via [Configmaps](https://github.com/twaslowski/grammr/commit/889284f0#diff-782f304121c40d11b8bcd8db123db62a7a8192bbcc8b8098cf07064774cc7c24))
-- [x] A solid frontend, in addition to the Telegram bot currently available
-- [x] Inflection tables (for Russian only right now)
-- [x] Anki flash card export
-- [ ] Instead of solely relying on LLMs for translation, maybe fetch translations via Wiktionary
-or a related project and use them as a reference for the LLMs. For one, all meanings of a word
-could be covered; also this would protect against wonky LLM responses.
+⏰ More will be added as the project progresses. Check back later!
 
 ## Technical Roadmap
 
@@ -72,9 +83,11 @@ Features and improvements will include:
 - [x] Adding several more languages, which means creating additional sidecars for morphological
 analyis.
 - [x] Building a frontend. Possibly web-app, possibly cross-platform apps.
-- [ ] Benchmarking against quality regression of prompts
 - [x] ~~Extract~~ Delete the Telegram Bot entirely from the core service. It was useful for prototyping, but
 should not be tied to the main application.
+- [ ] Versioning and release management
+- [ ] Creating multiple environments for testing and development
+- [ ] Benchmarking against quality regression of prompts
 
 ## Related projects
 

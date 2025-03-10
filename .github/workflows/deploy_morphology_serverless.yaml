@@ -9,6 +9,7 @@ on:
     paths:
       - 'config.yaml'
       - 'sidecars/morphology/**'
+      - 'terraform/**'
       - '.github/workflows/deploy_morphology_serverless.yaml'
   workflow_dispatch:
 
