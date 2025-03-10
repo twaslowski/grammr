@@ -1,4 +1,4 @@
-name: Build AWS Lambda Docker images
+name: Deploy serverless morphology functions
 
 on:
   pull_request:

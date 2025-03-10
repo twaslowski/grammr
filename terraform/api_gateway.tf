@@ -4,6 +4,9 @@ resource "aws_api_gateway_rest_api" "grammr_api" {
 }
 
 resource "aws_api_gateway_deployment" "deployment" {
+  # because the deployment requires integrations to be present
+  depends_on = [module.morphology_lambda]
+
   rest_api_id = aws_api_gateway_rest_api.grammr_api.id
 
   triggers = {
@@ -19,15 +22,12 @@ resource "aws_api_gateway_deployment" "deployment" {
 }
 
 resource "aws_api_gateway_stage" "stage" {
-  depends_on = [aws_cloudwatch_log_group.logs]
-
   deployment_id = aws_api_gateway_deployment.deployment.id
   rest_api_id   = aws_api_gateway_rest_api.grammr_api.id
   stage_name    = var.environment
 }
 
 resource "aws_api_gateway_method_settings" "example" {
-  depends_on  = [aws_api_gateway_stage.stage]
   rest_api_id = aws_api_gateway_rest_api.grammr_api.id
   stage_name  = aws_api_gateway_stage.stage.stage_name
   method_path = "*/*"

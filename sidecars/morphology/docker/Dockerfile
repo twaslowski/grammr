@@ -14,7 +14,7 @@ WORKDIR /app
 
 COPY pyproject.toml poetry.lock ./
 
-RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
+RUN poetry install --with webserver --no-root && rm -rf $POETRY_CACHE_DIR
 
 # Use the official Python image from the Docker Hub
 FROM python:3.12-slim

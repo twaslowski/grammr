@@ -3,7 +3,7 @@ import logging
 
 from morphology.domain.analysis_request import AnalysisRequest
 from morphology.service import analysis_service
-from morphology.lambda_util import ok, check_keep_warm
+from morphology.lambda_util import ok, fail, check_keep_warm
 
 
 """
@@ -20,9 +20,13 @@ logger.setLevel(logging.INFO)
 
 def handler(event, _) -> dict:
     logger.info(event)
-    if pre_warm_response := check_keep_warm(event):
-        return pre_warm_response
-    body = AnalysisRequest(**json.loads(event.get("body")))
-    logger.info(f"Received sentence, language: {body.phrase}")
-    analysis = analysis_service.perform_analysis(body)
-    return ok(analysis.model_dump())
+    if keep_warm_response := check_keep_warm(event):
+        return keep_warm_response
+    try:
+      body = AnalysisRequest(**json.loads(event.get("body")))
+      logger.info(f"Received sentence, language: {body.phrase}")
+      analysis = analysis_service.perform_analysis(body)
+      return ok(analysis.model_dump())
+    except Exception as e:
+      logger.error("An error occurred: ", e)
+      return fail(500)

@@ -23,8 +23,8 @@ module "lambda" {
 
 resource "aws_cloudwatch_event_rule" "keep_warm" {
   name                = "${var.name}-keep-warm"
-  description         = "Fires every ten minutes"
-  schedule_expression = "rate(10 minutes)"
+  description         = "Fires every five minutes"
+  schedule_expression = "rate(5 minutes)"
 }
 
 resource "aws_cloudwatch_event_target" "keep_warm" {

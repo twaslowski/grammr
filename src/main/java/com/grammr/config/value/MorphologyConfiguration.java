@@ -7,13 +7,7 @@ import lombok.Builder;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record MorphologyConfiguration(
     boolean enabled,
-    String host,
-    int port
+    String uri
 ) {
 
-  private static final String ENDPOINT = "/morphological-analysis";
-
-  public String uri() {
-    return "http://" + host + ":" + port + ENDPOINT;
-  }
 }
