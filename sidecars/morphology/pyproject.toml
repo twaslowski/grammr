@@ -30,16 +30,17 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 pip = "^23.3.2"
 mypy = "^1.8.0"
-pytest = "^7.4.4"
+pytest = "^8.3.5"
 black = "^24.10.0"
 de-core-news-sm = { url = "https://github.com/explosion/spacy-models/releases/download/de_core_news_sm-3.7.0/de_core_news_sm-3.7.0.tar.gz" }
+pytest-env = "^1.1.5"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
-minversion = "7.4.4"
+minversion = "8.3.5"
 addopts = "-s -v --disable-warnings"
 testpaths = [
   "test",
