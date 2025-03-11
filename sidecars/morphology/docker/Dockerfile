@@ -41,4 +41,4 @@ EXPOSE 8000
 WORKDIR ${APP_DIR}
 
 # Command to run the FastAPI server
-CMD /bin/sh init.sh
+CMD ["/bin/sh", "init.sh"]
