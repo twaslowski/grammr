@@ -15,7 +15,8 @@ import org.springframework.web.server.MethodNotAllowedException;
 public class CustomExceptionHandler {
 
   @ExceptionHandler(DeckNotFoundException.class)
-  public final ResponseEntity<ErrorResponse> handleDeckNotFound(Exception ex) {
+  public final ResponseEntity<ErrorResponse> handleDeckNotFound(DeckNotFoundException ex) {
+    log.info(ex.getMessage());
     return new ResponseEntity<>(ErrorResponse.withMessage(ex.getMessage()), HttpStatus.NOT_FOUND);
   }
 

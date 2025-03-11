@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,8 +36,8 @@ public class AnkiController {
   private final AnkiService ankiService;
 
   @PostMapping(value = "/export")
-  public ResponseEntity<?> exportDeck(@RequestBody @Valid InboundAnkiDeckExportDto data) {
-    byte[] exportedDeck = ankiService.exportDeck(data.deckId(), data.exportDataType());
+  public ResponseEntity<?> exportDeck(@RequestBody @Valid InboundAnkiDeckExportDto data, @AuthenticationPrincipal User user) {
+    byte[] exportedDeck = ankiService.exportDeck(user, data.deckId(), data.exportDataType());
     var headers = new HttpHeaders();
     var filename = deriveFilename(data.deckId(), data.exportDataType());
     headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename);
@@ -48,7 +49,7 @@ public class AnkiController {
   public ResponseEntity<Flashcard> createFlashcard(@RequestBody @Valid AnkiFlashcardCreationDto data,
                                                    @AuthenticationPrincipal User user) {
     log.info("Creating flashcard for user {} in deck {}", user.getId(), data.deckId());
-    var flashcard = ankiService.createFlashcard(data.deckId(), data.question(), data.answer());
+    var flashcard = ankiService.createFlashcard(user, data.deckId(), data.question(), data.answer());
     return ResponseEntity.status(201).body(flashcard);
   }
 
@@ -68,14 +69,20 @@ public class AnkiController {
 
   @GetMapping(value = "/deck/{deckId}", produces = APPLICATION_JSON_VALUE)
   public ResponseEntity<DeckDTO> getDeck(@AuthenticationPrincipal User user, @PathVariable long deckId) {
-    var deck = ankiService.getDeck(user.getId(), deckId);
+    var deck = ankiService.getDeck(user, deckId);
     var flashcards = ankiService.getFlashcards(deck.getId());
     return ResponseEntity.status(200).body(new DeckDTO(deck, flashcards));
   }
 
   @DeleteMapping(value = "/deck/{deckId}")
   public ResponseEntity<?> deleteDeck(@AuthenticationPrincipal User user, @PathVariable long deckId) {
-    ankiService.deleteDeck(user.getId(), deckId);
+    ankiService.deleteDeck(user, deckId);
+    return ResponseEntity.status(204).build();
+  }
+
+  @DeleteMapping(value = "/flashcard/{flashcardId}")
+  public ResponseEntity<?> deleteFlashcard(@AuthenticationPrincipal User user, @PathVariable long flashcardId) {
+    ankiService.deleteFlashcard(user, flashcardId);
     return ResponseEntity.status(204).build();
   }
 

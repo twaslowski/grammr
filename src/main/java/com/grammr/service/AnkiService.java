@@ -2,6 +2,7 @@ package com.grammr.service;
 
 import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
+import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.ExportDataType;
 import com.grammr.domain.exception.DeckNotFoundException;
 import com.grammr.domain.exception.UserNotFoundException;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AnkiService {
 
   private final FlashcardRepository flashcardRepository;
@@ -27,10 +29,10 @@ public class AnkiService {
   private final AnkiCsvExportService ankiCsvExportService;
   private final UserRepository userRepository;
 
-  @Transactional
-  public byte[] exportDeck(long id, ExportDataType exportDataType) {
+  public byte[] exportDeck(User user, long id, ExportDataType exportDataType) {
     var deck = deckRepository.findById(id)
-        .orElseThrow(() -> new DeckNotFoundException(id));
+        .map(d -> checkOwnershipMismatch(user, d))
+        .orElseThrow(() -> new DeckNotFoundException(user.getId(), id));
     var flashcards = flashcardRepository.findByDeckId(deck.getId());
     if (exportDataType == null) {
       exportDataType = ExportDataType.CSV;
@@ -42,9 +44,10 @@ public class AnkiService {
   }
 
   @Transactional
-  public Flashcard createFlashcard(long deckId, String question, String answer) {
+  public Flashcard createFlashcard(User user, long deckId, String question, String answer) {
     var deck = deckRepository.findById(deckId)
-        .orElseThrow(() -> new DeckNotFoundException(deckId));
+        .map(d -> checkOwnershipMismatch(user, d))
+        .orElseThrow(() -> new DeckNotFoundException(user.getId(), deckId));
     var flashcard = Flashcard.builder()
         .question(question)
         .answer(answer)
@@ -63,10 +66,10 @@ public class AnkiService {
     return deckRepository.save(deck);
   }
 
-  public Deck getDeck(long userId, long deckId) {
+  public Deck getDeck(User user, long deckId) {
     return deckRepository.findById(deckId)
-        .filter(deck -> deck.getUser().getId() == userId)
-        .orElseThrow(() -> new DeckNotFoundException(deckId));
+        .map(d -> checkOwnershipMismatch(user, d))
+        .orElseThrow(() -> new DeckNotFoundException(user.getId(), deckId));
   }
 
   public List<DeckDTO> getDecks(long userId) {
@@ -80,10 +83,24 @@ public class AnkiService {
     return flashcardRepository.findByDeckId(deckId);
   }
 
-  public void deleteDeck(long userId, long deckId) {
-    deckRepository.findById(deckId)
-        .filter(d -> d.getUser().getId() == userId)
-        .orElseThrow(() -> new DeckNotFoundException(deckId));
-    deckRepository.deleteById(deckId);
+  public void deleteDeck(User user, long deckId) {
+    var foundDeck = deckRepository.findById(deckId)
+        .map(d -> checkOwnershipMismatch(user, d))
+        .orElseThrow(() -> new DeckNotFoundException(user.getId(), deckId));
+    deckRepository.delete(foundDeck);
+  }
+
+  public void deleteFlashcard(User user, long flashcardId) {
+    var foundFlashcard = flashcardRepository.findById(flashcardId)
+        .filter(flashcard -> flashcard.getDeck().getUser().getId() == user.getId())
+        .orElseThrow(() -> new DeckNotFoundException(user.getId(), flashcardId));
+    flashcardRepository.delete(foundFlashcard);
+  }
+
+  private Deck checkOwnershipMismatch(User user, Deck deck) {
+    if (deck.getUser().getId() != user.getId()) {
+      throw new DeckNotFoundException(user.getId(), deck.getId());
+    }
+    return deck;
   }
 }

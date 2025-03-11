@@ -44,3 +44,6 @@ addopts = "-s -v --disable-warnings"
 testpaths = [
   "test",
 ]
+env = [
+  "SPACY_MODEL=de_core_news_sm",
+]
