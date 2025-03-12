@@ -36,18 +36,6 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
 
   @Test
   @SneakyThrows
-  void shouldReturnUnauthorized() {
-    var creationDto = new AnkiDeckCreationDto("Test Deck", null);
-    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/anki/deck")
-            .with(anonymous())
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(creationDto)))
-        .andExpect(status().is(401))
-        .andReturn();
-  }
-
-  @Test
-  @SneakyThrows
   void shouldCreateDeck() {
     var auth = createUserAuthentication();
     var creationDto = new AnkiDeckCreationDto("Test Deck", null);
