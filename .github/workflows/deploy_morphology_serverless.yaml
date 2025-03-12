@@ -1,9 +1,6 @@
 name: Deploy serverless morphology functions
 
 on:
-  pull_request:
-    branches:
-      - main
   push:
     branches: [main]
     paths:

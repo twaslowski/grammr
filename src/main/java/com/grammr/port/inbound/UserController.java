@@ -3,6 +3,7 @@ package com.grammr.port.inbound;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.exception.InvalidInputException;
 import com.grammr.domain.exception.UserAlreadyExistsException;
+import com.grammr.port.dto.ErrorResponse;
 import com.grammr.port.dto.UserRegistrationRequest;
 import com.grammr.port.dto.UserRegistrationResponse;
 import com.grammr.service.UserService;
