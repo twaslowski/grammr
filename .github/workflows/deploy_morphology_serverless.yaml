@@ -86,8 +86,22 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Check if image already exists
+        id: check-image
+        shell: bash
+        run: |
+          IMAGE_TAG="246770851643.dkr.ecr.eu-central-1.amazonaws.com/morphology:${{ needs.prepare.outputs.version }}-${{ matrix.code }}"
+          if docker manifest inspect $IMAGE_TAG &>/dev/null; then
+            echo "Image already exists, skipping build"
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Image does not exist, will build"
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
+        if: steps.check-image.outputs.exists != 'true'
         with:
           # required for ECR, see: https://github.com/serverless/serverless/issues/12808
           provenance: false
