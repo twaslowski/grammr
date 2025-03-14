@@ -13,7 +13,7 @@ For memory reasons, spaCy is only included where required, so its import will fa
 """
 
 # configure logging
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logging.basicConfig(format="%(levelname)s - %(message)s")
 logger = logging.getLogger("root")
 logger.setLevel(logging.INFO)
 
