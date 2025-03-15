@@ -1,3 +1,3 @@
-key    = "state-dev/terraform.tfstate"
+key    = "state-prod/terraform.tfstate"
 bucket = "grammr-state"
 region = "eu-central-1"

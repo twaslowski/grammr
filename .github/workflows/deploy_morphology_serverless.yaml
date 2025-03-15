@@ -115,9 +115,11 @@ jobs:
           build-args: |
             SPACY_MODEL=${{ matrix.model }}
 
-  deploy:
+  deploy-dev:
     needs: [ prepare, build ]
     runs-on: ubuntu-latest
+    env:
+      TF_VAR_environment: "dev"
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -139,4 +141,32 @@ jobs:
           TF_VAR_morphology_image_version: ${{ needs.prepare.outputs.version }}
         run: |
           terraform init -backend-config=config/dev.hcl
+          terraform apply -auto-approve
+
+  deploy-prod:
+    needs: [ prepare, build ]
+    runs-on: ubuntu-latest
+    env:
+      TF_VAR_environment: "prod"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::246770851643:role/github-actions
+          aws-region: eu-central-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.11.1
+
+      - name: Deploy Terraform
+        working-directory: terraform
+        env:
+          TF_VAR_morphology_image_version: ${{ needs.prepare.outputs.version }}
+        run: |
+          terraform init -backend-config=config/prod.hcl
           terraform apply -auto-approve

@@ -6,5 +6,4 @@ variable "morphology_image_version" {
 variable "environment" {
   description = "The environment to deploy to"
   type        = string
-  default     = "dev"
 }
