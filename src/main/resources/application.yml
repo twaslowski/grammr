@@ -21,8 +21,8 @@ spring:
     hashing:
       pepper: ${PEPPER_SECRET}
     encryption:
-      key: ${ENCRYPTION_SECRET}
-      salt: ${SALT_SECRET}
+      key: ${ENCRYPTION_KEY}
+      salt: ${ENCRYPTION_SALT}
   datasource:
     hikari:
       driver-class-name: org.postgresql.Driver
