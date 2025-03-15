@@ -67,14 +67,12 @@ jobs:
 
       - name: Deploy Terraform
         working-directory: terraform/shared
-        env:
-          TF_VAR_morphology_image_version: ${{ needs.prepare.outputs.version }}
         run: |
           terraform init -backend-config=config/shared.hcl
           terraform apply -auto-approve
 
   build:
-    needs: [ create-ecr ]
+    needs: [ create-ecr, prepare ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -170,7 +168,7 @@ jobs:
           terraform apply -auto-approve
 
   deploy-prod:
-    needs: [ deploy-dev ]
+    needs: [ deploy-dev, prepare ]
     runs-on: ubuntu-latest
     env:
       TF_VAR_environment: "prod"
