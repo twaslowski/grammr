@@ -17,6 +17,7 @@ fullnameOverride: ""
 openai_api_key: ""
 datasource_password: ""
 allowedOrigin: "localhost"
+environment: "dev"
 
 languages: []
 
@@ -70,12 +71,12 @@ livenessProbe:
   httpGet:
     path: /actuator/health
     port: 8080
-  initialDelaySeconds: 60
+  initialDelaySeconds: 30
 readinessProbe:
   httpGet:
     path: /actuator/health
     port: 8080
-  initialDelaySeconds: 60
+  initialDelaySeconds: 30
 
 # Additional volumes on the output Deployment definition.
 volumes:

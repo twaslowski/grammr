@@ -65,6 +65,8 @@ spec:
                 secretKeyRef:
                   name: {{ .Release.Name }}-encryption
                   key: salt
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.environment }}
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:

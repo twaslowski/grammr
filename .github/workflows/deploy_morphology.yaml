@@ -5,11 +5,11 @@ on:
     branches:
       - main
     paths:
-      - 'charts/morphology/**'
-      - 'config.yaml'
-      - 'sidecars/morphology/**'
-      - '.github/workflows/build_sidecar.yml'
-      - '.github/workflows/deploy_morphology.yaml'
+      - charts/morphology/**
+      - environments/*/core.values.yaml
+      - sidecars/morphology/**
+      - .github/workflows/build_sidecar.yml
+      - .github/workflows/deploy_morphology.yaml
 
 # Note: This workflow is still run for building the updated images, but they are currently not
 # being deployed. The serverless deployment workflow is used instead due to memory constraints
@@ -56,6 +56,6 @@ jobs:
       - name: deploy
         run: |
           helm upgrade --install --namespace grammr \
-            --values config.yaml --wait --timeout 600s \
+            --values ./environments/prod/core.values.yaml --wait --timeout 600s \
             morphology ./charts/morphology
         

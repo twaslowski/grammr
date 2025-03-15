@@ -9,7 +9,7 @@ function start_environment() {
 
 function deploy() {
   export TAG="sha-$(git rev-parse --short HEAD)"
-  export HELM_TIMEOUT=600s
+  export HELM_TIMEOUT=180s
 
   if [ -z "$OPENAI_API_KEY" ]; then
     echo "Please set OPENAI_API_KEY environment variable"
@@ -17,7 +17,7 @@ function deploy() {
   fi
 
   helm upgrade --install \
-    --values ./charts/values/postgres-values.yaml \
+    --values ./environments/dev/ \
     --namespace grammr --create-namespace \
     --wait --timeout "$HELM_TIMEOUT" \
     postgres oci://registry-1.docker.io/bitnamicharts/postgresql
@@ -25,7 +25,7 @@ function deploy() {
   helm upgrade --install \
     --set openai_api_key="$OPENAI_API_KEY" \
     --set image.tag="$TAG" \
-    --values config.yaml \
+    --values environments/dev/core.values.yaml \
     --namespace grammr --create-namespace \
     --wait --timeout "$HELM_TIMEOUT" \
     grammr-core ./charts/grammr

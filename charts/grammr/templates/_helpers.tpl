@@ -55,6 +55,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
     Template function to lookup a secret value or generate a new one if it doesn't exist.
 
     Parameters:
+      - .namespace: The namespace of the secret to lookup
       - .name: The name of the secret to lookup
       - .key: The key within the secret to look up
 
@@ -64,5 +65,24 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- $secretObj := (lookup "v1" "Secret" .namespace .name) | default dict }}
 {{- $secretData := (get $secretObj "data") | default dict }}
 {{- $value := (get $secretData .key) | default (randAlphaNum 64 | b64enc) }}
+{{- $value | quote }}
+{{- end }}
+
+{{- define "utils.secret.keepOrCreateHex" -}}
+{{- /*
+    Template function to lookup a secret value or generate a new one if it doesn't exist.
+    Specifically calls `randNumeric` over `randAlphaNum` to generate a hex-compatible value [0-9a-f].
+
+    Parameters:
+      - .namespace: The namespace of the secret to lookup
+      - .name: The name of the secret to lookup
+      - .key: The key within the secret to look up
+
+    Usage:
+    {{ include "utils.secret.lookup" (dict "namespace" "my-namespace" "name" "my-secret" "key" "secret-key") }}
+*/}}
+{{- $secretObj := (lookup "v1" "Secret" .namespace .name) | default dict }}
+{{- $secretData := (get $secretObj "data") | default dict }}
+{{- $value := (get $secretData .key) | default (randNumeric 64 | b64enc) }}
 {{- $value | quote }}
 {{- end }}

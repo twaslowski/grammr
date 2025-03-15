@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'config.yaml'
+      - 'environments/*/core.values.yaml'
       - 'charts/multi-inflection/**'
       - 'sidecars/multi-inflection/**'
       - '.github/workflows/build_sidecar.yml'
@@ -39,7 +39,8 @@ jobs:
       directory: "./sidecars/multi-inflection"
       image_name: "tobiaswaslowski/grammr-multi-inflection"
 
-  deploy:
+  deploy-dev:
+    environment: dev
     runs-on: self-hosted
     needs:
       - build_multi_inflection_sidecar
@@ -52,8 +53,25 @@ jobs:
       - name: deploy
         run: |
           helm upgrade --install \
+            --namespace grammr-dev --create-namespace \
+            --wait --timeout 600s \
+            --values ./environments/dev/core.values.yaml \
+            multi-inflection ./charts/multi-inflection
+
+  deploy-prod:
+    environment: prod
+    runs-on: self-hosted
+    needs: [ deploy-dev ]
+    if: always()
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: deploy
+        run: |
+          helm upgrade --install \
             --namespace grammr --create-namespace \
             --wait --timeout 600s \
-            --values config.yaml \
+            --values ./environments/prod/core.values.yaml \
             multi-inflection ./charts/multi-inflection
         
