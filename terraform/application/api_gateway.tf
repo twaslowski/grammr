@@ -4,7 +4,6 @@ resource "aws_api_gateway_rest_api" "grammr_api" {
 }
 
 resource "aws_api_gateway_deployment" "deployment" {
-  # because the deployment requires integrations to be present
   depends_on = [module.morphology_lambda]
 
   rest_api_id = aws_api_gateway_rest_api.grammr_api.id

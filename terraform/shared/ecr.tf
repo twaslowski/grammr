@@ -4,8 +4,6 @@ module "morphology_repository" {
   repository_name                 = "morphology"
   repository_image_tag_mutability = "MUTABLE"
 
-  repository_read_access_arns = [for lambda_instance in module.morphology_lambda : lambda_instance.lambda_role_arn]
-
   repository_lifecycle_policy = local.repository_lifecycle_policy
 }
 

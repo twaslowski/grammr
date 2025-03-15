@@ -8,3 +8,12 @@ terraform {
 
   backend "s3" {}
 }
+
+provider "aws" {
+  default_tags {
+    tags = {
+      "created-by" = "terraform",
+      "application" = "grammr"
+    }
+  }
+}

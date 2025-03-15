@@ -19,6 +19,22 @@ module "lambda" {
   allowed_triggers = local.allowed_triggers
 
   environment_variables = var.environment_variables
+
+  attach_policy_json = true
+  policy_json = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "ecr:BatchCheckLayerAvailability"
+        ]
+        Resource = "arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:repository/morphology"
+      }
+    ]
+  })
 }
 
 resource "aws_cloudwatch_event_rule" "keep_warm" {
