@@ -8,7 +8,8 @@ public class UserSpec {
 
   public static UserBuilder valid() {
     return User.builder()
-        .username("someuser@username.com")
+        .username("a nickname")
+        .email("someuser@username.com")
         .password("password-hash");
   }
 }

@@ -18,11 +18,11 @@ spring:
         default_schema: "\"grammr\""
     open-in-view: false
   security:
-    observability:
-      password: ${OBSERVABILITY_PASSWORD}
-      user: observability
     hashing:
       pepper: ${PEPPER_SECRET}
+    encryption:
+      key: ${ENCRYPTION_SECRET}
+      salt: ${SALT_SECRET}
   datasource:
     hikari:
       driver-class-name: org.postgresql.Driver

@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.port.dto.UserRegistrationRequest;
+import com.grammr.service.EncryptionService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,16 @@ class UserIntegrationTest extends IntegrationTestBase {
   @Autowired
   private MockMvc mockMvc;
 
+  @Autowired
+  private EncryptionService encryptionService;
+
   @Test
   @SneakyThrows
   void shouldCreateUserWithValidSessionToken() {
-    var registrationRequest = new UserRegistrationRequest("user@username.com", "correct-battery-horse-staple");
+    var registrationRequest = UserRegistrationRequest.builder()
+        .username("user")
+        .email("user@username.com")
+        .password("correct-battery-horse-staple").build();
 
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/user")
             .contentType(MediaType.APPLICATION_JSON)
@@ -34,14 +41,14 @@ class UserIntegrationTest extends IntegrationTestBase {
         .andExpect(jsonPath("$.userId").isNumber())
         .andExpect(cookie().exists("session_token"));
 
-    assertThat(userRepository.findByUsername("user@username.com")).isPresent();
+    assertThat(userRepository.findByEmailHash(encryptionService.computeEmailHash(registrationRequest.email()))).isPresent();
     assertThat(userSessionRepository.findAll()).hasSize(1);
   }
 
   @Test
   @SneakyThrows
   void shouldReturnConflictWhenUserAlreadyExists() {
-    var registrationRequest = new UserRegistrationRequest("test", "correct-battery-horse-staple");
+    var registrationRequest = new UserRegistrationRequest("user", "user@username.com", "correct-battery-horse-staple");
 
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/user")
             .contentType(MediaType.APPLICATION_JSON)
@@ -59,30 +66,41 @@ class UserIntegrationTest extends IntegrationTestBase {
   @Test
   @SneakyThrows
   void shouldReturnUnauthorizedIfUserDoesNotExistOrCredentialsMismatch() {
-    var registrationRequest = new UserRegistrationRequest("test", "correct-battery-horse-staple");
+    var initialRegistrationRequest = UserRegistrationRequest.builder()
+        .username("user")
+        .email("user@username.com")
+        .password("correct-battery-horse-staple")
+        .build();
 
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/user")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(registrationRequest)))
+            .content(objectMapper.writeValueAsString(initialRegistrationRequest)))
         .andExpect(status().is(201))
         .andExpect(jsonPath("$.userId").isNumber())
         .andExpect(cookie().exists("session_token"));
 
-    var badLoginRequest = new UserRegistrationRequest("test", "wrong-password");
+    var badLoginRequest = new UserRegistrationRequest("user", "user@username.com", "wrong-password");
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(badLoginRequest)))
         .andExpect(status().is(401));
 
-    var nonExistentUserRequest = new UserRegistrationRequest("non-existent-user", "password");
+    var nonExistentUserRequest = UserRegistrationRequest.builder()
+        .email("user-2@something.com")
+        .password("password")
+        .build();
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(nonExistentUserRequest)))
         .andExpect(status().is(401));
 
+    var loginRequest = UserRegistrationRequest.builder()
+        .email(initialRegistrationRequest.email())
+        .password(initialRegistrationRequest.password())
+        .build();
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/login")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(registrationRequest)))
+            .content(objectMapper.writeValueAsString(loginRequest)))
         .andExpect(status().is(200));
   }
 }

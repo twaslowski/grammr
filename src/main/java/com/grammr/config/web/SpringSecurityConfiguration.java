@@ -30,7 +30,6 @@ public class SpringSecurityConfiguration {
 
   @Bean
   public SecurityFilterChain configureWebSecurity(HttpSecurity httpSecurity,
-                                                  CustomUserDetailsService userDetailsService,
                                                   SessionCookieFilter sessionCookieFilter
   ) throws Exception {
     return httpSecurity
@@ -38,7 +37,6 @@ public class SpringSecurityConfiguration {
         .httpBasic(Customizer.withDefaults())
         .authorizeHttpRequests(this::configureRestAuthorizations)
         .addFilterBefore(sessionCookieFilter, UsernamePasswordAuthenticationFilter.class)
-        .userDetailsService(userDetailsService)
         .sessionManagement(session -> session.sessionCreationPolicy(NEVER))
         .build();
   }

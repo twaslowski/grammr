@@ -4,6 +4,7 @@ import com.grammr.domain.entity.User;
 import com.grammr.domain.exception.InvalidInputException;
 import com.grammr.domain.exception.InvalidPasswordException;
 import com.grammr.domain.exception.UserAlreadyExistsException;
+import com.grammr.domain.exception.UserNotFoundException;
 import com.grammr.port.dto.UserRegistrationRequest;
 import com.grammr.port.dto.UserRegistrationResponse;
 import com.grammr.repository.UserRepository;
@@ -23,6 +24,7 @@ public class UserService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final SessionManager sessionManager;
+  private final EncryptionService encryptionService;
 
   @Value("${spring.security.hashing.pepper}")
   private String pepper;
@@ -31,15 +33,18 @@ public class UserService {
   public UserRegistrationResponse registerUser(UserRegistrationRequest request) {
     validatePassword(request.password());
 
-    // Check if user already exists
-    if (userRepository.findByUsername(request.username()).isPresent()) {
-      log.info("Rejecting user registration due to existing user: {}", request.username());
-      throw new UserAlreadyExistsException(request.username());
+    var emailHash = encryptionService.computeEmailHash(request.email());
+
+    if (userRepository.findByEmailHash(emailHash).isPresent()) {
+      log.info("Rejecting user registration; email already exists");
+      throw new UserAlreadyExistsException(request.email());
     }
 
     String hashedPassword = passwordEncoder.encode(request.password() + pepper);
 
     var user = User.builder()
+        .email(encryptionService.encryptEmail(request.email()))
+        .emailHash(emailHash)
         .username(request.username())
         .password(hashedPassword)
         .build();
@@ -52,7 +57,7 @@ public class UserService {
   }
 
   public String login(UserRegistrationRequest request) throws InvalidInputException {
-    var user = userRepository.findByUsername(request.username())
+    var user = userRepository.findByEmailHash(encryptionService.computeEmailHash(request.email()))
         .orElseThrow(() -> new InvalidInputException("User not found"));
 
     if (!passwordEncoder.matches(request.password() + pepper, user.getPassword())) {

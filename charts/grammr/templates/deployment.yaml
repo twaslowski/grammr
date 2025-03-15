@@ -55,11 +55,16 @@ spec:
                 secretKeyRef:
                   name: {{ .Release.Name }}-auth
                   key: pepper
-            - name: OBSERVABILITY_PASSWORD
+            - name: ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-auth
-                  key: observability_password
+                  name: {{ .Release.Name }}-encryption
+                  key: encryption_key
+            - name: ENCRYPTION_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-encryption
+                  key: salt
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
