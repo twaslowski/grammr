@@ -2,7 +2,7 @@ allowedOrigin: "https://grmmr.vercel.app"
 environment: dev
 
 ingress:
-  enabled: false
+  enabled: true
   className: "cloudflare-tunnel"
   host: server-dev.grammr.app
   path: /api/
