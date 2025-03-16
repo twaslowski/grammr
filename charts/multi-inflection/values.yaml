@@ -13,8 +13,8 @@ image:
 nameOverride: ""
 fullnameOverride: "inflection"
 
-multiInflection:
-  languageCodes: []
+# Allowed values: RU, IT, ES, PT, RO
+languageCodes: []
 
 podAnnotations: {}
 podLabels: {}

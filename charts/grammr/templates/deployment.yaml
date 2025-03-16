@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "lingolift-core.fullname" . }}
+  name: {{ include "grammr-core.fullname" . }}
   labels:
-    {{- include "lingolift-core.labels" . | nindent 4 }}
+    {{- include "grammr-core.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "lingolift-core.selectorLabels" . | nindent 6 }}
+      {{- include "grammr-core.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -16,7 +16,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "lingolift-core.labels" . | nindent 8 }}
+        {{- include "grammr-core.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

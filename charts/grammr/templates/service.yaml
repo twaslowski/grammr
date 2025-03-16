@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "lingolift-core.fullname" . }}
+  name: {{ include "grammr-core.fullname" . }}
   labels:
-    {{- include "lingolift-core.labels" . | nindent 4 }}
+    {{- include "grammr-core.labels" . | nindent 4 }}
   annotations:
     prometheus.io/path: /actuator/prometheus
     prometheus.io/port: "8080"
@@ -16,4 +16,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "lingolift-core.selectorLabels" . | nindent 4 }}
+    {{- include "grammr-core.selectorLabels" . | nindent 4 }}

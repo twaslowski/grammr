@@ -1,0 +1,15 @@
+languages:
+  - code: ru
+    model: ru_core_news_lg
+  - code: de
+    model: de_core_news_lg
+  - code: en
+    model: en_core_web_lg
+  - code: es
+    model: es_core_news_lg
+  - code: fr
+    model: fr_core_news_lg
+  - code: it
+    model: it_core_news_lg
+  - code: pt
+    model: pt_core_news_lg
