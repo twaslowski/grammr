@@ -16,7 +16,7 @@ spec:
               service:
                 name: {{ .Release.Name }}
                 port:
-                  number: ${{ .Values.service.port }}
+                  number: {{ .Values.service.port }}
             path: {{ .Values.ingress.path }}
             pathType: Prefix
 {{ end }}

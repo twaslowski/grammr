@@ -4,17 +4,8 @@ environment: dev
 ingress:
   enabled: true
   className: "cloudflare-tunnel"
-  rules:
-    - host: grammr-backend-dev.twaslowski.com
-      http:
-        paths:
-          - backend:
-              service:
-                name: grammr-core
-                port:
-                  number: 8080
-            path: /api/
-            pathType: Prefix
+  host: grammr-backend-dev.twaslowski.com
+  path: /api/
 
 languages:
   - code: ru
