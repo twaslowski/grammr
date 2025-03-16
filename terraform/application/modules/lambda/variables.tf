@@ -10,17 +10,17 @@ variable "environment_variables" {
 }
 
 variable "image_uri" {
-  type    = string
+  type = string
   description = "The image to run"
 }
 
 variable "memory" {
-  type    = number
+  type = number
   default = 128
 }
 
 variable "timeout" {
-  type    = number
+  type = number
   default = 15
 }
 
@@ -29,5 +29,9 @@ variable "root_resource_id" {
 }
 
 variable "api_gateway_id" {
+  type = string
+}
+
+variable "environment" {
   type = string
 }

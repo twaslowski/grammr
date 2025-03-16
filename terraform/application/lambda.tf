@@ -5,8 +5,9 @@ module "morphology_lambda" {
     for code, lang in local.languages_map :
     code => lang if lang.morphology.enabled == true
   }
+  environment = var.environment
 
-  name      = "morphology-${each.key}-${var.environment}"
+  name      = "morphology-${each.key}"
   image_uri = "246770851643.dkr.ecr.eu-central-1.amazonaws.com/morphology:${var.morphology_image_version}-${each.key}"
   memory    = 3008
   timeout   = 90
