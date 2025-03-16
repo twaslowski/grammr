@@ -1,6 +1,6 @@
 module "lambda" {
   source        = "terraform-aws-modules/lambda/aws"
-  function_name = var.name
+  function_name = "${var.name}-${var.environment}"
   description   = "Provides ${var.name} container"
 
   package_type                            = "Image"
@@ -38,14 +38,14 @@ module "lambda" {
 }
 
 resource "aws_cloudwatch_event_rule" "keep_warm" {
-  name                = "${var.name}-keep-warm"
+  name                = "${var.name}-keep-warm-${var.environment}"
   description         = "Fires every five minutes"
   schedule_expression = "rate(5 minutes)"
 }
 
 resource "aws_cloudwatch_event_target" "keep_warm" {
   rule      = aws_cloudwatch_event_rule.keep_warm.name
-  target_id = "${module.lambda.lambda_function_name}-keep-warm"
+  target_id = "${module.lambda.lambda_function_name}-keep-warm-${var.environment}"
   arn       = module.lambda.lambda_function_arn
 
   input_transformer {
