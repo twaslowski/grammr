@@ -14,7 +14,7 @@ spec:
         paths:
           - backend:
               service:
-                name: {{ .Release.Name }}
+                name: {{ include "grammr-core.fullname" . }}
                 port:
                   number: {{ .Values.service.port }}
             path: {{ .Values.ingress.path }}
