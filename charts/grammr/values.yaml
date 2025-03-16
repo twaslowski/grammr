@@ -15,13 +15,14 @@ nameOverride: ""
 fullnameOverride: ""
 
 openai_api_key: ""
-datasource_password: ""
 allowedOrigin: "localhost"
-environment: "dev"
+environment: ""
 
 languages: []
 
-podAnnotations: {}
+podAnnotations:
+  fluentbit.io/parser: java
+
 podLabels: {}
 
 podSecurityContext: {}
@@ -68,7 +69,6 @@ readinessProbe:
     port: 8080
   initialDelaySeconds: 30
 
-# Additional volumes on the output Deployment definition.
 volumes:
   - name: languages-config-volume
     configMap:
