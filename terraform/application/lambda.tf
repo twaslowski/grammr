@@ -2,9 +2,9 @@ module "morphology_lambda" {
   source = "./modules/lambda"
 
   for_each = {
-    for code, lang in local.languages_map :
-    code => lang if lang.morphology.enabled == true
+    for code, lang in local.languages_map : code => lang
   }
+
   environment = var.environment
 
   name      = "morphology-${each.key}"
