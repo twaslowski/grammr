@@ -8,6 +8,14 @@ ingress:
   host: server-prod.grammr.app
   path: /api/
 
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1024Mi
+  requests:
+    cpu: 300m
+    memory: 512Mi
+
 languages:
   - code: ru
     morphology:
