@@ -1,4 +1,6 @@
 environment: prod
+allowedOrigin: "https://grammr.app"
+fullnameOverride: "core"
 
 ingress:
   enabled: true
@@ -8,7 +10,6 @@ ingress:
 
 languages:
   - code: ru
-    model: ru_core_news_lg
     morphology:
       enabled: true
       uri: "https://xqybdr4e07.execute-api.eu-central-1.amazonaws.com/prod/morphology-ru"
@@ -16,21 +17,18 @@ languages:
       enabled: true
       uri: "http://inflection-ru.grammr.svc.cluster.local:8000/inflect"
   - code: de
-    model: de_core_news_lg
     morphology:
       enabled: true
       uri: "https://xqybdr4e07.execute-api.eu-central-1.amazonaws.com/prod/morphology-de"
     inflection:
       enabled: false
   - code: en
-    model: en_core_web_lg
     morphology:
       enabled: true
       uri: "https://xqybdr4e07.execute-api.eu-central-1.amazonaws.com/prod/morphology-en"
     inflection:
       enabled: false
   - code: it
-    model: it_core_news_lg
     morphology:
       enabled: true
       uri: "https://xqybdr4e07.execute-api.eu-central-1.amazonaws.com/prod/morphology-it"
@@ -38,7 +36,6 @@ languages:
       enabled: true
       uri: "http://inflection-it.grammr.svc.cluster.local:8000/inflect"
   - code: es
-    model: es_core_news_lg
     morphology:
       enabled: true
       uri: "https://xqybdr4e07.execute-api.eu-central-1.amazonaws.com/prod/morphology-es"
@@ -46,7 +43,6 @@ languages:
       enabled: true
       uri: "http://inflection-es.grammr.svc.cluster.local:8000/inflect"
   - code: pt
-    model: pt_core_news_md
     morphology:
       enabled: true
       uri: "https://xqybdr4e07.execute-api.eu-central-1.amazonaws.com/prod/morphology-pt"
@@ -54,15 +50,9 @@ languages:
       enabled: true
       uri: "http://inflection-pt.grammr.svc.cluster.local:8000/inflect"
   - code: fr
-    model: fr_core_news_lg
     morphology:
       enabled: true
       uri: "https://xqybdr4e07.execute-api.eu-central-1.amazonaws.com/prod/morphology-fr"
     inflection:
       enabled: true
       uri: "http://inflection-fr.grammr.svc.cluster.local:8000/inflect"
-
-multiInflection:
-  languageCodes: ["it", "es", "pt", "fr"]
-
-allowedOrigin: "https://grmmr.vercel.app"

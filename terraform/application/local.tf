@@ -1,6 +1,5 @@
 locals {
-  config                = yamldecode(file("${path.module}/../../environments/${var.environment}/core.values.yaml"))
-  create_ecr_repository = var.environment == "dev"
+  config                = yamldecode(file("${path.module}/../../environments/${var.environment}/morphology.values.yaml"))
 
   languages_map = {
     for lang in local.config.languages : lang.code => lang

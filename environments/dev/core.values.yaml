@@ -1,5 +1,6 @@
-allowedOrigin: "https://grmmr.vercel.app"
+allowedOrigin: "https://grammr.app"
 environment: dev
+fullnameOverride: "core"
 
 ingress:
   enabled: true
@@ -9,7 +10,6 @@ ingress:
 
 languages:
   - code: ru
-    model: ru_core_news_lg
     morphology:
       enabled: true
       uri: "https://b4l7c733qf.execute-api.eu-central-1.amazonaws.com/dev/morphology-ru"
@@ -17,21 +17,18 @@ languages:
       enabled: true
       uri: "http://inflection-ru.grammr-dev.svc.cluster.local:8000/inflect"
   - code: de
-    model: de_core_news_lg
     morphology:
       enabled: true
       uri: "https://b4l7c733qf.execute-api.eu-central-1.amazonaws.com/dev/morphology-de"
     inflection:
       enabled: false
   - code: en
-    model: en_core_web_lg
     morphology:
       enabled: true
       uri: "https://b4l7c733qf.execute-api.eu-central-1.amazonaws.com/dev/morphology-en"
     inflection:
       enabled: false
   - code: es
-    model: es_core_news_lg
     morphology:
       enabled: true
       uri: "https://b4l7c733qf.execute-api.eu-central-1.amazonaws.com/dev/morphology-es"
@@ -39,5 +36,3 @@ languages:
       enabled: true
       uri: "http://inflection-es.grammr-dev.svc.cluster.local:8000/inflect"
 
-multiInflection:
-  languageCodes: ["es"]

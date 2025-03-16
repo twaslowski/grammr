@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'environments/*/core.values.yaml'
+      - 'environments/*/multi-inflection.values.yaml'
       - 'charts/multi-inflection/**'
       - 'sidecars/multi-inflection/**'
       - '.github/workflows/build_sidecar.yml'
@@ -55,7 +55,7 @@ jobs:
           helm upgrade --install \
             --namespace grammr-dev --create-namespace \
             --wait --timeout 600s \
-            --values ./environments/dev/core.values.yaml \
+            --values ./environments/dev/multi-inflection.values.yaml \
             multi-inflection ./charts/multi-inflection
 
   deploy-prod:
@@ -72,6 +72,6 @@ jobs:
           helm upgrade --install \
             --namespace grammr --create-namespace \
             --wait --timeout 600s \
-            --values ./environments/prod/core.values.yaml \
+            --values ./environments/prod/multi-inflection.values.yaml \
             multi-inflection ./charts/multi-inflection
         
