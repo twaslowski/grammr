@@ -1,3 +1,21 @@
+allowedOrigin: "https://grmmr.vercel.app"
+environment: dev
+
+ingress:
+  enabled: true
+  className: "cloudflare-tunnel"
+  rules:
+    - host: grammr-backend-dev.twaslowski.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: grammr-core
+                port:
+                  number: 8080
+            path: /api/
+            pathType: Prefix
+
 languages:
   - code: ru
     model: ru_core_news_lg
@@ -33,5 +51,3 @@ languages:
 multiInflection:
   languageCodes: ["es"]
 
-allowedOrigin: "https://grmmr.vercel.app"
-environment: dev
