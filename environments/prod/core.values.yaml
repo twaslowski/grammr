@@ -1,7 +1,7 @@
 environment: prod
 
 ingress:
-  enabled: false
+  enabled: true
   className: "cloudflare-tunnel"
   host: server-prod.grammr.app
   path: /api/
