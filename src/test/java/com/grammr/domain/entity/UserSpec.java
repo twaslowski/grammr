@@ -10,6 +10,7 @@ public class UserSpec {
     return User.builder()
         .username("a nickname")
         .email("someuser@username.com")
+        .emailHash("email-hash")
         .password("password-hash");
   }
 }

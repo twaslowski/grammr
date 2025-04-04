@@ -9,7 +9,7 @@ spring:
     hashing:
       pepper: pepper
     encryption:
-      key: secret-key-12345
+      key: some-key
       salt: c0ffee
   datasource:
     url: jdbc:postgresql://localhost:5432/grammr?currentSchema=grammr
