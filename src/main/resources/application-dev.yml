@@ -9,4 +9,4 @@ spring:
 grammr:
   anki:
     api:
-      host: http://anki.grammr.svc.cluster.local:8000
+      host: http://anki-exporter.grammr-dev.svc.cluster.local:8000
