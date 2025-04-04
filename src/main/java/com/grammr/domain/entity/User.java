@@ -35,8 +35,11 @@ public class User {
 
   @NotNull
   @Convert(converter = EmailEncryptionConverter.class)
+  @JsonIgnore
   private String email;
 
+  @NotNull
+  @JsonIgnore
   private String emailHash;
 
   @NotNull

@@ -13,7 +13,7 @@
     <springProfile name="prod">
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
-                <pattern>%-5level %t %C{1} - [%X] %msg%n</pattern>
+                <pattern>%d{ISO8601} %-5level %t %C{1} - [%X] %msg%n</pattern>
             </encoder>
         </appender>
 
@@ -24,7 +24,7 @@
     <springProfile name="dev">
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
-                <pattern>%-5level %t %C{1} - [%X] %msg%n</pattern>
+                <pattern>%d{ISO8601} %-5level %t %C{1} - [%X] %msg%n</pattern>
             </encoder>
         </appender>
 

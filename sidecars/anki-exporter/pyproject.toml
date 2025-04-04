@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "anki"
+name = "anki-exporter"
 version = "0.1.0"
 description = "Anki flashcard generator"
 authors = ["Tobias Waslowski <tobiaswaslowski@gmail.com>"]
