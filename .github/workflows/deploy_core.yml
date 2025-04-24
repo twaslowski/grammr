@@ -27,7 +27,7 @@ jobs:
           cache: maven
 
       - name: Unit tests
-        run: ./scripts/qa.sh
+        run: ./lifecycle/qa.sh
 
       - name: Upload jar artifact
         uses: actions/upload-artifact@v4

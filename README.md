@@ -121,10 +121,10 @@ Given those, you can run the project with a local configuration or by deploying 
 Helm chart. My recommendation is using an `.envrc` file so you always have your environment variables
 handy, but do whatever works best for you.
 
-By running `./scripts/run.sh`, a Postgres container and the Python sidecar running spaCy will be
+By running `./lifecycle/run.sh`, a Postgres container and the Python sidecar running spaCy will be
 launched. The Spring application will be run via `mvn spring-boot:run`.
 
-If you choose to run `./scripts/deploy.sh`, a Helm chart will be created and deployed to your
+If you choose to run `./lifecycle/deploy.sh`, a Helm chart will be created and deployed to your
 Kubernetes cluster. This will require a running Kubernetes cluster (you could try using
 [Minikube](https://minikube.sigs.k8s.io/docs/) or [k3s](https://k3s.io/)) and
 [Helm](https://helm.sh/) to be installed. You should set a DATASOURCE_PASSWORD environment variable,
@@ -134,8 +134,8 @@ which will be used to create a secret in the cluster for authentication with Pos
 
 PRs are welcome! I'm happy to help you get started with the project, so feel free to reach out.
 
-You can run unit tests with `./scripts/unit-test.sh` and integration tests with `./scripts/integration-test.sh`.
-Alternatively, run both with `./scripts/qa.sh`. This will also ensure the most accurate test coverage
+You can run unit tests with `./lifecycle/unit-test.sh` and integration tests with `./lifecycle/integration-test.sh`.
+Alternatively, run both with `./lifecycle/qa.sh`. This will also ensure the most accurate test coverage
 report is generated, which you can access at `target/site/jacoco/index.html`.
 
 ## Domain Language

@@ -1,0 +1,14 @@
+ingress:
+  enabled: true
+  className: "cloudflare-tunnel"
+  hosts:
+    - host: "sync.grammr.app"
+      paths:
+        - path: /api/
+          pathType: Prefix
+
+
+fullnameOverride: "anki-sync"
+environmentVariables:
+  - name: SYNC_USER1
+    value: "${sync_user1}"

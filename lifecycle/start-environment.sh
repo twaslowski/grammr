@@ -3,6 +3,6 @@
 PROJECT_ROOT=$(git rev-parse --show-toplevel)
 export PROJECT_ROOT
 
-source "$PROJECT_ROOT/scripts/common.sh"
+source "$PROJECT_ROOT/lifecycle/common.sh"
 
-unit_test
+start_environment
