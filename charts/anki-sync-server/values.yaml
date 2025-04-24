@@ -90,17 +90,16 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 # Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
+volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: {{ include "your-chart-name.fullname" . }}-data
 
 # Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
+volumeMounts:
+ - name: data
+   mountPath: "/anki_data"
+   readOnly: true
 
 nodeSelector: {}
 
