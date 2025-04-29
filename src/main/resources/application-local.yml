@@ -15,3 +15,6 @@ spring:
 grammr:
   languages:
     mount-path: src/test/resources/languages.yml
+
+clerk:
+  secret-key: some-secret-key

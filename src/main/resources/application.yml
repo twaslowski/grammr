@@ -44,6 +44,9 @@ openai:
     model: tts-1
     voice: nova
 
+clerk:
+  secret-key: ${CLERK_SECRET_KEY}
+
 grammr:
   anki:
     api:

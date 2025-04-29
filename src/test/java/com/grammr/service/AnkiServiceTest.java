@@ -9,6 +9,7 @@ import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.exception.DeckNotFoundException;
 import com.grammr.repository.DeckRepository;
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,8 +27,8 @@ class AnkiServiceTest {
 
   @Test
   void shouldThrowExceptionOnOwnerMismatch() {
-    var user = UserSpec.valid().id(1).build();
-    var otherUser = UserSpec.valid().id(2).build();
+    var user = UserSpec.valid().build();
+    var otherUser = UserSpec.valid().build();
     var deck = DeckSpec.withUser(user).build();
 
     when(deckRepository.findById(1L)).thenReturn(Optional.of(deck));

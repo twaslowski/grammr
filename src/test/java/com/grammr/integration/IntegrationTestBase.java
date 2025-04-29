@@ -18,7 +18,6 @@ import com.grammr.domain.value.language.TokenTranslation;
 import com.grammr.repository.DeckRepository;
 import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.UserRepository;
-import com.grammr.repository.UserSessionRepository;
 import com.grammr.service.AnalysisService;
 import com.grammr.service.InflectionService;
 import com.grammr.service.TokenService;
@@ -75,9 +74,6 @@ public class IntegrationTestBase {
   protected FlashcardRepository flashcardRepository;
 
   @Autowired
-  protected UserSessionRepository userSessionRepository;
-
-  @Autowired
   protected InflectionService inflectionService;
 
   private final OpenAI.ChatCompletions chatCompletionsMock = mock(OpenAI.ChatCompletions.class);
@@ -87,7 +83,6 @@ public class IntegrationTestBase {
   public void setUp() {
     flashcardRepository.deleteAll();
     deckRepository.deleteAll();
-    userSessionRepository.deleteAll();
     userRepository.deleteAll();
     reset(audioMock, chatCompletionsMock);
   }

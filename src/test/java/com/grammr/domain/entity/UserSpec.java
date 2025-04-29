@@ -8,9 +8,7 @@ public class UserSpec {
 
   public static UserBuilder valid() {
     return User.builder()
-        .username("a nickname")
-        .email("someuser@username.com")
-        .emailHash("email-hash")
-        .password("password-hash");
+        .id(UUID.randomUUID().toString())
+        .externalId("some-id");
   }
 }
