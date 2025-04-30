@@ -10,3 +10,15 @@ grammr:
   anki:
     api:
       host: http://anki-exporter.grammr.svc.cluster.local:8000
+
+clerk:
+  jwt-key: '-----BEGIN PUBLIC KEY-----
+  MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5+OGO0cFfrPdPIKJPHud
+  LGYwDjmmX45nSTls+WwxBMV1Mm03aY1y86pm8u3sVHHcOW+29bb+wwqB6U6y+cys
+  I3Xl7P85GHRwEuIcRh0lmN/NbBgiIz/6VZXJEUCiXruKscOxcnm0iS//Lg2qjr3i
+  MOD0cO6FSuot6A+i5qhXSpFNA5U4sap59jkfILZe7oemPl2YkYjfD+Wgs8ExtOqu
+  O/1/N0Z2M5zYpRmq76U9dzDbrYCIU/uQtG07nzZZNIRY72W7oR091+FasFvqFkyO
+  +217pZHNmujdAYY0JT+VOgPz+X7q+u+scb9kv2h7xsibC85Whx7lHG05Ay9ZIYhR
+  EwIDAQAB
+-----END PUBLIC KEY-----'
+  authorized-party: 'https://grammr.app'

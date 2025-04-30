@@ -6,12 +6,17 @@ import com.clerk.backend_api.helpers.jwks.RequestState;
 import com.grammr.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.HttpCookie;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +32,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class ClerkJwtValidationFilter extends OncePerRequestFilter {
 
+  private static final String SESSION_COOKIE_NAME = "__session";
+
   @Value("${clerk.jwt-key}")
   private String jwtKey;
+
+  @Value("${clerk.authorized-party}")
+  private String authorizedParty;
 
   private final UserService userService;
 
@@ -43,7 +53,7 @@ public class ClerkJwtValidationFilter extends OncePerRequestFilter {
 
     RequestState requestState = AuthenticateRequest.authenticateRequest(
         extractHeaders(request), AuthenticateRequestOptions.jwtKey(jwtKey)
-            .authorizedParty("https://localhost.com")
+            .authorizedParty(authorizedParty)
             .build()
     );
 
@@ -55,12 +65,25 @@ public class ClerkJwtValidationFilter extends OncePerRequestFilter {
     filterChain.doFilter(request, response);
   }
 
+  // AuthenticateRequest.authenticateRequest() takes a Map that represents request headers.
+  // For parsing Cookies, it uses HttpCookie.parse(String httpCookie), which expects a Set-Cookie
+  // header, instead of a plain Cookie header. This function extracts the JWT correctly
+  // and passes it. Refactor when behavior in the library is improved.
   private Map<String, List<String>> extractHeaders(HttpServletRequest request) {
-    return Collections.list(request.getHeaderNames())
-        .stream()
-        .collect(Collectors.toMap(
-            Function.identity(),
-            h -> Collections.list(request.getHeaders(h))
-        ));
+    Optional<String> authorizationHeader = Optional.ofNullable(request.getHeader("Authorization"));
+    if (authorizationHeader.isPresent()) {
+      return fakeAuthenticationHeader(authorizationHeader.get());
+    }
+
+    Optional<Cookie> sessionCookie = Arrays.stream(request.getCookies())
+        .filter(cookie -> cookie.getName().equals(SESSION_COOKIE_NAME))
+        .findFirst();
+
+    return sessionCookie.map(cookie -> fakeAuthenticationHeader(cookie.getValue()))
+        .orElse(Map.of());
+  }
+
+  private Map<String, List<String>> fakeAuthenticationHeader(String token) {
+    return Map.of("Authorization", Collections.singletonList("Bearer " + token));
   }
 }

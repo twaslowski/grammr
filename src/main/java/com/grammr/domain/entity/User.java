@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
@@ -40,9 +41,9 @@ public class User {
   @UpdateTimestamp
   private ZonedDateTime updatedTimestamp;
 
-  public static User fromExternalId(String clerkId) {
+  public static User fromExternalId(String externalId) {
     return User.builder()
-        .externalId(clerkId)
+        .externalId(externalId)
         .build();
   }
 }

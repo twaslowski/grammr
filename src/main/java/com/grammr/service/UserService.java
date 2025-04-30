@@ -15,6 +15,6 @@ public class UserService {
 
   public User getOrCreate(String id) {
     return userRepository.findByExternalId(id)
-        .orElse(userRepository.save(User.fromExternalId(id)));
+        .orElseGet(() -> userRepository.save(User.fromExternalId(id)));
   }
 }
