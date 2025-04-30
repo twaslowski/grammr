@@ -70,17 +70,18 @@ public class ClerkJwtValidationFilter extends OncePerRequestFilter {
   // header, instead of a plain Cookie header. This function extracts the JWT correctly
   // and passes it. Refactor when behavior in the library is improved.
   private Map<String, List<String>> extractHeaders(HttpServletRequest request) {
-    Optional<String> authorizationHeader = Optional.ofNullable(request.getHeader("Authorization"));
-    if (authorizationHeader.isPresent()) {
-      return fakeAuthenticationHeader(authorizationHeader.get());
-    }
+    return Optional.ofNullable(request.getHeader("Authorization"))
+        .map(this::fakeAuthenticationHeader)
+        .or(() -> extractSessionCookie(request))
+        .orElse(Collections.emptyMap());
+  }
 
-    Optional<Cookie> sessionCookie = Arrays.stream(request.getCookies())
-        .filter(cookie -> cookie.getName().equals(SESSION_COOKIE_NAME))
-        .findFirst();
-
-    return sessionCookie.map(cookie -> fakeAuthenticationHeader(cookie.getValue()))
-        .orElse(Map.of());
+  private Optional<Map<String, List<String>>> extractSessionCookie(HttpServletRequest request) {
+    return Optional.ofNullable(request.getCookies())
+        .flatMap(cookies -> Arrays.stream(cookies)
+            .filter(cookie -> cookie.getName().equals(SESSION_COOKIE_NAME))
+            .findFirst()
+            .map(cookie -> fakeAuthenticationHeader(cookie.getValue())));
   }
 
   private Map<String, List<String>> fakeAuthenticationHeader(String token) {
