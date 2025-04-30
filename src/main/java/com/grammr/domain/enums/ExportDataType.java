@@ -4,10 +4,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
+@Deprecated
 @RequiredArgsConstructor
 public enum ExportDataType {
 
-  CSV("application/zip", "zip"),
+  /**
+   * Will be replaced by actively syncing to an Anki Instance via AnkiConnect.
+   */
+
   APKG("application/octet-stream", "apkg"),
   DB("application/octet-stream", "db");
 

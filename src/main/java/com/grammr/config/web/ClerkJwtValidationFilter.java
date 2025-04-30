@@ -27,28 +27,32 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class ClerkJwtValidationFilter extends OncePerRequestFilter {
 
-  @Value("${clerk.secret-key}")
-  private String secretKey;
+  @Value("${clerk.jwt-key}")
+  private String jwtKey;
 
   private final UserService userService;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication != null && authentication.isAuthenticated()) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+
     RequestState requestState = AuthenticateRequest.authenticateRequest(
-        extractHeaders(request), AuthenticateRequestOptions.secretKey(secretKey)
+        extractHeaders(request), AuthenticateRequestOptions.jwtKey(jwtKey)
             .authorizedParty("https://localhost.com")
             .build()
     );
-    if (!requestState.isSignedIn()) {
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-    } else {
-      requestState.claims().ifPresent(claims -> {
-        var user = userService.getOrCreate(claims.getSubject());
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
-        SecurityContextHolder.getContext().setAuthentication(auth);
-      });
-      filterChain.doFilter(request, response);
-    }
+
+    requestState.claims().ifPresent(claims -> {
+      var user = userService.getOrCreate(claims.getSubject());
+      Authentication auth = new UsernamePasswordAuthenticationToken(user, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
+      SecurityContextHolder.getContext().setAuthentication(auth);
+    });
+    filterChain.doFilter(request, response);
   }
 
   private Map<String, List<String>> extractHeaders(HttpServletRequest request) {

@@ -17,12 +17,6 @@ spring:
       hibernate:
         default_schema: "\"grammr\""
     open-in-view: false
-  security:
-    hashing:
-      pepper: ${PEPPER_SECRET}
-    encryption:
-      key: ${ENCRYPTION_KEY}
-      salt: ${ENCRYPTION_SALT}
   datasource:
     hikari:
       driver-class-name: org.postgresql.Driver
@@ -45,16 +39,12 @@ openai:
     voice: nova
 
 clerk:
-  secret-key: ${CLERK_SECRET_KEY}
+  jwt-key: ${CLERK_SECRET_KEY}
 
 grammr:
   anki:
     api:
       host: http://localhost:8030
       endpoint: /create
-  default:
-    user:
-      language-spoken: EN
-      language-learned: DE
   languages:
     mount-path: /app/config/languages.yml

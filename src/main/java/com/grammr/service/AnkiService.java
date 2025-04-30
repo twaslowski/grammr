@@ -26,7 +26,6 @@ public class AnkiService {
   private final FlashcardRepository flashcardRepository;
   private final DeckRepository deckRepository;
   private final AnkiPort ankiPort;
-  private final AnkiCsvExportService ankiCsvExportService;
   private final UserRepository userRepository;
 
   public byte[] exportDeck(User user, long id, ExportDataType exportDataType) {
@@ -34,11 +33,7 @@ public class AnkiService {
         .map(d -> checkOwnershipMismatch(user, d))
         .orElseThrow(() -> new DeckNotFoundException(user.getId(), id));
     var flashcards = flashcardRepository.findByDeckId(deck.getId());
-    if (exportDataType == null) {
-      exportDataType = ExportDataType.CSV;
-    }
     return switch (exportDataType) {
-      case CSV -> ankiCsvExportService.exportDeck(flashcards);
       case APKG, DB -> ankiPort.exportDeck(deck, flashcards);
     };
   }

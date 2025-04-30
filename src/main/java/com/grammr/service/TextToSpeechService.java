@@ -13,8 +13,12 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@Deprecated
 @RequiredArgsConstructor
 public class TextToSpeechService {
+
+  // Todo: Needs to be replaced with a service that supports streaming to reduce time to first byte.
+  // Arguably can be performed from the frontend without having to pass through the backend.
 
   private final SimpleOpenAI client;
 

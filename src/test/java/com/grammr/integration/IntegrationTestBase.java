@@ -2,7 +2,6 @@ package com.grammr.integration;
 
 import static com.grammr.integration.OpenAITestUtil.chatRequestContains;
 import static com.grammr.integration.OpenAITestUtil.chatRequestEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -10,7 +9,6 @@ import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.annotation.IntegrationTest;
-import com.grammr.common.MessageUtil;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.domain.value.language.SemanticTranslation;
@@ -18,11 +16,8 @@ import com.grammr.domain.value.language.TokenTranslation;
 import com.grammr.repository.DeckRepository;
 import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.UserRepository;
-import com.grammr.service.AnalysisService;
-import com.grammr.service.InflectionService;
 import com.grammr.service.TokenService;
 import com.grammr.service.language.recognition.OpenAILanguageRecognitionService;
-import com.grammr.service.language.translation.literal.OpenAILiteralTranslationService;
 import com.grammr.service.language.translation.semantic.OpenAISemanticTranslationService;
 import io.github.sashirestela.openai.OpenAI;
 import io.github.sashirestela.openai.SimpleOpenAI;
@@ -44,13 +39,7 @@ public class IntegrationTestBase {
   protected OpenAISemanticTranslationService semanticTranslationService;
 
   @Autowired
-  protected OpenAILiteralTranslationService literalTranslationService;
-
-  @Autowired
   protected OpenAILanguageRecognitionService languageRecognitionService;
-
-  @Autowired
-  protected AnalysisService fullAnalysisService;
 
   @Autowired
   protected TokenService tokenService;
@@ -62,9 +51,6 @@ public class IntegrationTestBase {
   protected ObjectMapper objectMapper;
 
   @Autowired
-  protected MessageUtil messageUtil;
-
-  @Autowired
   protected UserRepository userRepository;
 
   @Autowired
@@ -72,9 +58,6 @@ public class IntegrationTestBase {
 
   @Autowired
   protected FlashcardRepository flashcardRepository;
-
-  @Autowired
-  protected InflectionService inflectionService;
 
   private final OpenAI.ChatCompletions chatCompletionsMock = mock(OpenAI.ChatCompletions.class);
   private final OpenAI.Audios audioMock = mock(OpenAI.Audios.class);
@@ -123,12 +106,5 @@ public class IntegrationTestBase {
     mockOpenAIResponseFuzzy(
         "in the context of the following sentence",
         tokenTranslation);
-  }
-
-  @SneakyThrows
-  protected void mockAudioTranscription(String output) {
-    var transcription = openAITestUtil.parameterizeTranscription(output);
-    when(audioMock.transcribe(any())).thenReturn(CompletableFuture.supplyAsync(() -> transcription));
-    when(openAIClient.audios()).thenReturn(audioMock);
   }
 }

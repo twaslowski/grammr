@@ -5,26 +5,14 @@ server:
 spring:
   cors:
     allowed-origin: "localhost"
-  security:
-    hashing:
-      pepper: pepper
-    encryption:
-      key: some-key
-      salt: c0ffee
   datasource:
     url: jdbc:postgresql://localhost:5432/grammr?currentSchema=grammr
     username: user
     password: password
-
-analysis:
-  rest:
-    host: localhost
-    uri-resolution:
-      mechanism: PATH
 
 grammr:
   languages:
     mount-path: src/test/resources/languages.yml
 
 clerk:
-  secret-key: some-secret-key
+  jwt-key: bmF0dXJhbC1nb2JsaW4tODIuY2xlcmsuYWNjb3VudHMuZGV2JA
