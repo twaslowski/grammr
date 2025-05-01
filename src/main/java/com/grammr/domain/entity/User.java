@@ -1,14 +1,13 @@
 package com.grammr.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.grammr.repository.converter.EmailEncryptionConverter;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
@@ -23,28 +22,15 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "app_user")
+@Table(name = "user")
 public class User {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
-  private long id;
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private String id;
 
   @NotNull
-  private String username;
-
-  @NotNull
-  @Convert(converter = EmailEncryptionConverter.class)
-  @JsonIgnore
-  private String email;
-
-  @NotNull
-  @JsonIgnore
-  private String emailHash;
-
-  @NotNull
-  @JsonIgnore
-  private String password;
+  private String externalId;
 
   @JsonIgnore
   @CreationTimestamp
@@ -54,4 +40,10 @@ public class User {
   @JsonIgnore
   @UpdateTimestamp
   private ZonedDateTime updatedTimestamp;
+
+  public static User fromExternalId(String externalId) {
+    return User.builder()
+        .externalId(externalId)
+        .build();
+  }
 }

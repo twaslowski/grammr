@@ -1,12 +1,6 @@
 spring:
   cors:
     allowed-origin: "http://localhost:3000"
-  security:
-    hashing:
-      pepper: pepper
-    encryption:
-      key: some-key
-      salt: c0ffee
   datasource:
     url: jdbc:postgresql://localhost:5432/grammr?currentSchema=grammr
     username: user
@@ -15,3 +9,15 @@ spring:
 grammr:
   languages:
     mount-path: src/test/resources/languages.yml
+
+clerk:
+  jwt-key: '-----BEGIN PUBLIC KEY-----
+  MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvsWGcKsfmjJjiN9DnwK2
+  K3mX5T2s6MhGFSVyXCON+xJRfrJPAGd3PYzSPLK6jgWus/7YX3vS5AQ0PCWeRnY0
+  60UXvYwG4H+ayanuqHO14MwTOwZx1LzdqOf24M2u+f94hI+DTk6LT2fOZN+pAiBn
+  RLif4ac+5MVkzl2oWCMw5fFxhrJfZ8Hz7AxP1MxRmkurO4w/pUWoeDxYys3txySH
+  VFEEen38awkq9yLleywb+rG5I/jEWgE/I/qr/U7fYAdQK3rGM51wfqUOsuaND8Ui
+  cnXGsy4uPH038gqQWngClnhUO8TKM0I1gf2I0B9zoKtHuCONNnWtnqrwnHyNOjfI
+  FwIDAQAB
+  -----END PUBLIC KEY-----'
+  authorized-party: 'http://localhost:3000'

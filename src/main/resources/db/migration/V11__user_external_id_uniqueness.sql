@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX idx_user_external_id ON "user" (external_id);

@@ -30,13 +30,13 @@ public class SpringSecurityConfiguration {
 
   @Bean
   public SecurityFilterChain configureWebSecurity(HttpSecurity httpSecurity,
-                                                  SessionCookieFilter sessionCookieFilter
+                                                  ClerkJwtValidationFilter clerkJwtValidationFilter
   ) throws Exception {
     return httpSecurity
         .csrf(AbstractHttpConfigurer::disable)
         .httpBasic(Customizer.withDefaults())
         .authorizeHttpRequests(this::configureRestAuthorizations)
-        .addFilterBefore(sessionCookieFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(clerkJwtValidationFilter, UsernamePasswordAuthenticationFilter.class)
         .sessionManagement(session -> session.sessionCreationPolicy(NEVER))
         .build();
   }
@@ -70,8 +70,8 @@ public class SpringSecurityConfiguration {
   private void configureRestAuthorizations(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorizationRegistry) {
     authorizationRegistry
         .requestMatchers("/actuator/*").permitAll()
-        .requestMatchers("/api/v1/**").permitAll()
         .requestMatchers("/api/v1/anki/*").authenticated()
+        .requestMatchers("/api/v1/**").permitAll()
         .anyRequest().authenticated();
   }
 

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - develop
     paths:
       - src/**
       - charts/grammr/**
@@ -115,6 +116,7 @@ jobs:
     runs-on: self-hosted
     needs: [ deploy-dev ]
     environment: prod
+    if: github.ref == 'refs/heads/main'
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
     steps:
