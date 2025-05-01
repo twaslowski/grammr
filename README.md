@@ -10,7 +10,7 @@ of languages easier.
 - 📚 Create flashcards to memorize words and phrases
 - 🌈 Many more features coming! Check out the [Roadmap](#Features) for more information.
 
-### 👉🏼 [Try it out](https://grammr.twaslowski.com).
+### 👉🏼 [Try it out](https://grammr.app).
 
 ---
 
@@ -64,10 +64,10 @@ tool that can be arbitrarily extended for different languages.
     or a related project and use them as a reference for the LLMs. For one, all meanings of a word
     could be covered; also this would protect against wonky LLM responses.
 - [x] Inflection tables (supported: 🇷🇺🇮🇹🇫🇷🇪🇸🇵🇹)
-- [ ] Anki flash card export
+- [ ] Anki flashcard export
   - [x] Flashcard creation
   - [ ] Flashcard editing
-  - [ ] Flashcard export
+  - [x] Flashcard export
 - [ ] Named-entity recognition and explanation of terms
 - [ ] Translations of phrases and sayings (which often do not translate literally and may
 or may not have equivalents in different languages)
@@ -89,7 +89,7 @@ analyis.
 - [x] ~~Extract~~ Delete the Telegram Bot entirely from the core service. It was useful for prototyping, but
 should not be tied to the main application.
 - [ ] Versioning and release management
-- [ ] Creating multiple environments for testing and development
+- [x] Creating multiple environments for testing and development
 - [ ] Benchmarking against quality regression of prompts
 
 ## Related projects
