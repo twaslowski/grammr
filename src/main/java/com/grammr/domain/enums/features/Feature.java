@@ -1,10 +1,10 @@
 package com.grammr.domain.enums.features;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public record Feature(FeatureType type, String value) {
 
-  // todo:  Include validation at deserialization time instead of retrieval.
+  @JsonIgnore
   public FeatureProperty getEnumValue() {
     return switch (type) {
       case GENDER -> Gender.valueOf(value);
@@ -15,11 +15,6 @@ public record Feature(FeatureType type, String value) {
       case ANIMACY -> Animacy.valueOf(value);
       case MISC -> MiscellaneousFeature.UNSUPPORTED_FEATURE;
     };
-  }
-
-  @JsonProperty("fullIdentifier")
-  public String fullIdentifier() {
-    return getEnumValue().fullIdentifier();
   }
 
   public static Feature of(FeatureType type, String value) {

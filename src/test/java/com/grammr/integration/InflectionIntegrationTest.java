@@ -1,14 +1,15 @@
 package com.grammr.integration;
 
+import static com.grammr.domain.enums.PartOfSpeechTag.NOUN;
+import static com.grammr.domain.enums.PartOfSpeechTag.PRON;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.port.dto.InflectionsRequest;
-import com.grammr.domain.value.language.Token;
-import com.grammr.domain.value.language.TokenMorphology;
+import com.grammr.repository.ParadigmRepository;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +25,13 @@ public class InflectionIntegrationTest extends IntegrationTestBase {
   @Autowired
   private MockMvc mockMvc;
 
+  @Autowired
+  private ParadigmRepository paradigmRepository;
+
   @Test
   @SneakyThrows
   void shouldRetrieveInflectionsForWord() {
-    String lemma = "дело";
-    var morphology = TokenMorphology.builder().lemma(lemma).partOfSpeechTag(PartOfSpeechTag.NOUN).build();
-    var token = Token.builder()
-        .text("дела")
-        .morphology(morphology)
-        .build();
-    var request = new InflectionsRequest(LanguageCode.RU, token);
+    var request = new InflectionsRequest(LanguageCode.RU, "дело", NOUN);
 
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/inflection")
             .contentType(MediaType.APPLICATION_JSON)
@@ -43,18 +41,15 @@ public class InflectionIntegrationTest extends IntegrationTestBase {
         .andExpect(jsonPath("$.inflections").isArray())
         .andExpect(jsonPath("$.partOfSpeech").value("NOUN"))
         .andReturn();
+
+    assertThat(paradigmRepository.findByLemmaAndPartOfSpeechAndLanguageCode("дело", NOUN, LanguageCode.RU))
+        .isPresent();
   }
 
   @Test
   @SneakyThrows
   void shouldReturnBadRequestForUnsupportedPartOfSpeech() {
-    String lemma = "дело";
-    var morphology = TokenMorphology.builder().lemma(lemma).partOfSpeechTag(PartOfSpeechTag.PRON).build();
-    var token = Token.builder()
-        .text("дела")
-        .morphology(morphology)
-        .build();
-    var request = new InflectionsRequest(LanguageCode.RU, token);
+    var request = new InflectionsRequest(LanguageCode.RU, "дело", PRON);
 
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/inflection")
             .contentType(MediaType.APPLICATION_JSON)
@@ -67,13 +62,7 @@ public class InflectionIntegrationTest extends IntegrationTestBase {
   @Test
   @SneakyThrows
   void shouldReturnBadRequestForLanguageWithNoInflectionsAvailable() {
-    String lemma = "дело";
-    var morphology = TokenMorphology.builder().lemma(lemma).partOfSpeechTag(PartOfSpeechTag.NOUN).build();
-    var token = Token.builder()
-        .text("дела")
-        .morphology(morphology)
-        .build();
-    var request = new InflectionsRequest(LanguageCode.EN, token);
+    var request = new InflectionsRequest(LanguageCode.EN, "дело", NOUN);
 
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/inflection")
             .contentType(MediaType.APPLICATION_JSON)

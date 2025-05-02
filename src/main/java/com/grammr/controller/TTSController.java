@@ -1,4 +1,4 @@
-package com.grammr.port.inbound;
+package com.grammr.controller;
 
 import com.grammr.port.dto.TTSRequest;
 import com.grammr.service.TextToSpeechService;

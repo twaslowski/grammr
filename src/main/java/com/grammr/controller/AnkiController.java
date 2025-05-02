@@ -1,8 +1,7 @@
-package com.grammr.port.inbound;
+package com.grammr.controller;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.ExportDataType;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

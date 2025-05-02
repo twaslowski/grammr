@@ -1,4 +1,4 @@
-package com.grammr.port.inbound;
+package com.grammr.controller;
 
 import com.grammr.domain.value.language.TokenTranslation;
 import com.grammr.port.dto.LiteralTranslationRequestDTO;
