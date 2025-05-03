@@ -3,6 +3,7 @@ package com.grammr.domain.enums.features;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Transient;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record Feature(FeatureType type, String value) {
@@ -20,6 +21,7 @@ public record Feature(FeatureType type, String value) {
     };
   }
 
+  @Transient
   @JsonProperty("fullIdentifier")
   public String fullIdentifier() {
     return getEnumValue().fullIdentifier();

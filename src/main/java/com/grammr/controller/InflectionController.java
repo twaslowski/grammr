@@ -4,6 +4,7 @@ import com.grammr.domain.value.language.ParadigmDTO;
 import com.grammr.port.dto.InflectionsRequest;
 import com.grammr.service.InflectionService;
 import io.micrometer.core.annotation.Timed;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class InflectionController {
 
   @Timed(value = "rest.inflection", description = "Time taken to inflect words")
   @PostMapping(value = "/inflection", produces = "application/json")
-  public ResponseEntity<ParadigmDTO> performInflection(@RequestBody InflectionsRequest request) {
+  public ResponseEntity<ParadigmDTO> performInflection(@RequestBody @Valid InflectionsRequest request) {
     log.info("Processing inflection request {}", request);
     var paradigm = inflectionService.inflect(request);
     return ResponseEntity.ok(paradigm);
