@@ -12,6 +12,7 @@ import com.grammr.port.dto.InflectionsRequest;
 import com.grammr.port.outbound.InflectionPort;
 import com.grammr.repository.ParadigmRepository;
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,7 +37,7 @@ public class InflectionServiceTest {
   @Test
   void shouldNotInteractWithInflectionPortWhenParadigmExists() {
     when(paradigmRepository.findByLemmaAndPartOfSpeechAndLanguageCode(any(), any(), any()))
-        .thenReturn(Optional.of(Paradigm.builder().build()));
+        .thenReturn(Optional.of(Paradigm.builder().id(UUID.randomUUID()).build()));
 
     // Act
     inflectionService.inflect(InflectionsRequest.builder().build());

@@ -1,5 +1,6 @@
 package com.grammr.domain.value;
 
+import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.Token;
 import com.grammr.domain.value.language.TokenTranslation;
@@ -11,6 +12,8 @@ import lombok.Builder;
 public record FullAnalysis(
     String sourcePhrase,
     SemanticTranslation semanticTranslation,
+    LanguageCode sourceLanguage,
+    LanguageCode targetLanguage,
     List<Token> analyzedTokens
 ) {
 

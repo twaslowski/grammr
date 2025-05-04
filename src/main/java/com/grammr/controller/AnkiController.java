@@ -47,7 +47,7 @@ public class AnkiController {
   public ResponseEntity<Flashcard> createFlashcard(@RequestBody @Valid AnkiFlashcardCreationDto data,
                                                    @AuthenticationPrincipal User user) {
     log.info("Creating flashcard for user {} in deck {}", user.getId(), data.deckId());
-    var flashcard = ankiService.createFlashcard(user, data.deckId(), data.question(), data.answer());
+    var flashcard = ankiService.createFlashcard(user, data.deckId(), data.question(), data.answer(), data.tokenPos(), data.paradigmId());
     return ResponseEntity.status(201).body(flashcard);
   }
 

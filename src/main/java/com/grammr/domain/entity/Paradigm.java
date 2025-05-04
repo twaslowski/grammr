@@ -68,6 +68,6 @@ public class Paradigm {
   }
 
   public ParadigmDTO toDTO() {
-    return new ParadigmDTO(partOfSpeech, lemma, languageCode, inflections);
+    return new ParadigmDTO(id.toString(), partOfSpeech, lemma, languageCode, inflections);
   }
 }

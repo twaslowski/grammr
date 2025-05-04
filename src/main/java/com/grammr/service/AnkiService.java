@@ -4,14 +4,19 @@ import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.ExportDataType;
+import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.domain.exception.DeckNotFoundException;
 import com.grammr.domain.exception.UserNotFoundException;
 import com.grammr.port.dto.DeckDTO;
 import com.grammr.port.outbound.AnkiPort;
 import com.grammr.repository.DeckRepository;
 import com.grammr.repository.FlashcardRepository;
+import com.grammr.repository.ParadigmRepository;
 import com.grammr.repository.UserRepository;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +32,7 @@ public class AnkiService {
   private final DeckRepository deckRepository;
   private final AnkiPort ankiPort;
   private final UserRepository userRepository;
+  private final ParadigmRepository paradigmRepository;
 
   public byte[] exportDeck(User user, long id, ExportDataType exportDataType) {
     var deck = deckRepository.findById(id)
@@ -38,19 +44,22 @@ public class AnkiService {
     };
   }
 
-  @Transactional
-  public Flashcard createFlashcard(User user, long deckId, String question, String answer) {
+  public Flashcard createFlashcard(User user, long deckId, String question, String answer, PartOfSpeechTag tokenPos, UUID paradigmId) {
     var deck = deckRepository.findById(deckId)
         .map(d -> checkOwnershipMismatch(user, d))
         .orElseThrow(() -> new DeckNotFoundException(user.getId(), deckId));
+    var paradigm = Optional.ofNullable(paradigmId)
+        .flatMap(paradigmRepository::findById)
+        .orElse(null);
     var flashcard = Flashcard.builder()
         .question(question)
         .answer(answer)
+        .tokenPos(tokenPos)
+        .paradim(paradigm)
         .deck(deck).build();
     return flashcardRepository.save(flashcard);
   }
 
-  @Transactional
   public Deck createDeck(String userId, String name) {
     var user = userRepository.findById(userId)
         .orElseThrow(() -> new UserNotFoundException(userId));
@@ -87,7 +96,7 @@ public class AnkiService {
 
   public void deleteFlashcard(User user, long flashcardId) {
     var foundFlashcard = flashcardRepository.findById(flashcardId)
-        .filter(flashcard -> flashcard.getDeck().getUser().getId() == user.getId())
+        .filter(flashcard -> Objects.equals(flashcard.getDeck().getUser().getId(), user.getId()))
         .orElseThrow(() -> new DeckNotFoundException(user.getId(), flashcardId));
     flashcardRepository.delete(foundFlashcard);
   }
