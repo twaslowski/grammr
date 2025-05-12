@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github-personal:twaslowski/grammr-ui.git
+	branch = main
+	commit = 26f8973602851025c8b4ada5ce8aef30641eb36e
+	parent = a0c7e3ccbafd42728b305d2ab9971119b5c80282
+	method = merge
+	cmdver = 0.4.9
