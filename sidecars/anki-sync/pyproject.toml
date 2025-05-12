@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "anki-exporter"
+version = "0.1.0"
+description = "Lightweight anki sync server"
+authors = ["Tobias Waslowski <tobiaswaslowski@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+anki = "^25.2.4"
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+isort = "^6.0.0"
+pytest = "^8.3.4"
+autoflake = "^2.3.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
