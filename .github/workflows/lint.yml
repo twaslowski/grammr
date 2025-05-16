@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - develop
     paths:
       - 'grammr-ui/**'
   pull_request: {}
@@ -31,9 +30,10 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
+          cache-dependency-path: grammr-ui/pnpm-lock.yaml
 
       - name: Change working directory
-        run: pushd grammr-ui
+        run: cd grammr-ui
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
