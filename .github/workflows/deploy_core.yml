@@ -98,7 +98,7 @@ jobs:
           helm upgrade --install \
             --values ./environments/dev/postgres.values.yaml \
             --namespace grammr-dev --create-namespace \
-            --wait --timeout 180s \
+            --wait --timeout 600s \
             postgres oci://registry-1.docker.io/bitnamicharts/postgresql
 
       - name: Deploy core
@@ -109,7 +109,7 @@ jobs:
             --set image.tag="$TAG" \
             --values environments/dev/core.values.yaml \
             --namespace grammr-dev --create-namespace \
-            --wait --timeout 180s \
+            --wait --timeout 600s \
             grammr-core ./charts/grammr
 
   deploy-prod:
@@ -128,7 +128,7 @@ jobs:
           helm upgrade --install \
             --values ./environments/prod/postgres.values.yaml \
             --namespace grammr --create-namespace \
-            --wait --timeout 180s \
+            --wait --timeout 600s \
             postgres oci://registry-1.docker.io/bitnamicharts/postgresql
 
       - name: Deploy core
@@ -139,5 +139,5 @@ jobs:
             --set image.tag="$TAG" \
             --values environments/prod/core.values.yaml \
             --namespace grammr --create-namespace \
-            --wait --timeout 180s \
+            --wait --timeout 600s \
             grammr-core ./charts/grammr
