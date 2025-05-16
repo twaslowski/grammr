@@ -3,9 +3,11 @@ resource "vercel_project" "project" {
   framework     = "nextjs"
   public_source = false
 
+  root_directory = "grammr-ui"
+
   git_repository = {
     type = "github"
-    repo = "twaslowski/grammr-ui"
+    repo = "twaslowski/grammr"
   }
 }
 
@@ -23,5 +25,5 @@ resource "vercel_project_domain" "domain_production_www" {
 resource "vercel_project_domain" "domain_preview" {
   project_id = vercel_project.project.id
   domain     = "dev.grammr.app"
-  git_branch = "preview"
+  git_branch = "develop"
 }
