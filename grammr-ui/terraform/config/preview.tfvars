@@ -1,2 +1,2 @@
 clerk_publishable_key_preview="pk_test_bmF0dXJhbC1nb2JsaW4tODIuY2xlcmsuYWNjb3VudHMuZGV2JA"
-backend_host_preview="https://dev.grammr.app"
+backend_host_preview="https://server-dev.grammr.app"

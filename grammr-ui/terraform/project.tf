@@ -10,14 +10,14 @@ resource "vercel_project" "project" {
 }
 
 resource "vercel_project_domain" "domain_production" {
-  project_id = vercel_project.project.id
-  domain     = "grammr.app"
+  project_id           = vercel_project.project.id
+  domain               = "grammr.app"
+  redirect_status_code = 307
 }
 
 resource "vercel_project_domain" "domain_production_www" {
-  project_id           = vercel_project.project.id
-  domain               = "www.grammr.app"
-  redirect_status_code = 307
+  project_id = vercel_project.project.id
+  domain     = "www.grammr.app"
 }
 
 resource "vercel_project_domain" "domain_preview" {

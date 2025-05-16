@@ -1,6 +1,8 @@
-// inflectionUtils.test.ts
-import { findInflection, organizeInflectionTable } from '@/service/inflection';
-import { Inflection, InflectionTableData } from '@/types/inflections';
+import { findInflection, organizeInflectionTable } from '@/inflection/lib';
+import {
+  Inflection,
+  InflectionTableData,
+} from '@/inflection/types/inflections';
 
 const nominative = { type: 'CASE', value: 'NOM', fullIdentifier: 'Nominative' };
 const genitive = { type: 'CASE', value: 'GEN', fullIdentifier: 'Genitive' };

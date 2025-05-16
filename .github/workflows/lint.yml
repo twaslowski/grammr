@@ -1,9 +1,13 @@
-name: Code Check
+name: Typescript Linter
 on:
   push:
     branches:
       - main
+      - develop
+    paths:
+      - 'grammr-ui/**'
   pull_request: {}
+
 
 concurrency:
   group: ${{ github.job }}-${{ github.ref }}
@@ -14,17 +18,20 @@ jobs:
     name: ⬣ ESLint, ʦ TypeScript, 💅 Prettier, and 🃏 Test
     runs-on: ubuntu-latest
     steps:
-      - name: ⬇️ Checkout repo
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: 🤌 Setup pnpm
+      - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
-      - name: ⎔ Setup node
+      - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
+
+      - name: Change working directory
+        run: pushd grammr-ui
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile

@@ -1,76 +1,41 @@
-import { ArrowLeftRight, RotateCw } from 'lucide-react';
+import { RotateCw } from 'lucide-react';
 import React, { useState } from 'react';
 
-import DeckSelection from '@/components/deck/DeckSelection';
+import DeckSelection from '@/flashcard/component/deck/DeckSelection';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
-import { toast } from '@/hooks/use-toast';
+import TokenType from '@/types/tokenType';
+import { createTokenFlashcard } from '@/flashcard/lib';
+import useAnalysis from '@/hooks/useAnalysis';
+import { useInflections } from '@/inflection/useInflections';
+import RichFlashcardBack from '@/flashcard/component/RichFlashcardContent';
 
 interface FlashcardPreviewProps {
-  initialFront: string;
-  initialBack: string;
+  token: TokenType;
   onClose: () => void;
 }
 
-const FlashcardPreview: React.FC<FlashcardPreviewProps> = ({
-  initialFront,
-  initialBack,
+const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
+  token,
   onClose,
 }) => {
   const [deckId, setDeckId] = useState(-1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [front, setFront] = useState(initialFront);
-  const [back, setBack] = useState(initialBack);
+  const [front, setFront] = useState(token.morphology.lemma);
   const [activeCard, setActiveCard] = useState('front');
 
-  // Toggle front and back of the flashcard without changing anything
+  const { analysis } = useAnalysis();
+  const { inflections } = useInflections(
+    token.morphology.lemma,
+    token.morphology.pos,
+    analysis?.sourceLanguage ?? 'unknown', // this will always lead to unretrievable inflections
+  );
+
   const handleToggle = () => {
     if (activeCard === 'front') {
       setActiveCard('back');
     } else {
       setActiveCard('front');
-    }
-  };
-
-  // Switch front and back of the flashcard
-  const handleSwitch = () => {
-    const newFront = back;
-    const newBack = front;
-    setFront(newFront);
-    setBack(newBack);
-  };
-
-  const createFlashcard = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch('/api/v1/anki/flashcard', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          deckId: deckId,
-          question: front,
-          answer: back,
-        }),
-      });
-
-      if (response.status !== 201) {
-        throw new Error('Failed to create flashcard');
-      }
-
-      toast({
-        title: 'Success',
-        description: 'Flashcard created successfully',
-      });
-      onClose();
-    } catch (error) {
-      toast({
-        title: 'Error creating flashcard',
-        description: 'Please try again later',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -100,26 +65,19 @@ const FlashcardPreview: React.FC<FlashcardPreviewProps> = ({
       </div>
       <div>
         <Card
-          className='w-full h-32 cursor-pointer relative'
+          className='w-full h-64 cursor-pointer relative'
           onClick={handleToggle}
         >
           <RotateCw className='h-4 w-4 absolute top-4 right-4' />
           <CardContent className='flex items-center justify-center h-full p-0'>
-            <div className='text-xl'>
-              {activeCard === 'front' ? front : back}
-            </div>
+            {activeCard === 'front' && <p>{front}</p>}
+            {activeCard === 'back' && (
+              <div className='text-xl'>
+                <RichFlashcardBack inflections={inflections} token={token} />
+              </div>
+            )}
           </CardContent>
         </Card>
-      </div>
-
-      <div className='py-4'>
-        <ArrowLeftRight
-          onClick={handleSwitch}
-          className='w-full text-gray-500 hover:text-gray-700 cursor-pointer transition-colors'
-        />
-        <p className='text-center text-sm text-gray-500'>
-          Reverse front and back
-        </p>
       </div>
 
       <div className='space-y-4 mt-6'>
@@ -136,8 +94,12 @@ const FlashcardPreview: React.FC<FlashcardPreviewProps> = ({
           <div className='w-1/2'>
             <h3 className='text-sm font-medium mb-2'>Back</h3>
             <Textarea
-              value={back}
-              onChange={(e) => setBack(e.target.value)}
+              disabled={true}
+              value={
+                '{{translation}}\n' +
+                '{{part of speech}} \n' +
+                '{{inflection}} \n'
+              }
               placeholder='Back of card'
               className='min-h-20'
             />
@@ -149,8 +111,12 @@ const FlashcardPreview: React.FC<FlashcardPreviewProps> = ({
         <div className='flex items-center gap-4'>
           <DeckSelection onDeckSelect={setDeckId} />
           <Button
-            onClick={createFlashcard}
-            disabled={isLoading || deckId === -1}
+            onClick={() => {
+              console.log(inflections);
+              void createTokenFlashcard(deckId, token, inflections?.paradigmId);
+              onClose();
+            }}
+            disabled={deckId === -1}
           >
             Save
           </Button>
@@ -160,4 +126,4 @@ const FlashcardPreview: React.FC<FlashcardPreviewProps> = ({
   );
 };
 
-export default FlashcardPreview;
+export default GenericFlashcardPreview;

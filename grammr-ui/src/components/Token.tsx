@@ -8,8 +8,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { stringifyFeatures } from '@/service/feature';
-import { getPosColor } from '@/service/pos';
+import { stringifyFeatures } from '@/lib/feature';
+import { getPosColor } from '@/lib/pos';
 import { TokenTranslation } from '@/types';
 import TokenType from '@/types/tokenType';
 

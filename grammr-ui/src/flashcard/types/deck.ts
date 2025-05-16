@@ -1,4 +1,4 @@
-import { Flashcard } from '@/types/flashcard';
+import { Flashcard } from '@/flashcard/types/flashcard';
 
 export default interface Deck {
   id: number;

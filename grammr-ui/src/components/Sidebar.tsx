@@ -2,23 +2,23 @@ import { X } from 'lucide-react';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import TTSPlayer from '@/components/buttons/TextToSpeech';
-import GenericFlashcardExport from '@/components/GenericFlashcardExport';
 import { Pos } from '@/components/language/Pos';
-import InflectionTable from '@/components/table/InflectionTable';
+import InflectionTable from '@/inflection/InflectionTable';
 import Translation from '@/components/Translation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { tokenHasNoFeatures } from '@/lib/utils';
-import { stringifyFeatures } from '@/service/feature';
+import { stringifyFeatures } from '@/lib/feature';
 import { TokenTranslation } from '@/types';
 import TokenType from '@/types/tokenType';
+import TokenFlashcardExport from '@/flashcard/component/TokenFlashcardExport';
+import { useInflections } from '@/inflection/useInflections';
 
 interface SidebarProps {
-  isOpen: boolean;
   onClose: () => void;
   context: string;
-  token: TokenType;
   languageCode: string;
+  token: TokenType;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -27,10 +27,14 @@ const Sidebar: React.FC<SidebarProps> = ({
   token,
   languageCode,
 }) => {
-  const [translationData, setTranslationData] = useState<TokenTranslation>({
-    source: '',
-    translation: '',
-  });
+  const { inflections, error, notAvailableInfo } = useInflections(
+    token.morphology.lemma,
+    token.morphology.pos,
+    languageCode,
+  );
+
+  const [translationData, setTranslationData] =
+    useState<TokenTranslation | null>(null);
 
   useEffect(() => {
     if (token.translation) {
@@ -86,18 +90,14 @@ const Sidebar: React.FC<SidebarProps> = ({
 
             <div className='py-2 border-b'>
               <InflectionTable
-                token={token}
-                languageCode={languageCode}
-                pos={token.morphology.pos}
+                inflections={inflections}
+                error={error}
+                notAvailableInfo={notAvailableInfo}
               />
             </div>
 
             <div className='py-2'>
-              <GenericFlashcardExport
-                front={translationData.translation}
-                back={translationData.source}
-                layout=''
-              />
+              <TokenFlashcardExport token={token} />
             </div>
           </div>
         </CardContent>

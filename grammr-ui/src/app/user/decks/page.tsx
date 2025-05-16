@@ -5,11 +5,11 @@ import React, { useEffect, useState } from 'react';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import Unauthorized from '@/components/common/Unauthorized';
-import DeckCard from '@/components/deck/DeckCard';
-import EmptyState from '@/components/deck/EmptyDeckState';
-import NewDeckDialog from '@/components/deck/NewDeckDialog';
+import DeckCard from '@/flashcard/component/deck/DeckCard';
+import EmptyState from '@/flashcard/component/deck/EmptyDeckState';
+import NewDeckDialog from '@/flashcard/component/deck/NewDeckDialog';
 import { toast } from '@/hooks/use-toast';
-import Deck from '@/types/deck';
+import Deck from '@/flashcard/types/deck';
 import Error from '@/components/common/Error';
 
 export default function DecksPage() {

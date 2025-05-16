@@ -1,9 +1,8 @@
-// components/FlashcardList.jsx
 import { ChevronDown, ChevronRight, Edit, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { MouseEvent, useState } from 'react';
 
-import { Flashcard } from '@/types/flashcard';
+import { Flashcard } from '@/flashcard/types/flashcard';
 
 interface FlashcardListProps {
   cards: Flashcard[];

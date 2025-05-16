@@ -2,7 +2,7 @@ import { Loader2 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { useLanguage } from '@/context/LanguageContext';
-import { fetchTranslation } from '@/service/translation';
+import { fetchTranslation } from '@/lib/translation';
 import { TokenTranslation } from '@/types';
 import TokenType from '@/types/tokenType';
 

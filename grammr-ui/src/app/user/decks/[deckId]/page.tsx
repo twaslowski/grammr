@@ -8,8 +8,8 @@ import DisabledButton from '@/components/buttons/DisabledButton';
 import ExportButton from '@/components/buttons/ExportButton';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import NotFound from '@/components/common/NotFound';
-import FlashcardList from '@/components/flashcard/FlashcardList';
-import Deck from '@/types/deck';
+import FlashcardList from '@/flashcard/component/FlashcardList';
+import Deck from '@/flashcard/types/deck';
 
 export default function DeckPage(props: {
   params: Promise<{ deckId: string }>;

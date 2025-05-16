@@ -8,14 +8,10 @@ export interface Inflection {
 }
 
 export interface Inflections {
+  paradigmId: string;
   lemma: string;
   partOfSpeech: string;
   inflections: Inflection[];
-}
-
-export interface InflectionsRequest {
-  token: TokenType;
-  languageCode: string;
 }
 
 export interface InflectionTableData {

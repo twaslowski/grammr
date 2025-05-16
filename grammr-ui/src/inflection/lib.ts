@@ -3,9 +3,8 @@ import {
   Inflection,
   Inflections,
   InflectionsNotAvailableError,
-  InflectionsRequest,
   InflectionTableData,
-} from '@/types/inflections';
+} from '@/inflection/types/inflections';
 
 export const organizeInflectionTable = (
   inflections: Inflections,
@@ -111,23 +110,30 @@ export const findInflection = (
 };
 
 export const fetchInflections = async (
-  request: InflectionsRequest,
+  lemma: string,
+  pos: string,
+  languageCode: string,
 ): Promise<Inflections> => {
   const response = await fetch(`/api/v1/inflection`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(request),
+    body: JSON.stringify({
+      lemma: lemma,
+      partOfSpeechTag: pos,
+      languageCode: languageCode,
+    }),
   });
 
   if (!response.ok) {
     if (response.status === 422) {
       const body = await response.json();
       throw new InflectionsNotAvailableError(body.message);
+    } else {
+      const body = await response.json();
+      throw new Error(body.message);
     }
-    const body = await response.json();
-    throw new Error(body.message);
   }
 
   const data = await response.json();

@@ -1,7 +1,6 @@
 import { BookPlus } from 'lucide-react';
 import React, { useState } from 'react';
 
-import FlashcardPreview from '@/components/flashcard/FlashcardPreview';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -11,34 +10,23 @@ import {
 } from '@/components/ui/dialog';
 import { Toaster } from '@/components/ui/toaster';
 import { SignedIn, SignedOut } from '@clerk/nextjs';
-import { toast } from '@/hooks/use-toast';
+import TokenType from '@/types/tokenType';
+import TokenFlashcardPreview from '@/flashcard/component/TokenFlashcardPreview';
 
-interface GenericFlashcardExportProps {
-  front: string;
-  back: string;
-  layout: string;
+interface TokenFlashcardExportProps {
+  token: TokenType;
 }
 
-const GenericFlashcardExport: React.FC<GenericFlashcardExportProps> = ({
-  front,
-  back,
-  layout,
+const TokenFlashcardExport: React.FC<TokenFlashcardExportProps> = ({
+  token,
 }) => {
   const [showPreviewDialog, setShowPreviewDialog] = useState(false);
-
-  const displayAuthToast = () => {
-    toast({
-      title: 'Not logged in',
-      description: 'You need to log in to create flashcards',
-      variant: 'destructive',
-    });
-  };
 
   return (
     <div>
       <SignedIn>
         <div className='space-y-4'>
-          <Button className={layout} onClick={() => setShowPreviewDialog(true)}>
+          <Button onClick={() => setShowPreviewDialog(true)}>
             <BookPlus className='h-4 w-4 mr-2' />
             To Vocabulary
           </Button>
@@ -48,9 +36,8 @@ const GenericFlashcardExport: React.FC<GenericFlashcardExportProps> = ({
               <DialogHeader>
                 <DialogTitle>Preview Flashcard</DialogTitle>
               </DialogHeader>
-              <FlashcardPreview
-                initialFront={front}
-                initialBack={back}
+              <TokenFlashcardPreview
+                token={token}
                 onClose={() => setShowPreviewDialog(false)}
               />
             </DialogContent>
@@ -70,4 +57,4 @@ const GenericFlashcardExport: React.FC<GenericFlashcardExportProps> = ({
   );
 };
 
-export default GenericFlashcardExport;
+export default TokenFlashcardExport;
