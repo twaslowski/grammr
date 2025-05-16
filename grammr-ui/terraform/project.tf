@@ -25,5 +25,5 @@ resource "vercel_project_domain" "domain_production_www" {
 resource "vercel_project_domain" "domain_preview" {
   project_id = vercel_project.project.id
   domain     = "dev.grammr.app"
-  git_branch = "develop"
+  git_branch = var.tracked_staging_branch
 }

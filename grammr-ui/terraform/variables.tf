@@ -16,3 +16,8 @@ variable "clerk_secret_key_preview" {
 variable "clerk_secret_key_production" {
   sensitive = true
 }
+
+variable "tracked_staging_branch" {
+  type = string
+  default = "develop"
+}
