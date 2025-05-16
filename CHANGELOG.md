@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/twaslowski/grammr/compare/v1.0.0...v1.1.0) (2025-05-16)
+
+
+### Features
+
+* **ops:** increase helm deploy timeouts ([7747ec3](https://github.com/twaslowski/grammr/commit/7747ec33df1f16b070008cea07c5e6ad670c6322))
+
 ## 1.0.0 (2025-05-16)
 
 
