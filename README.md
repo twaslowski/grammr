@@ -22,6 +22,8 @@ of languages easier.
 
 [![Russian inflections](https://github.com/twaslowski/grammr/actions/workflows/deploy_inflection_ru.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_inflection_ru.yaml)
 
+![Vercel Deploy](https://deploy-badge.vercel.app/vercel/grammr)
+
 ---
 
 ## In this doc
