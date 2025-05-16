@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
-import Deck from '@/types/deck';
+import Deck from '@/flashcard/types/deck';
 
 const ExportButton = ({ deck }: { deck: Deck }) => {
   const [isExporting, setIsExporting] = useState(false);
