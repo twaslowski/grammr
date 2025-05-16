@@ -3,10 +3,11 @@ package com.grammr.port.outbound;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 import com.grammr.config.value.LanguageConfiguration;
-import com.grammr.domain.enums.LanguageCode;
+import com.grammr.domain.entity.Paradigm;
 import com.grammr.domain.exception.InflectionNotAvailable;
-import com.grammr.domain.value.language.Inflections;
-import com.grammr.port.dto.InflectionRequest;
+import com.grammr.domain.value.language.ParadigmDTO;
+import com.grammr.port.dto.InflectionsRequest;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,20 +22,24 @@ public class InflectionPort {
   private final RestClient restClient;
   private final LanguageConfiguration languageConfiguration;
 
-  public Inflections retrieveInflections(LanguageCode languageCode, InflectionRequest request) {
-    var uri = languageConfiguration.getInflectionUri(languageCode);
+  public Paradigm retrieveInflections(InflectionsRequest request) {
+    var uri = languageConfiguration.getInflectionUri(request.languageCode());
     log.info("Inflecting word '{}'", request.lemma());
     try {
-      return restClient
+      ParadigmDTO paradigmDTO = restClient
           .post()
           .uri(uri)
           .body(request)
           .retrieve()
-          .body(Inflections.class);
+          .body(ParadigmDTO.class);
+
+      return Optional.ofNullable(paradigmDTO)
+          .map(Paradigm::from)
+          .orElseThrow(() -> new InflectionNotAvailable(request.languageCode(), request.partOfSpeechTag()));
     } catch (HttpClientErrorException e) {
       log.info("Inflections could not be performed for word {}, pos {}", request.lemma(), request.partOfSpeechTag());
       if (e.getStatusCode() == UNPROCESSABLE_ENTITY) {
-        throw new InflectionNotAvailable(languageCode, request.partOfSpeechTag());
+        throw new InflectionNotAvailable(request.languageCode(), request.partOfSpeechTag());
       }
       throw e;
     } catch (Exception e) {

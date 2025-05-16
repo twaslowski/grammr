@@ -56,7 +56,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
     var user = userRepository.save(UserSpec.valid().build());
     var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
     var authentication = createUserAuthentication(user);
-    var creationDto = new AnkiFlashcardCreationDto(deck.getId(), "Test Question", "Test Answer");
+    var creationDto = new AnkiFlashcardCreationDto(deck.getId(), "Test Question", "Test Answer", null, null);
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/anki/flashcard")
             .with(authentication(authentication))
             .contentType(MediaType.APPLICATION_JSON)

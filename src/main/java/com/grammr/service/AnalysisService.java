@@ -62,6 +62,8 @@ public class AnalysisService {
     return FullAnalysis.builder()
         .semanticTranslation(semanticAnalysis)
         .sourcePhrase(sourcePhrase)
+        .sourceLanguage(analysisRequest.userLanguageLearned())
+        .targetLanguage(analysisRequest.userLanguageSpoken())
         .analyzedTokens(tokens)
         .build();
   }
@@ -104,6 +106,8 @@ public class AnalysisService {
     tokens = tokenService.enrichTokens(tokens, literalTranslation, grammaticalAnalysis);
     return FullAnalysis.builder()
         .sourcePhrase(sourcePhrase)
+        .sourceLanguage(analysisRequest.userLanguageLearned())
+        .targetLanguage(analysisRequest.userLanguageSpoken())
         .semanticTranslation(semanticTranslation)
         .analyzedTokens(tokens)
         .build();

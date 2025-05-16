@@ -1,8 +1,13 @@
 package com.grammr.port.dto;
 
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.domain.value.language.Token;
+import com.grammr.domain.enums.PartOfSpeechTag;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
-public record InflectionsRequest(LanguageCode languageCode, Token token) {
+@Builder
+public record InflectionsRequest(@NotNull LanguageCode languageCode,
+                                 @NotNull String lemma,
+                                 @NotNull PartOfSpeechTag partOfSpeechTag) {
 
 }
