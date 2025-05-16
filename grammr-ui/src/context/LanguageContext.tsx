@@ -9,9 +9,7 @@ interface LanguageContextProps {
   setLanguageLearned: (language: string) => void;
 }
 
-const LanguageContext = createContext<LanguageContextProps | undefined>(
-  undefined,
-);
+const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [languageSpoken, setLanguageSpoken] = useState('en');

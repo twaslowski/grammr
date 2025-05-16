@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 
 interface NewDeckDialogProps {
@@ -16,12 +11,7 @@ interface NewDeckDialogProps {
   isLoading: boolean;
 }
 
-const NewDeckDialog: React.FC<NewDeckDialogProps> = ({
-  isOpen,
-  onClose,
-  onCreate,
-  isLoading,
-}) => {
+const NewDeckDialog: React.FC<NewDeckDialogProps> = ({ isOpen, onClose, onCreate, isLoading }) => {
   const [newDeckName, setNewDeckName] = useState('');
   const [newDeckDescription, setNewDeckDescription] = useState('');
 

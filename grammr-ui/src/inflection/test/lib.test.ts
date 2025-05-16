@@ -1,8 +1,5 @@
 import { findInflection, organizeInflectionTable } from '@/inflection/lib';
-import {
-  Inflection,
-  InflectionTableData,
-} from '@/inflection/types/inflections';
+import { Inflection, InflectionTableData } from '@/inflection/types/inflections';
 
 const nominative = { type: 'CASE', value: 'NOM', fullIdentifier: 'Nominative' };
 const genitive = { type: 'CASE', value: 'GEN', fullIdentifier: 'Genitive' };
@@ -42,6 +39,7 @@ describe('organizeInflectionTable', () => {
 
     expect(
       organizeInflectionTable({
+        paradigmId: '1',
         inflections: inflections,
         partOfSpeech: 'NOUN',
         lemma: 'test',
@@ -53,6 +51,7 @@ describe('organizeInflectionTable', () => {
     const inflections: Inflection[] = [];
     expect(
       organizeInflectionTable({
+        paradigmId: '1',
         inflections: inflections,
         partOfSpeech: 'NOUN',
         lemma: 'test',
@@ -65,14 +64,13 @@ describe('organizeInflectionTable', () => {
       {
         lemma: 'test',
         inflected: 'test',
-        features: [
-          { type: 'Gender', value: 'MASC', fullIdentifier: 'Masculine' },
-        ],
+        features: [{ type: 'Gender', value: 'MASC', fullIdentifier: 'Masculine' }],
       },
     ];
 
     expect(
       organizeInflectionTable({
+        paradigmId: '1',
         inflections: inflections,
         partOfSpeech: 'NOUN',
         lemma: 'test',
@@ -109,6 +107,7 @@ describe('organizeInflectionTable', () => {
 
     expect(
       organizeInflectionTable({
+        paradigmId: '1',
         inflections: inflections,
         partOfSpeech: 'VERB',
         lemma: 'test',

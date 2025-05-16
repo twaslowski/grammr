@@ -78,9 +78,7 @@ export default function DecksPage() {
     return (
       <Error
         title={'Failed to load decks :('}
-        message={
-          'An unexpected error occurred when loading your decks. Please try again later.'
-        }
+        message={'An unexpected error occurred when loading your decks. Please try again later.'}
       />
     );
   }
@@ -127,11 +125,7 @@ export default function DecksPage() {
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {decks.map((deck) => (
-            <DeckCard
-              key={deck.id}
-              deck={deck}
-              onClick={() => handleDeckClick(deck.id)}
-            />
+            <DeckCard key={deck.id} deck={deck} onClick={() => handleDeckClick(deck.id)} />
           ))}
         </div>
 

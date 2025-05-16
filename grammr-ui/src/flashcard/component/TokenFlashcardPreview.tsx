@@ -16,10 +16,7 @@ interface FlashcardPreviewProps {
   onClose: () => void;
 }
 
-const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
-  token,
-  onClose,
-}) => {
+const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({ token, onClose }) => {
   const [deckId, setDeckId] = useState(-1);
   const [front, setFront] = useState(token.morphology.lemma);
   const [activeCard, setActiveCard] = useState('front');
@@ -64,10 +61,7 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
         </button>
       </div>
       <div>
-        <Card
-          className='w-full h-64 cursor-pointer relative'
-          onClick={handleToggle}
-        >
+        <Card className='w-full h-64 cursor-pointer relative' onClick={handleToggle}>
           <RotateCw className='h-4 w-4 absolute top-4 right-4' />
           <CardContent className='flex items-center justify-center h-full p-0'>
             {activeCard === 'front' && <p>{front}</p>}
@@ -95,11 +89,7 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
             <h3 className='text-sm font-medium mb-2'>Back</h3>
             <Textarea
               disabled={true}
-              value={
-                '{{translation}}\n' +
-                '{{part of speech}} \n' +
-                '{{inflection}} \n'
-              }
+              value={'{{translation}}\n' + '{{part of speech}} \n' + '{{inflection}} \n'}
               placeholder='Back of card'
               className='min-h-20'
             />

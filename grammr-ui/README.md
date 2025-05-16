@@ -32,4 +32,3 @@ It maintains its domains and, more importantly, the environment variables, which
     terraform init -backend-config=config/backend.hcl
     TF_VAR_vercel_token=$VERCEL_API_TOKEN terraform apply -var-file=config/preview.tfvars -var-file=config/production.tfvars
    ```
-

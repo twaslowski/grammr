@@ -21,20 +21,14 @@ interface SidebarProps {
   token: TokenType;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({
-  onClose,
-  context,
-  token,
-  languageCode,
-}) => {
+const Sidebar: React.FC<SidebarProps> = ({ onClose, context, token, languageCode }) => {
   const { inflections, error, notAvailableInfo } = useInflections(
     token.morphology.lemma,
     token.morphology.pos,
     languageCode,
   );
 
-  const [translationData, setTranslationData] =
-    useState<TokenTranslation | null>(null);
+  const [translationData, setTranslationData] = useState<TokenTranslation | null>(null);
 
   useEffect(() => {
     if (token.translation) {
@@ -63,19 +57,11 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
 
             <div className='border-b pb-2'>
-              <Pos
-                pos={token.morphology.pos}
-                className='text-gray-600 text-lg'
-              />
-              <p className='text-gray-600 text-md'>
-                Base form: {token.morphology.lemma}
-              </p>
+              <Pos pos={token.morphology.pos} className='text-gray-600 text-lg' />
+              <p className='text-gray-600 text-md'>Base form: {token.morphology.lemma}</p>
               {!tokenHasNoFeatures(token) && (
                 <p className='text-gray-600 text-md'>
-                  {stringifyFeatures(
-                    token.morphology.pos,
-                    token.morphology.features,
-                  )}
+                  {stringifyFeatures(token.morphology.pos, token.morphology.features)}
                 </p>
               )}
             </div>

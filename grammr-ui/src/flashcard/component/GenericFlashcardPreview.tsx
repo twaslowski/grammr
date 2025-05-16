@@ -99,15 +99,10 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
         </button>
       </div>
       <div>
-        <Card
-          className='w-full h-32 cursor-pointer relative'
-          onClick={handleToggle}
-        >
+        <Card className='w-full h-32 cursor-pointer relative' onClick={handleToggle}>
           <RotateCw className='h-4 w-4 absolute top-4 right-4' />
           <CardContent className='flex items-center justify-center h-full p-0'>
-            <div className='text-xl'>
-              {activeCard === 'front' ? front : back}
-            </div>
+            <div className='text-xl'>{activeCard === 'front' ? front : back}</div>
           </CardContent>
         </Card>
       </div>
@@ -117,9 +112,7 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
           onClick={handleSwitch}
           className='w-full text-gray-500 hover:text-gray-700 cursor-pointer transition-colors'
         />
-        <p className='text-center text-sm text-gray-500'>
-          Reverse front and back
-        </p>
+        <p className='text-center text-sm text-gray-500'>Reverse front and back</p>
       </div>
 
       <div className='space-y-4 mt-6'>
@@ -148,10 +141,7 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
         <h3 className='text-sm font-medium'>Select Deck</h3>
         <div className='flex items-center gap-4'>
           <DeckSelection onDeckSelect={setDeckId} />
-          <Button
-            onClick={createFlashcard}
-            disabled={isLoading || deckId === -1}
-          >
+          <Button onClick={createFlashcard} disabled={isLoading || deckId === -1}>
             Save
           </Button>
         </div>

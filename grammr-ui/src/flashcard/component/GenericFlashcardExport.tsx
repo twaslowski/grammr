@@ -3,12 +3,7 @@ import React, { useState } from 'react';
 
 import GenericFlashcardPreview from '@/flashcard/component/GenericFlashcardPreview';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Toaster } from '@/components/ui/toaster';
 import { SignedIn, SignedOut } from '@clerk/nextjs';
 
@@ -18,11 +13,7 @@ interface GenericFlashcardExportProps {
   layout: string;
 }
 
-const GenericFlashcardExport: React.FC<GenericFlashcardExportProps> = ({
-  front,
-  back,
-  layout,
-}) => {
+const GenericFlashcardExport: React.FC<GenericFlashcardExportProps> = ({ front, back, layout }) => {
   const [showPreviewDialog, setShowPreviewDialog] = useState(false);
 
   return (
@@ -52,9 +43,7 @@ const GenericFlashcardExport: React.FC<GenericFlashcardExportProps> = ({
         <Toaster />
         <Button className='cursor-not-allowed bg-gray-500' disabled>
           <BookPlus className='h-4 w-4 mr-2' />
-          <span className='hidden sm:inline'>
-            To Vocabulary (Sign in required)
-          </span>
+          <span className='hidden sm:inline'>To Vocabulary (Sign in required)</span>
         </Button>
       </SignedOut>
     </div>

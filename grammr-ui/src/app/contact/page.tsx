@@ -7,9 +7,7 @@ export default function Contact() {
       <div className='container mx-auto px-4 py-12 flex-grow'>
         <section className='mb-8 text-center'>
           <h1 className='text-4xl font-bold mb-4'>Get in Touch</h1>
-          <p className='text-gray-600'>
-            Feel free to reach out through any of these platforms.
-          </p>
+          <p className='text-gray-600'>Feel free to reach out through any of these platforms.</p>
         </section>
 
         <div className='bg-gray-50 rounded-lg p-6 mb-8'>

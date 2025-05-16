@@ -10,15 +10,10 @@ export const isNounLike = (pos: string): boolean => {
 
 export const stringifyFeatures = (pos: string, features: Feature[]) => {
   const relevantFeatures = retrieveFeatures(pos, features);
-  return relevantFeatures
-    .map((feature) => feature.fullIdentifier.toLowerCase())
-    .join(' ');
+  return relevantFeatures.map((feature) => feature.fullIdentifier.toLowerCase()).join(' ');
 };
 
-export const retrieveFeatures = (
-  pos: string,
-  features: Feature[],
-): Feature[] => {
+export const retrieveFeatures = (pos: string, features: Feature[]): Feature[] => {
   if (!pos) return [];
   const result = [];
   if (isNounLike(pos)) {

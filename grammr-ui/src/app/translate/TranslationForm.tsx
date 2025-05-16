@@ -5,10 +5,7 @@ interface TranslationFormProps {
   isLoading: boolean;
 }
 
-const TranslationForm: React.FC<TranslationFormProps> = ({
-  onTranslate,
-  isLoading,
-}) => {
+const TranslationForm: React.FC<TranslationFormProps> = ({ onTranslate, isLoading }) => {
   const [inputText, setInputText] = useState('');
 
   const handleSubmit = () => {

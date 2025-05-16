@@ -11,10 +11,7 @@ interface TranslationCardProps {
   onTokenClick: (token: TokenType) => void;
 }
 
-const AnalysisCard: React.FC<TranslationCardProps> = ({
-  analysis,
-  onTokenClick,
-}) => {
+const AnalysisCard: React.FC<TranslationCardProps> = ({ analysis, onTokenClick }) => {
   return (
     <Card className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700'>
       <CardHeader>

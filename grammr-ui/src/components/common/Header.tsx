@@ -17,12 +17,7 @@ import Image from 'next/image';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const {
-    languageSpoken,
-    languageLearned,
-    setLanguageSpoken,
-    setLanguageLearned,
-  } = useLanguage();
+  const { languageSpoken, languageLearned, setLanguageSpoken, setLanguageLearned } = useLanguage();
 
   useEffect(() => {
     const savedSpoken = localStorage.getItem('languageSpoken');
@@ -57,12 +52,7 @@ const Header: React.FC = () => {
           {/* Logo and Brand */}
           <div className='flex items-center'>
             <Link href='/' className='flex items-start space-x-2'>
-              <Image
-                src={'/images/logo.png'}
-                alt={'logo'}
-                width={30}
-                height={30}
-              />
+              <Image src={'/images/logo.png'} alt={'logo'} width={30} height={30} />
               <span className='text-xl font-bold text-primary-600'>grammr</span>
             </Link>
           </div>
@@ -113,9 +103,7 @@ const Header: React.FC = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className='w-64 p-4'>
                 <div className='mb-4'>
-                  <p className='text-sm font-medium text-gray-700 mb-2'>
-                    I speak:
-                  </p>
+                  <p className='text-sm font-medium text-gray-700 mb-2'>I speak:</p>
                   <div className='grid grid-cols-2 gap-2'>
                     {languages.map((lang) => (
                       <button
@@ -125,9 +113,7 @@ const Header: React.FC = () => {
                             ? 'bg-blue-100 text-blue-700'
                             : 'hover:bg-gray-100'
                         }`}
-                        onClick={() =>
-                          updateLanguages(lang.code, languageLearned)
-                        }
+                        onClick={() => updateLanguages(lang.code, languageLearned)}
                       >
                         <span className='mr-2'>{lang.flag}</span>
                         <span>{lang.name}</span>
@@ -136,9 +122,7 @@ const Header: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <p className='text-sm font-medium text-gray-700 mb-2'>
-                    I am learning:
-                  </p>
+                  <p className='text-sm font-medium text-gray-700 mb-2'>I am learning:</p>
                   <div className='grid grid-cols-2 gap-2'>
                     {languages.map((lang) => (
                       <button
@@ -148,9 +132,7 @@ const Header: React.FC = () => {
                             ? 'bg-blue-100 text-blue-700'
                             : 'hover:bg-gray-100'
                         }`}
-                        onClick={() =>
-                          updateLanguages(languageSpoken, lang.code)
-                        }
+                        onClick={() => updateLanguages(languageSpoken, lang.code)}
                       >
                         <span className='mr-2'>{lang.flag}</span>
                         <span>{lang.name}</span>
@@ -169,9 +151,7 @@ const Header: React.FC = () => {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className='inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500'
             >
-              <span className='sr-only'>
-                {isMenuOpen ? 'Close main menu' : 'Open main menu'}
-              </span>
+              <span className='sr-only'>{isMenuOpen ? 'Close main menu' : 'Open main menu'}</span>
               {isMenuOpen ? (
                 <X className='block h-6 w-6' aria-hidden='true' />
               ) : (
@@ -223,24 +203,17 @@ const Header: React.FC = () => {
           {/* Mobile language selector */}
           <div className='pt-4 pb-3 border-t border-gray-200'>
             <div className='px-4'>
-              <p className='text-sm font-medium text-gray-500'>
-                Language Settings
-              </p>
+              <p className='text-sm font-medium text-gray-500'>Language Settings</p>
               <div className='mt-2 flex items-center'>
                 <div className='flex-1'>
                   <p className='text-sm text-gray-700'>I speak:</p>
                   <select
                     value={languageSpoken}
-                    onChange={(e) =>
-                      updateLanguages(e.target.value, languageLearned)
-                    }
+                    onChange={(e) => updateLanguages(e.target.value, languageLearned)}
                     className='mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
                   >
                     {languages.map((lang) => (
-                      <option
-                        key={`mobile-speak-${lang.code}`}
-                        value={lang.code}
-                      >
+                      <option key={`mobile-speak-${lang.code}`} value={lang.code}>
                         {lang.flag} {lang.name}
                       </option>
                     ))}
@@ -252,16 +225,11 @@ const Header: React.FC = () => {
                   <p className='text-sm text-gray-700'>I am learning:</p>
                   <select
                     value={languageLearned}
-                    onChange={(e) =>
-                      updateLanguages(languageSpoken, e.target.value)
-                    }
+                    onChange={(e) => updateLanguages(languageSpoken, e.target.value)}
                     className='mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
                   >
                     {languages.map((lang) => (
-                      <option
-                        key={`mobile-learn-${lang.code}`}
-                        value={lang.code}
-                      >
+                      <option key={`mobile-learn-${lang.code}`} value={lang.code}>
                         {lang.flag} {lang.name}
                       </option>
                     ))}

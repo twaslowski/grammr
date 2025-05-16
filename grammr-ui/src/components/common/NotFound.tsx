@@ -2,10 +2,7 @@ import { ArrowLeft, Search } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
-export default function NotFound({
-  message = 'Page not found',
-  backHref = '/',
-}) {
+export default function NotFound({ message = 'Page not found', backHref = '/' }) {
   return (
     <div className='flex flex-col items-center justify-center min-h-screen p-4 text-center'>
       <div className='bg-gray-100 rounded-full p-6 mb-4'>

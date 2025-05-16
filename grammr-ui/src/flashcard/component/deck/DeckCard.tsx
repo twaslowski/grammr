@@ -15,14 +15,11 @@ export default function DeckCard(props: DeckCardProps) {
   const onClick = props.onClick;
 
   const cardCount = deck.flashcards.length;
-  const lastUpdated = new Date(deck.updatedTimestamp).toLocaleDateString(
-    'en-US',
-    {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    },
-  );
+  const lastUpdated = new Date(deck.updatedTimestamp).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
 
   return (
     <div
@@ -34,17 +31,13 @@ export default function DeckCard(props: DeckCardProps) {
       </div>
 
       <div className='p-4 flex-1'>
-        <div className='mb-2 line-clamp-2 h-12'>
-          {deck.description || 'No description'}
-        </div>
+        <div className='mb-2 line-clamp-2 h-12'>{deck.description || 'No description'}</div>
 
         <div className='text-sm text-gray-600 mt-4'>
           {cardCount} {cardCount === 1 ? 'card' : 'cards'}
         </div>
 
-        <div className='text-xs text-gray-500 mt-1'>
-          Last updated: {lastUpdated}
-        </div>
+        <div className='text-xs text-gray-500 mt-1'>Last updated: {lastUpdated}</div>
       </div>
 
       <div className='border-t p-3 flex justify-between items-center'>

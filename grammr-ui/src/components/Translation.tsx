@@ -12,11 +12,7 @@ interface TranslationProps {
   onTranslationLoaded: (translation: TokenTranslation) => void;
 }
 
-const Translation: React.FC<TranslationProps> = ({
-  context,
-  token,
-  onTranslationLoaded,
-}) => {
+const Translation: React.FC<TranslationProps> = ({ context, token, onTranslationLoaded }) => {
   const { languageSpoken, languageLearned } = useLanguage();
   const [isTranslationLoading, setIsTranslationLoading] = useState(false);
   const [translationError, setTranslationError] = useState<string | null>(null);
@@ -40,11 +36,7 @@ const Translation: React.FC<TranslationProps> = ({
       setTranslationError(null);
 
       try {
-        const translationResult = await fetchTranslation(
-          context,
-          token.text,
-          languageSpoken,
-        );
+        const translationResult = await fetchTranslation(context, token.text, languageSpoken);
         setTranslationData(translationResult);
         onTranslationLoadedRef.current(translationResult);
       } catch (err) {

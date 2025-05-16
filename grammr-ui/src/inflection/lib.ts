@@ -6,22 +6,15 @@ import {
   InflectionTableData,
 } from '@/inflection/types/inflections';
 
-export const organizeInflectionTable = (
-  inflections: Inflections,
-): InflectionTableData => {
-  if (
-    inflections.partOfSpeech === 'NOUN' ||
-    inflections.partOfSpeech === 'ADJ'
-  ) {
+export const organizeInflectionTable = (inflections: Inflections): InflectionTableData => {
+  if (inflections.partOfSpeech === 'NOUN' || inflections.partOfSpeech === 'ADJ') {
     return organizeNounInflectionTable(inflections.inflections);
   } else {
     return organizeVerbInflectionTable(inflections.inflections);
   }
 };
 
-const organizeNounInflectionTable = (
-  inflections: Inflection[],
-): InflectionTableData => {
+const organizeNounInflectionTable = (inflections: Inflection[]): InflectionTableData => {
   const table: InflectionTableData = {};
 
   const features = ['NOM', 'GEN', 'DAT', 'ACC', 'ABL', 'LOC'];
@@ -57,9 +50,7 @@ const organizeNounInflectionTable = (
   return table;
 };
 
-const organizeVerbInflectionTable = (
-  inflections: Inflection[],
-): InflectionTableData => {
+const organizeVerbInflectionTable = (inflections: Inflection[]): InflectionTableData => {
   const table: InflectionTableData = {};
 
   const type = 'PERSON';
@@ -102,9 +93,7 @@ export const findInflection = (
 ): Inflection | undefined => {
   return inflections.find((inflection) => {
     return features.every((feature) =>
-      inflection.features.some(
-        (f) => f.value === feature.value && f.type === feature.type,
-      ),
+      inflection.features.some((f) => f.value === feature.value && f.type === feature.type),
     );
   });
 };

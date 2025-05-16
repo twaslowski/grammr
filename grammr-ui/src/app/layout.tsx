@@ -49,20 +49,14 @@ export const metadata: Metadata = {
   // ],
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <ClerkProvider>
       <html>
         <body className='flex flex-col min-h-screen'>
           <LanguageProvider>
             <Header />
-            <main className='flex-grow bg-gray-50 dark:bg-gray-900'>
-              {children}
-            </main>
+            <main className='flex-grow bg-gray-50 dark:bg-gray-900'>{children}</main>
             <Footer />
           </LanguageProvider>
           <SpeedInsights />

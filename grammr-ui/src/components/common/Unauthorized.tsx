@@ -9,8 +9,8 @@ const Unauthorized = () => {
           <h1 className='text-2xl font-bold text-gray-900 mb-2'>Signed Out</h1>
           <div className='w-16 h-1 bg-red-500 mx-auto mb-4'></div>
           <p className='text-gray-600 mb-6'>
-            This page requires you to be signed in to your account. Please
-            create an account or sign in to continue.
+            This page requires you to be signed in to your account. Please create an account or sign
+            in to continue.
           </p>
 
           <div className='flex flex-col space-y-4'>

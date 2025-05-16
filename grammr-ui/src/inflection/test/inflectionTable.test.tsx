@@ -4,34 +4,20 @@ import { Inflections } from '@/inflection/types/inflections';
 
 describe('InflectionTable', () => {
   it('renders a loading spinner when no data is provided', () => {
-    render(
-      <InflectionTable
-        inflections={null}
-        error={null}
-        notAvailableInfo={null}
-      />,
-    );
+    render(<InflectionTable inflections={null} error={null} notAvailableInfo={null} />);
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
   it('renders an error message when error is provided', () => {
     render(
-      <InflectionTable
-        inflections={null}
-        error='Error loading data'
-        notAvailableInfo={null}
-      />,
+      <InflectionTable inflections={null} error='Error loading data' notAvailableInfo={null} />,
     );
     expect(screen.getByText('Error loading data')).toBeInTheDocument();
   });
 
   it('renders a "not available" message when notAvailableInfo is provided', () => {
     render(
-      <InflectionTable
-        inflections={null}
-        error={null}
-        notAvailableInfo='Data not available'
-      />,
+      <InflectionTable inflections={null} error={null} notAvailableInfo='Data not available' />,
     );
     expect(screen.getByText('Data not available')).toBeInTheDocument();
   });
@@ -40,6 +26,7 @@ describe('InflectionTable', () => {
     const mockInflections: Inflections = {
       lemma: 'dog',
       partOfSpeech: 'NOUN',
+      paradigmId: '1',
       inflections: [
         {
           lemma: 'dog',
@@ -60,13 +47,7 @@ describe('InflectionTable', () => {
       ],
     };
 
-    render(
-      <InflectionTable
-        inflections={mockInflections}
-        error={null}
-        notAvailableInfo={null}
-      />,
-    );
+    render(<InflectionTable inflections={mockInflections} error={null} notAvailableInfo={null} />);
     expect(screen.getByText('Nom')).toBeInTheDocument();
     expect(screen.getByText('dog')).toBeInTheDocument();
     expect(screen.getByText('dogs')).toBeInTheDocument();

@@ -3,11 +3,7 @@ import React, { useCallback, useState } from 'react';
 
 import { Pos } from '@/components/language/Pos';
 import Translation from '@/components/Translation';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { stringifyFeatures } from '@/lib/feature';
 import { getPosColor } from '@/lib/pos';
 import { TokenTranslation } from '@/types';
@@ -49,11 +45,7 @@ const Token: React.FC<TokenProps> = ({ context, token, onShare }) => {
         </div>
 
         <div className='space-y-2 pb-2'>
-          <Translation
-            context={context}
-            token={token}
-            onTranslationLoaded={onTranslationLoaded}
-          />
+          <Translation context={context} token={token} onTranslationLoaded={onTranslationLoaded} />
         </div>
         <div className='border-t pt-2'>
           <Pos className='font-normal' pos={morphology.pos} />

@@ -17,9 +17,7 @@ export default function EmptyState(emptyStateProps: EmptyStateProps) {
         <PlusCircle size={48} className='text-gray-400' />
       </div>
       <h2 className='text-xl font-semibold mb-2'>{emptyStateProps.title}</h2>
-      <p className='text-gray-600 mb-6 max-w-md'>
-        {emptyStateProps.description}
-      </p>
+      <p className='text-gray-600 mb-6 max-w-md'>{emptyStateProps.description}</p>
       <Button
         onClick={emptyStateProps.onClick}
         className='px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors'

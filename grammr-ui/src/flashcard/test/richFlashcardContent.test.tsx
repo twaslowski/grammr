@@ -1,9 +1,7 @@
 import { render } from '@testing-library/react';
 import RichFlashcardContent from '../component/RichFlashcardContent';
 
-jest.mock('@/inflection/InflectionTable', () =>
-  jest.fn(() => <div>Mocked InflectionTable</div>),
-);
+jest.mock('@/inflection/InflectionTable', () => jest.fn(() => <div>Mocked InflectionTable</div>));
 
 describe('FlashcardContent', () => {
   const mockToken = {

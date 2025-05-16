@@ -41,10 +41,7 @@ const MultiLanguageFeatureTable: React.FC<MultiLanguageFeatureTableProps> = ({
               Feature / Language
             </th>
             {languages.map((language) => (
-              <th
-                key={language}
-                className='p-3 text-center font-semibold text-gray-700'
-              >
+              <th key={language} className='p-3 text-center font-semibold text-gray-700'>
                 {language}
               </th>
             ))}
@@ -52,10 +49,7 @@ const MultiLanguageFeatureTable: React.FC<MultiLanguageFeatureTableProps> = ({
         </thead>
         <tbody>
           {DEFAULT_FEATURES.map((feature) => (
-            <tr
-              key={feature}
-              className='border-b hover:bg-gray-50 transition-colors'
-            >
+            <tr key={feature} className='border-b hover:bg-gray-50 transition-colors'>
               <td className='p-3 text-gray-800 font-medium sticky left-0 bg-white'>
                 {formatFeatureName(feature)}
               </td>

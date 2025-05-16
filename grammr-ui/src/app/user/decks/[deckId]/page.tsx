@@ -11,9 +11,7 @@ import NotFound from '@/components/common/NotFound';
 import FlashcardList from '@/flashcard/component/FlashcardList';
 import Deck from '@/flashcard/types/deck';
 
-export default function DeckPage(props: {
-  params: Promise<{ deckId: string }>;
-}) {
+export default function DeckPage(props: { params: Promise<{ deckId: string }> }) {
   const params = use(props.params);
   const { deckId } = params;
   const [deck, setDeck] = useState<Deck | null>(null);
@@ -23,11 +21,7 @@ export default function DeckPage(props: {
   const router = useRouter();
 
   const handleDeleteDeck = async () => {
-    if (
-      !confirm(
-        'Are you sure you want to delete this deck? This action cannot be undone.',
-      )
-    ) {
+    if (!confirm('Are you sure you want to delete this deck? This action cannot be undone.')) {
       return;
     }
 
@@ -185,9 +179,7 @@ export default function DeckPage(props: {
           <FlashcardList cards={deck.flashcards} deckId={deck.id} />
         ) : (
           <div className='text-center py-12 bg-gray-50 rounded-lg'>
-            <p className='text-gray-500 mb-4'>
-              This deck doesn't have any flashcards yet.
-            </p>
+            <p className='text-gray-500 mb-4'>This deck doesn't have any flashcards yet.</p>
           </div>
         )}
       </div>

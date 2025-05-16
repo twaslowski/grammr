@@ -54,23 +54,13 @@ const TranslatePage = () => {
       )}
 
       <div className='px-4 py-8 max-w-3xl mx-auto'>
-        <TranslationForm
-          onTranslate={handleTranslation}
-          isLoading={isLoading}
-        />
+        <TranslationForm onTranslate={handleTranslation} isLoading={isLoading} />
 
-        {error && (
-          <div className='text-red-500 text-sm p-3 bg-red-50 rounded py-4'>
-            {error}
-          </div>
-        )}
+        {error && <div className='text-red-500 text-sm p-3 bg-red-50 rounded py-4'>{error}</div>}
 
         {analysis && (
           <div className='mt-8 space-y-6 max-w-3xl mx-auto'>
-            <AnalysisCard
-              analysis={analysis}
-              onTokenClick={(token) => setSelectedToken(token)}
-            />
+            <AnalysisCard analysis={analysis} onTokenClick={(token) => setSelectedToken(token)} />
           </div>
         )}
       </div>

@@ -1,15 +1,8 @@
 import { useEffect, useState } from 'react';
 import { fetchInflections } from './lib';
-import {
-  Inflections,
-  InflectionsNotAvailableError,
-} from '@/inflection/types/inflections';
+import { Inflections, InflectionsNotAvailableError } from '@/inflection/types/inflections';
 
-export const useInflections = (
-  lemma: string,
-  pos: string,
-  languageCode: string,
-) => {
+export const useInflections = (lemma: string, pos: string, languageCode: string) => {
   const [inflections, setInflections] = useState<Inflections | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [notAvailableInfo, setNotAvailableInfo] = useState<string | null>(null);
@@ -21,11 +14,7 @@ export const useInflections = (
       setNotAvailableInfo(null);
 
       try {
-        const fetchedInflections = await fetchInflections(
-          lemma,
-          pos,
-          languageCode,
-        );
+        const fetchedInflections = await fetchInflections(lemma, pos, languageCode);
         setInflections(fetchedInflections);
       } catch (err) {
         if (err instanceof InflectionsNotAvailableError) {

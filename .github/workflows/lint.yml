@@ -29,10 +29,10 @@ jobs:
 
       - name: Setup node
         uses: actions/setup-node@v4
-        working-directory: grammr-ui
         with:
           node-version: 20
           cache: 'pnpm'
+          cache-dependency-path: grammr-ui/pnpm-lock.yaml
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
