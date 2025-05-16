@@ -5,7 +5,9 @@ on:
       - main
     paths:
       - 'grammr-ui/**'
-  pull_request: {}
+  pull_request:
+    branches:
+      - main
 
 
 concurrency:
@@ -27,25 +29,27 @@ jobs:
 
       - name: Setup node
         uses: actions/setup-node@v4
+        working-directory: grammr-ui
         with:
           node-version: 20
           cache: 'pnpm'
-          cache-dependency-path: grammr-ui/pnpm-lock.yaml
-
-      - name: Change working directory
-        run: cd grammr-ui
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
+        working-directory: grammr-ui
 
       - name: 🔬 Lint
         run: pnpm run lint:strict
+        working-directory: grammr-ui
 
       - name: 🔎 Type check
         run: pnpm run typecheck
+        working-directory: grammr-ui
 
       - name: 💅 Prettier check
         run: pnpm run format:check
+        working-directory: grammr-ui
 
       - name: 🃏 Run jest
         run: pnpm run test
+        working-directory: grammr-ui
