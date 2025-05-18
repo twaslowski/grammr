@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/twaslowski/grammr/compare/v1.0.0...v1.1.0) (2025-05-18)
+
+
+### Features
+
+* **ops:** increase helm deploy timeouts ([7747ec3](https://github.com/twaslowski/grammr/commit/7747ec33df1f16b070008cea07c5e6ad670c6322))
+
+
+### Bug Fixes
+
+* **core:** change paradigm fetching on flashcards to EAGER ([15860b5](https://github.com/twaslowski/grammr/commit/15860b59f3aca21ffc95b076f53ad58d67a7b3f2))
+
 ## 1.0.0 (2025-05-16)
 
 
