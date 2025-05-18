@@ -9,9 +9,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
+import com.grammr.domain.entity.Paradigm;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.ExportDataType;
+import com.grammr.domain.enums.LanguageCode;
+import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.port.dto.anki.AnkiDeckCreationDto;
 import com.grammr.port.dto.anki.AnkiFlashcardCreationDto;
 import com.grammr.port.dto.anki.InboundAnkiDeckExportDto;
@@ -48,6 +51,36 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
         .andReturn();
 
     assertThat(deckRepository.findAll()).hasSize(1);
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldRetrieveDeckWithFlashcards() {
+    var user = userRepository.save(UserSpec.valid().build());
+    var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
+    var paradigm = paradigmRepository.save(Paradigm.builder()
+        .lemma("Hund")
+        .languageCode(LanguageCode.DE)
+        .partOfSpeech(PartOfSpeechTag.NOUN)
+        .inflections(List.of())
+        .build());
+    var flashcard = flashcardRepository.save(Flashcard.builder()
+        .question("Dog")
+        .answer("Hund")
+        .tokenPos(PartOfSpeechTag.NOUN)
+        .paradigm(paradigm)
+        .deck(deck)
+        .build());
+    var auth = createUserAuthentication(user);
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/anki/deck")
+            .with(authentication(auth))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].id").value(deck.getId()))
+        .andExpect(jsonPath("$[0].flashcards").isArray())
+        .andExpect(jsonPath("$[0].flashcards.[0].id").value(flashcard.getId()))
+        .andReturn();
   }
 
   @Test

@@ -81,7 +81,7 @@ class AnkiServiceTest {
     assertThat(flashcard.getAnswer()).isEqualTo(answer);
     assertThat(flashcard.getTokenPos()).isEqualTo(tokenPos);
     assertThat(flashcard.getDeck()).isEqualTo(deck);
-    assertThat(flashcard.getParadim()).isNull();
+    assertThat(flashcard.getParadigm()).isNull();
   }
 
   @Test
@@ -105,7 +105,7 @@ class AnkiServiceTest {
     assertThat(flashcard.getAnswer()).isEqualTo(answer);
     assertThat(flashcard.getTokenPos()).isEqualTo(tokenPos);
     assertThat(flashcard.getDeck()).isEqualTo(deck);
-    assertThat(flashcard.getParadim()).isEqualTo(paradigm);
+    assertThat(flashcard.getParadigm()).isEqualTo(paradigm);
   }
 
 

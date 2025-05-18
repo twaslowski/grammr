@@ -93,13 +93,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy Postgres
-        run: |
-          helm upgrade --install \
-            --values ./environments/dev/postgres.values.yaml \
-            --namespace grammr-dev --create-namespace \
-            --wait --timeout 600s \
-            postgres oci://registry-1.docker.io/bitnamicharts/postgresql
+#      - name: Deploy Postgres
+#        run: |
+#          helm upgrade --install \
+#            --values ./environments/dev/postgres.values.yaml \
+#            --namespace grammr-dev --create-namespace \
+#            --wait --timeout 600s \
+#            postgres oci://registry-1.docker.io/bitnamicharts/postgresql
 
       - name: Deploy core
         run: |
@@ -123,13 +123,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy Postgres
-        run: |
-          helm upgrade --install \
-            --values ./environments/prod/postgres.values.yaml \
-            --namespace grammr --create-namespace \
-            --wait --timeout 600s \
-            postgres oci://registry-1.docker.io/bitnamicharts/postgresql
+#      - name: Deploy Postgres
+#        run: |
+#          helm upgrade --install \
+#            --values ./environments/prod/postgres.values.yaml \
+#            --namespace grammr --create-namespace \
+#            --wait --timeout 600s \
+#            postgres oci://registry-1.docker.io/bitnamicharts/postgresql
 
       - name: Deploy core
         run: |

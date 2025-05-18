@@ -8,6 +8,17 @@ ingress:
   host: server-prod.grammr.app
   path: /api/
 
+livenessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8080
+  initialDelaySeconds: 90
+readinessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8080
+  initialDelaySeconds: 90
+
 languages:
   - code: ru
     morphology:

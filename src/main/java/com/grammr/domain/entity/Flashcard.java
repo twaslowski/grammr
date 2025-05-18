@@ -15,7 +15,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,9 +43,9 @@ public class Flashcard {
   @Enumerated(EnumType.STRING)
   private PartOfSpeechTag tokenPos;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "paradigm_id")
-  private Paradigm paradim;
+  private Paradigm paradigm;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn

@@ -55,7 +55,7 @@ public class AnkiService {
         .question(question)
         .answer(answer)
         .tokenPos(tokenPos)
-        .paradim(paradigm)
+        .paradigm(paradigm)
         .deck(deck).build();
     return flashcardRepository.save(flashcard);
   }

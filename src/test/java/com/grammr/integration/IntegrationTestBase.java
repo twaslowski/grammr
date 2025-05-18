@@ -15,6 +15,7 @@ import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.TokenTranslation;
 import com.grammr.repository.DeckRepository;
 import com.grammr.repository.FlashcardRepository;
+import com.grammr.repository.ParadigmRepository;
 import com.grammr.repository.UserRepository;
 import com.grammr.service.TokenService;
 import com.grammr.service.language.recognition.OpenAILanguageRecognitionService;
@@ -59,6 +60,9 @@ public class IntegrationTestBase {
   @Autowired
   protected FlashcardRepository flashcardRepository;
 
+  @Autowired
+  protected ParadigmRepository paradigmRepository;
+
   private final OpenAI.ChatCompletions chatCompletionsMock = mock(OpenAI.ChatCompletions.class);
   private final OpenAI.Audios audioMock = mock(OpenAI.Audios.class);
 
@@ -67,6 +71,7 @@ public class IntegrationTestBase {
     flashcardRepository.deleteAll();
     deckRepository.deleteAll();
     userRepository.deleteAll();
+    paradigmRepository.deleteAll();
     reset(audioMock, chatCompletionsMock);
   }
 
