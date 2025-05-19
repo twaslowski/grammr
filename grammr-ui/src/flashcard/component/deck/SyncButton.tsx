@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import {Button} from "@/components/ui/button";
-import React from "react";
-import Deck from "@/flashcard/types/deck";
-import SyncIcon from "@/components/common/SyncIcon";
+import { Button } from '@/components/ui/button';
+import React from 'react';
+import Deck from '@/flashcard/types/deck';
+import SyncIcon from '@/components/common/SyncIcon';
 
 interface Note {
-  fields: Fields
+  fields: Fields;
   modelName: string;
   deckName: string;
 }
@@ -16,12 +16,12 @@ interface Fields {
   back: string;
 }
 
-export default function SyncButton({deck}: { deck: Deck }) {
+export default function SyncButton({ deck }: { deck: Deck }) {
   const [isExporting, setIsExporting] = React.useState(false);
 
   const syncFlashcards = async (deck: Deck) => {
     setIsExporting(true);
-    const notes: Note[] = deck.flashcards.map(flashcard => ({
+    const notes: Note[] = deck.flashcards.map((flashcard) => ({
       fields: {
         front: flashcard.question,
         back: flashcard.answer,
@@ -33,7 +33,7 @@ export default function SyncButton({deck}: { deck: Deck }) {
     try {
       const deckResult = await fetch('http://localhost:8765', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'createDeck',
           version: 6,
@@ -41,7 +41,7 @@ export default function SyncButton({deck}: { deck: Deck }) {
             deck: deck.name,
           },
         }),
-      })
+      });
 
       const deckData = await deckResult.json();
       if (deckData.error) {
@@ -52,7 +52,7 @@ export default function SyncButton({deck}: { deck: Deck }) {
 
       const result = await fetch('http://localhost:8765', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'addNotes',
           version: 6,
@@ -69,21 +69,21 @@ export default function SyncButton({deck}: { deck: Deck }) {
         alert('Flashcards synced successfully!');
       }
     } finally {
-      setIsExporting(false)
+      setIsExporting(false);
     }
-  }
+  };
 
   return (
-      <Button
-          onClick={() => syncFlashcards(deck)}
-          disabled={isExporting || !deck?.id}
-          className='flex items-center px-3 py-2 rounded bg-blue-100 text-blue-800'
-          variant='outline'
-      >
-  <span className={isExporting ? 'animate-spin' : ''}>
-    <SyncIcon className='text-blue-800' />
-  </span>
-        {isExporting ? 'Syncing ...' : 'Sync'}
-      </Button>
-  )
+    <Button
+      onClick={() => syncFlashcards(deck)}
+      disabled={isExporting || !deck?.id}
+      className='flex items-center px-3 py-2 rounded bg-blue-100 text-blue-800'
+      variant='outline'
+    >
+      <span className={isExporting ? 'animate-spin' : ''}>
+        <SyncIcon className='text-blue-800' />
+      </span>
+      {isExporting ? 'Syncing ...' : 'Sync'}
+    </Button>
+  );
 }

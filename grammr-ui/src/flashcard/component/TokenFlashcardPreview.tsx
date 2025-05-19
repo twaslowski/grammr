@@ -36,9 +36,9 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({ token, onClo
   };
 
   const createTokenFlashcard = async (
-      deckId: number,
-      token: TokenType,
-      paradigmId: string | undefined,
+    deckId: number,
+    token: TokenType,
+    paradigmId: string | undefined,
   ) => {
     console.log(deckId, token, paradigmId);
     return await fetch('/api/v1/anki/flashcard', {

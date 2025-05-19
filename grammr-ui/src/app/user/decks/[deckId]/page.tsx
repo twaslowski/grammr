@@ -10,7 +10,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import NotFound from '@/components/common/NotFound';
 import FlashcardList from '@/flashcard/component/FlashcardList';
 import Deck from '@/flashcard/types/deck';
-import SyncButton from "@/flashcard/component/deck/SyncButton";
+import SyncButton from '@/flashcard/component/deck/SyncButton';
 
 export default function DeckPage(props: { params: Promise<{ deckId: string }> }) {
   const params = use(props.params);
