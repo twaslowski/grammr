@@ -1,7 +1,7 @@
 'use client';
 
-import { SignedIn, SignedOut, SignInButton } from '@clerk/nextjs';
-import { ChevronDown, Divide, Menu, User, X } from 'lucide-react';
+import { ClerkLoading, SignedIn, SignedOut, SignInButton } from '@clerk/nextjs';
+import { ChevronDown, Menu, User, X } from 'lucide-react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
@@ -14,6 +14,7 @@ import {
 import { languages } from '@/constant/languages';
 import { useLanguage } from '@/context/LanguageContext';
 import Image from 'next/image';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -142,7 +143,25 @@ const Header: React.FC = () => {
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>
-            <UserMenu />
+            <SignedIn>
+              <UserMenu />
+            </SignedIn>
+            <SignedOut>
+              <div className='flex items-center'>
+                <SignInButton>
+                  <button className='inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm'>
+                    <User className='mr-2 h-4 w-4' />
+                    Sign In
+                  </button>
+                </SignInButton>
+              </div>
+            </SignedOut>
+            <ClerkLoading>
+              <button className='inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm cursor-not-allowed'>
+                <User className='mr-2 h-4 w-4' />
+                <LoadingSpinner size={4} />
+              </button>
+            </ClerkLoading>
           </div>
 
           {/* Mobile menu button */}
@@ -197,7 +216,25 @@ const Header: React.FC = () => {
           </div>
 
           <div className='p-4 border-t border-gray-200'>
-            <UserMenu />
+            <SignedIn>
+              <UserMenu />
+            </SignedIn>
+            <SignedOut>
+              <div className='flex items-center'>
+                <SignInButton>
+                  <button className='inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm'>
+                    <User className='mr-2 h-4 w-4' />
+                    Sign In
+                  </button>
+                </SignInButton>
+              </div>
+            </SignedOut>
+            <ClerkLoading>
+              <button className='inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm cursor-not-allowed'>
+                <User className='mr-2 h-4 w-4' />
+                <LoadingSpinner size={4} />
+              </button>
+            </ClerkLoading>
           </div>
 
           {/* Mobile language selector */}
