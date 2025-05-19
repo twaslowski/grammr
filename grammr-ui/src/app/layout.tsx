@@ -9,7 +9,7 @@ import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
 import { siteConfig } from '@/constant/config';
 import { LanguageProvider } from '@/context/LanguageContext';
-import {Toaster} from "@/components/ui/toaster";
+import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),

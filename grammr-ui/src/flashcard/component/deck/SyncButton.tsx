@@ -82,22 +82,21 @@ export default function SyncButton({ deck }: { deck: Deck }) {
           title: 'Error',
           description: `Failed to sync flashcards: ${data.error}`,
           variant: 'destructive',
-        })
+        });
       } else {
         toast({
           title: 'Success',
           description: 'Flashcards synced successfully!',
           variant: 'default',
-        })
+        });
       }
     } catch {
       toast({
         title: 'Error',
         description: `Failed to sync flashcards. Ensure that Anki is running with the AnkiConnect plugin installed.`,
         variant: 'destructive',
-      })
-    }
-    finally {
+      });
+    } finally {
       setIsExporting(false);
     }
   };
