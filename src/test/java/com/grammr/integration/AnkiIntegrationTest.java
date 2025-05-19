@@ -1,6 +1,7 @@
 package com.grammr.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -9,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
+import com.grammr.domain.entity.Flashcard.Status;
 import com.grammr.domain.entity.Paradigm;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.entity.UserSpec;
@@ -70,6 +72,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
         .tokenPos(PartOfSpeechTag.NOUN)
         .paradigm(paradigm)
         .deck(deck)
+        .status(Status.CREATED)
         .build());
     var auth = createUserAuthentication(user);
 
@@ -81,6 +84,53 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
         .andExpect(jsonPath("$[0].flashcards").isArray())
         .andExpect(jsonPath("$[0].flashcards.[0].id").value(flashcard.getId()))
         .andReturn();
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldExportNonExportedCards() {
+    var user = userRepository.save(UserSpec.valid().build());
+    var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
+
+    var paradigm = paradigmRepository.save(Paradigm.builder()
+        .lemma("Hund")
+        .languageCode(LanguageCode.DE)
+        .partOfSpeech(PartOfSpeechTag.NOUN)
+        .inflections(List.of())
+        .build());
+    var flashcard = flashcardRepository.save(Flashcard.builder()
+        .question("Dog")
+        .answer("Hund")
+        .tokenPos(PartOfSpeechTag.NOUN)
+        .paradigm(paradigm)
+        .deck(deck)
+        .status(Status.CREATED)
+        .build());
+
+    flashcardRepository.save(Flashcard.builder()
+        .question("I go on a walk with the dog")
+        .answer("Ich gehe mit dem Hund spazieren")
+        .deck(deck)
+        .status(Status.EXPORTED)
+        .build());
+
+    var auth = createUserAuthentication(user);
+
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/anki/sync")
+            .with(authentication(auth))
+            .content(objectMapper.writeValueAsString(new InboundAnkiDeckExportDto(deck.getId(), ExportDataType.APKG)))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value(deck.getId()))
+        .andExpect(jsonPath("$.name").value(deck.getName()))
+        .andExpect(jsonPath("$.flashcards").isArray())
+        .andExpect(jsonPath("$.flashcards", hasSize(1)))
+        .andExpect(jsonPath("$.flashcards.[0].id").value(flashcard.getId()))
+        .andReturn();
+
+    // Status of the exported Flashcard now also is EXPORTED
+    assertThat(flashcardRepository.findAll()).hasSize(2);
+    assertThat(flashcardRepository.findByDeckIdAndStatusNot(deck.getId(), Status.EXPORTED)).hasSize(0);
   }
 
   @Test
@@ -116,6 +166,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
     flashcardRepository.save(Flashcard.builder()
         .question("Question")
         .answer("Answer")
+        .status(Status.CREATED)
         .deck(deck)
         .build()
     );
@@ -139,6 +190,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
     flashcardRepository.save(Flashcard.builder()
         .question("Question")
         .answer("Answer")
+        .status(Status.CREATED)
         .deck(deck)
         .build()
     );

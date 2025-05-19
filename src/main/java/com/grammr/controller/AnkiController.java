@@ -43,6 +43,18 @@ public class AnkiController {
     return ResponseEntity.ok().headers(headers).body(exportedDeck);
   }
 
+  @PostMapping(value = "/sync")
+  public ResponseEntity<DeckDTO> syncDeck(@AuthenticationPrincipal User user, @RequestBody InboundAnkiDeckExportDto dto) {
+    var flashcards = ankiService.retrieveSyncableCards(dto.deckId());
+    var deck = ankiService.getDeck(user, dto.deckId());
+    DeckDTO response = DeckDTO.builder()
+        .id(deck.getId())
+        .name(deck.getName())
+        .flashcards(flashcards)
+        .build();
+    return ResponseEntity.ok(response);
+  }
+
   @PostMapping(value = "/flashcard", produces = APPLICATION_JSON_VALUE)
   public ResponseEntity<Flashcard> createFlashcard(@RequestBody @Valid AnkiFlashcardCreationDto data,
                                                    @AuthenticationPrincipal User user) {
@@ -53,7 +65,7 @@ public class AnkiController {
 
   @PostMapping(value = "/deck", produces = APPLICATION_JSON_VALUE)
   public ResponseEntity<DeckDTO> createDeck(@RequestBody @Valid AnkiDeckCreationDto data,
-                                         @AuthenticationPrincipal User user) {
+                                            @AuthenticationPrincipal User user) {
     var deck = ankiService.createDeck(user.getId(), data.name());
     var deckDto = new DeckDTO(deck, List.of());
     return ResponseEntity.status(201).body(deckDto);

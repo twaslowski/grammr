@@ -2,6 +2,7 @@ package com.grammr.service;
 
 import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
+import com.grammr.domain.entity.Flashcard.Status;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.ExportDataType;
 import com.grammr.domain.enums.PartOfSpeechTag;
@@ -44,6 +45,12 @@ public class AnkiService {
     };
   }
 
+  public List<Flashcard> retrieveSyncableCards(long deckId) {
+    var flashcards = flashcardRepository.findByDeckIdAndStatusNot(deckId, Status.EXPORTED);
+    flashcards.forEach(f -> f.setStatus(Status.EXPORTED));
+    return flashcards;
+  }
+
   public Flashcard createFlashcard(User user, long deckId, String question, String answer, PartOfSpeechTag tokenPos, UUID paradigmId) {
     var deck = deckRepository.findById(deckId)
         .map(d -> checkOwnershipMismatch(user, d))
@@ -56,6 +63,7 @@ public class AnkiService {
         .answer(answer)
         .tokenPos(tokenPos)
         .paradigm(paradigm)
+        .status(Status.CREATED)
         .deck(deck).build();
     return flashcardRepository.save(flashcard);
   }
