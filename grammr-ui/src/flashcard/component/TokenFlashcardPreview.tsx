@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import TokenType from '@/types/tokenType';
-import { createTokenFlashcard } from '@/flashcard/lib';
 import useAnalysis from '@/hooks/useAnalysis';
 import { useInflections } from '@/inflection/useInflections';
 import RichFlashcardBack from '@/flashcard/component/RichFlashcardContent';
@@ -34,6 +33,25 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({ token, onClo
     } else {
       setActiveCard('front');
     }
+  };
+
+  const createTokenFlashcard = async (
+      deckId: number,
+      token: TokenType,
+      paradigmId: string | undefined,
+  ) => {
+    console.log(deckId, token, paradigmId);
+    return await fetch('/api/v1/anki/flashcard', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        deckId: deckId,
+        question: token.morphology.lemma,
+        answer: token.translation.translation,
+        tokenPos: token.morphology.pos,
+        paradigmId: paradigmId,
+      }),
+    });
   };
 
   return (

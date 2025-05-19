@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import ExportButton from '@/components/buttons/ExportButton';
+import ExportButton from '@/flashcard/component/deck/ExportButton';
 import Deck from '@/flashcard/types/deck';
 
 interface DeckCardProps {

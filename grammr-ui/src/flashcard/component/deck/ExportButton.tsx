@@ -90,7 +90,7 @@ const ExportButton = ({ deck }: { deck: Deck }) => {
     >
       {isExporting ? (
         <>
-          <span className='animate-spin mr-2'>
+          <span className='animate-spin'>
             <svg
               className='w-4 h-4'
               xmlns='http://www.w3.org/2000/svg'
@@ -116,7 +116,7 @@ const ExportButton = ({ deck }: { deck: Deck }) => {
         </>
       ) : (
         <>
-          <Download size={16} className='mr-2' />
+          <Download size={16} />
           Export to Anki
         </>
       )}
