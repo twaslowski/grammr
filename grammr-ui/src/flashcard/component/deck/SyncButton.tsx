@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import {Button} from '@/components/ui/button';
 import React from 'react';
 import Deck from '@/flashcard/types/deck';
 import SyncIcon from '@/components/common/SyncIcon';
@@ -19,9 +19,30 @@ interface Fields {
 export default function SyncButton({ deck }: { deck: Deck }) {
   const [isExporting, setIsExporting] = React.useState(false);
 
+  const fetchNonSyncedFlashcards = async (deckId: number): Promise<Deck> => {
+    const response = await fetch(`/api/v1/anki/sync`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        deckId: deckId,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch non-synced flashcards');
+    }
+    return await response.json() as Deck;
+  }
+
   const syncFlashcards = async (deck: Deck) => {
     setIsExporting(true);
-    const notes: Note[] = deck.flashcards.map((flashcard) => ({
+
+    // Fetch non-synced flashcards from the server
+    const nonSyncedFlashcards = await fetchNonSyncedFlashcards(deck.id);
+
+    const notes: Note[] = nonSyncedFlashcards.flashcards.map((flashcard) => ({
       fields: {
         front: flashcard.question,
         back: flashcard.answer,

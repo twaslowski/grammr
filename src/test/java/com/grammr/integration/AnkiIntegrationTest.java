@@ -118,7 +118,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
 
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/anki/sync")
             .with(authentication(auth))
-            .content(objectMapper.writeValueAsString(new InboundAnkiDeckExportDto(deck.getId(), ExportDataType.APKG)))
+            .content(objectMapper.writeValueAsString(new InboundAnkiDeckExportDto(deck.getId(), null)))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(deck.getId()))
