@@ -9,6 +9,7 @@ import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
 import { siteConfig } from '@/constant/config';
 import { LanguageProvider } from '@/context/LanguageContext';
+import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className='flex-grow bg-gray-50 dark:bg-gray-900'>{children}</main>
             <Footer />
           </LanguageProvider>
+          <Toaster />
           <SpeedInsights />
         </body>
       </html>

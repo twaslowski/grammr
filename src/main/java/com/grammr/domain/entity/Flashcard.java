@@ -30,6 +30,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Table(name = "flashcard")
 public class Flashcard {
 
+  public enum Status {
+    CREATED,
+    UPDATED,
+    EXPORTED
+  }
+
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
   private long id;
@@ -51,6 +57,10 @@ public class Flashcard {
   @JoinColumn
   @JsonIgnore
   private Deck deck;
+
+  @NotNull
+  @Enumerated(EnumType.STRING)
+  private Status status;
 
   @CreationTimestamp
   @Column(updatable = false)

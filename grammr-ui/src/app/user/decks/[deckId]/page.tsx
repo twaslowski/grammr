@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation';
 import React, { use, useEffect, useState } from 'react';
 
 import DisabledButton from '@/components/buttons/DisabledButton';
-import ExportButton from '@/components/buttons/ExportButton';
+import ExportButton from '@/flashcard/component/deck/ExportButton';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import NotFound from '@/components/common/NotFound';
 import FlashcardList from '@/flashcard/component/FlashcardList';
 import Deck from '@/flashcard/types/deck';
+import SyncButton from '@/flashcard/component/deck/SyncButton';
+import { Button } from '@/components/ui/button';
 
 export default function DeckPage(props: { params: Promise<{ deckId: string }> }) {
   const params = use(props.params);
@@ -121,15 +123,16 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
             </DisabledButton>
 
             <ExportButton deck={deck} />
+            <SyncButton deck={deck} />
 
-            <button
+            <Button
               onClick={handleDeleteDeck}
-              className='flex items-center px-3 py-2 bg-red-100 text-red-600 rounded'
-              title='Delete Deck'
+              className='flex items-center px-3 py-2 rounded hover:bg-red-50 bg-red-100 text-red-800'
+              variant='outline'
             >
               <Trash2 size={16} className='mr-1' />
               <span className='hidden sm:inline'>Delete</span>
-            </button>
+            </Button>
           </div>
         </div>
 

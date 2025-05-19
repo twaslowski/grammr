@@ -85,12 +85,12 @@ const ExportButton = ({ deck }: { deck: Deck }) => {
     <Button
       onClick={handleExport}
       disabled={isExporting || !deck?.id}
-      className='flex items-center px-3 py-2 rounded bg-green-100 text-green-800'
+      className='flex items-center px-3 py-2 hover:bg-gray-50 bg-gray-100 text-gray-800'
       variant='outline'
     >
       {isExporting ? (
         <>
-          <span className='animate-spin mr-2'>
+          <span className='animate-spin'>
             <svg
               className='w-4 h-4'
               xmlns='http://www.w3.org/2000/svg'
@@ -116,8 +116,8 @@ const ExportButton = ({ deck }: { deck: Deck }) => {
         </>
       ) : (
         <>
-          <Download size={16} className='mr-2' />
-          Export to Anki
+          <Download size={16} />
+          APKG
         </>
       )}
     </Button>

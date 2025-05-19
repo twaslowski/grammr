@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -18,7 +17,6 @@ export default function DecksPage() {
   const [error, setError] = useState<string | null>(null);
   const [unauthorized, setUnauthorized] = useState(false);
   const [showNewDeckDialog, setShowNewDeckDialog] = useState(false);
-  const router = useRouter();
 
   const createNewDeck = async (name: string, description: string) => {
     try {
@@ -65,10 +63,6 @@ export default function DecksPage() {
       .catch((err) => setError(err.message))
       .finally(() => setIsLoading(false));
   }, []);
-
-  const handleDeckClick = (deckId: number) => {
-    router.push(`/user/decks/${deckId}`);
-  };
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -125,7 +119,7 @@ export default function DecksPage() {
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {decks.map((deck) => (
-            <DeckCard key={deck.id} deck={deck} onClick={() => handleDeckClick(deck.id)} />
+            <DeckCard key={deck.id} deck={deck} />
           ))}
         </div>
 
