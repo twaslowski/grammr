@@ -1,6 +1,6 @@
 'use client';
 
-import {Button} from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import React from 'react';
 import Deck from '@/flashcard/types/deck';
 import SyncIcon from '@/components/common/SyncIcon';
@@ -33,8 +33,8 @@ export default function SyncButton({ deck }: { deck: Deck }) {
     if (!response.ok) {
       throw new Error('Failed to fetch non-synced flashcards');
     }
-    return await response.json() as Deck;
-  }
+    return (await response.json()) as Deck;
+  };
 
   const syncFlashcards = async (deck: Deck) => {
     setIsExporting(true);
