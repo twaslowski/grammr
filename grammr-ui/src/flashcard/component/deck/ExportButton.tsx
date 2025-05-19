@@ -85,7 +85,7 @@ const ExportButton = ({ deck }: { deck: Deck }) => {
     <Button
       onClick={handleExport}
       disabled={isExporting || !deck?.id}
-      className='flex items-center px-3 py-2 rounded bg-green-100 text-green-800'
+      className='flex items-center px-3 py-2 hover:bg-gray-50 bg-gray-100 text-gray-800'
       variant='outline'
     >
       {isExporting ? (
@@ -117,7 +117,7 @@ const ExportButton = ({ deck }: { deck: Deck }) => {
       ) : (
         <>
           <Download size={16} />
-          Export to Anki
+          APKG
         </>
       )}
     </Button>

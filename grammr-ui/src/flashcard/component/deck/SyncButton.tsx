@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import React from 'react';
 import Deck from '@/flashcard/types/deck';
 import SyncIcon from '@/components/common/SyncIcon';
+import { toast } from '@/hooks/use-toast';
 
 interface Note {
   fields: Fields;
@@ -64,13 +65,6 @@ export default function SyncButton({ deck }: { deck: Deck }) {
         }),
       });
 
-      const deckData = await deckResult.json();
-      if (deckData.error) {
-        console.error('Error creating deck:', deckData.error);
-        alert('Failed to create deck. Please try again.');
-        return;
-      }
-
       const result = await fetch('http://localhost:8765', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -84,12 +78,26 @@ export default function SyncButton({ deck }: { deck: Deck }) {
       });
       const data = await result.json();
       if (data.error) {
-        console.error('Error syncing flashcards:', data.error);
-        alert('Failed to sync flashcards. Please try again.');
+        toast({
+          title: 'Error',
+          description: `Failed to sync flashcards: ${data.error}`,
+          variant: 'destructive',
+        })
       } else {
-        alert('Flashcards synced successfully!');
+        toast({
+          title: 'Success',
+          description: 'Flashcards synced successfully!',
+          variant: 'default',
+        })
       }
-    } finally {
+    } catch {
+      toast({
+        title: 'Error',
+        description: `Failed to sync flashcards. Ensure that Anki is running with the AnkiConnect plugin installed.`,
+        variant: 'destructive',
+      })
+    }
+    finally {
       setIsExporting(false);
     }
   };
@@ -98,7 +106,7 @@ export default function SyncButton({ deck }: { deck: Deck }) {
     <Button
       onClick={() => syncFlashcards(deck)}
       disabled={isExporting || !deck?.id}
-      className='flex items-center px-3 py-2 rounded bg-blue-100 text-blue-800'
+      className='flex items-center px-3 py-2 rounded hover:bg-blue-50 bg-blue-100 text-blue-800'
       variant='outline'
     >
       <span className={isExporting ? 'animate-spin' : ''}>

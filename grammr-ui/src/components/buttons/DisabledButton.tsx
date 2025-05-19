@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import * as React from 'react';
+import {Button} from "@/components/ui/button";
 
 interface DisabledButtonProps {
   children: React.ReactNode;
@@ -14,7 +15,7 @@ const DisabledButton = (props: DisabledButtonProps) => {
 
   return (
     <div className='relative inline-block'>
-      <button
+      <Button
         className={`bg-gray-100 text-gray-400 cursor-not-allowed ${props.className}`}
         onMouseEnter={() => setIsTooltipVisible(true)}
         onMouseLeave={() => setIsTooltipVisible(false)}
@@ -22,7 +23,7 @@ const DisabledButton = (props: DisabledButtonProps) => {
       >
         {props.icon && <span className='mr-1'>{props.icon}</span>}
         {props.children}
-      </button>
+      </Button>
 
       {isTooltipVisible && (
         <div
