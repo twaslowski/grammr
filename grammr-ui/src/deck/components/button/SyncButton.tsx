@@ -21,7 +21,7 @@ export default function SyncButton({ deck }: { deck: Deck }) {
   const [isExporting, setIsExporting] = React.useState(false);
 
   const fetchNonSyncedFlashcards = async (deckId: number): Promise<Deck> => {
-    const response = await fetch(`/api/v1/anki/sync`, {
+    const response = await fetch(`/api/v1/anki/deck/sync`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
