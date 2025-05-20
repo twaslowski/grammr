@@ -2,7 +2,6 @@ package com.grammr.controller;
 
 import com.grammr.domain.exception.DeckNotFoundException;
 import com.grammr.domain.exception.InflectionNotAvailable;
-import com.grammr.port.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

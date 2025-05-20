@@ -1,5 +1,5 @@
 import { Feature } from '@/types/feature';
-import TokenType from '@/types/tokenType';
+import TokenType from '@/token/types/tokenType';
 
 export interface Inflection {
   lemma: string;

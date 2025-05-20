@@ -1,9 +1,9 @@
 import React from 'react';
 import TTSPlayer from '@/components/buttons/TextToSpeech';
-import GenericFlashcardExport from '@/flashcard/component/GenericFlashcardExport';
-import Token from '@/components/Token';
+import GenericFlashcardExport from '@/flashcard/components/GenericFlashcardExport';
+import Token from '@/token/components/Token';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import TokenType from '@/types/tokenType';
+import TokenType from '@/token/types/tokenType';
 import Analysis from '@/types/analysis';
 
 interface TranslationCardProps {

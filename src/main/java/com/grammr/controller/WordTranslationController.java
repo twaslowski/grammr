@@ -1,7 +1,7 @@
 package com.grammr.controller;
 
+import com.grammr.controller.dto.LiteralTranslationRequestDto;
 import com.grammr.domain.value.language.TokenTranslation;
-import com.grammr.port.dto.LiteralTranslationRequestDTO;
 import com.grammr.service.language.translation.literal.ContextFreeWordTranslationService;
 import com.grammr.service.language.translation.literal.OpenAITokenTranslationService;
 import jakarta.validation.Valid;
@@ -23,7 +23,7 @@ public class WordTranslationController {
   private final ContextFreeWordTranslationService wordTranslationService;
 
   @PostMapping("/word/context")
-  public ResponseEntity<TokenTranslation> translateWithContext(@RequestBody @Valid LiteralTranslationRequestDTO request) {
+  public ResponseEntity<TokenTranslation> translateWithContext(@RequestBody @Valid LiteralTranslationRequestDto request) {
     var tokenTranslation = tokenTranslationService.createTranslationForSingleWord(
         request.phrase(), request.word(), request.targetLanguage()
     );
@@ -31,7 +31,7 @@ public class WordTranslationController {
   }
 
   @PostMapping("/word/no-context")
-  public ResponseEntity<?> translateAll(@RequestBody LiteralTranslationRequestDTO request) {
+  public ResponseEntity<?> translateAll(@RequestBody LiteralTranslationRequestDto request) {
     var result = wordTranslationService.create(request.word(), request.targetLanguage(), request.sourceLanguage());
     return ResponseEntity.ok(result);
   }

@@ -2,8 +2,8 @@ package com.grammr.service.language.morphology;
 
 import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.language.MorphologicalAnalysis;
-import com.grammr.port.dto.MorphologicalAnalysisRequest;
-import com.grammr.port.outbound.MorphologicalAnalysisPort;
+import com.grammr.port.MorphologicalAnalysisPort;
+import com.grammr.port.dto.outbound.MorphologicalAnalysisRequest;
 import com.grammr.service.language.AnalysisComponentProvider;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;

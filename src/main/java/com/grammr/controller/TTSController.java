@@ -1,6 +1,6 @@
 package com.grammr.controller;
 
-import com.grammr.port.dto.TTSRequest;
+import com.grammr.controller.dto.TTSRequest;
 import com.grammr.service.TextToSpeechService;
 import java.io.InputStream;
 import lombok.RequiredArgsConstructor;

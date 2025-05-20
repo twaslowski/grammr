@@ -1,5 +1,6 @@
 package com.grammr.service;
 
+import com.grammr.controller.dto.DeckDto;
 import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
@@ -8,8 +9,7 @@ import com.grammr.domain.enums.ExportDataType;
 import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.domain.exception.DeckNotFoundException;
 import com.grammr.domain.exception.UserNotFoundException;
-import com.grammr.port.dto.DeckDTO;
-import com.grammr.port.outbound.AnkiPort;
+import com.grammr.port.AnkiPort;
 import com.grammr.repository.DeckRepository;
 import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.ParadigmRepository;
@@ -35,10 +35,7 @@ public class AnkiService {
   private final UserRepository userRepository;
   private final ParadigmRepository paradigmRepository;
 
-  public byte[] exportDeck(User user, long id, ExportDataType exportDataType) {
-    var deck = deckRepository.findById(id)
-        .map(d -> checkOwnershipMismatch(user, d))
-        .orElseThrow(() -> new DeckNotFoundException(user.getId(), id));
+  public byte[] exportDeck(Deck deck, ExportDataType exportDataType) {
     var flashcards = flashcardRepository.findByDeckId(deck.getId());
     return switch (exportDataType) {
       case APKG, DB -> ankiPort.exportDeck(deck, flashcards);
@@ -48,6 +45,7 @@ public class AnkiService {
   public List<Flashcard> retrieveSyncableCards(long deckId) {
     var flashcards = flashcardRepository.findByDeckIdAndStatusNot(deckId, Status.EXPORTED);
     flashcards.forEach(f -> f.setStatus(Status.EXPORTED));
+    log.info("Synced {} cards for deck {}", flashcards.size(), deckId);
     return flashcards;
   }
 
@@ -84,10 +82,10 @@ public class AnkiService {
         .orElseThrow(() -> new DeckNotFoundException(user.getId(), deckId));
   }
 
-  public List<DeckDTO> getDecks(String userId) {
+  public List<DeckDto> getDecks(String userId) {
     var decks = deckRepository.findAllByUserId(userId);
     return decks.stream()
-        .map(deck -> new DeckDTO(deck, flashcardRepository.findByDeckId(deck.getId())))
+        .map(deck -> new DeckDto(deck, flashcardRepository.findByDeckId(deck.getId())))
         .toList();
   }
 
@@ -96,9 +94,7 @@ public class AnkiService {
   }
 
   public void deleteDeck(User user, long deckId) {
-    var foundDeck = deckRepository.findById(deckId)
-        .map(d -> checkOwnershipMismatch(user, d))
-        .orElseThrow(() -> new DeckNotFoundException(user.getId(), deckId));
+    var foundDeck = getDeck(user, deckId);
     deckRepository.delete(foundDeck);
   }
 

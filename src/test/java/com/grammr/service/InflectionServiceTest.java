@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 import com.grammr.config.value.LanguageConfiguration;
 import com.grammr.domain.entity.Paradigm;
 import com.grammr.port.dto.InflectionsRequest;
-import com.grammr.port.outbound.InflectionPort;
+import com.grammr.port.InflectionPort;
 import com.grammr.repository.ParadigmRepository;
 import java.util.Optional;
 import java.util.UUID;

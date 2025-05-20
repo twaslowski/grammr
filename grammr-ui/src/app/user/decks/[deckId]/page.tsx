@@ -5,12 +5,12 @@ import { useRouter } from 'next/navigation';
 import React, { use, useEffect, useState } from 'react';
 
 import DisabledButton from '@/components/buttons/DisabledButton';
-import ExportButton from '@/flashcard/component/deck/ExportButton';
+import ExportButton from '@/deck/components/button/ExportButton';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import NotFound from '@/components/common/NotFound';
-import FlashcardList from '@/flashcard/component/FlashcardList';
-import Deck from '@/flashcard/types/deck';
-import SyncButton from '@/flashcard/component/deck/SyncButton';
+import FlashcardList from '@/flashcard/components/FlashcardList';
+import Deck from '@/deck/types/deck';
+import SyncButton from '@/deck/components/button/SyncButton';
 import { Button } from '@/components/ui/button';
 
 export default function DeckPage(props: { params: Promise<{ deckId: string }> }) {
@@ -28,7 +28,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
     }
 
     try {
-      const response = await fetch(`/api/v1/anki/deck/${deckId}`, {
+      const response = await fetch(`/api/v1/deck/${deckId}`, {
         method: 'DELETE',
       });
 
@@ -47,7 +47,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
     async function fetchDeck() {
       try {
         setIsLoading(true);
-        const response = await fetch(`/api/v1/anki/deck/${deckId}`);
+        const response = await fetch(`/api/v1/deck/${deckId}`);
 
         if (response.status === 404) {
           setNotFound(true);

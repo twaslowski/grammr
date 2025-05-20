@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-@Deprecated
 @RequiredArgsConstructor
 public enum ExportDataType {
 

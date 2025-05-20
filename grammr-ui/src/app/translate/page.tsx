@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import Sidebar from '@/components/Sidebar';
+import Sidebar from '@/token/components/Sidebar';
 import AnalysisCard from './AnalysisCard';
 import TranslationForm from './TranslationForm';
 import { useLanguage } from '@/context/LanguageContext';
 import useAnalysis from '@/hooks/useAnalysis';
-import TokenType from '@/types/tokenType';
+import TokenType from '@/token/types/tokenType';
 
 const TranslatePage = () => {
   const { languageSpoken, languageLearned } = useLanguage();

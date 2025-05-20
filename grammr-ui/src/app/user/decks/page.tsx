@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import Unauthorized from '@/components/common/Unauthorized';
-import DeckCard from '@/flashcard/component/deck/DeckCard';
-import EmptyState from '@/flashcard/component/deck/EmptyDeckState';
-import NewDeckDialog from '@/flashcard/component/deck/NewDeckDialog';
+import DeckCard from '@/deck/components/DeckCard';
+import EmptyState from '@/deck/components/EmptyDeckState';
+import NewDeckDialog from '@/deck/components/NewDeckDialog';
 import { toast } from '@/hooks/use-toast';
-import Deck from '@/flashcard/types/deck';
+import Deck from '@/deck/types/deck';
 import Error from '@/components/common/Error';
 
 export default function DecksPage() {
@@ -21,7 +21,7 @@ export default function DecksPage() {
   const createNewDeck = async (name: string, description: string) => {
     try {
       setIsLoading(true);
-      const response = await fetch('/api/v1/anki/deck', {
+      const response = await fetch('/api/v1/deck', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, description }),
@@ -42,7 +42,7 @@ export default function DecksPage() {
   };
 
   const fetchDecks = async (): Promise<Deck[]> => {
-    const response = await fetch('/api/v1/anki/deck');
+    const response = await fetch('/api/v1/deck');
 
     if (response.status === 401) {
       setUnauthorized(true);

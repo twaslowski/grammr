@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { fetchTranslation } from '@/lib/translation';
 import { TokenTranslation } from '@/types';
-import TokenType from '@/types/tokenType';
+import TokenType from '@/token/types/tokenType';
 
 interface TranslationProps {
   context: string;
@@ -13,7 +13,7 @@ interface TranslationProps {
 }
 
 const Translation: React.FC<TranslationProps> = ({ context, token, onTranslationLoaded }) => {
-  const { languageSpoken, languageLearned } = useLanguage();
+  const { languageSpoken } = useLanguage();
   const [isTranslationLoading, setIsTranslationLoading] = useState(false);
   const [translationError, setTranslationError] = useState<string | null>(null);
   const [translationData, setTranslationData] = useState<{

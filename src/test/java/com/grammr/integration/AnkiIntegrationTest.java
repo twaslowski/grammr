@@ -17,9 +17,9 @@ import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.ExportDataType;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.enums.PartOfSpeechTag;
-import com.grammr.port.dto.anki.AnkiDeckCreationDto;
-import com.grammr.port.dto.anki.AnkiFlashcardCreationDto;
-import com.grammr.port.dto.anki.InboundAnkiDeckExportDto;
+import com.grammr.controller.dto.DeckCreationDto;
+import com.grammr.controller.dto.FlashcardCreationDto;
+import com.grammr.controller.dto.DeckExportDto;
 import java.util.List;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -42,8 +42,8 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldCreateDeck() {
     var auth = createUserAuthentication();
-    var creationDto = new AnkiDeckCreationDto("Test Deck", null);
-    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/anki/deck")
+    var creationDto = new DeckCreationDto("Test Deck", null);
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/deck")
             .with(authentication(auth))
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(creationDto)))
@@ -76,7 +76,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
         .build());
     var auth = createUserAuthentication(user);
 
-    mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/anki/deck")
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/deck")
             .with(authentication(auth))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -116,9 +116,9 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
 
     var auth = createUserAuthentication(user);
 
-    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/anki/sync")
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/deck/sync")
             .with(authentication(auth))
-            .content(objectMapper.writeValueAsString(new InboundAnkiDeckExportDto(deck.getId(), null)))
+            .content(objectMapper.writeValueAsString(new DeckExportDto(deck.getId(), null)))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(deck.getId()))
@@ -139,8 +139,9 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
     var user = userRepository.save(UserSpec.valid().build());
     var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
     var authentication = createUserAuthentication(user);
-    var creationDto = new AnkiFlashcardCreationDto(deck.getId(), "Test Question", "Test Answer", null, null);
-    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/anki/flashcard")
+    var creationDto = new FlashcardCreationDto(deck.getId(), "Test Question", "Test Answer", null, null);
+
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/flashcard")
             .with(authentication(authentication))
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(creationDto)))
@@ -171,10 +172,10 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
         .build()
     );
 
-    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/anki/export")
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/deck/export")
             .with(authentication(authentication))
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(new InboundAnkiDeckExportDto(deck.getId(), ExportDataType.APKG)))
+            .content(objectMapper.writeValueAsString(new DeckExportDto(deck.getId(), ExportDataType.APKG)))
             .accept(MediaType.APPLICATION_OCTET_STREAM))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
@@ -195,7 +196,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
         .build()
     );
 
-    mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/anki/deck/" + deck.getId())
+    mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/deck/" + deck.getId())
             .with(authentication(authentication))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNoContent())

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import InflectionTable from '@/inflection/InflectionTable';
+import InflectionTable from '@/inflection/components/InflectionTable';
 import { Inflections } from '@/inflection/types/inflections';
 
 describe('InflectionTable', () => {
