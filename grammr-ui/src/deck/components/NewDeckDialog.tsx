@@ -8,10 +8,9 @@ interface NewDeckDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onCreate: (name: string, description: string) => void;
-  isLoading: boolean;
 }
 
-const NewDeckDialog: React.FC<NewDeckDialogProps> = ({ isOpen, onClose, onCreate, isLoading }) => {
+const NewDeckDialog: React.FC<NewDeckDialogProps> = ({ isOpen, onClose, onCreate }) => {
   const [newDeckName, setNewDeckName] = useState('');
   const [newDeckDescription, setNewDeckDescription] = useState('');
 
@@ -19,6 +18,7 @@ const NewDeckDialog: React.FC<NewDeckDialogProps> = ({ isOpen, onClose, onCreate
     onCreate(newDeckName, newDeckDescription);
     setNewDeckName('');
     setNewDeckDescription('');
+    onClose();
   };
 
   return (
@@ -39,10 +39,10 @@ const NewDeckDialog: React.FC<NewDeckDialogProps> = ({ isOpen, onClose, onCreate
             onChange={(e) => setNewDeckDescription(e.target.value)}
           />
           <div className='flex justify-end gap-2'>
-            <Button variant='outline' onClick={onClose} disabled={isLoading}>
+            <Button variant='outline' onClick={onClose}>
               Cancel
             </Button>
-            <Button onClick={handleCreate} disabled={!newDeckName || isLoading}>
+            <Button onClick={handleCreate} disabled={!newDeckName}>
               Create
             </Button>
           </div>

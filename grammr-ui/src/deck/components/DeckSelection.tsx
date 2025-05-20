@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/select';
 import { useDecks } from '@/deck/hooks/useDecks';
 import Deck from '@/deck/types/deck';
+import { toast } from '@/hooks/use-toast';
 
 interface DeckSelectionProps {
   onDeckSelect: (deckId: number) => void;
@@ -19,8 +20,10 @@ const DeckSelection: React.FC<DeckSelectionProps> = ({ onDeckSelect }) => {
   const [selectedDeck, setSelectedDeck] = useState<Deck | null>(null);
   const [showNewDeckDialog, setShowNewDeckDialog] = useState(false);
 
+  const NEW_DECK_CREATION = '_createNewDeck';
+
   const handleDeckChange = (deckId: string) => {
-    if (deckId === '_createNewDeck') {
+    if (deckId === NEW_DECK_CREATION) {
       setShowNewDeckDialog(true);
     } else {
       const deck = decks.find((d) => d.id.toString() === deckId) || null;
@@ -34,11 +37,14 @@ const DeckSelection: React.FC<DeckSelectionProps> = ({ onDeckSelect }) => {
   const createNewDeck = async (name: string, description: string) => {
     try {
       const newDeck = await addDeck(name, description);
-      setSelectedDeck(newDeck);
-      onDeckSelect(newDeck.id);
+      if (newDeck) onDeckSelect(newDeck.id);
       setShowNewDeckDialog(false);
     } catch {
-      // Error handling is already in the hook
+      toast({
+        title: 'Error',
+        description: 'There was an error creating the new deck.',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -58,7 +64,7 @@ const DeckSelection: React.FC<DeckSelectionProps> = ({ onDeckSelect }) => {
               {deck.name}
             </SelectItem>
           ))}
-          <SelectItem value='_createNewDeck' className='text-blue-600'>
+          <SelectItem value={NEW_DECK_CREATION} className='text-blue-600'>
             <div className='flex items-center gap-2'>Create new deck</div>
           </SelectItem>
         </SelectContent>
@@ -68,7 +74,6 @@ const DeckSelection: React.FC<DeckSelectionProps> = ({ onDeckSelect }) => {
         isOpen={showNewDeckDialog}
         onClose={() => setShowNewDeckDialog(false)}
         onCreate={createNewDeck}
-        isLoading={isLoading}
       />
     </div>
   );

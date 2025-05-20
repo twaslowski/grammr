@@ -15,7 +15,7 @@ interface FlashcardPreviewProps {
   onClose: () => void;
 }
 
-const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({ token, onClose }) => {
+const TokenFlashcardPreview: React.FC<FlashcardPreviewProps> = ({ token, onClose }) => {
   const [deckId, setDeckId] = useState(-1);
   const [front, setFront] = useState(token.morphology.lemma);
   const [activeCard, setActiveCard] = useState('front');
@@ -134,4 +134,4 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({ token, onClo
   );
 };
 
-export default GenericFlashcardPreview;
+export default TokenFlashcardPreview;

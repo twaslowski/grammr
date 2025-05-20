@@ -12,6 +12,7 @@ import FlashcardList from '@/flashcard/components/FlashcardList';
 import Deck from '@/deck/types/deck';
 import SyncButton from '@/deck/components/button/SyncButton';
 import { Button } from '@/components/ui/button';
+import { toast } from '@/hooks/use-toast';
 
 export default function DeckPage(props: { params: Promise<{ deckId: string }> }) {
   const params = use(props.params);
@@ -27,20 +28,19 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
       return;
     }
 
-    try {
-      const response = await fetch(`/api/v1/deck/${deckId}`, {
-        method: 'DELETE',
+    await fetch(`/api/v1/deck/${deckId}`, {
+      method: 'DELETE',
+    })
+      .then(() => {
+        router.push('/user/decks');
+      })
+      .catch(() => {
+        toast({
+          title: 'Error',
+          description: 'Failed to delete deck. Please try again later.',
+          variant: 'destructive',
+        });
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete deck');
-      }
-
-      router.push('/user/decks');
-    } catch (error) {
-      console.error('Error deleting deck:', error);
-      alert('Failed to delete deck. Please try again.');
-    }
   };
 
   useEffect(() => {

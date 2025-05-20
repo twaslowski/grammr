@@ -1,4 +1,4 @@
-import { ArrowLeftRight, RotateCw } from 'lucide-react';
+import { RotateCw } from 'lucide-react';
 import React, { useState } from 'react';
 
 import DeckSelection from '@/deck/components/DeckSelection';
@@ -24,7 +24,6 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
   const [back, setBack] = useState(initialBack);
   const [activeCard, setActiveCard] = useState('front');
 
-  // Toggle front and back of the flashcard without changing anything
   const handleToggle = () => {
     if (activeCard === 'front') {
       setActiveCard('back');
@@ -33,45 +32,32 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
     }
   };
 
-  // Switch front and back of the flashcard
-  const handleSwitch = () => {
-    const newFront = back;
-    const newBack = front;
-    setFront(newFront);
-    setBack(newBack);
-  };
-
   const createFlashcard = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch('/api/v1/flashcard', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          deckId: deckId,
-          question: front,
-          answer: back,
-        }),
-      });
-
-      if (response.status !== 201) {
-        throw new Error('Failed to create flashcard');
-      }
-
-      toast({
-        title: 'Success',
-        description: 'Flashcard created successfully',
-      });
-      onClose();
-    } catch (error) {
-      toast({
-        title: 'Error creating flashcard',
-        description: 'Please try again later',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    await fetch('/api/v1/flashcard', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        deckId: deckId,
+        question: front,
+        answer: back,
+      }),
+    })
+      .then(() => {
+        toast({
+          title: 'Success',
+          description: 'Flashcard created successfully',
+        });
+        onClose();
+      })
+      .catch(() => {
+        toast({
+          title: 'Error',
+          description: 'Error creating flashcard',
+          variant: 'destructive',
+        });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -105,14 +91,6 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
             <div className='text-xl'>{activeCard === 'front' ? front : back}</div>
           </CardContent>
         </Card>
-      </div>
-
-      <div className='py-4'>
-        <ArrowLeftRight
-          onClick={handleSwitch}
-          className='w-full text-gray-500 hover:text-gray-700 cursor-pointer transition-colors'
-        />
-        <p className='text-center text-sm text-gray-500'>Reverse front and back</p>
       </div>
 
       <div className='space-y-4 mt-6'>
