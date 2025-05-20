@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import TTSPlayer from '@/components/buttons/TextToSpeech';
 import { Pos } from '@/components/language/Pos';
 import InflectionTable from '@/inflection/components/InflectionTable';
-import Translation from '@/components/Translation';
+import Translation from '@/token/components/Translation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { stringifyFeatures } from '@/token/feature';

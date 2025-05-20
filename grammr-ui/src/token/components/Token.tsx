@@ -2,7 +2,7 @@ import { ExternalLink } from 'lucide-react';
 import React, { useCallback, useState } from 'react';
 
 import { Pos } from '@/components/language/Pos';
-import Translation from '@/components/Translation';
+import Translation from '@/token/components/Translation';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { stringifyFeatures } from '@/token/feature';
 import { getPosColor } from '@/token/pos';

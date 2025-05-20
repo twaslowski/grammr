@@ -1,6 +1,6 @@
 import { InfoIcon, Loader2 } from 'lucide-react';
 
-import { capitalize } from '@/lib/utils';
+import { capitalize } from '@/util';
 import { Inflections, InflectionTableData } from '@/inflection/types/inflections';
 import React, { useEffect, useState } from 'react';
 import { organizeInflectionTable } from '@/inflection/lib';
