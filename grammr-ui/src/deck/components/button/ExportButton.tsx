@@ -23,8 +23,8 @@ const ExportButton = ({ deck }: { deck: Deck }) => {
         },
         body: JSON.stringify({
           deckId: deck.id,
-          exportDataType: 'APKG'
-        })
+          exportDataType: 'APKG',
+        }),
       });
 
       if (!response.ok) {

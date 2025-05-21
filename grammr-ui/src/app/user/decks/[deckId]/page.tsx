@@ -47,7 +47,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
     })
       .then((d) => setDeck(d))
       .catch(() => {});
-  }, [deckId]);
+  }, [deckId, request]);
 
   if (isLoading) {
     return <LoadingSpinner message='Loading deck...' />;
