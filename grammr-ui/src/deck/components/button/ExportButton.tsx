@@ -6,24 +6,16 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import Deck from '@/deck/types/deck';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 const ExportButton = ({ deck }: { deck: Deck }) => {
   const [isExporting, setIsExporting] = useState(false);
 
   const handleExport = async () => {
-    if (!deck?.id) {
-      toast({
-        title: 'Export Failed',
-        description: 'Invalid deck information',
-        variant: 'destructive',
-      });
-      return;
-    }
-
     try {
       setIsExporting(true);
 
-      const response = await fetch('/api/v1/anki/export', {
+      const response = await fetch('/api/v1/deck/export', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,21 +32,14 @@ const ExportButton = ({ deck }: { deck: Deck }) => {
       if (!response.ok) {
         throw new Error(`Failed to export deck: ${response.statusText}`);
       }
+
       const blob = await response.blob();
 
       const url = window.URL.createObjectURL(new Blob([blob]));
       const link = document.createElement('a');
       link.href = url;
 
-      const contentDisposition = response.headers.get('content-disposition');
-      let filename = `${deck.name || 'deck'}-export.apkg`;
-
-      if (contentDisposition) {
-        const filenameMatch = contentDisposition.match(/filename="?([^"]*)"?/);
-        if (filenameMatch && filenameMatch[1]) {
-          filename = filenameMatch[1];
-        }
-      }
+      let filename = `${deck.name.toLowerCase().replace(' ', '_') || 'deck'}.apkg`;
 
       link.setAttribute('download', filename);
       document.body.appendChild(link);
@@ -66,14 +51,10 @@ const ExportButton = ({ deck }: { deck: Deck }) => {
         title: 'Export Successful',
         description: `Deck "${deck.name}" has been exported successfully.`,
       });
-    } catch (error) {
-      let message;
-      if (error instanceof Error) message = error.message;
-      else message = 'An unknown error occurred';
-      console.error('Export failed:', error);
+    } catch {
       toast({
-        title: 'Export Failed',
-        description: message,
+        title: 'Error',
+        description: 'Export failed',
         variant: 'destructive',
       });
     } finally {
@@ -89,31 +70,7 @@ const ExportButton = ({ deck }: { deck: Deck }) => {
       variant='outline'
     >
       {isExporting ? (
-        <>
-          <span className='animate-spin'>
-            <svg
-              className='w-4 h-4'
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-            >
-              <circle
-                className='opacity-25'
-                cx='12'
-                cy='12'
-                r='10'
-                stroke='currentColor'
-                strokeWidth='4'
-              ></circle>
-              <path
-                className='opacity-75'
-                fill='currentColor'
-                d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
-              ></path>
-            </svg>
-          </span>
-          Exporting...
-        </>
+        <LoadingSpinner size={12}></LoadingSpinner>
       ) : (
         <>
           <Download size={16} />

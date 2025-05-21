@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
-import { useApi } from '@/hooks/useApi';
+import { UNEXPECTED_ERROR, useApi } from '@/hooks/useApi';
 
 describe('useApi hook', () => {
   afterEach(() => {
@@ -10,6 +10,7 @@ describe('useApi hook', () => {
     const expectedData = { message: 'Success' };
     global.fetch = jest.fn(() =>
       Promise.resolve({
+        ok: true,
         json: () => Promise.resolve(expectedData),
       }),
     ) as jest.Mock;
@@ -26,37 +27,38 @@ describe('useApi hook', () => {
     expect(result.current.error).toBeNull();
   });
 
-  it('should set error for 401 unauthorized', async () => {
+  it('should throw error for 401 unauthorized', async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
+        ok: false,
         status: 401,
+        statusText: 'Unauthorized',
       }),
     ) as jest.Mock;
 
     const { result } = renderHook(() => useApi());
 
-    let data: any;
     await act(async () => {
-      data = await result.current.request('/test-endpoint');
+      await expect(result.current.request('/test-endpoint')).rejects.toEqual({
+        code: 401,
+        message: 'Unauthorized',
+      });
     });
 
-    expect(data).toBeNull();
     expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toEqual({ code: 401, message: 'Unauthorized' });
   });
 
-  it('should set error for network failure', async () => {
+  it('should throw error for network failure', async () => {
     jest.spyOn(global, 'fetch').mockRejectedValueOnce(new Error('Network error'));
 
     const { result } = renderHook(() => useApi());
 
-    let data: any;
     await act(async () => {
-      data = await result.current.request('/error-endpoint');
+      await expect(result.current.request('/error-endpoint')).rejects.toEqual(UNEXPECTED_ERROR);
     });
 
-    expect(data).toBeNull();
     expect(result.current.isLoading).toBe(false);
-    expect(result.current.error).toEqual({ code: 500, message: 'Something went wrong' });
+    expect(result.current.error).toEqual(UNEXPECTED_ERROR);
   });
 });

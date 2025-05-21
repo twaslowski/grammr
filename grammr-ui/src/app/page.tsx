@@ -8,27 +8,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Image from 'next/image';
 
 const HomePage = () => {
-  const [languageSpoken, setLanguageSpoken] = useState('en');
-  const [languageLearned, setLanguageLearned] = useState('de');
-
-  useEffect(() => {
-    const storedLanguageSpoken = localStorage.getItem('languageSpoken');
-    const storedLanguageLearned = localStorage.getItem('languageLearned');
-    if (storedLanguageSpoken) {
-      setLanguageSpoken(storedLanguageSpoken);
-    }
-    if (storedLanguageLearned) {
-      setLanguageLearned(storedLanguageLearned);
-    }
-  }, []);
-
-  const handleLanguageChange = (spoken: string, learned: string) => {
-    setLanguageSpoken(spoken);
-    setLanguageLearned(learned);
-    localStorage.setItem('languageSpoken', spoken);
-    localStorage.setItem('languageLearned', learned);
-  };
-
   return (
     <div className='container mx-auto px-4 py-12'>
       <div className='flex justify-center mb-12'>
