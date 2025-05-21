@@ -23,10 +23,8 @@ const ExportButton = ({ deck }: { deck: Deck }) => {
         },
         body: JSON.stringify({
           deckId: deck.id,
-          exportDataType: 'APKG',
-          credentials: 'include',
-        }),
-        credentials: 'include',
+          exportDataType: 'APKG'
+        })
       });
 
       if (!response.ok) {
