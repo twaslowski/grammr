@@ -2,7 +2,7 @@ import React from 'react';
 import InflectionTable from '@/inflection/components/InflectionTable';
 import TokenType from '@/token/types/tokenType';
 import { Inflections } from '@/inflection/types/inflections';
-import { capitalize } from '@/util';
+import { capitalize } from '@/lib/utils';
 
 interface FlashcardContentProps {
   inflections: Inflections | null;

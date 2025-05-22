@@ -1,7 +1,7 @@
 import { Info } from 'lucide-react';
 import React from 'react';
 
-import { capitalize } from '@/util';
+import { capitalize } from '@/lib/utils';
 import { PartOfSpeechTag } from '@/types/pos';
 
 interface PosProps {

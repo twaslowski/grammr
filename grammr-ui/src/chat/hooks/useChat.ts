@@ -1,6 +1,6 @@
-import {useState} from "react";
-import {Message} from "@/chat/types/message";
-import {ApiError} from "@/hooks/useApi";
+import { useState } from 'react';
+import { Message } from '@/chat/types/message';
+import { ApiError } from '@/hooks/useApi';
 
 export const useChat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -23,7 +23,7 @@ export const useChat = () => {
     try {
       const result = await fetch('/api/v1/chat', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedMessages),
       });
 
@@ -41,11 +41,11 @@ export const useChat = () => {
 
       setMessages((prev) => [...prev, placeholderMessage]);
     } catch (err: any) {
-      setError({code: 500, message: err.message || 'Unknown error'});
+      setError({ code: 500, message: err.message || 'Unknown error' });
     } finally {
       setIsLoading(false);
     }
   };
 
-  return {messages, sendMessage, isLoading, error}
-}
+  return { messages, sendMessage, isLoading, error };
+};
