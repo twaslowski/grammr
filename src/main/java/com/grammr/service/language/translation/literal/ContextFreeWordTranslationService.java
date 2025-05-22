@@ -5,7 +5,7 @@ import com.grammr.common.MessageUtil;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.language.ContextFreeWordTranslation;
 import com.grammr.domain.value.language.WordTranslation;
-import com.grammr.service.language.AbstractOpenAIService;
+import com.grammr.service.language.AbstractStructuredOpenAIService;
 import io.github.sashirestela.openai.SimpleOpenAI;
 import io.github.sashirestela.openai.common.ResponseFormat;
 import io.github.sashirestela.openai.common.ResponseFormat.JsonSchema;
@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ContextFreeWordTranslationService extends AbstractOpenAIService {
+public class ContextFreeWordTranslationService extends AbstractStructuredOpenAIService {
 
   public ContextFreeWordTranslationService(
       ObjectMapper objectMapper,

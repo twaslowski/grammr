@@ -1,19 +1,20 @@
 package com.grammr.config;
 
-import io.github.sashirestela.openai.SimpleOpenAI;
+import com.openai.client.OpenAIClient;
+import com.openai.client.okhttp.OpenAIOkHttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@Deprecated
-public class SimpleOpenAIConfiguration {
+public class OpenAIConfiguration {
+
+  @Value("${openai.api-key}")
+  private String apiKey;
 
   @Bean
-  public SimpleOpenAI openAIClient(
-      @Value("${openai.api-key}") String apiKey
-  ) {
-    return SimpleOpenAI.builder()
+  public OpenAIClient client() {
+    return OpenAIOkHttpClient.builder()
         .apiKey(apiKey)
         .build();
   }
