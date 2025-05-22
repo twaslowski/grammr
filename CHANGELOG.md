@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.2.0](https://github.com/twaslowski/grammr/compare/v1.1.0...v1.2.0) (2025-05-21)
+
+
+### Features
+
+* **ui:** improve user login component responsiveness ([d22c63f](https://github.com/twaslowski/grammr/commit/d22c63f133ec9effcdf41ced482c0bf9cd168028))
+
+
+### Bug Fixes
+
+* **ui:** anki deck sync endpoint ([caf5d00](https://github.com/twaslowski/grammr/commit/caf5d0083989540324263cdd2ba1bd09bc63f79a))
+* **ui:** anki deck sync endpoint (2) ([ac92ddc](https://github.com/twaslowski/grammr/commit/ac92ddcba5afe320498d835525b372820c3fff4e))
+* **ui:** linting issues ([f35eb2d](https://github.com/twaslowski/grammr/commit/f35eb2dc2341d770d2d67741e555b0fbcac027ba))
+* **ui:** path of export api ([2d8734d](https://github.com/twaslowski/grammr/commit/2d8734d32c42bb5492cbae77c376cefbfe89164f))
+* **ui:** remove obsolete 'credentials: include' from export button ([41c15b4](https://github.com/twaslowski/grammr/commit/41c15b4e4831ce01b0519168c4ef5cf7bde40abb))
+
 ## [1.1.0](https://github.com/twaslowski/grammr/compare/v1.0.0...v1.1.0) (2025-05-18)
 
 
