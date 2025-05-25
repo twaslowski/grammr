@@ -6,6 +6,9 @@ export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [streamingMessage, setStreamingMessage] = useState<ChatMessage | null>(null);
 
+  // Rewrites break real-time response streaming, therefore we manually construct the URL here
+  const BACKEND_HOST = process.env.BACKEND_HOST || 'http://localhost:8080';
+
   const sendMessage = useCallback(
     async (input: Message) => {
       const userMsg: ChatMessage = {
@@ -31,7 +34,7 @@ export function useChat() {
 
       try {
         const promptMessages = [...messages, userMsg]; // might be stale
-        const response = await fetch('/api/v1/chat', {
+        const response = await fetch(`${BACKEND_HOST}/api/v1/chat`, {
           method: 'POST',
           body: JSON.stringify(promptMessages),
           headers: { 'Content-Type': 'application/json' },
@@ -39,23 +42,19 @@ export function useChat() {
 
         if (!response.body) throw new Error('No stream body');
 
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
 
-        let done = false;
-        while (!done) {
-          const { value, done: readerDone } = await reader.read();
-          if (value) {
-            const chunk = decoder.decode(value, { stream: true });
-            console.log(chunk);
-            accumulated += chunk;
+        const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
+        let accumulated = '';
 
-            setStreamingMessage({
-              ...assistantTemplate,
-              content: accumulated,
-            });
-          }
-          done = readerDone;
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+
+          accumulated += value;
+          setStreamingMessage({
+            ...assistantTemplate,
+            content: accumulated,
+          });
         }
 
         // Finalize message
