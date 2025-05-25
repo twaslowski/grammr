@@ -1,12 +1,11 @@
 'use client';
 
-import Image from 'next/image';
-import Chat from '@/chat/components/Chat';
+import { ChatWindow } from '@/chat/components/ChatWindow';
 
 const HomePage = () => {
   return (
     <div className='mt-5 mb-5'>
-      <Chat />
+      <ChatWindow />
     </div>
   );
 };
