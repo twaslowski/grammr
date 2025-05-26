@@ -1,6 +1,6 @@
 import { ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import {languages} from "@/constant/languages";
+import { languages } from '@/constant/languages';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -12,6 +12,5 @@ export const capitalize = (s: string | undefined) => {
 };
 
 export const fullLanguageName = (code: string) => {
-  return languages.filter(lang => lang.code === code)[0]?.name
-      || code.toUpperCase();
-}
+  return languages.filter((lang) => lang.code === code)[0]?.name || code.toUpperCase();
+};

@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { ChatMessage, Message } from '@/chat/types/message';
-import {fullLanguageName} from "@/lib/utils";
-import {useLanguage} from "@/context/LanguageContext";
+import { fullLanguageName } from '@/lib/utils';
+import { useLanguage } from '@/context/LanguageContext';
 
 export function useChat() {
   const { languageLearned } = useLanguage();
@@ -55,7 +55,7 @@ export function useChat() {
       }
 
       try {
-        console.log("learned language:", languageLearned);
+        console.log('learned language:', languageLearned);
         const response = await fetch(`/api/v1/chat`, {
           method: 'POST',
           body: JSON.stringify(promptMessages),
@@ -63,7 +63,6 @@ export function useChat() {
         });
 
         if (!response.body) throw new Error('No stream body');
-
 
         const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
         let accumulated = '';

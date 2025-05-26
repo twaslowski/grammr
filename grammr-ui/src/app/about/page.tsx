@@ -19,11 +19,13 @@ export default function Page() {
 
       <section>
         <p className='mb-4'>
-          Grammr is designed to be a reference toolkit for grammar and vocabulary.
-          It integrates with
-          <a className='text-blue-900 underline' href={'https://apps.ankiweb.net/'}>Anki</a>
-          , a popular and open-source flashcard application, to help you memorize vocabulary
-          and concepts more easily.
+          Grammr is designed to be a reference toolkit for grammar and vocabulary. It integrates
+          with
+          <a className='text-blue-900 underline' href={'https://apps.ankiweb.net/'}>
+            Anki
+          </a>
+          , a popular and open-source flashcard application, to help you memorize vocabulary and
+          concepts more easily.
         </p>
       </section>
 
