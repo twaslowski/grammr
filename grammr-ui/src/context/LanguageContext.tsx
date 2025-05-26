@@ -1,38 +1,63 @@
-'use client';
+"use client";
 
-import React, { createContext, ReactNode, useContext, useState } from 'react';
+import {createContext, ReactNode, useContext, useEffect, useState} from "react";
 
-interface LanguageContextProps {
+type LanguageContextProps = {
   languageSpoken: string;
   languageLearned: string;
-  setLanguageSpoken: (language: string) => void;
-  setLanguageLearned: (language: string) => void;
-}
+  setLanguageSpoken: (lang: string) => void;
+  setLanguageLearned: (lang: string) => void;
+  isReady: boolean;
+};
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
 
-export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [languageSpoken, setLanguageSpoken] = useState('en');
-  const [languageLearned, setLanguageLearned] = useState('es');
+export function LanguageProvider({
+                                   children,
+                                 }: {
+  children: ReactNode;
+}) {
+  const [languageSpoken, setLanguageSpokenState] = useState('');
+  const [languageLearned, setLanguageLearnedState] = useState('');
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const savedSpoken = localStorage.getItem("languageSpoken");
+    const savedLearned = localStorage.getItem("languageLearned");
+
+    if (savedSpoken) setLanguageSpokenState(savedSpoken);
+    if (savedLearned) setLanguageLearnedState(savedLearned);
+
+    setIsReady(true);
+  }, []);
+
+  const setLanguageSpoken = (lang: string) => {
+    localStorage.setItem("languageSpoken", lang);
+    setLanguageSpokenState(lang);
+  };
+
+  const setLanguageLearned = (lang: string) => {
+    localStorage.setItem("languageLearned", lang);
+    setLanguageLearnedState(lang);
+  };
 
   return (
-    <LanguageContext.Provider
-      value={{
-        languageSpoken,
-        languageLearned,
-        setLanguageSpoken,
-        setLanguageLearned,
-      }}
-    >
-      {children}
-    </LanguageContext.Provider>
+      <LanguageContext.Provider
+          value={{
+            languageSpoken,
+            languageLearned,
+            setLanguageSpoken,
+            setLanguageLearned,
+            isReady,
+          }}
+      >
+        {children}
+      </LanguageContext.Provider>
   );
-};
+}
 
-export const useLanguage = () => {
+export function useLanguage() {
   const context = useContext(LanguageContext);
-  if (!context) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
+  if (!context) throw new Error("useLanguage must be used within a LanguageProvider");
   return context;
-};
+}

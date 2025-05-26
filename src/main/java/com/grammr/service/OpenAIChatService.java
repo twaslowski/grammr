@@ -1,7 +1,6 @@
 package com.grammr.service;
 
 import com.grammr.common.MessageUtil;
-import com.grammr.controller.dto.ChatInitRequest;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.Message;
 import com.openai.client.OpenAIClient;
@@ -10,6 +9,7 @@ import com.openai.models.ChatModel;
 import com.openai.models.responses.ResponseCreateParams;
 import com.openai.models.responses.ResponseInputItem;
 import com.openai.models.responses.ResponseStreamEvent;
+import com.openai.models.responses.ResponseTextDeltaEvent;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
@@ -66,14 +66,10 @@ public class OpenAIChatService {
     try (StreamResponse<ResponseStreamEvent> streamResponse =
         client.responses().createStreaming(createParams)) {
 
-      Arrays.stream(LOREM_IPSUM.split(" "))
-          .map(this::safeSleep)
+      streamResponse.stream()
+          .flatMap(event -> event.outputTextDelta().stream())
+          .map(ResponseTextDeltaEvent::delta)
           .forEach(onChunk);
-
-//      streamResponse.stream()
-//          .flatMap(event -> event.outputTextDelta().stream())
-//          .map(ResponseTextDeltaEvent::delta)
-//          .forEach(onChunk);
     }
   }
 
