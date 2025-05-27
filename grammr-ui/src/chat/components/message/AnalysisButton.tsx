@@ -5,14 +5,15 @@ import { BookOpenCheck } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import Analysis from '@/types/analysis';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { useChat } from '@/chat/hooks/useChat';
 
 export const AnalysisButton: React.FC<{
-  className?: string;
   message: ChatMessage;
-  onAnalysisResult: (result: TokenType[]) => void;
-}> = ({ className, message, onAnalysisResult }) => {
+  onAnalysis: (result: Analysis) => void;
+}> = ({ message, onAnalysis }) => {
   const [loading, setLoading] = React.useState(false);
   const { languageSpoken, languageLearned } = useLanguage();
+  const { editMessage } = useChat();
 
   const handleAnalyzeGrammar = async () => {
     try {
@@ -29,8 +30,12 @@ export const AnalysisButton: React.FC<{
       });
 
       const data = (await response.json()) as Analysis;
-      if (onAnalysisResult) {
-        onAnalysisResult(data.analyzedTokens);
+      if (onAnalysis) {
+        onAnalysis(data);
+        editMessage(message.id, {
+          ...message,
+          analysis: data,
+        });
       }
     } catch (error) {
       console.error('Analysis failed', error);

@@ -8,6 +8,7 @@ export function useChat() {
   const { languageLearned } = useLanguage();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [streamingMessage, setStreamingMessage] = useState<ChatMessage | null>(null);
+  const [storageInitialized, setStorageInitialized] = useState<boolean>(false);
 
   const BACKEND_HOST = process.env.BACKEND_HOST || 'http://localhost:8080';
 
@@ -18,16 +19,21 @@ export function useChat() {
       if (stored) {
         setMessages(JSON.parse(stored));
       }
+      console.log('Retrieved chat messages from session storage:', stored);
     } catch (error) {
       console.error('Failed to parse chat messages from session storage:', error);
       sessionStorage.removeItem('chatMessages');
+    } finally {
+      setStorageInitialized(true);
     }
   }, []);
 
   // Persist messages to session storage whenever they change.
   useEffect(() => {
+    if (!storageInitialized) return;
+    console.log('Persisting messages to session storage:', messages);
     sessionStorage.setItem('chatMessages', JSON.stringify(messages));
-  }, [messages]);
+  }, [messages, storageInitialized]);
 
   const sendMessage = useCallback(
     async (input: Message) => {
@@ -38,6 +44,7 @@ export function useChat() {
           role: 'system',
           content: `You are a friendly and engaging language tutor. You converse naturally with the user in ${languageName}, adapting to their level. Keep responses appropriate for learners and encourage them to reply in the same language.`,
           timestamp: Date.now(),
+          analysis: null,
           status: 'sent',
         };
       };
@@ -58,6 +65,7 @@ export function useChat() {
         role: 'assistant',
         content: '',
         timestamp: Date.now(),
+        analysis: null,
         status: 'streaming',
       };
 
@@ -118,8 +126,16 @@ export function useChat() {
     [messages, languageLearned],
   );
 
+  const editMessage = useCallback(
+    (id: string, newMessage: ChatMessage) => {
+      setMessages((prevMessages) => prevMessages.map((m) => (m.id === id ? newMessage : m)));
+    },
+    [messages],
+  );
+
   return {
     messages: streamingMessage ? [...messages, streamingMessage] : messages,
     sendMessage,
+    editMessage,
   };
 }

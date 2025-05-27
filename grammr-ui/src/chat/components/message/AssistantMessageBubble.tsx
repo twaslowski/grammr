@@ -5,9 +5,10 @@ import Image from 'next/image';
 import { AnalysisButton } from '@/chat/components/message/AnalysisButton';
 import TokenType from '@/token/types/tokenType';
 import Token from '@/token/components/Token';
+import Analysis from '@/types/analysis';
 
 export const AssistantMessageBubble: React.FC<{ message: ChatMessage }> = ({ message }) => {
-  const [analysisResult, setAnalysisResult] = React.useState<TokenType[]>([]);
+  const [analysis, setAnalysis] = React.useState<Analysis | null>(null);
 
   return (
     <div className='my-2 flex justify-start'>
@@ -15,14 +16,14 @@ export const AssistantMessageBubble: React.FC<{ message: ChatMessage }> = ({ mes
         <Image src={'/images/mascot.png'} alt={'mascot'} width={32} height={32} />
       </div>
       <div className={clsx('rounded-2xl px-4 max-w-[75%] text-gray-800 bg-white')}>
-        {analysisResult.length === 0 ? (
-          <div className='flex'>
+        {analysis === null ? (
+          <div className='flex gap-2'>
             <p className='whitespace-pre-wrap break-words py-1'>{message.content}</p>
-            <AnalysisButton message={message} onAnalysisResult={setAnalysisResult} />
+            <AnalysisButton message={message} onAnalysis={setAnalysis} />
           </div>
         ) : (
           <div className='flex flex-wrap gap-1 py-1'>
-            {analysisResult.map((token: TokenType) => (
+            {analysis.analyzedTokens.map((token: TokenType) => (
               <Token
                 size='sm'
                 context={message.content}

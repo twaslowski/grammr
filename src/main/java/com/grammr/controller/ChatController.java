@@ -54,7 +54,6 @@ public class ChatController {
   private static Consumer<String> writeToOutputStream(OutputStream outputStream) {
     return chunk -> {
       try {
-        log.info("Streaming chunk: {}", chunk);
         outputStream.write((chunk).getBytes(StandardCharsets.UTF_8));
         outputStream.flush();
       } catch (IOException e) {
