@@ -15,6 +15,7 @@ export const ChatWindow: React.FC = () => {
       id: '', // ID will be generated in the hook
       role: 'user',
       content: input,
+      analysis: null,
       timestamp: Date.now(),
     });
   };

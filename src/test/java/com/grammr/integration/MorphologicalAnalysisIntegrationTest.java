@@ -30,7 +30,7 @@ public class MorphologicalAnalysisIntegrationTest extends IntegrationTestBase {
     var analysis = analysisService.createAnalysisComponent(analysisComponentRequest);
 
     assertThat(analysis).isNotNull();
-    assertThat(analysis.getTokens().size()).isEqualTo(3);
+    assertThat(analysis.getTokens().size()).isEqualTo(4);
 
     var ich = analysis.findByText("Ich").orElseThrow();
     assertThat(ich.partOfSpeechTag()).isEqualTo(PartOfSpeechTag.PRON);

@@ -130,7 +130,7 @@ export function useChat() {
     (id: string, newMessage: ChatMessage) => {
       setMessages((prevMessages) => prevMessages.map((m) => (m.id === id ? newMessage : m)));
     },
-    [messages],
+    [],
   );
 
   return {
