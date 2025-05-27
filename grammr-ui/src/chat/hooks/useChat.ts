@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { ChatMessage, Message } from '@/chat/types/message';
 import { fullLanguageName } from '@/lib/utils';
@@ -9,11 +9,25 @@ export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [streamingMessage, setStreamingMessage] = useState<ChatMessage | null>(null);
 
-  // todo revisit:
-  // Rewrites break real-time response streaming, therefore we manually construct the URL here.
-  // Unfortunately, calling the backend directly runs into CORS issues, so I'll write the proxy myself.
-  // However, for now I'll just treat streaming as a secondary issue and get the feature done.
   const BACKEND_HOST = process.env.BACKEND_HOST || 'http://localhost:8080';
+
+  // Retrieve messages after mounting (instead of defaulting the useState) to avoid hydration errors
+  useEffect(() => {
+    try {
+      const stored = sessionStorage.getItem('chatMessages');
+      if (stored) {
+        setMessages(JSON.parse(stored));
+      }
+    } catch (error) {
+      console.error('Failed to parse chat messages from session storage:', error);
+      sessionStorage.removeItem('chatMessages');
+    }
+  }, []);
+
+  // Persist messages to session storage whenever they change.
+  useEffect(() => {
+    sessionStorage.setItem('chatMessages', JSON.stringify(messages));
+  }, [messages]);
 
   const sendMessage = useCallback(
     async (input: Message) => {
@@ -55,13 +69,14 @@ export function useChat() {
       }
 
       try {
-        console.log('learned language:', languageLearned);
         const response = await fetch(`/api/v1/chat`, {
           method: 'POST',
           body: JSON.stringify(promptMessages),
           headers: { 'Content-Type': 'application/json' },
         });
 
+        if (response.status !== 200)
+          throw new Error(response.statusText || 'Failed to fetch response');
         if (!response.body) throw new Error('No stream body');
 
         const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
@@ -90,11 +105,14 @@ export function useChat() {
       } catch (err) {
         console.error(err);
 
-        setStreamingMessage({
+        const finalAssistantMessage: ChatMessage = {
           ...assistantTemplate,
-          content: accumulated,
+          content: 'An error occurred while processing your request. Please try again later.',
           status: 'failed',
-        });
+        };
+
+        setMessages((prev) => [...prev, finalAssistantMessage]);
+        setStreamingMessage(null);
       }
     },
     [messages, languageLearned],

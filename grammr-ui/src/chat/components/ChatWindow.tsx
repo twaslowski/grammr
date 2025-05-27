@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageBubble } from '@/chat/components/MessageBubble';
+import { MessageBubble } from '@/chat/components/message/MessageBubble';
 import { useChat } from '@/chat/hooks/useChat';
 
 export const ChatWindow: React.FC = () => {
