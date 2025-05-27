@@ -126,12 +126,9 @@ export function useChat() {
     [messages, languageLearned],
   );
 
-  const editMessage = useCallback(
-    (id: string, newMessage: ChatMessage) => {
-      setMessages((prevMessages) => prevMessages.map((m) => (m.id === id ? newMessage : m)));
-    },
-    [],
-  );
+  const editMessage = useCallback((id: string, newMessage: ChatMessage) => {
+    setMessages((prevMessages) => prevMessages.map((m) => (m.id === id ? newMessage : m)));
+  }, []);
 
   return {
     messages: streamingMessage ? [...messages, streamingMessage] : messages,
