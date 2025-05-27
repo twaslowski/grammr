@@ -16,12 +16,5 @@ def perform_analysis(request: AnalysisRequest) -> list:
     return MorphologicalAnalysis(
         source_phrase=request.phrase,
         request_id=request.request_id,
-        tokens=[
-            from_spacy_token(token)
-            for token in spacy_tokens
-            if not _token_is_punctuation(token)
-        ],
+        tokens=[from_spacy_token(token) for token in spacy_tokens],
     )
-
-def _token_is_punctuation(token):
-    return token.pos_ == "PUNCT"

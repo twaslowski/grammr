@@ -14,7 +14,7 @@ export default function Contact() {
           <ul className='space-y-4'>
             <li>
               <a
-                href='mailto:tobiaswaslowski@gmail.com'
+                href='mailto:contact@twaslowski.com'
                 className='flex items-center p-3 hover:bg-gray-100 rounded-md transition-colors'
               >
                 <Mail className='text-blue-500 mr-4' size={24} />

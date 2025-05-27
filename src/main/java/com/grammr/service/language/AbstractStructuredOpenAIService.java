@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.common.MessageUtil;
 import com.grammr.domain.exception.ErroneousOpenAIResponse;
 import com.grammr.domain.exception.UnparsableOpenAIResponse;
+import com.openai.client.OpenAIClient;
 import io.github.sashirestela.openai.SimpleOpenAI;
 import io.github.sashirestela.openai.common.ResponseFormat;
 import io.github.sashirestela.openai.domain.chat.Chat;
@@ -20,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
-public abstract class AbstractOpenAIService {
+public abstract class AbstractStructuredOpenAIService {
 
   protected ObjectMapper objectMapper;
   protected SimpleOpenAI openAIClient;

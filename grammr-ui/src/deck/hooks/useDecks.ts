@@ -17,6 +17,7 @@ export const useDecks = () => {
   const addDeck = async (name: string, description: string) => {
     const newDeck = await request<Deck>('/api/v1/deck', {
       method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, description }),
     });

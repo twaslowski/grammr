@@ -21,6 +21,7 @@ const ExportButton = ({ deck }: { deck: Deck }) => {
           'Content-Type': 'application/json',
           Accept: 'application/octet-stream',
         },
+        credentials: 'include',
         body: JSON.stringify({
           deckId: deck.id,
           exportDataType: 'APKG',

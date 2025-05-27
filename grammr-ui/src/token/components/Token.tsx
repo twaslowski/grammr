@@ -10,12 +10,13 @@ import { TokenTranslation } from '@/types';
 import TokenType from '@/token/types/tokenType';
 
 interface TokenProps {
+  size?: 'sm' | 'md' | 'lg';
   context: string;
   token: TokenType;
   onShare(token: TokenType): void;
 }
 
-const Token: React.FC<TokenProps> = ({ context, token, onShare }) => {
+const Token: React.FC<TokenProps> = ({ size, context, token, onShare }) => {
   const { index, text, translation, morphology } = token;
   const [_, setTranslationData] = useState<TokenTranslation>(translation);
 
@@ -31,7 +32,7 @@ const Token: React.FC<TokenProps> = ({ context, token, onShare }) => {
     <Popover>
       <PopoverTrigger>
         <span>
-          <div className={`text-lg ${getPosColor(morphology.pos)}`}>{text}</div>
+          <div className={`${size} ${getPosColor(morphology.pos)}`}>{text}</div>
         </span>
       </PopoverTrigger>
       <PopoverContent className='w-64'>

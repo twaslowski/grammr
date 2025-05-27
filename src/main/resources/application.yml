@@ -4,6 +4,8 @@ server:
     context-path: /
   ssl:
     enabled: false
+  compression:
+    enabled: false
 
 spring:
   application:
