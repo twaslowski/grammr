@@ -47,7 +47,7 @@ const Header: React.FC = () => {
   const learnedLanguage = getLanguageByCode(languageLearned);
 
   return (
-    <header className='bg-white shadow-sm'>
+    <header className='bg-white shadow-sm h-min'>
       <div className='container mx-auto px-4'>
         <div className='flex items-center justify-between h-16'>
           {/* Logo and Brand */}

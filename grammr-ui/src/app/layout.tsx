@@ -57,8 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <body className='flex flex-col min-h-screen'>
           <LanguageProvider>
             <Header />
-            <main className='flex-grow bg-gray-50 dark:bg-gray-900'>{children}</main>
-            <Footer />
+            <main className='flex-grow'>{children}</main>
           </LanguageProvider>
           <Toaster />
           <SpeedInsights />
