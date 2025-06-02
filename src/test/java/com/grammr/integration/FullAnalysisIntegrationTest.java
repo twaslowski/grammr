@@ -28,12 +28,10 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldPerformCompleteAnalysis() {
     var sourcePhrase = "Ich lerne heute Deutsch";
-    var phraseTranslation = "I am learning German today";
     var tokens = tokenService.tokenize(sourcePhrase);
     var words = tokens.stream().map(Token::text).toList();
 
     mockLanguageRecognition(sourcePhrase, LanguageCode.DE);
-    mockSemanticTranslation(sourcePhrase, phraseTranslation, LanguageCode.EN);
 
     for (String word : words) {
       mockTokenTranslation(sourcePhrase, word, new TokenTranslation(word, "someTranslation"));
@@ -52,7 +50,6 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
             .content(objectMapper.writeValueAsString(analysisRequest)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.sourcePhrase").value(sourcePhrase))
-        .andExpect(jsonPath("$.semanticTranslation.translatedPhrase").value(phraseTranslation))
         .andExpect(jsonPath("$.analyzedTokens").isArray())
         .andExpect(jsonPath("$.analyzedTokens[*].morphology").exists())
         .andExpect(jsonPath("$.analyzedTokens[*].translation").exists())
@@ -61,7 +58,6 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
 
   @Test
   @SneakyThrows
-  @Disabled("Being split into two separate user flows right now, wip")
   void shouldPerformCompleteAnalysisWhenReceivingPhraseInUserSpokenLanguage() {
     var sourcePhrase = "I am learning German today";
     var translation = "Ich lerne heute Deutsch";
@@ -82,11 +78,11 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
         .performSemanticTranslation(true)
         .build();
 
-    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/analysis")
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/translation")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.sourcePhrase").value(translation))
+        .andExpect(jsonPath("$.sourcePhrase").value(sourcePhrase))
         .andExpect(jsonPath("$.semanticTranslation.translatedPhrase").value(translation))
         .andExpect(jsonPath("$.analyzedTokens").isArray())
         .andExpect(jsonPath("$.analyzedTokens[*].morphology").exists())
