@@ -24,6 +24,7 @@ public class TokenService {
     return Arrays.stream(phrase.split("(?<=\\p{L})(?=\\p{P})|(?<=\\p{P})(?=\\p{L})|[^\\p{L}\\p{P}]+"))
         .filter(token -> !token.isEmpty())
         .map(token -> Token.fromString(token, indexCounter.getAndIncrement()))
+        .filter(token -> !token.text().isBlank())
         .collect(Collectors.toList());
   }
 

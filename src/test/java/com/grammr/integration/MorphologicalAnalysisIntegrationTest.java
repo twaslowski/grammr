@@ -44,4 +44,25 @@ public class MorphologicalAnalysisIntegrationTest extends IntegrationTestBase {
     var deutsch = analysis.findByText("Deutsch").orElseThrow();
     assertThat(deutsch.partOfSpeechTag()).isEqualTo(PartOfSpeechTag.NOUN);
   }
+
+  @Test
+  void shouldCreateComplexAnalysis() {
+    var phrase = """
+        Конечно! Это отличная идея. Давай начнём с приветствия.
+        
+        — Здравствуйте, приятно познакомиться. \s
+        (Hello, nice to meet you.)
+        
+        Как ты бы ответил на её вопрос: "Как дела?"
+        """;
+    var analysisComponentRequest = AnalysisComponentRequest.builder()
+        .phrase(phrase)
+        .sourceLanguage(LanguageCode.RU)
+        .build();
+    var analysis = analysisService.createAnalysisComponent(analysisComponentRequest);
+
+    assertThat(analysis).isNotNull();
+
+    analysis.findByText("Здравствуйте").orElseThrow();
+  }
 }
