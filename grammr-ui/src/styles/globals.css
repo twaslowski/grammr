@@ -190,3 +190,9 @@
 .animate-spin {
   animation: spin 1s linear infinite;
 }
+
+@layer components {
+  .custom-link {
+    @apply text-gray-600 hover:text-blue-600 text-sm font-medium;
+  }
+}

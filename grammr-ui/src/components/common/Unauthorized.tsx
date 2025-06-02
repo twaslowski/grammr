@@ -3,7 +3,7 @@ import React from 'react';
 
 const Unauthorized = () => {
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gray-50 px-4'>
+    <div className='min-h-screen flex items-center justify-center px-4'>
       <div className='max-w-md w-full bg-white rounded-lg shadow-md p-8'>
         <div className='text-center'>
           <h1 className='text-2xl font-bold text-gray-900 mb-2'>Signed Out</h1>
