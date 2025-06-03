@@ -15,9 +15,9 @@ import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
 import { headerLinks } from '@/constant/config';
 
-export const MobileHeader: React.FC = () => {
+export const DesktopSidebar: React.FC = () => {
   const { languageSpoken, languageLearned, setLanguageSpoken, setLanguageLearned } = useLanguage();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export const MobileHeader: React.FC = () => {
   const learnedLanguage = getLanguageByCode(languageLearned);
 
   return (
-    <header className='bg-white md:hidden'>
+    <div className='hidden md:block'>
       <div className='flex justify-between'>
         <div className='container p-4 flex items-center'>
           <button
@@ -62,7 +62,7 @@ export const MobileHeader: React.FC = () => {
       {/* Mobile Menu Panel */}
       <div
         className={clsx(
-          'p-2 space-y-2 border border-gray-200 shadow-md bg-white h-full w-1/2 z-50 fixed top-0 left-0 transform transition-transform duration-300 ease-in-out',
+          `w-1/5 p-2 space-y-2 border border-gray-200 shadow-md bg-white h-full z-50 fixed top-0 left-0 transform transition-transform duration-300 ease-in-out`,
           {
             'translate-x-0': menuOpen,
             '-translate-x-full': !menuOpen,
@@ -102,58 +102,7 @@ export const MobileHeader: React.FC = () => {
 
         <div className='border border-gray-200 m-4 ' />
 
-        {/* Language Switcher */}
-        <DropdownMenu>
-          <DropdownMenuTrigger className='m-4 inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50'>
-            <span className='mr-1'>{spokenLanguage.flag}</span>
-            <span className='mx-1'>→</span>
-            <span className='mr-1'>{learnedLanguage.flag}</span>
-            <ChevronDown className='ml-1 w-4 h-4' />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className='w-full p-4 mt-2'>
-            <div className='mb-4'>
-              <p className='text-sm font-medium text-gray-700 mb-2'>I speak:</p>
-              <div className='grid grid-cols-2 gap-2'>
-                {languages.map((lang) => (
-                  <button
-                    key={`speak-${lang.code}`}
-                    className={`flex items-center px-2 py-2 text-sm rounded-lg ${
-                      languageSpoken === lang.code
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'hover:bg-gray-100'
-                    }`}
-                    onClick={() => updateLanguages(lang.code, languageLearned)}
-                  >
-                    <span className='mr-2'>{lang.flag}</span>
-                    <span>{lang.name}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div>
-              <p className='text-sm font-medium text-gray-700 mb-2'>I am learning:</p>
-              <div className='grid grid-cols-2 gap-2'>
-                {languages.map((lang) => (
-                  <button
-                    key={`learn-${lang.code}`}
-                    className={`flex items-center px-2 py-2 text-sm rounded-lg ${
-                      languageLearned === lang.code
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'hover:bg-gray-100'
-                    }`}
-                    onClick={() => updateLanguages(languageSpoken, lang.code)}
-                  >
-                    <span className='mr-2'>{lang.flag}</span>
-                    <span>{lang.name}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        {/* Auth Buttons */}
-        <div className='p-4'>
+        <div className='flex items-center pl-4'>
           <SignedIn>
             <UserMenu />
           </SignedIn>
@@ -167,8 +116,57 @@ export const MobileHeader: React.FC = () => {
               <LoadingSpinner size={4} textColor='white' spinnerColor='white' message='Loading' />
             </button>
           </ClerkLoading>
+          <DropdownMenu>
+            <DropdownMenuTrigger className='m-4 inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50'>
+              <span className='mr-1'>{spokenLanguage.flag}</span>
+              <span className='mx-1'>→</span>
+              <span className='mr-1'>{learnedLanguage.flag}</span>
+              <ChevronDown className='ml-1 w-4 h-4' />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className='w-full p-4 mt-2'>
+              <div className='mb-4'>
+                <p className='text-sm font-medium text-gray-700 mb-2'>I speak:</p>
+                <div className='grid grid-cols-2 gap-2'>
+                  {languages.map((lang) => (
+                    <button
+                      key={`speak-${lang.code}`}
+                      className={`flex items-center px-2 py-2 text-sm rounded-lg ${
+                        languageSpoken === lang.code
+                          ? 'bg-blue-100 text-blue-700'
+                          : 'hover:bg-gray-100'
+                      }`}
+                      onClick={() => updateLanguages(lang.code, languageLearned)}
+                    >
+                      <span className='mr-2'>{lang.flag}</span>
+                      <span>{lang.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className='text-sm font-medium text-gray-700 mb-2'>I am learning:</p>
+                <div className='grid grid-cols-2 gap-2'>
+                  {languages.map((lang) => (
+                    <button
+                      key={`learn-${lang.code}`}
+                      className={`flex items-center px-2 py-2 text-sm rounded-lg ${
+                        languageLearned === lang.code
+                          ? 'bg-blue-100 text-blue-700'
+                          : 'hover:bg-gray-100'
+                      }`}
+                      onClick={() => updateLanguages(languageSpoken, lang.code)}
+                    >
+                      <span className='mr-2'>{lang.flag}</span>
+                      <span>{lang.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
+        <div className='border border-gray-200 m-4 ' />
       </div>
-    </header>
+    </div>
   );
 };

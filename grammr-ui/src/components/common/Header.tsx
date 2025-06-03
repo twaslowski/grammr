@@ -1,14 +1,14 @@
 'use client';
 
 import React from 'react';
-import { MobileHeader } from '@/components/common/MobileHeader';
-import { DesktopHeader } from '@/components/common/DesktopHeader';
+import { MobileSidebar } from '@/components/common/MobileSidebar';
+import { DesktopSidebar } from '@/components/common/DesktopSidebar';
 
 export const Header: React.FC = () => {
   return (
     <>
-      <DesktopHeader />
-      <MobileHeader />
+      <MobileSidebar />
+      <DesktopSidebar />
     </>
   );
 };
