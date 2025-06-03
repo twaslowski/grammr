@@ -14,6 +14,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
 import { headerLinks } from '@/constant/config';
+import { SidebarLeftIcon } from '@/components/ui/icons';
 
 export const DesktopSidebar: React.FC = () => {
   const { languageSpoken, languageLearned, setLanguageSpoken, setLanguageLearned } = useLanguage();
@@ -40,7 +41,6 @@ export const DesktopSidebar: React.FC = () => {
 
   const navigateTo = (path: string) => {
     router.push(path);
-    setMenuOpen(false);
   };
 
   const spokenLanguage = getLanguageByCode(languageSpoken);
@@ -55,7 +55,7 @@ export const DesktopSidebar: React.FC = () => {
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label='Toggle Menu'
           >
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            {menuOpen ? <SidebarLeftIcon size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
@@ -85,7 +85,7 @@ export const DesktopSidebar: React.FC = () => {
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label='Toggle Menu'
           >
-            <X size={24} />
+            <SidebarLeftIcon size={24} />
           </button>
         </div>
         {/* Nav Links */}

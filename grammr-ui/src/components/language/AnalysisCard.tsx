@@ -5,13 +5,15 @@ import Token from '@/token/components/Token';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import TokenType from '@/token/types/tokenType';
 import Analysis from '@/types/analysis';
+import { useTokenPopover } from '@/context/TokenPopoverContext';
 
 interface TranslationCardProps {
   analysis: Analysis;
-  onTokenClick: (token: TokenType) => void;
 }
 
-const AnalysisCard: React.FC<TranslationCardProps> = ({ analysis, onTokenClick }) => {
+const AnalysisCard: React.FC<TranslationCardProps> = ({ analysis }) => {
+  const { show } = useTokenPopover();
+
   return (
     <Card className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700'>
       <CardHeader>
@@ -26,13 +28,15 @@ const AnalysisCard: React.FC<TranslationCardProps> = ({ analysis, onTokenClick }
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className='flex flex-wrap gap-2'>
+        <div className='flex flex-wrap gap-1'>
           {analysis.analyzedTokens.map((token: TokenType) => (
             <Token
               context={analysis.semanticTranslation.translatedPhrase}
               key={token.index}
               token={token}
-              onShare={() => onTokenClick(token)}
+              onShare={() =>
+                show(token, analysis.semanticTranslation.translatedPhrase, analysis.sourceLanguage)
+              }
             />
           ))}
         </div>

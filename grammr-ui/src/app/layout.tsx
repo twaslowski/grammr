@@ -10,6 +10,7 @@ import { LanguageProvider } from '@/context/LanguageContext';
 import { Toaster } from '@/components/ui/toaster';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Header } from '@/components/common/Header';
+import { TokenPopoverProvider } from '@/context/TokenPopoverContext';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -50,8 +51,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <html>
         <body className='flex flex-col min-h-screen'>
           <LanguageProvider>
-            <Header />
-            <main className='flex-grow'>{children}</main>
+            <TokenPopoverProvider>
+              <Header />
+              <main className='flex-grow'>{children}</main>
+            </TokenPopoverProvider>
           </LanguageProvider>
           <Toaster />
           <SpeedInsights />

@@ -1,16 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import Sidebar from '@/token/components/Sidebar';
-import AnalysisCard from './AnalysisCard';
-import TranslationForm from './TranslationForm';
+import AnalysisCard from '@/components/language/AnalysisCard';
 import { useLanguage } from '@/context/LanguageContext';
 import useAnalysis from '@/hooks/useAnalysis';
-import TokenType from '@/token/types/tokenType';
+import { InputArea } from '@/components/common/InputArea';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 const TranslatePage = () => {
   const { languageSpoken, languageLearned } = useLanguage();
-  const [selectedToken, setSelectedToken] = useState<TokenType | null>(null);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -44,23 +42,15 @@ const TranslatePage = () => {
 
   return (
     <main>
-      {selectedToken && (
-        <Sidebar
-          context={analysis?.semanticTranslation.translatedPhrase || ''}
-          onClose={() => setSelectedToken(null)}
-          token={selectedToken}
-          languageCode={languageLearned}
-        />
-      )}
-
       <div className='px-4 py-8 max-w-3xl mx-auto'>
-        <TranslationForm onTranslate={handleTranslation} isLoading={isLoading} />
+        <InputArea onEnter={handleTranslation} />
 
+        {isLoading && <LoadingSpinner size={24} spinnerColor='black' />}
         {error && <div className='text-red-500 text-sm p-3 bg-red-50 rounded py-4'>{error}</div>}
 
         {analysis && (
           <div className='mt-8 space-y-6 max-w-3xl mx-auto'>
-            <AnalysisCard analysis={analysis} onTokenClick={(token) => setSelectedToken(token)} />
+            <AnalysisCard analysis={analysis} />
           </div>
         )}
       </div>

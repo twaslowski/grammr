@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { MessageBubble } from '@/chat/components/message/MessageBubble';
 import { useChat } from '@/chat/hooks/useChat';
-import { SendHorizonal } from 'lucide-react';
 import { Suggestions } from '@/chat/components/Suggestions';
+import { InputArea } from '@/components/common/InputArea';
 
 export const ChatWindow: React.FC = () => {
   const { messages, sendMessage } = useChat();
@@ -20,13 +20,6 @@ export const ChatWindow: React.FC = () => {
       analysis: null,
       timestamp: Date.now(),
     });
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      void handleSend();
-    }
   };
 
   return (
@@ -50,31 +43,7 @@ export const ChatWindow: React.FC = () => {
             />
           )}
         </div>
-        <div className='w-full border border-gray-300 rounded-2xl px-4 resize-none shadow-sm flex flex-col py-2'>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              void handleSend();
-            }}
-          >
-            <textarea
-              className='border-none w-full resize-none focus:outline-none focus:ring-0'
-              placeholder='Type your message...'
-              rows={1}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyPress}
-            />
-          </form>
-          <button
-            type='submit'
-            aria-label='Send message'
-            className='self-end p-2 rounded-full bg-black text-white hover:bg-gray-800 transition-colors shadow-md'
-            onClick={() => void handleSend()}
-          >
-            <SendHorizonal className='w-5 h-5' />
-          </button>
-        </div>
+        <InputArea onEnter={handleSend} />
       </div>
     </div>
   );
