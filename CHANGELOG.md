@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/twaslowski/grammr/compare/v1.2.0...v2.0.0) (2025-06-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* implement chat functionality ([#25](https://github.com/twaslowski/grammr/issues/25))
+
+### Features
+
+* implement chat functionality ([#25](https://github.com/twaslowski/grammr/issues/25)) ([fc76732](https://github.com/twaslowski/grammr/commit/fc76732826bf85678f814127ac03305c8c527755))
+
 ## [1.2.0](https://github.com/twaslowski/grammr/compare/v1.1.0...v1.2.0) (2025-05-21)
 
 
