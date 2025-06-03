@@ -18,9 +18,13 @@ public class TokenService {
   public List<Token> tokenize(String phrase) {
     var indexCounter = new AtomicInteger(0);
 
-    return Arrays.stream(phrase.split("\\P{L}+"))
+    // Splits the phrase at boundaries between letters (\\p{L}) and punctuation (\\p{P}),
+    // and ignores sequences of any characters which are neither letters nor punctuation.
+    // Includes lookaheads and lookbehinds to ensure that punctuation is treated as separate tokens.
+    return Arrays.stream(phrase.split("(?<=\\p{L})(?=\\p{P})|(?<=\\p{P})(?=\\p{L})|[^\\p{L}\\p{P}]+"))
         .filter(token -> !token.isEmpty())
         .map(token -> Token.fromString(token, indexCounter.getAndIncrement()))
+        .filter(token -> !token.text().isBlank())
         .collect(Collectors.toList());
   }
 

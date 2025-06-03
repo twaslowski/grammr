@@ -48,7 +48,6 @@ public class AnalysisService {
         .targetLanguage(analysisRequest.userLanguageSpoken())
         .build();
 
-    var semanticTranslationFuture = supplyAsync(() -> semanticTranslationService.createAnalysisComponent(analysisComponentRequest));
     var literalTranslationFuture = supplyAsync(() -> literalTranslationService.createAnalysisComponent(analysisComponentRequest));
     var grammaticalAnalysisFuture = supplyAsync(() -> morphologyService.createAnalysisComponent(analysisComponentRequest));
 
@@ -56,11 +55,10 @@ public class AnalysisService {
 
     var literalTranslation = join(literalTranslationFuture).getTokenTranslations();
     var grammaticalAnalysis = join(grammaticalAnalysisFuture);
-    var semanticAnalysis = join(semanticTranslationFuture);
     tokens = tokenService.enrichTokens(tokens, literalTranslation, grammaticalAnalysis);
 
     return FullAnalysis.builder()
-        .semanticTranslation(semanticAnalysis)
+        .semanticTranslation(null)
         .sourcePhrase(sourcePhrase)
         .sourceLanguage(analysisRequest.userLanguageLearned())
         .targetLanguage(analysisRequest.userLanguageSpoken())

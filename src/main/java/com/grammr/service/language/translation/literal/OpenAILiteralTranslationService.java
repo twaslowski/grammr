@@ -6,6 +6,8 @@ import com.grammr.domain.value.language.Token;
 import io.micrometer.core.annotation.Timed;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +18,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OpenAILiteralTranslationService implements LiteralTranslationService {
 
-  private static final int MAX_TOKENS = 15;
+  private static final int MAX_TOKENS = 25;
+
+  private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
   private final OpenAITokenTranslationService openAITokenTranslationService;
 
@@ -32,12 +36,15 @@ public class OpenAILiteralTranslationService implements LiteralTranslationServic
 
     log.info("Performing translations for {} tokens", request.getTokens().size());
 
-    var completableFutures = request.getTokens().stream()
-        .map(token -> CompletableFuture.supplyAsync(() -> openAITokenTranslationService.createTranslation(request.getPhrase(), token, request.getTargetLanguage())))
+    var futures = request.getTokens().stream()
+        .filter(token -> token.text().chars().anyMatch(Character::isLetterOrDigit))
+        .map(token -> CompletableFuture.supplyAsync(() ->
+                openAITokenTranslationService.createTranslation(request.getPhrase(), token, request.getTargetLanguage()),
+            executorService))
         .toList();
 
-    var tokenTranslations = completableFutures.stream()
-        .parallel()
+    CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+    var tokenTranslations = futures.stream()
         .map(CompletableFuture::join)
         .collect(Collectors.toList());
 

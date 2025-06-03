@@ -5,11 +5,12 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Metadata } from 'next';
 import * as React from 'react';
 
-import Footer from '@/components/common/Footer';
-import Header from '@/components/common/Header';
 import { siteConfig } from '@/constant/config';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { Toaster } from '@/components/ui/toaster';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Header } from '@/components/common/Header';
+import { TokenPopoverProvider } from '@/context/TokenPopoverContext';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -36,18 +37,12 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: siteConfig.title,
-    description: siteConfig.description,
-    images: [`${siteConfig.url}/images/logo.jpg`],
-  },
-  // authors: [
-  //   {
-  //     name: 'Theodorus Clarence',
-  //     url: 'https://theodorusclarence.com',
-  //   },
-  // ],
+  authors: [
+    {
+      name: 'Tobias Waslowski',
+      url: 'https://twaslowski.com',
+    },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -56,9 +51,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <html>
         <body className='flex flex-col min-h-screen'>
           <LanguageProvider>
-            <Header />
-            <main className='flex-grow bg-gray-50 dark:bg-gray-900'>{children}</main>
-            <Footer />
+            <TokenPopoverProvider>
+              <Header />
+              <main className='flex-grow'>{children}</main>
+            </TokenPopoverProvider>
           </LanguageProvider>
           <Toaster />
           <SpeedInsights />

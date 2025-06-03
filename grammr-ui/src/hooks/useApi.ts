@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-interface ApiError {
+export interface ApiError {
   code: number;
   message: string;
 }

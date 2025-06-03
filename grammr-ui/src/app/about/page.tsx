@@ -13,8 +13,20 @@ export default function Page() {
 
   return (
     <div className='container mx-auto px-12'>
-      <section className='mb-12 text-center py-8'>
-        <h1 className='text-4xl font-bold mb-4'>About Grammr</h1>
+      <section className='text-center py-8'>
+        <h1 className='text-4xl font-bold'>About Grammr</h1>
+      </section>
+
+      <section>
+        <p className='mb-4'>
+          Grammr is designed to be a reference toolkit for grammar and vocabulary. It integrates
+          with
+          <a className='text-blue-900 underline' href={'https://apps.ankiweb.net/'}>
+            Anki
+          </a>
+          , a popular and open-source flashcard application, to help you memorize vocabulary and
+          concepts more easily.
+        </p>
       </section>
 
       <div className='flex border-b mb-8'>
@@ -58,25 +70,6 @@ export default function Page() {
             <LanguageFeatureTable languageFeatures={languageFeatures} />
           </div>
         )}
-        {activeTab === 'service' && (
-          <div>
-            <h2 className='text-2xl font-bold mb-4'>On Grammr</h2>
-            <p className='mb-4'>
-              Grammr is designed to be a reference toolkit for grammar and vocabulary. It supports a
-              variety of languages and is built with a focus on accessibility and ease of use.
-              Grammr enables its users to translate, practice, and learn new languages with
-              confidence by providing information on phrases, named entities and cultural
-              references, grammar, rules, vocabulary, and more.
-            </p>
-            <p className='mb-4'>
-              In order to provide the best possible experience, people with different levels of
-              language proficiency and programming experience are encouraged to contribute to the
-              project. If you're interested, feel free to read more in the Open Source section or
-              reach out directly.
-            </p>
-          </div>
-        )}
-
         {activeTab === 'open-source' && (
           <div>
             <h2 className='text-2xl font-bold mb-4'>Open Source</h2>

@@ -23,10 +23,10 @@ def handler(event, _) -> dict:
     if keep_warm_response := check_keep_warm(event):
         return keep_warm_response
     try:
-      body = AnalysisRequest(**json.loads(event.get("body")))
-      logger.info(f"Received sentence, language: {body.phrase}")
-      analysis = analysis_service.perform_analysis(body)
-      return ok(analysis.model_dump())
+        body = AnalysisRequest(**json.loads(event.get("body")))
+        logger.info(f"Received sentence, language: {body.phrase}")
+        analysis = analysis_service.perform_analysis(body)
+        return ok(analysis.model_dump())
     except Exception as e:
-      logger.error("An error occurred: ", e)
-      return fail(500)
+        logger.error("An error occurred: ", e)
+        return fail(500)

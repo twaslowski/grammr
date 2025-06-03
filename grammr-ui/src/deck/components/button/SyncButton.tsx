@@ -27,6 +27,7 @@ export default function SyncButton({ deck }: { deck: Deck }) {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({
         deckId: deckId,
       }),

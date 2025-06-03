@@ -4,7 +4,7 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 import com.grammr.config.value.LanguageConfiguration;
 import com.grammr.domain.entity.Paradigm;
-import com.grammr.domain.exception.InflectionNotAvailable;
+import com.grammr.domain.exception.InflectionNotAvailableException;
 import com.grammr.domain.value.language.ParadigmDTO;
 import com.grammr.port.dto.InflectionsRequest;
 import java.util.Optional;
@@ -35,11 +35,11 @@ public class InflectionPort {
 
       return Optional.ofNullable(paradigmDTO)
           .map(Paradigm::from)
-          .orElseThrow(() -> new InflectionNotAvailable(request.languageCode(), request.partOfSpeechTag()));
+          .orElseThrow(() -> new InflectionNotAvailableException(request.languageCode(), request.partOfSpeechTag()));
     } catch (HttpClientErrorException e) {
       log.info("Inflections could not be performed for word {}, pos {}", request.lemma(), request.partOfSpeechTag());
       if (e.getStatusCode() == UNPROCESSABLE_ENTITY) {
-        throw new InflectionNotAvailable(request.languageCode(), request.partOfSpeechTag());
+        throw new InflectionNotAvailableException(request.languageCode(), request.partOfSpeechTag());
       }
       throw e;
     } catch (Exception e) {

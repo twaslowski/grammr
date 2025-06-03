@@ -2,7 +2,7 @@ package com.grammr.service;
 
 import com.grammr.config.value.LanguageConfiguration;
 import com.grammr.domain.entity.Paradigm;
-import com.grammr.domain.exception.InflectionNotAvailable;
+import com.grammr.domain.exception.InflectionNotAvailableException;
 import com.grammr.domain.value.language.ParadigmDTO;
 import com.grammr.port.InflectionPort;
 import com.grammr.port.dto.InflectionsRequest;
@@ -36,7 +36,7 @@ public class InflectionService {
       paradigm.setLanguageCode(inflectionRequest.languageCode());
       return paradigmRepository.save(paradigm);
     } else {
-      throw new InflectionNotAvailable(inflectionRequest.languageCode());
+      throw new InflectionNotAvailableException(inflectionRequest.languageCode());
     }
   }
 }

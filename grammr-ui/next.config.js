@@ -14,15 +14,9 @@ const nextConfig = {
 
   reactStrictMode: true,
 
-  // Uncoment to add domain whitelist
-  // images: {
-  //   remotePatterns: [
-  //     {
-  //       protocol: 'https',
-  //       hostname: 'res.cloudinary.com',
-  //     },
-  //   ]
-  // },
+  images: {
+    remotePatterns: [new URL('https://img.clerk.com/**')],
+  },
 
   webpack(config) {
     // Grab the existing rule that handles SVG imports

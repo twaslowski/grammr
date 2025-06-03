@@ -701,7 +701,7 @@ export const SidebarLeftIcon = ({ size = 16 }: { size?: number }) => (
     strokeLinejoin='round'
     viewBox='0 0 16 16'
     width={size}
-    style={{ color: 'currentcolor' }}
+    className='text-gray-500 hover:bg-gray-200'
   >
     <path
       fillRule='evenodd'

@@ -24,7 +24,7 @@ const Translation: React.FC<TranslationProps> = ({ context, token, onTranslation
     data: translation,
     loading: isTranslationLoading,
     error: translationError,
-  } = useTranslation(context, token.text, languageSpoken, !!token.translation);
+  } = useTranslation(context, token.text, languageSpoken, !token.translation);
 
   useEffect(() => {
     if (translation) {

@@ -13,14 +13,14 @@ import TokenType from '@/token/types/tokenType';
 import TokenFlashcardExport from '@/flashcard/components/TokenFlashcardExport';
 import { useInflections } from '@/inflection/hooks/useInflections';
 
-interface SidebarProps {
+interface TokenPopoverProps {
   onClose: () => void;
   context: string;
   languageCode: string;
   token: TokenType;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onClose, context, token, languageCode }) => {
+const TokenPopover: React.FC<TokenPopoverProps> = ({ onClose, context, token, languageCode }) => {
   const { inflections, error, notAvailableInfo } = useInflections(
     token.morphology.lemma,
     token.morphology.pos,
@@ -97,4 +97,4 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose, context, token, languageCode
     </div>
   );
 };
-export default Sidebar;
+export default TokenPopover;

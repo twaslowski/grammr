@@ -8,8 +8,12 @@ export const useDecks = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await request<Deck[]>('/api/v1/deck');
-      if (result) setDecks(result);
+      try {
+        const result = await request<Deck[]>('/api/v1/deck');
+        if (result) setDecks(result);
+      } catch (err) {
+        //
+      }
     };
     void fetchData();
   }, [request]);
@@ -17,6 +21,7 @@ export const useDecks = () => {
   const addDeck = async (name: string, description: string) => {
     const newDeck = await request<Deck>('/api/v1/deck', {
       method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, description }),
     });
