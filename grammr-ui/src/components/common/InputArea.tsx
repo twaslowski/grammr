@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { SendHorizonal } from 'lucide-react';
 
-export const InputArea: React.FC<{ onEnter: (input: string) => void, clear: boolean }> = ({ onEnter, clear }) => {
+export const InputArea: React.FC<{ onEnter: (input: string) => void; clear: boolean }> = ({
+  onEnter,
+  clear,
+}) => {
   const [input, setInput] = useState('');
 
   const handleSubmit = () => {

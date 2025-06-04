@@ -39,7 +39,7 @@ export const Suggestions: React.FC<SuggestionsProps> = ({
   useEffect(() => {
     const randomSuggestions = getRandomSuggestions(suggestions, numberOfSuggestions);
     setSampledSuggestions(randomSuggestions);
-  }, []);
+  }, [numberOfSuggestions]);
 
   return (
     <div className='flex flex-wrap gap-2 justify-center mb-4'>
