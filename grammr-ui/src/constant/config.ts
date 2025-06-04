@@ -1,4 +1,4 @@
-import { BookOpen, Globe, Home, Info, Phone } from 'lucide-react';
+import { BookOpen, Globe, HelpCircle, Home } from 'lucide-react';
 
 export const siteConfig = {
   title: 'grammr',
@@ -10,6 +10,5 @@ export const headerLinks = [
   { label: 'Home', href: '/', icon: Home },
   { label: 'Translate', href: '/translate', icon: Globe },
   { label: 'Flashcards', href: '/user/decks', icon: BookOpen },
-  { label: 'About', href: '/about', icon: Info },
-  { label: 'Contact', href: '/contact', icon: Phone },
+  { label: 'Help', href: '/help', icon: HelpCircle },
 ];

@@ -43,7 +43,7 @@ const TranslatePage = () => {
   return (
     <main>
       <div className='px-4 py-8 max-w-3xl mx-auto'>
-        <InputArea onEnter={handleTranslation} />
+        <InputArea onEnter={handleTranslation} clear={false} />
 
         {isLoading && <LoadingSpinner size={24} spinnerColor='black' />}
         {error && <div className='text-red-500 text-sm p-3 bg-red-50 rounded py-4'>{error}</div>}

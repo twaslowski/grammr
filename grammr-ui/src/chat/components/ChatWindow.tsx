@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MessageBubble } from '@/chat/components/message/MessageBubble';
 import { useChat } from '@/chat/hooks/useChat';
 import { Suggestions } from '@/chat/components/Suggestions';
@@ -6,17 +6,12 @@ import { InputArea } from '@/components/common/InputArea';
 
 export const ChatWindow: React.FC = () => {
   const { messages, sendMessage } = useChat();
-  const [input, setInput] = useState('');
 
-  const handleSend = async () => {
-    if (!input.trim()) return;
-
-    setInput('');
-
+  const handleSend = async (text: string) => {
     await sendMessage({
       id: '', // ID will be generated in the hook
       role: 'user',
-      content: input,
+      content: text,
       analysis: null,
       timestamp: Date.now(),
     });
@@ -36,14 +31,13 @@ export const ChatWindow: React.FC = () => {
         <div>
           {messages.length === 0 && (
             <Suggestions
-              onSuggestionClick={(text: string) => {
-                setInput(text);
-                void handleSend();
+              onSuggestionClickAction={(text: string) => {
+                void handleSend(text);
               }}
             />
           )}
         </div>
-        <InputArea onEnter={handleSend} />
+        <InputArea onEnter={handleSend} clear={true} />
       </div>
     </div>
   );
