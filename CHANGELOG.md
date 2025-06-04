@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.1](https://github.com/twaslowski/grammr/compare/v2.0.0...v2.0.1) (2025-06-04)
+
+
+### Bug Fixes
+
+* **chat:** InputArea message sending ([0a1c898](https://github.com/twaslowski/grammr/commit/0a1c898bd5293138052e9dbe74ad4fdf6e3e99ea))
+* linter issues ([313e331](https://github.com/twaslowski/grammr/commit/313e33119046503d58f80198ca11743585b861dc))
+
 ## [2.0.0](https://github.com/twaslowski/grammr/compare/v1.2.0...v2.0.0) (2025-06-03)
 
 
