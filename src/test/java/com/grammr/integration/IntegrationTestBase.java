@@ -8,18 +8,16 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.grammr.language.service.TokenService;
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.TokenTranslation;
 import com.grammr.repository.DeckRepository;
 import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.ParadigmRepository;
 import com.grammr.repository.UserRepository;
-import com.grammr.service.TokenService;
-import com.grammr.service.language.recognition.OpenAILanguageRecognitionService;
-import com.grammr.service.language.translation.semantic.OpenAISemanticTranslationService;
+import com.grammr.language.service.translation.semantic.OpenAISemanticTranslationService;
 import io.github.sashirestela.openai.OpenAI;
 import io.github.sashirestela.openai.SimpleOpenAI;
 import java.util.concurrent.CompletableFuture;
@@ -38,9 +36,6 @@ public class IntegrationTestBase {
 
   @Autowired
   protected OpenAISemanticTranslationService semanticTranslationService;
-
-  @Autowired
-  protected OpenAILanguageRecognitionService languageRecognitionService;
 
   @Autowired
   protected TokenService tokenService;
@@ -98,12 +93,6 @@ public class IntegrationTestBase {
         .sourcePhrase(source)
         .translatedPhrase(translation)
         .build());
-  }
-
-  @SneakyThrows
-  protected void mockLanguageRecognition(String source, LanguageCode languageCode) {
-    String prompt = languageRecognitionService.generateUserMessage(source).getContent().toString();
-    mockOpenAIResponseExactly(prompt, LanguageRecognition.of(languageCode));
   }
 
   @SneakyThrows

@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.port.dto.InflectionsRequest;
+import com.grammr.language.controller.dto.InflectionsRequest;
 import com.grammr.repository.ParadigmRepository;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;

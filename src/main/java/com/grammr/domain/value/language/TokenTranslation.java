@@ -1,6 +1,6 @@
 package com.grammr.domain.value.language;
 
-import com.grammr.service.language.AIGeneratedContent;
+import com.grammr.common.AIGeneratedContent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

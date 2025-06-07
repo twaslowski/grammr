@@ -3,7 +3,8 @@ package com.grammr.config.web;
 import com.clerk.backend_api.helpers.jwks.AuthenticateRequest;
 import com.clerk.backend_api.helpers.jwks.AuthenticateRequestOptions;
 import com.clerk.backend_api.helpers.jwks.RequestState;
-import com.grammr.service.UserService;
+import com.grammr.domain.entity.User;
+import com.grammr.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,7 +38,7 @@ public class ClerkJwtValidationFilter extends OncePerRequestFilter {
   @Value("${clerk.authorized-party}")
   private String authorizedParty;
 
-  private final UserService userService;
+  private final UserRepository userRepository;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -55,7 +56,7 @@ public class ClerkJwtValidationFilter extends OncePerRequestFilter {
     );
 
     requestState.claims().ifPresent(claims -> {
-      var user = userService.getOrCreate(claims.getSubject());
+      var user = getOrCreate(claims.getSubject());
       Authentication auth = new UsernamePasswordAuthenticationToken(user, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
       SecurityContextHolder.getContext().setAuthentication(auth);
     });
@@ -83,5 +84,10 @@ public class ClerkJwtValidationFilter extends OncePerRequestFilter {
 
   private Map<String, List<String>> fakeAuthenticationHeader(String token) {
     return Map.of("Authorization", Collections.singletonList("Bearer " + token));
+  }
+
+  public User getOrCreate(String id) {
+    return userRepository.findByExternalId(id)
+        .orElseGet(() -> userRepository.save(User.fromExternalId(id)));
   }
 }

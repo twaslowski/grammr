@@ -1,6 +1,6 @@
 package com.grammr.domain.value.language;
 
-import com.grammr.service.language.AIGeneratedContent;
+import com.grammr.common.AIGeneratedContent;
 import io.github.sashirestela.openai.domain.audio.Transcription;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

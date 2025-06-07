@@ -4,10 +4,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.grammr.language.service.translation.literal.OpenAILiteralTranslationService;
+import com.grammr.language.service.translation.literal.OpenAITokenTranslationService;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.AnalysisComponentRequest;
-import com.grammr.domain.value.language.Token;
-import com.grammr.service.TokenService;
+import com.grammr.language.service.TokenService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

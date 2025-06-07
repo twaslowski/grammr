@@ -5,7 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import com.grammr.annotation.BenchmarkTest;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.AnalysisComponentRequest;
-import com.grammr.service.language.translation.semantic.OpenAISemanticTranslationService;
+import com.grammr.language.service.translation.semantic.OpenAISemanticTranslationService;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

@@ -31,8 +31,6 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
     var tokens = tokenService.tokenize(sourcePhrase);
     var words = tokens.stream().map(Token::text).toList();
 
-    mockLanguageRecognition(sourcePhrase, LanguageCode.DE);
-
     for (String word : words) {
       mockTokenTranslation(sourcePhrase, word, new TokenTranslation(word, "someTranslation"));
     }
@@ -65,7 +63,6 @@ public class FullAnalysisIntegrationTest extends IntegrationTestBase {
     var tokens = tokenService.tokenize(translation);
     var words = tokens.stream().map(Token::text).toList();
 
-    mockLanguageRecognition(sourcePhrase, LanguageCode.EN);
     mockSemanticTranslation(sourcePhrase, translation, LanguageCode.DE);
     for (String word : words) {
       mockTokenTranslation(translation, word, new TokenTranslation(word, "someTranslation"));

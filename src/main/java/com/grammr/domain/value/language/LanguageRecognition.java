@@ -1,7 +1,7 @@
 package com.grammr.domain.value.language;
 
+import com.grammr.common.AIGeneratedContent;
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.service.language.AIGeneratedContent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
