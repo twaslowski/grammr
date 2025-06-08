@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OpenAITestUtil {
 
-  public static final String MOCK_FILE_PATH = "src/test/resources/rest/openai_sample_response.json";
+  public static final String MOCK_FILE_PATH = "src/test/resources/templates/chat_completions.json";
 
   private final ObjectMapper objectMapper;
 

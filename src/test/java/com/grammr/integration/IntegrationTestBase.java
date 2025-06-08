@@ -1,5 +1,9 @@
 package com.grammr.integration;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static com.grammr.integration.OpenAITestUtil.chatRequestContains;
 import static com.grammr.integration.OpenAITestUtil.chatRequestEquals;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -8,21 +12,26 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grammr.language.service.TokenService;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.TokenTranslation;
+import com.grammr.language.service.TokenService;
+import com.grammr.language.service.translation.semantic.OpenAISemanticTranslationService;
 import com.grammr.repository.DeckRepository;
 import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.ParadigmRepository;
 import com.grammr.repository.UserRepository;
-import com.grammr.language.service.translation.semantic.OpenAISemanticTranslationService;
 import io.github.sashirestela.openai.OpenAI;
 import io.github.sashirestela.openai.SimpleOpenAI;
 import java.util.concurrent.CompletableFuture;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,10 +41,13 @@ import org.springframework.test.web.servlet.MockMvc;
 @IntegrationTest
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestInstance(Lifecycle.PER_CLASS)
 public class IntegrationTestBase {
 
   @Autowired
   protected MockMvc mockMvc;
+
+  protected WireMockServer wireMockServer;
 
   @MockBean
   protected SimpleOpenAI openAIClient;
@@ -65,7 +77,6 @@ public class IntegrationTestBase {
   protected ParadigmRepository paradigmRepository;
 
   private final OpenAI.ChatCompletions chatCompletionsMock = mock(OpenAI.ChatCompletions.class);
-  private final OpenAI.Audios audioMock = mock(OpenAI.Audios.class);
 
   @BeforeEach
   public void setUp() {
@@ -73,7 +84,7 @@ public class IntegrationTestBase {
     deckRepository.deleteAll();
     userRepository.deleteAll();
     paradigmRepository.deleteAll();
-    reset(audioMock, chatCompletionsMock);
+    reset(chatCompletionsMock);
   }
 
   @SneakyThrows

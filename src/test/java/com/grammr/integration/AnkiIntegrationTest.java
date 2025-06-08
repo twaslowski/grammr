@@ -32,11 +32,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @IntegrationTest
-@AutoConfigureMockMvc
 public class AnkiIntegrationTest extends IntegrationTestBase {
-
-  @Autowired
-  private MockMvc mockMvc;
 
   @Test
   @SneakyThrows

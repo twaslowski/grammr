@@ -142,8 +142,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
+            <groupId>org.wiremock</groupId>
+            <artifactId>wiremock-standalone</artifactId>
+            <version>3.3.1</version>
             <scope>test</scope>
         </dependency>
 

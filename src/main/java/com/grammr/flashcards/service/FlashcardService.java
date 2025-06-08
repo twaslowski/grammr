@@ -52,7 +52,7 @@ public class FlashcardService {
   public Flashcard createFlashcard(User user, long deckId, String question, String answer, PartOfSpeechTag tokenPos, UUID paradigmId) {
     var deck = deckRepository.findById(deckId)
         .map(d -> checkOwnershipMismatch(user, d))
-        .orElseThrow(() -> new DeckNotFoundException(user.getId(), deckId));
+        .orElseThrow(() -> new DeckNotFoundException(user.getId().toString(), deckId));
     var paradigm = Optional.ofNullable(paradigmId)
         .flatMap(paradigmRepository::findById)
         .orElse(null);
@@ -66,7 +66,7 @@ public class FlashcardService {
     return flashcardRepository.save(flashcard);
   }
 
-  public Deck createDeck(String userId, String name) {
+  public Deck createDeck(UUID userId, String name) {
     var user = userRepository.findById(userId)
         .orElseThrow(() -> new UserNotFoundException(userId));
     var deck = Deck.builder()
@@ -79,10 +79,10 @@ public class FlashcardService {
   public Deck getDeck(User user, long deckId) {
     return deckRepository.findById(deckId)
         .map(d -> checkOwnershipMismatch(user, d))
-        .orElseThrow(() -> new DeckNotFoundException(user.getId(), deckId));
+        .orElseThrow(() -> new DeckNotFoundException(user.getId().toString(), deckId));
   }
 
-  public List<DeckDto> getDecks(String userId) {
+  public List<DeckDto> getDecks(UUID userId) {
     var decks = deckRepository.findAllByUserId(userId);
     return decks.stream()
         .map(deck -> new DeckDto(deck, flashcardRepository.findByDeckId(deck.getId())))
@@ -101,13 +101,13 @@ public class FlashcardService {
   public void deleteFlashcard(User user, long flashcardId) {
     var foundFlashcard = flashcardRepository.findById(flashcardId)
         .filter(flashcard -> Objects.equals(flashcard.getDeck().getUser().getId(), user.getId()))
-        .orElseThrow(() -> new DeckNotFoundException(user.getId(), flashcardId));
+        .orElseThrow(() -> new DeckNotFoundException(user.getId().toString(), flashcardId));
     flashcardRepository.delete(foundFlashcard);
   }
 
   private Deck checkOwnershipMismatch(User user, Deck deck) {
     if (!deck.getUser().getId().equals(user.getId())) {
-      throw new DeckNotFoundException(user.getId(), deck.getId());
+      throw new DeckNotFoundException(user.getId().toString(), deck.getId());
     }
     return deck;
   }

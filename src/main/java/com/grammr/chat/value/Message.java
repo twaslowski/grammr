@@ -1,5 +1,6 @@
 package com.grammr.chat.value;
 
+import com.grammr.domain.entity.ChatMessage;
 import com.grammr.domain.entity.ChatMessage.Role;
 import com.openai.models.responses.EasyInputMessage;
 import java.util.UUID;
@@ -28,6 +29,15 @@ public record Message(
     return Message.builder()
         .content(response)
         .role(Role.ASSISTANT)
+        .build();
+  }
+
+  public static Message fromChatMessage(ChatMessage chatMessage) {
+    return Message.builder()
+        .id(chatMessage.getId().toString())
+        .content(chatMessage.getContent())
+        .role(chatMessage.getRole())
+        .chatId(chatMessage.getChat().getChatId().toString())
         .build();
   }
 

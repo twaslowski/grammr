@@ -44,6 +44,7 @@ public class SpringSecurityConfiguration {
     authorizationRegistry
         .requestMatchers("/actuator/*").permitAll()
         .requestMatchers("/api/v1/chat").permitAll()
+        .requestMatchers("/api/v2/chat").permitAll()
         .requestMatchers("/api/v1/deck").authenticated()
         .requestMatchers("/api/v1/deck/**").authenticated()
         .requestMatchers("/api/v1/flashcard").authenticated()

@@ -44,7 +44,7 @@ public class ChatMessage {
   @Enumerated(EnumType.STRING)
   private Role role;
 
-  @JoinColumn
+  @JoinColumn(name = "chat_id", nullable = false)
   @ManyToOne(fetch = FetchType.LAZY)
   public Chat chat;
 

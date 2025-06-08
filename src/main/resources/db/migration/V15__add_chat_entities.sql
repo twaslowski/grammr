@@ -1,21 +1,36 @@
+-- Migrate user id to UUID instead of VARCHAR
+ALTER TABLE deck
+  DROP CONSTRAINT IF EXISTS deck_user_id_fkey;
+
+ALTER TABLE "user"
+  ALTER COLUMN id TYPE UUID USING id::UUID;
+
+ALTER TABLE deck
+  ALTER COLUMN user_id TYPE UUID USING user_id::UUID;
+
+ALTER TABLE deck
+  ADD CONSTRAINT deck_user_id_fkey FOREIGN KEY (user_id) REFERENCES "user" (id);
+
+-- Create new entities with correct types
 CREATE TABLE IF NOT EXISTS chat
 (
   id                BIGINT PRIMARY KEY,
   chat_id           UUID                     NOT NULL,
-  owner             VARCHAR                  NOT NULL,
+  owner             UUID                     NULL,
   created_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
   updated_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
   FOREIGN KEY (owner) REFERENCES "user" (id)
 );
 
-CREATE TABLE IF NOT EXISTS chat_message (
-  id BIGINT PRIMARY KEY,
-  content TEXT,
-  role VARCHAR(16) NOT NULL,
-  chat_id BIGINT NOT NULL,
+CREATE TABLE IF NOT EXISTS chat_message
+(
+  id                BIGINT PRIMARY KEY,
+  content           TEXT,
+  role              VARCHAR(16)              NOT NULL,
+  chat_id           BIGINT                   NOT NULL,
   created_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
   updated_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-  FOREIGN KEY (chat_id) REFERENCES chat (id)
+  FOREIGN KEY (chat_id) REFERENCES chat (id) ON DELETE CASCADE
 );
 
 CREATE SEQUENCE IF NOT EXISTS chat_id_seq INCREMENT 50 START 1;

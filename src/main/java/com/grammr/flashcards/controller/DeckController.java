@@ -32,6 +32,14 @@ public class DeckController {
 
   private final FlashcardService flashcardService;
 
+  @PostMapping(produces = APPLICATION_JSON_VALUE)
+  public ResponseEntity<DeckDto> createDeck(@RequestBody @Valid DeckCreationDto data,
+                                            @AuthenticationPrincipal User user) {
+    var deck = flashcardService.createDeck(user.getId(), data.name());
+    var deckDto = new DeckDto(deck, List.of());
+    return ResponseEntity.status(201).body(deckDto);
+  }
+
   @PostMapping(value = "/export")
   public ResponseEntity<?> exportDeck(@RequestBody @Valid DeckExportDto data, @AuthenticationPrincipal User user) {
     var deck = flashcardService.getDeck(user, data.deckId());
@@ -53,14 +61,6 @@ public class DeckController {
         .flashcards(flashcards)
         .build();
     return ResponseEntity.ok(response);
-  }
-
-  @PostMapping(produces = APPLICATION_JSON_VALUE)
-  public ResponseEntity<DeckDto> createDeck(@RequestBody @Valid DeckCreationDto data,
-                                            @AuthenticationPrincipal User user) {
-    var deck = flashcardService.createDeck(user.getId(), data.name());
-    var deckDto = new DeckDto(deck, List.of());
-    return ResponseEntity.status(201).body(deckDto);
   }
 
   @GetMapping(produces = APPLICATION_JSON_VALUE)

@@ -1,6 +1,5 @@
 package com.grammr.chat.controller.v1;
 
-import com.grammr.chat.controller.v1.dto.ChatInitializationDto;
 import com.grammr.chat.service.OpenAIChatService;
 import com.grammr.chat.value.Message;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,7 +11,6 @@ import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

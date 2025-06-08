@@ -7,6 +7,7 @@ import com.grammr.domain.entity.User;
 import com.grammr.repository.ChatMessageRepository;
 import com.grammr.repository.ChatRepository;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class ChatPersistenceService {
   public Chat newChat(User user) {
     var chat = Chat.builder()
         .owner(user)
+        .chatId(UUID.randomUUID())
         .build();
     return chatRepository.save(chat);
   }
@@ -31,5 +33,18 @@ public class ChatPersistenceService {
         .map(message -> ChatMessage.from(message, chat))
         .toList();
     chatMessageRepository.saveAll(chatMessages);
+  }
+
+  public void save(Chat chat, Message message) {
+    var chatMessage = ChatMessage.from(message, chat);
+    chatMessageRepository.save(chatMessage);
+  }
+
+  public Chat getChat(UUID chatId) {
+    return chatRepository.findByChatId(chatId);
+  }
+
+  public List<ChatMessage> getChatMessages(Chat chatId) {
+    return chatMessageRepository.findByChat(chatId);
   }
 }
