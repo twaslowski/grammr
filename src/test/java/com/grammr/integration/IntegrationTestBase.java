@@ -15,6 +15,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.grammr.annotation.IntegrationTest;
+import com.grammr.domain.entity.User;
+import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.language.SemanticTranslation;
 import com.grammr.domain.value.language.TokenTranslation;
@@ -26,6 +28,7 @@ import com.grammr.repository.ParadigmRepository;
 import com.grammr.repository.UserRepository;
 import io.github.sashirestela.openai.OpenAI;
 import io.github.sashirestela.openai.SimpleOpenAI;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeAll;
@@ -36,6 +39,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.test.web.servlet.MockMvc;
 
 @IntegrationTest
@@ -85,6 +90,15 @@ public class IntegrationTestBase {
     userRepository.deleteAll();
     paradigmRepository.deleteAll();
     reset(chatCompletionsMock);
+  }
+
+  protected Authentication createUserAuthentication() {
+    var user = userRepository.save(UserSpec.valid().build());
+    return new UsernamePasswordAuthenticationToken(user, null, List.of());
+  }
+
+  protected Authentication createUserAuthentication(User user) {
+    return new UsernamePasswordAuthenticationToken(user, null, List.of());
   }
 
   @SneakyThrows

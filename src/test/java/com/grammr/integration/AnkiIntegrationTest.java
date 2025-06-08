@@ -201,13 +201,4 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
     assertThat(deckRepository.findAll()).isEmpty();
     assertThat(flashcardRepository.findAll()).isEmpty();
   }
-
-  private Authentication createUserAuthentication() {
-    var user = userRepository.save(UserSpec.valid().build());
-    return new UsernamePasswordAuthenticationToken(user, null, List.of());
-  }
-
-  private Authentication createUserAuthentication(User user) {
-    return new UsernamePasswordAuthenticationToken(user, null, List.of());
-  }
 }

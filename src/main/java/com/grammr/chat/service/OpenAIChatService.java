@@ -69,19 +69,6 @@ public class OpenAIChatService {
     return response;
   }
 
-  @PostAuthorize("returnObject.owner == null or returnObject.owner.id == #user?.id")
-  public Chat retrieveChat(UUID chatId, @Nullable User user) {
-    return chatPersistenceService.getChat(chatId);
-  }
-
-  public List<Message> getMessages(UUID chatId, @Nullable User user) {
-    Chat chat = retrieveChat(chatId, user);
-    return chatPersistenceService.getChatMessages(chat)
-        .stream()
-        .map(Message::fromChatMessage)
-        .toList();
-  }
-
   private List<ResponseInputItem> buildInputItems(List<Message> messages) {
     return messages.stream()
         .map(Message::toEasyInputMessage)

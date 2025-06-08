@@ -1,0 +1,5 @@
+ALTER TABLE chat
+  DROP CONSTRAINT IF EXISTS chat_owner_fkey;
+
+ALTER TABLE chat
+  ADD CONSTRAINT chat_owner_fkey FOREIGN KEY (owner) REFERENCES "user" (id) ON DELETE CASCADE;
