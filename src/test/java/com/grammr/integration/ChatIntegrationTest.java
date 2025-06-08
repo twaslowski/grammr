@@ -11,6 +11,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.chat.controller.v2.dto.ChatInitializationDto;
+import com.grammr.chat.service.OpenAIChatService;
 import com.grammr.chat.value.Message;
 import com.grammr.domain.entity.ChatMessage.Role;
 import com.grammr.domain.enums.LanguageCode;
@@ -36,6 +37,9 @@ public class ChatIntegrationTest extends IntegrationTestBase {
 
   @Autowired
   private ChatMessageRepository chatMessageRepository;
+
+  @Autowired
+  private OpenAIChatService chatService;
 
   @BeforeAll
   void setupWireMock() {
@@ -75,6 +79,26 @@ public class ChatIntegrationTest extends IntegrationTestBase {
 
     assertThat(chatRepository.count()).isEqualTo(1);
     assertThat(chatMessageRepository.count()).isEqualTo(3);
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldGetChatMessages() {
+    var chat = chatService.initializeChat(LanguageCode.DE, null);
+    chatService.getResponse(chat.getChatId(),
+        Message.builder()
+            .role(Role.USER)
+            .content("Hallo, wie geht es Ihnen?")
+            .build());
+
+    assertThat(chatMessageRepository.count()).isEqualTo(3);
+
+    var response = mockMvc.perform(MockMvcRequestBuilders.get("/api/v2/chat/{chatId}/messages", chat.getChatId())
+            .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk()).andReturn().getResponse();
+
+    var messages = objectMapper.readValue(response.getContentAsString(), Message[].class);
+    assertThat(messages).hasSize(3);
   }
 
   @SneakyThrows

@@ -22,11 +22,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class OpenAIChatService {
 
@@ -45,7 +47,6 @@ public class OpenAIChatService {
     return chat;
   }
 
-  @Transactional
   public Message getResponse(UUID chatId, Message userMessage) {
     Chat chat = chatPersistenceService.getChat(chatId);
     List<Message> messages = new ArrayList<>(chatPersistenceService.getChatMessages(chat)
@@ -66,6 +67,19 @@ public class OpenAIChatService {
     var response = Message.fromAssistant(responseText);
     chatPersistenceService.save(chat, List.of(userMessage, response));
     return response;
+  }
+
+  @PostAuthorize("returnObject.owner == null or returnObject.owner.id == #user?.id")
+  public Chat retrieveChat(UUID chatId, @Nullable User user) {
+    return chatPersistenceService.getChat(chatId);
+  }
+
+  public List<Message> getMessages(UUID chatId, @Nullable User user) {
+    Chat chat = retrieveChat(chatId, user);
+    return chatPersistenceService.getChatMessages(chat)
+        .stream()
+        .map(Message::fromChatMessage)
+        .toList();
   }
 
   private List<ResponseInputItem> buildInputItems(List<Message> messages) {
