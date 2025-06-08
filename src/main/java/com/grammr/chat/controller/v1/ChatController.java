@@ -1,8 +1,8 @@
-package com.grammr.chat.controller;
+package com.grammr.chat.controller.v1;
 
-import com.grammr.chat.controller.dto.ChatInitializationDto;
+import com.grammr.chat.controller.v1.dto.ChatInitializationDto;
 import com.grammr.chat.service.OpenAIChatService;
-import com.grammr.domain.value.Message;
+import com.grammr.chat.value.Message;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,7 +24,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 @Slf4j
 @CrossOrigin
-@RestController
+@RestController("v1ChatController")
 @RequestMapping("/api/v1/chat")
 @RequiredArgsConstructor
 public class ChatController {
@@ -34,16 +35,6 @@ public class ChatController {
   public ResponseEntity<StreamingResponseBody> streamChat(@RequestBody List<Message> messages, HttpServletResponse response) {
     StreamingResponseBody body = outputStream ->
         chatService.streamChatResponse(messages, writeToOutputStream(outputStream));
-
-    return ResponseEntity.ok()
-        .contentType(MediaType.TEXT_PLAIN)
-        .body(body);
-  }
-
-  @PostMapping("/initialize")
-  public ResponseEntity<StreamingResponseBody> initializeChat(@RequestBody ChatInitializationDto request, Message initialMessage, HttpServletResponse response) {
-    StreamingResponseBody body = outputStream ->
-        chatService.initializeChat(request.languageCode(), initialMessage, writeToOutputStream(outputStream));
 
     return ResponseEntity.ok()
         .contentType(MediaType.TEXT_PLAIN)

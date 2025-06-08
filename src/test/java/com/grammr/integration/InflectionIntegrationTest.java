@@ -19,11 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @IntegrationTest
-@AutoConfigureMockMvc
 public class InflectionIntegrationTest extends IntegrationTestBase {
-
-  @Autowired
-  private MockMvc mockMvc;
 
   @Autowired
   private ParadigmRepository paradigmRepository;

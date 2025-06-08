@@ -1,7 +1,6 @@
 package com.grammr.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.grammr.domain.enums.PartOfSpeechTag;
+import com.grammr.chat.value.Message;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,7 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,40 +25,28 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "flashcard")
-public class Flashcard {
+@Table(name = "chat_message")
+public class ChatMessage {
 
-  public enum Status {
-    CREATED,
-    UPDATED,
-    EXPORTED
+  public enum Role {
+    SYSTEM,
+    USER,
+    ASSISTANT,
+    DEVELOPER;
   }
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "flashcard_id_seq")
-  private long id;
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "chat_message_id_seq")
+  private Long id;
 
-  @NotNull
-  private String question;
-
-  @NotNull
-  private String answer;
+  private String content;
 
   @Enumerated(EnumType.STRING)
-  private PartOfSpeechTag tokenPos;
+  private Role role;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "paradigm_id")
-  private Paradigm paradigm;
-
-  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn
-  @JsonIgnore
-  private Deck deck;
-
-  @NotNull
-  @Enumerated(EnumType.STRING)
-  private Status status;
+  @ManyToOne(fetch = FetchType.LAZY)
+  public Chat chat;
 
   @CreationTimestamp
   @Column(updatable = false)
@@ -68,4 +54,12 @@ public class Flashcard {
 
   @UpdateTimestamp
   private ZonedDateTime updatedTimestamp;
+
+  public static ChatMessage from(Message message, Chat chat) {
+    return ChatMessage.builder()
+        .content(message.content())
+        .role(message.role())
+        .chat(chat)
+        .build();
+  }
 }

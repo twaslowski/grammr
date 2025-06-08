@@ -30,6 +30,7 @@ management:
         include: health,prometheus,metrics
 
 openai:
+  base-url: https://api.openai.com/v1
   api-key: ${OPENAI_API_KEY}
   completions:
     model: gpt-4o-mini

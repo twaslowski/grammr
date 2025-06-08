@@ -10,8 +10,6 @@ export function useChat() {
   const [streamingMessage, setStreamingMessage] = useState<ChatMessage | null>(null);
   const [storageInitialized, setStorageInitialized] = useState<boolean>(false);
 
-  const BACKEND_HOST = process.env.BACKEND_HOST || 'http://localhost:8080';
-
   // Retrieve messages after mounting (instead of defaulting the useState) to avoid hydration errors
   useEffect(() => {
     try {
