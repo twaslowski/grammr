@@ -3,6 +3,8 @@ package com.grammr.chat.service;
 import com.grammr.chat.value.Message;
 import com.grammr.common.MessageUtil;
 import com.grammr.domain.entity.Chat;
+import com.grammr.domain.entity.ChatMessage;
+import com.grammr.domain.entity.ChatMessage.Role;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.LanguageCode;
 import com.openai.client.OpenAIClient;
@@ -13,22 +15,19 @@ import com.openai.models.responses.ResponseInputItem;
 import com.openai.models.responses.ResponseOutputText;
 import com.openai.models.responses.ResponseStreamEvent;
 import com.openai.models.responses.ResponseTextDeltaEvent;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class OpenAIChatService {
 
@@ -36,41 +35,38 @@ public class OpenAIChatService {
   private final MessageUtil messageUtil;
   private final ChatPersistenceService chatPersistenceService;
 
-  public Chat initializeChat(LanguageCode languageCode, @Nullable User user) {
+  public Chat initializeChat(LanguageCode languageCode, @Nullable User user, String message) {
+    var chat = chatPersistenceService.newChat(user, message);
+
     var systemPromptMessage = messageUtil.parameterizeMessage("openai.chat.prompt.system", languageCode);
+    var systemPrompt = ChatMessage.from(systemPromptMessage, chat, Role.SYSTEM);
 
-    var chat = chatPersistenceService.newChat(user);
-
-    var systemPrompt = Message.systemPrompt(systemPromptMessage);
-    chatPersistenceService.save(chat, systemPrompt);
-
+    chatPersistenceService.save(systemPrompt);
     return chat;
   }
 
-  public Message getResponse(UUID chatId, Message userMessage) {
-    Chat chat = chatPersistenceService.getChat(chatId);
-    List<Message> messages = new ArrayList<>(chatPersistenceService.getChatMessages(chat)
-        .stream()
-        .map(Message::fromChatMessage)
-        .toList());
-    messages.add(userMessage);
+  public Message respond(User user, UUID chatId, String message) {
+    Chat chat = chatPersistenceService.retrieveChat(chatId, user);
 
-    List<ResponseInputItem> inputItems = buildInputItems(messages);
+    ChatMessage userMessage = ChatMessage.from(message, chat, Role.USER);
+    List<ChatMessage> chatHistory = chatPersistenceService.getMessages(chat);
+
+    List<ResponseInputItem> inputItems = buildInputItems(chatHistory, userMessage);
 
     ResponseCreateParams createParams = ResponseCreateParams.builder()
         .inputOfResponse(inputItems)
         .model(ChatModel.GPT_4O)
         .build();
-
     String responseText = createResponse(createParams);
 
-    var response = Message.fromAssistant(responseText);
-    chatPersistenceService.save(chat, List.of(userMessage, response));
-    return response;
+    var response = ChatMessage.from(responseText, chat, Role.ASSISTANT);
+    chatPersistenceService.save(List.of(userMessage, response));
+    return Message.fromChatMessage(response);
   }
 
-  private List<ResponseInputItem> buildInputItems(List<Message> messages) {
-    return messages.stream()
+  private List<ResponseInputItem> buildInputItems(List<ChatMessage> chatHistory, ChatMessage userMessage) {
+    return Stream.concat(chatHistory.stream(), Stream.of(userMessage))
+        .map(Message::fromChatMessage)
         .map(Message::toEasyInputMessage)
         .map(ResponseInputItem::ofEasyInputMessage)
         .toList();

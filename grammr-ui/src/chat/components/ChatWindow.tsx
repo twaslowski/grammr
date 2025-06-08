@@ -1,15 +1,15 @@
 import React from 'react';
 import { MessageBubble } from '@/chat/components/message/MessageBubble';
-import { useChat } from '@/chat/hooks/useChat';
 import { Suggestions } from '@/chat/components/Suggestions';
 import { InputArea } from '@/components/common/InputArea';
+import useMessages from "@/chat/hooks/use-messages";
 
 export const ChatWindow: React.FC = () => {
-  const { messages, sendMessage } = useChat();
+  const { messages, sendMessage, isLoading } = useMessages();
 
   const handleSend = async (text: string) => {
     await sendMessage({
-      id: '', // ID will be generated in the hook
+      id: '',
       role: 'user',
       content: text,
       analysis: null,

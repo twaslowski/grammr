@@ -1,4 +1,4 @@
-package com.grammr.config;
+package com.grammr.config.openai;
 
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;

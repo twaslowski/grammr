@@ -11,6 +11,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Header } from '@/components/common/Header';
 import { TokenPopoverProvider } from '@/context/TokenPopoverContext';
+import {ChatProvider} from "@/context/ChatContext";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -52,8 +53,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <body className='flex flex-col min-h-screen'>
           <LanguageProvider>
             <TokenPopoverProvider>
-              <Header />
-              <main className='flex-grow'>{children}</main>
+              <ChatProvider>
+                <Header />
+                <main className='flex-grow'>{children}</main>
+              </ChatProvider>
             </TokenPopoverProvider>
           </LanguageProvider>
           <Toaster />

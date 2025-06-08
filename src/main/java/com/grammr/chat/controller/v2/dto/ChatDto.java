@@ -9,7 +9,8 @@ import lombok.Builder;
 public record ChatDto(
     UUID chatId,
     ZonedDateTime createdAt,
-    ZonedDateTime updatedAt
+    ZonedDateTime updatedAt,
+    String summary
 ) {
 
   public static ChatDto from(Chat chat) {
@@ -17,6 +18,7 @@ public record ChatDto(
         .chatId(chat.getChatId())
         .createdAt(chat.getCreatedTimestamp())
         .updatedAt(chat.getUpdatedTimestamp())
+        .summary(chat.getSummary())
         .build();
   }
 }

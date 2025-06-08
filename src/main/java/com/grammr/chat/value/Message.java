@@ -8,14 +8,14 @@ import lombok.Builder;
 
 @Builder
 public record Message(
-    String id,
+    UUID id,
     String content,
     Role role,
     String chatId
 ) {
 
   public static Message systemPrompt(String content) {
-    return new Message(UUID.randomUUID().toString(), content, Role.SYSTEM, null);
+    return new Message(UUID.randomUUID(), content, Role.SYSTEM, null);
   }
 
   public EasyInputMessage toEasyInputMessage() {
@@ -34,7 +34,7 @@ public record Message(
 
   public static Message fromChatMessage(ChatMessage chatMessage) {
     return Message.builder()
-        .id(chatMessage.getId().toString())
+        .id(chatMessage.getMessageId())
         .content(chatMessage.getContent())
         .role(chatMessage.getRole())
         .chatId(chatMessage.getChat().getChatId().toString())

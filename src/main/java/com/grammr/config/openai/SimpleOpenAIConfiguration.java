@@ -1,4 +1,4 @@
-package com.grammr.config;
+package com.grammr.config.openai;
 
 import io.github.sashirestela.openai.SimpleOpenAI;
 import org.springframework.beans.factory.annotation.Value;

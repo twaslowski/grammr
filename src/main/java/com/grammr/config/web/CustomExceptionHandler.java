@@ -1,4 +1,4 @@
-package com.grammr.config;
+package com.grammr.config.web;
 
 import com.grammr.common.ErrorResponse;
 import com.grammr.domain.exception.DeckNotFoundException;

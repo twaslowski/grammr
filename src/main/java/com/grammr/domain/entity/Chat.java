@@ -39,6 +39,8 @@ public class Chat {
   @JoinColumn(name = "owner")
   private User owner;
 
+  private String summary;
+
   @CreationTimestamp
   @Column(updatable = false)
   private ZonedDateTime createdTimestamp;

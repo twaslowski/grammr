@@ -2,9 +2,11 @@ package com.grammr.chat.controller.v2;
 
 import com.grammr.chat.controller.v2.dto.ChatDto;
 import com.grammr.chat.controller.v2.dto.ChatInitializationDto;
+import com.grammr.chat.controller.v2.dto.ChatInitializedDto;
 import com.grammr.chat.service.ChatPersistenceService;
 import com.grammr.chat.service.OpenAIChatService;
 import com.grammr.chat.value.Message;
+import com.grammr.domain.entity.Chat;
 import com.grammr.domain.entity.User;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -33,12 +35,12 @@ public class ChatController {
   private final ChatPersistenceService chatPersistenceService;
 
   @PostMapping
-  public ResponseEntity<Message> initializeChat(@AuthenticationPrincipal User user,
-                                                @Valid @RequestBody ChatInitializationDto chatInitializationDto) {
-    var chat = chatService.initializeChat(chatInitializationDto.languageCode(), user);
-    var response = chatService.getResponse(chat.getChatId(), chatInitializationDto.message());
+  public ResponseEntity<ChatInitializedDto> initializeChat(@AuthenticationPrincipal User user,
+                                                           @Valid @RequestBody ChatInitializationDto chatInitializationDto) {
+    var chat = chatService.initializeChat(chatInitializationDto.languageCode(), user, chatInitializationDto.message());
+    var response = chatService.respond(user, chat.getChatId(), chatInitializationDto.message());
 
-    return ResponseEntity.ok(response);
+    return ResponseEntity.ok(new ChatInitializedDto(ChatDto.from(chat), response));
   }
 
   @GetMapping
@@ -53,8 +55,16 @@ public class ChatController {
   }
 
   @GetMapping("/{chatId}/messages")
-  public ResponseEntity<List<Message>> getChatMessages(@AuthenticationPrincipal User user, @Valid @PathVariable UUID chatId) {
-    var messages = chatPersistenceService.getMessages(chatId, user);
-    return ResponseEntity.ok(messages);
+  public ResponseEntity<List<Message>> getChatMessages(@AuthenticationPrincipal User user, @PathVariable UUID chatId) {
+    Chat chat = chatPersistenceService.retrieveChat(chatId, user);
+    var messages = chatPersistenceService.getMessages(chat);
+    var responseBody = messages.stream().map(Message::fromChatMessage).toList();
+    return ResponseEntity.ok(responseBody);
+  }
+
+  @PostMapping("/{chatId}/messages")
+  public ResponseEntity<Message> addMessage(@AuthenticationPrincipal User user, @PathVariable UUID chatId, @RequestBody String message) {
+    var response = chatService.respond(user, chatId, message);
+    return ResponseEntity.ok(response);
   }
 }

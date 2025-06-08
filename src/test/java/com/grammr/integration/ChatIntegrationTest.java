@@ -15,7 +15,6 @@ import com.grammr.annotation.IntegrationTest;
 import com.grammr.chat.controller.v2.dto.ChatInitializationDto;
 import com.grammr.chat.service.OpenAIChatService;
 import com.grammr.chat.value.Message;
-import com.grammr.domain.entity.ChatMessage.Role;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.repository.ChatMessageRepository;
@@ -66,12 +65,8 @@ public class ChatIntegrationTest extends IntegrationTestBase {
   @Test
   @SneakyThrows
   void shouldCreateChat() {
-    var initialMessage = Message.builder()
-        .role(Role.USER)
-        .content("Hallo, wie geht es Ihnen?")
-        .build();
     var chatInitializationDto = ChatInitializationDto.builder()
-        .message(initialMessage)
+        .message("Hallo, wie geht es Ihnen?")
         .languageCode(LanguageCode.DE)
         .build();
 
@@ -88,11 +83,8 @@ public class ChatIntegrationTest extends IntegrationTestBase {
   void shouldListUserChatsWhenAuthenticated() throws Exception {
     var user = userRepository.save(UserSpec.valid().build());
     var auth = createUserAuthentication(user);
+    String initialMessage = "Hallo, wie geht es Ihnen?";
 
-    var initialMessage = Message.builder()
-        .role(Role.USER)
-        .content("Hallo, wie geht es Ihnen?")
-        .build();
     var chatInitializationDto = ChatInitializationDto.builder()
         .message(initialMessage)
         .languageCode(LanguageCode.DE)
@@ -121,12 +113,9 @@ public class ChatIntegrationTest extends IntegrationTestBase {
   @Test
   @SneakyThrows
   void shouldGetChatMessages() {
-    var chat = chatService.initializeChat(LanguageCode.DE, null);
-    chatService.getResponse(chat.getChatId(),
-        Message.builder()
-            .role(Role.USER)
-            .content("Hallo, wie geht es Ihnen?")
-            .build());
+    String initialMessage = "Hallo, wie geht es Ihnen?";
+    var chat = chatService.initializeChat(LanguageCode.DE, null, initialMessage);
+    chatService.respond(null, chat.getChatId(), initialMessage);
 
     assertThat(chatMessageRepository.count()).isEqualTo(3);
 

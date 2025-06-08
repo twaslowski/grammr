@@ -69,3 +69,12 @@ services:
       timeout: 5s
       retries: 3
     command: [ "postgres", "-c", "log_statement=all" ]
+
+  mockserver:
+    image: mockserver/mockserver
+    ports:
+      - "1080:1080"
+    volumes:
+      - ./expectations/:/config/
+    environment:
+      - MOCKSERVER_INITIALIZATION_JSON_PATH=/config/*.json

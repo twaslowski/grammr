@@ -12,7 +12,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,13 +41,16 @@ public class ChatMessage {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "chat_message_id_seq")
   private Long id;
 
+  @NotNull
+  private UUID messageId;
+
   private String content;
 
   @Enumerated(EnumType.STRING)
   private Role role;
 
   @JoinColumn(name = "chat_id", nullable = false)
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   public Chat chat;
 
   @CreationTimestamp
@@ -60,6 +65,15 @@ public class ChatMessage {
         .content(message.content())
         .role(message.role())
         .chat(chat)
+        .build();
+  }
+
+  public static ChatMessage from(String input, Chat chat, Role role) {
+    return ChatMessage.builder()
+        .content(input)
+        .messageId(UUID.randomUUID())
+        .chat(chat)
+        .role(Role.USER)
         .build();
   }
 }
