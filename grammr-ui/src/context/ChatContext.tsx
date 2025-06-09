@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import React, {createContext, ReactNode, useCallback, useContext, useEffect, useState} from 'react';
 import { Chat } from '@/chat/types/chat';
 import { useApi } from '@/hooks/useApi';
 
@@ -18,23 +18,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [chats, setChats] = useState<Chat[]>([]);
   const { request } = useApi();
 
-  useEffect(() => {
-    const fetchChats = async () => {
-      try {
-        const result = await request<Chat[]>('/api/v2/chat', {
-          method: 'GET',
-          credentials: 'include',
-        });
-        if (result) setChats(result);
-      } catch (err) {
-        console.error('Failed to fetch chats:', err);
-      }
-    };
-
-    void fetchChats();
-  }, []);
-
-  const refreshChats = async () => {
+  const fetchChats = useCallback(async () => {
     try {
       const result = await request<Chat[]>('/api/v2/chat', {
         method: 'GET',
@@ -42,8 +26,16 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
       });
       if (result) setChats(result);
     } catch (err) {
-      console.error('Failed to refresh chats:', err);
+      console.error('Failed to fetch chats:', err);
     }
+  }, [request]);
+
+  useEffect(() => {
+    void fetchChats();
+  }, [fetchChats]);
+
+  const refreshChats = async () => {
+    void fetchChats();
   };
 
   return (

@@ -1,9 +1,8 @@
 import React from 'react';
-import { ChatMessage } from '@/chat/types/message';
 import clsx from 'clsx';
 import { TypingDots } from '@/chat/components/TypingDots';
 
-export const LoadingMessageBubble: React.FC<{ message: ChatMessage }> = ({ message }) => {
+export const LoadingMessageBubble: React.FC = () => {
   return (
     <div className={clsx('my-2 flex justify-start')}>
       <div

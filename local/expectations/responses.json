@@ -1,15 +1,19 @@
 [
   {
-    "httpRequest" : {
-      "path" : "/v1/responses"
+    "httpRequest": {
+      "path": "/v1/responses"
     },
-    "httpResponse" : {
-      "statusCode" : 200,
-      "body" : "{\n  \"id\": \"resp_67ccd2bed1ec8190b14f964abc0542670bb6a6b452d3795b\",\n  \"object\": \"response\",\n  \"created_at\": 1741476542,\n  \"status\": \"completed\",\n  \"error\": null,\n  \"incomplete_details\": null,\n  \"instructions\": null,\n  \"max_output_tokens\": null,\n  \"model\": \"gpt-4.1-2025-04-14\",\n  \"output\": [\n    {\n      \"type\": \"message\",\n      \"id\": \"msg_67ccd2bf17f0819081ff3bb2cf6508e60bb6a6b452d3795b\",\n      \"status\": \"completed\",\n      \"role\": \"assistant\",\n      \"content\": [\n        {\n          \"type\": \"output_text\",\n          \"text\": \"Mir geht es gut! Und dir?\",\n          \"annotations\": []\n        }\n      ]\n    }\n  ],\n  \"parallel_tool_calls\": true,\n  \"previous_response_id\": null,\n  \"reasoning\": {\n    \"effort\": null,\n    \"summary\": null\n  },\n  \"store\": true,\n  \"temperature\": 1.0,\n  \"text\": {\n    \"format\": {\n      \"type\": \"text\"\n    }\n  },\n  \"tool_choice\": \"auto\",\n  \"tools\": [],\n  \"top_p\": 1.0,\n  \"truncation\": \"disabled\",\n  \"usage\": {\n    \"input_tokens\": 36,\n    \"input_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"output_tokens\": 87,\n    \"output_tokens_details\": {\n      \"reasoning_tokens\": 0\n    },\n    \"total_tokens\": 123\n  },\n  \"user\": null,\n  \"metadata\": {}\n}\n"
+    "httpResponse": {
+      "statusCode": 200,
+      "body": "{\n  \"id\": \"resp_67ccd2bed1ec8190b14f964abc0542670bb6a6b452d3795b\",\n  \"object\": \"response\",\n  \"created_at\": 1741476542,\n  \"status\": \"completed\",\n  \"error\": null,\n  \"incomplete_details\": null,\n  \"instructions\": null,\n  \"max_output_tokens\": null,\n  \"model\": \"gpt-4.1-2025-04-14\",\n  \"output\": [\n    {\n      \"type\": \"message\",\n      \"id\": \"msg_67ccd2bf17f0819081ff3bb2cf6508e60bb6a6b452d3795b\",\n      \"status\": \"completed\",\n      \"role\": \"assistant\",\n      \"content\": [\n        {\n          \"type\": \"output_text\",\n          \"text\": \"Mir geht es gut! Und dir?\",\n          \"annotations\": []\n        }\n      ]\n    }\n  ],\n  \"parallel_tool_calls\": true,\n  \"previous_response_id\": null,\n  \"reasoning\": {\n    \"effort\": null,\n    \"summary\": null\n  },\n  \"store\": true,\n  \"temperature\": 1.0,\n  \"text\": {\n    \"format\": {\n      \"type\": \"text\"\n    }\n  },\n  \"tool_choice\": \"auto\",\n  \"tools\": [],\n  \"top_p\": 1.0,\n  \"truncation\": \"disabled\",\n  \"usage\": {\n    \"input_tokens\": 36,\n    \"input_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n    \"output_tokens\": 87,\n    \"output_tokens_details\": {\n      \"reasoning_tokens\": 0\n    },\n    \"total_tokens\": 123\n  },\n  \"user\": null,\n  \"metadata\": {}\n}\n",
+      "delay": {
+        "timeUnit": "MILLISECONDS",
+        "value": 1000
+      }
     },
-    "times" : {
-      "unlimited" : true
+    "times": {
+      "unlimited": true
     },
-    "priority" : 1
+    "priority": 1
   }
 ]

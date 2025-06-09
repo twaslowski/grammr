@@ -4,10 +4,14 @@ import { Suggestions } from '@/chat/components/Suggestions';
 import { InputArea } from '@/components/common/InputArea';
 import useMessages from '@/chat/hooks/use-messages';
 import { useChat } from '@/context/ChatContext';
+import { LoadingMessageBubble } from '@/chat/components/message/LoadingMessageBubble';
+import { AssistantMessageBubble } from '@/chat/components/message/AssistantMessageBubble';
+import { AssistantFailedMessageBubble } from '@/chat/components/message/FailedMessageBubble';
 
 export const ChatWindow: React.FC = () => {
   const { chatId, setChatId, refreshChats } = useChat();
-  const { messages, sendMessage, startChat, refreshMessages, isLoading } = useMessages(chatId);
+  const { messages, sendMessage, startChat, refreshMessages, isLoading, error } =
+    useMessages(chatId);
 
   const handleSend = async (text: string) => {
     if (!chatId) {
@@ -22,20 +26,19 @@ export const ChatWindow: React.FC = () => {
     if (chatId) {
       void refreshMessages();
       void refreshChats();
-      console.log(messages);
     }
   }, [chatId]);
 
   return (
     <div className='flex h-full bg-white max-w-3xl mx-auto'>
-      {/* Chat messages */}
       <div className='flex-1 overflow-y-auto p-4'>
         {messages.map((msg) => (
-          <MessageBubble key={msg.id} message={msg} isLoading={isLoading} />
+          <MessageBubble key={msg.id} message={msg} />
         ))}
+        {isLoading && <LoadingMessageBubble />}
+        {error && <AssistantFailedMessageBubble />}
       </div>
 
-      {/* Input area */}
       <div className='fixed bottom-0 bg-white border-t p-4 w-full max-w-3xl mx-auto'>
         <div>
           {messages.length === 0 && (

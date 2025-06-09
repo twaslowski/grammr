@@ -1,8 +1,7 @@
 import React from 'react';
-import { ChatMessage } from '@/chat/types/message';
 import clsx from 'clsx';
 
-export const AssistantFailedMessageBubble: React.FC<{ message: ChatMessage }> = ({ message }) => {
+export const AssistantFailedMessageBubble: React.FC = () => {
   return (
     <div className={clsx('my-2 flex justify-start')}>
       <div className={clsx('rounded-2xl px-4 py-2 max-w-[75%] text-gray-800 bg-red-100')}>

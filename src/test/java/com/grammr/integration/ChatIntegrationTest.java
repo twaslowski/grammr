@@ -1,22 +1,15 @@
 package com.grammr.integration;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.chat.controller.v2.dto.ChatInitializationDto;
 import com.grammr.chat.controller.v2.dto.ChatInitializedDto;
 import com.grammr.chat.service.OpenAIChatService;
 import com.grammr.chat.value.Message;
-import com.grammr.domain.entity.Chat;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.repository.ChatMessageRepository;
@@ -24,7 +17,6 @@ import com.grammr.repository.ChatRepository;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,19 +36,6 @@ public class ChatIntegrationTest extends IntegrationTestBase {
 
   @Autowired
   private OpenAIChatService chatService;
-
-  @BeforeAll
-  void setupWireMock() {
-    wireMockServer = new WireMockServer(options().port(8089));
-    wireMockServer.start();
-
-    WireMock.configureFor("localhost", 8089);
-
-    wireMockServer.stubFor(post(urlEqualTo("/v1/responses"))
-        .willReturn(aResponse()
-            .withHeader("Content-Type", "application/json")
-            .withBody(getResponsesMock())));
-  }
 
   @BeforeEach
   void setup() {

@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Message } from '@/chat/types/message';
-import { useApi } from '@/hooks/useApi';
-import { ChatInitializedDto } from '@/chat/types/chat';
-import { useLanguage } from '@/context/LanguageContext';
+import {useEffect, useState} from 'react';
+import {Message} from '@/chat/types/message';
+import {ApiError, useApi} from '@/hooks/useApi';
+import {ChatInitializedDto} from '@/chat/types/chat';
+import {useLanguage} from '@/context/LanguageContext';
 
 interface UseMessagesResult {
   messages: Message[];
@@ -10,12 +10,13 @@ interface UseMessagesResult {
   startChat: (message: string) => Promise<string>;
   refreshMessages: () => void;
   isLoading: boolean;
+  error: ApiError | null;
 }
 
 const useMessages = (chatId: string): UseMessagesResult => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const { languageLearned } = useLanguage();
-  const { request, error, isLoading } = useApi();
+  const {languageLearned} = useLanguage();
+  const {request, error, isLoading} = useApi();
 
   const refreshMessages = async () => {
     try {
@@ -27,6 +28,9 @@ const useMessages = (chatId: string): UseMessagesResult => {
   };
 
   const startChat = async (message: string): Promise<string> => {
+    const tempUserMessage = createTempMessage(message);
+    setMessages((prevMessages) => [...prevMessages, tempUserMessage]);
+
     const chatInitializationDto = {
       message: message,
       languageCode: languageLearned,
@@ -42,6 +46,9 @@ const useMessages = (chatId: string): UseMessagesResult => {
   };
 
   const sendMessage = async (message: string): Promise<void> => {
+    const tempUserMessage = createTempMessage(message);
+    setMessages((prevMessages) => [...prevMessages, tempUserMessage]);
+
     await request<Message>(`/api/v2/chat/${chatId}/messages`, {
       method: 'POST',
       headers: {
@@ -52,6 +59,16 @@ const useMessages = (chatId: string): UseMessagesResult => {
     await refreshMessages();
   };
 
+  const createTempMessage = (message: string): Message => {
+    // This temporary message displays immediately in the UI, gets overwritten with refreshMessages()
+    return {
+      id: crypto.randomUUID(),
+      role: 'USER',
+      content: message,
+      date: new Date().toISOString(),
+    };
+  }
+
   useEffect(() => {
     if (chatId) {
       void refreshMessages();
@@ -60,7 +77,7 @@ const useMessages = (chatId: string): UseMessagesResult => {
     }
   }, [chatId]);
 
-  return { messages, sendMessage, startChat, refreshMessages, isLoading };
+  return {messages, sendMessage, startChat, refreshMessages, isLoading, error};
 };
 
 export default useMessages;
