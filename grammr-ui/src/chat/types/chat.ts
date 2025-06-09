@@ -1,13 +1,13 @@
-import {Message} from "@/chat/types/message";
+import { Message } from '@/chat/types/message';
 
 export interface Chat {
   chatId: string;
-  createdAt: number;
-  updatedAt: number;
+  createdAt: Date;
+  updatedAt: Date;
   summary: string;
 }
 
 export interface ChatInitializedDto {
-  chat: Chat
-  response: Message
+  chat: Chat;
+  response: Message;
 }

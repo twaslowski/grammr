@@ -14,3 +14,8 @@ export const capitalize = (s: string | undefined) => {
 export const fullLanguageName = (code: string) => {
   return languages.filter((lang) => lang.code === code)[0]?.name || code.toUpperCase();
 };
+
+function parseZonedDateTime(isoString: string): Date {
+  const cleaned = isoString.replace(/\[.*\]$/, '');
+  return new Date(cleaned);
+}

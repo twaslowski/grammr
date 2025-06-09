@@ -1,6 +1,5 @@
 package com.grammr.domain.entity;
 
-import com.grammr.chat.value.Message;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -51,7 +50,9 @@ public class ChatMessage {
 
   @JoinColumn(name = "chat_id", nullable = false)
   @ManyToOne(fetch = FetchType.EAGER)
-  public Chat chat;
+  private Chat chat;
+
+  private Long tokenUsage;
 
   @CreationTimestamp
   @Column(updatable = false)
@@ -60,20 +61,13 @@ public class ChatMessage {
   @UpdateTimestamp
   private ZonedDateTime updatedTimestamp;
 
-  public static ChatMessage from(Message message, Chat chat) {
-    return ChatMessage.builder()
-        .content(message.content())
-        .role(message.role())
-        .chat(chat)
-        .build();
-  }
-
-  public static ChatMessage from(String input, Chat chat, Role role) {
+  public static ChatMessage from(String input, Chat chat, Role role, Long tokens) {
     return ChatMessage.builder()
         .content(input)
         .messageId(UUID.randomUUID())
         .chat(chat)
-        .role(Role.USER)
+        .role(role)
+        .tokenUsage(tokens)
         .build();
   }
 }

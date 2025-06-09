@@ -1,28 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MessageBubble } from '@/chat/components/message/MessageBubble';
 import { Suggestions } from '@/chat/components/Suggestions';
 import { InputArea } from '@/components/common/InputArea';
-import useMessages from "@/chat/hooks/use-messages";
+import useMessages from '@/chat/hooks/use-messages';
+import { useChat } from '@/context/ChatContext';
 
 export const ChatWindow: React.FC = () => {
-  const { messages, sendMessage, isLoading } = useMessages();
+  const { chatId, setChatId, refreshChats } = useChat();
+  const { messages, sendMessage, startChat, refreshMessages, isLoading } = useMessages(chatId);
 
   const handleSend = async (text: string) => {
-    await sendMessage({
-      id: '',
-      role: 'user',
-      content: text,
-      analysis: null,
-      timestamp: Date.now(),
-    });
+    if (!chatId) {
+      const newChatId = await startChat(text);
+      setChatId(newChatId);
+    } else {
+      await sendMessage(text);
+    }
   };
+
+  useEffect(() => {
+    if (chatId) {
+      void refreshMessages();
+      void refreshChats();
+      console.log(messages);
+    }
+  }, [chatId]);
 
   return (
     <div className='flex h-full bg-white max-w-3xl mx-auto'>
       {/* Chat messages */}
       <div className='flex-1 overflow-y-auto p-4'>
         {messages.map((msg) => (
-          <MessageBubble key={msg.id} message={msg} />
+          <MessageBubble key={msg.id} message={msg} isLoading={isLoading} />
         ))}
       </div>
 

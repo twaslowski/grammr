@@ -41,10 +41,19 @@ public class Chat {
 
   private String summary;
 
+  private Long totalTokens;
+
   @CreationTimestamp
   @Column(updatable = false)
   private ZonedDateTime createdTimestamp;
 
   @UpdateTimestamp
   private ZonedDateTime updatedTimestamp;
+
+  public void incrementTokens(Long tokens) {
+    if (this.totalTokens == null) {
+      this.totalTokens = tokens;
+    }
+    this.totalTokens += tokens;
+  }
 }

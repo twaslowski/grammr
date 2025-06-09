@@ -1,57 +1,55 @@
-import {useEffect, useState} from 'react';
-import {Message} from "@/chat/types/message";
-import {useApi} from "@/hooks/useApi";
-import {useChat} from "@/context/ChatContext";
-import {ChatInitializedDto} from "@/chat/types/chat";
-import {useLanguage} from "@/context/LanguageContext";
+import { useEffect, useState } from 'react';
+import { Message } from '@/chat/types/message';
+import { useApi } from '@/hooks/useApi';
+import { ChatInitializedDto } from '@/chat/types/chat';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface UseMessagesResult {
   messages: Message[];
-  sendMessage: (message: Message) => Promise<void>;
+  sendMessage: (message: string) => Promise<void>;
+  startChat: (message: string) => Promise<string>;
   refreshMessages: () => void;
   isLoading: boolean;
 }
 
-const useMessages = (): UseMessagesResult => {
+const useMessages = (chatId: string): UseMessagesResult => {
   const [messages, setMessages] = useState<Message[]>([]);
   const { languageLearned } = useLanguage();
-  const {chatId, setChatId} = useChat();
-  const {request, error, isLoading} = useApi();
+  const { request, error, isLoading } = useApi();
 
   const refreshMessages = async () => {
     try {
       const response = await request<Message[]>(`/api/v2/chat/${chatId}/messages`);
-      setMessages(response)
+      setMessages(response);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const sendMessage = async (message: Message) => {
-    if (!chatId) {
-      const chatInitializationDto = {
-        message: message,
-        languageCode: languageLearned
-      }
-      const chatInitialization = await request<ChatInitializedDto>('/api/v2/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(chatInitializationDto)
-      });
-      setChatId(chatInitialization.chat.chatId);
-      void refreshMessages();
-    } else {
-      await request<Message>(`/api/v2/chat/${chatId}/messages`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({message})
-      });
-      await refreshMessages();
-    }
+  const startChat = async (message: string): Promise<string> => {
+    const chatInitializationDto = {
+      message: message,
+      languageCode: languageLearned,
+    };
+    const chatInitialization = await request<ChatInitializedDto>('/api/v2/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(chatInitializationDto),
+    });
+    return chatInitialization.chat.chatId;
+  };
+
+  const sendMessage = async (message: string): Promise<void> => {
+    await request<Message>(`/api/v2/chat/${chatId}/messages`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: message,
+    });
+    await refreshMessages();
   };
 
   useEffect(() => {
@@ -62,7 +60,7 @@ const useMessages = (): UseMessagesResult => {
     }
   }, [chatId]);
 
-  return {messages, sendMessage, refreshMessages, isLoading};
+  return { messages, sendMessage, startChat, refreshMessages, isLoading };
 };
 
 export default useMessages;

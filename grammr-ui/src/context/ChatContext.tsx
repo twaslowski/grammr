@@ -1,12 +1,13 @@
 'use client';
 
-import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
-import {Chat} from "@/chat/types/chat";
-import {useApi} from "@/hooks/useApi";
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { Chat } from '@/chat/types/chat';
+import { useApi } from '@/hooks/useApi';
 
 type ChatContextType = {
   chatId: string;
   setChatId: (id: string) => void;
+  refreshChats: () => void;
   chats: Chat[];
 };
 
@@ -25,19 +26,30 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
           credentials: 'include',
         });
         if (result) setChats(result);
-        console.log(result)
       } catch (err) {
         console.error('Failed to fetch chats:', err);
       }
-    }
+    };
 
     void fetchChats();
   }, []);
 
+  const refreshChats = async () => {
+    try {
+      const result = await request<Chat[]>('/api/v2/chat', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      if (result) setChats(result);
+    } catch (err) {
+      console.error('Failed to refresh chats:', err);
+    }
+  };
+
   return (
-      <ChatContext.Provider value={{ chatId, setChatId, chats: chats }}>
-        {children}
-      </ChatContext.Provider>
+    <ChatContext.Provider value={{ chatId, setChatId, chats: chats, refreshChats }}>
+      {children}
+    </ChatContext.Provider>
   );
 };
 

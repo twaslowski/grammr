@@ -14,8 +14,8 @@ import { useLanguage } from '@/context/LanguageContext';
 import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
 import { headerLinks } from '@/constant/config';
-import {ChatHistory} from "@/chat/components/ChatHistory";
-import {LanguageSelectionDropdown} from "@/components/common/LanguageSelectionDropdown";
+import { ChatHistory } from '@/chat/components/ChatHistory';
+import { LanguageSelectionDropdown } from '@/components/common/LanguageSelectionDropdown';
 
 export const MobileSidebar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -107,9 +107,7 @@ export const MobileSidebar: React.FC = () => {
         <div className='p-4 text-center'>
           <p className='text-gray-500'>Please sign in to access chat history.</p>
           <SignInButton>
-            <button className='mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg'>
-              Sign In
-            </button>
+            <button className='mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg'>Sign In</button>
           </SignInButton>
         </div>
       </SignedOut>

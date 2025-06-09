@@ -2,7 +2,6 @@ import React from 'react';
 import { ChatMessage } from '@/chat/types/message';
 import clsx from 'clsx';
 import Image from 'next/image';
-import { AnalysisButton } from '@/chat/components/message/AnalysisButton';
 import TokenType from '@/token/types/tokenType';
 import Token from '@/token/components/Token';
 import Analysis from '@/types/analysis';
@@ -25,7 +24,7 @@ export const AssistantMessageBubble: React.FC<{ message: ChatMessage }> = ({ mes
         {analysis === null && (
           <div className='flex gap-2'>
             <p className='whitespace-pre-wrap break-words py-1'>{message.content}</p>
-            <AnalysisButton message={message} onAnalysis={setAnalysis} />
+            {/*<AnalysisButton message={message} onAnalysis={setAnalysis} />*/}
           </div>
         )}
         {analysis && (

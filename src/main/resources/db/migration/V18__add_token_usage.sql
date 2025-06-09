@@ -1,0 +1,5 @@
+ALTER TABLE chat_message
+  ADD COLUMN IF NOT EXISTS token_usage BIGINT;
+
+ALTER TABLE chat
+  ADD COLUMN IF NOT EXISTS total_tokens BIGINT;

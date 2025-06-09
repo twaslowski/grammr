@@ -1,11 +1,9 @@
 import { ChatMessage } from '@/chat/types/message';
-import TokenType from '@/token/types/tokenType';
 import React from 'react';
 import { BookOpenCheck } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import Analysis from '@/types/analysis';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import { useChat } from '@/chat/hooks/useChat';
 
 export const AnalysisButton: React.FC<{
   message: ChatMessage;
@@ -13,7 +11,6 @@ export const AnalysisButton: React.FC<{
 }> = ({ message, onAnalysis }) => {
   const [loading, setLoading] = React.useState(false);
   const { languageSpoken, languageLearned } = useLanguage();
-  const { editMessage } = useChat();
 
   const handleAnalyzeGrammar = async () => {
     try {
@@ -32,10 +29,10 @@ export const AnalysisButton: React.FC<{
       const data = (await response.json()) as Analysis;
       if (onAnalysis) {
         onAnalysis(data);
-        editMessage(message.id, {
-          ...message,
-          analysis: data,
-        });
+        // editMessage(message.id, {
+        //   ...message,
+        //   analysis: data,
+        // });
       }
     } catch (error) {
       console.error('Analysis failed', error);

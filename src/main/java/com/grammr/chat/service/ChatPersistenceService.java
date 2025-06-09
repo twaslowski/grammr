@@ -27,6 +27,7 @@ public class ChatPersistenceService {
     var chat = Chat.builder()
         .owner(user)
         .chatId(UUID.randomUUID())
+        .totalTokens(0L)
         .summary(message.substring(0, Math.min(message.length(), 100)))
         .build();
     return chatRepository.save(chat);
@@ -40,9 +41,14 @@ public class ChatPersistenceService {
     chatMessageRepository.save(message);
   }
 
+  public void save(Chat chat, List<ChatMessage> message) {
+    chatRepository.save(chat);
+    chatMessageRepository.saveAll(message);
+  }
+
   @PostAuthorize("returnObject.owner == null or returnObject.owner.id == #user?.id")
   public Chat retrieveChat(UUID chatId, @Nullable User user) {
-    return chatRepository.findByChatId(chatId);
+    return chatRepository.findByChatId(chatId).orElseThrow();
   }
 
   public List<ChatMessage> getMessages(Chat chat) {

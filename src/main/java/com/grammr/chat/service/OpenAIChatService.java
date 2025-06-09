@@ -10,11 +10,13 @@ import com.grammr.domain.enums.LanguageCode;
 import com.openai.client.OpenAIClient;
 import com.openai.core.http.StreamResponse;
 import com.openai.models.ChatModel;
+import com.openai.models.responses.Response;
 import com.openai.models.responses.ResponseCreateParams;
 import com.openai.models.responses.ResponseInputItem;
 import com.openai.models.responses.ResponseOutputText;
 import com.openai.models.responses.ResponseStreamEvent;
 import com.openai.models.responses.ResponseTextDeltaEvent;
+import com.openai.models.responses.ResponseUsage;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -38,8 +40,8 @@ public class OpenAIChatService {
   public Chat initializeChat(LanguageCode languageCode, @Nullable User user, String message) {
     var chat = chatPersistenceService.newChat(user, message);
 
-    var systemPromptMessage = messageUtil.parameterizeMessage("openai.chat.prompt.system", languageCode);
-    var systemPrompt = ChatMessage.from(systemPromptMessage, chat, Role.SYSTEM);
+    var systemPromptMessage = messageUtil.parameterizeMessage("openai.chat.prompt.system", languageCode.getLanguageName());
+    var systemPrompt = ChatMessage.from(systemPromptMessage, chat, Role.SYSTEM, 0L);
 
     chatPersistenceService.save(systemPrompt);
     return chat;
@@ -48,7 +50,7 @@ public class OpenAIChatService {
   public Message respond(User user, UUID chatId, String message) {
     Chat chat = chatPersistenceService.retrieveChat(chatId, user);
 
-    ChatMessage userMessage = ChatMessage.from(message, chat, Role.USER);
+    ChatMessage userMessage = ChatMessage.from(message, chat, Role.USER, 0L);
     List<ChatMessage> chatHistory = chatPersistenceService.getMessages(chat);
 
     List<ResponseInputItem> inputItems = buildInputItems(chatHistory, userMessage);
@@ -57,10 +59,18 @@ public class OpenAIChatService {
         .inputOfResponse(inputItems)
         .model(ChatModel.GPT_4O)
         .build();
-    String responseText = createResponse(createParams);
+    Response openAIResponse = client.responses().create(createParams);
 
-    var response = ChatMessage.from(responseText, chat, Role.ASSISTANT);
-    chatPersistenceService.save(List.of(userMessage, response));
+    String responseText = extractOutputText(openAIResponse);
+    Long inputTokens = extractInputTokens(openAIResponse);
+    Long outputTokens = extractOutputTokens(openAIResponse);
+
+    userMessage.setTokenUsage(inputTokens);
+
+    var response = ChatMessage.from(responseText, chat, Role.ASSISTANT, outputTokens);
+    chat.incrementTokens(inputTokens + outputTokens);
+
+    chatPersistenceService.save(chat, List.of(userMessage, response));
     return Message.fromChatMessage(response);
   }
 
@@ -72,14 +82,25 @@ public class OpenAIChatService {
         .toList();
   }
 
-  private String createResponse(ResponseCreateParams createParams) {
-    return client.responses().create(createParams)
-        .output().stream()
+  private String extractOutputText(Response response) {
+    return response.output().stream()
         .flatMap(item -> item.message().stream())
         .flatMap(message -> message.content().stream())
         .flatMap(content -> content.outputText().stream())
         .map(ResponseOutputText::text)
         .collect(Collectors.joining());
+  }
+
+  private Long extractInputTokens(Response response) {
+    return response.usage().stream()
+        .map(ResponseUsage::inputTokens)
+        .reduce(0L, Long::sum);
+  }
+
+  private Long extractOutputTokens(Response response) {
+    return response.usage().stream()
+        .map(ResponseUsage::outputTokens)
+        .reduce(0L, Long::sum);
   }
 
   @SneakyThrows

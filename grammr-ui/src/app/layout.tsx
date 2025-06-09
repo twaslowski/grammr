@@ -11,7 +11,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Header } from '@/components/common/Header';
 import { TokenPopoverProvider } from '@/context/TokenPopoverContext';
-import {ChatProvider} from "@/context/ChatContext";
+import { ChatProvider } from '@/context/ChatContext';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),

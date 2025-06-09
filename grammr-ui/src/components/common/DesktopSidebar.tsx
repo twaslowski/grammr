@@ -15,13 +15,12 @@ import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
 import { headerLinks } from '@/constant/config';
 import { SidebarLeftIcon } from '@/components/ui/icons';
-import {ChatHistory} from "@/chat/components/ChatHistory";
-import {LanguageSelectionDropdown} from "@/components/common/LanguageSelectionDropdown";
+import { ChatHistory } from '@/chat/components/ChatHistory';
+import { LanguageSelectionDropdown } from '@/components/common/LanguageSelectionDropdown';
 
 export const DesktopSidebar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(true);
   const router = useRouter();
-
 
   const navigateTo = (path: string) => {
     router.push(path);

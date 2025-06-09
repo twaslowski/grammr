@@ -13,8 +13,10 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.chat.controller.v2.dto.ChatInitializationDto;
+import com.grammr.chat.controller.v2.dto.ChatInitializedDto;
 import com.grammr.chat.service.OpenAIChatService;
 import com.grammr.chat.value.Message;
+import com.grammr.domain.entity.Chat;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.repository.ChatMessageRepository;
@@ -70,12 +72,17 @@ public class ChatIntegrationTest extends IntegrationTestBase {
         .languageCode(LanguageCode.DE)
         .build();
 
-    mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/chat")
+    var result = mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/chat")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(chatInitializationDto)))
-        .andExpect(status().isOk());
+        .andExpect(status().isOk()).andReturn();
 
-    assertThat(chatRepository.count()).isEqualTo(1);
+    var chatInitializedDto = objectMapper.readValue(result.getResponse().getContentAsString(), ChatInitializedDto.class);
+    var chatId = chatInitializedDto.chat().chatId();
+
+    var chat = chatRepository.findByChatId(chatId).orElseThrow();
+    assertThat(chat.getTotalTokens()).isGreaterThan(0);
+
     assertThat(chatMessageRepository.count()).isEqualTo(3);
   }
 
