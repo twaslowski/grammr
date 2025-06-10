@@ -1,13 +1,13 @@
 import React from 'react';
-import { ChatMessage } from '@/chat/types/message';
 import clsx from 'clsx';
 import Image from 'next/image';
 import TokenType from '@/token/types/tokenType';
 import Token from '@/token/components/Token';
 import Analysis from '@/types/analysis';
 import { useTokenPopover } from '@/context/TokenPopoverContext';
+import {Message} from "@/chat/types/message";
 
-export const AssistantMessageBubble: React.FC<{ message: ChatMessage }> = ({ message }) => {
+export const AssistantMessageBubble: React.FC<{ message: Message }> = ({ message }) => {
   const [analysis, setAnalysis] = React.useState<Analysis | null>(null);
   const { show } = useTokenPopover();
 

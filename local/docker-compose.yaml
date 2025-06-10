@@ -74,7 +74,3 @@ services:
     image: mockserver/mockserver
     ports:
       - "1080:1080"
-    volumes:
-      - ./expectations/:/config/
-    environment:
-      - MOCKSERVER_INITIALIZATION_JSON_PATH=/config/*.json
