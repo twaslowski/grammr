@@ -2,6 +2,7 @@ resource "vercel_project" "project" {
   name          = "grammr"
   framework     = "nextjs"
   public_source = false
+  ignore_command = "bash deploy.sh"
 
   root_directory = "grammr-ui"
 

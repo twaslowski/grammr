@@ -154,7 +154,7 @@ jobs:
         working-directory: terraform/application
         run: |
           terraform init -backend-config=config/dev.hcl
-          terraform apply -auto-approve
+          terraform apply -auto-approve -var-file=config/dev.tfvars
 
   deploy-prod:
     needs: [ deploy-dev, prepare ]
@@ -180,4 +180,4 @@ jobs:
         working-directory: terraform/application
         run: |
           terraform init -backend-config=config/prod.hcl
-          terraform apply -auto-approve
+          terraform apply -auto-approve -var-file=config/prod.tfvars

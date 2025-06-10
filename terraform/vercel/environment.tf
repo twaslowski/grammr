@@ -27,7 +27,6 @@ resource "vercel_project_environment_variable" "tts_host_production" {
   key        = "TTS_HOST"
   value      = "https://b4l7c733qf.execute-api.eu-central-1.amazonaws.com/dev/tts"
   target     = ["production"]
-  git_branch = var.tracked_staging_branch
   comment    = "TTS API Gateway URL"
 }
 
