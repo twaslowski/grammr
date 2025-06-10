@@ -10,6 +10,9 @@ DELETE FROM "user"
 ALTER TABLE "user"
   ALTER COLUMN id TYPE UUID USING id::UUID;
 
+DELETE FROM deck
+  WHERE NOT (user_id ~* '^[0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12}$');
+
 ALTER TABLE deck
   ALTER COLUMN user_id TYPE UUID USING user_id::UUID;
 
