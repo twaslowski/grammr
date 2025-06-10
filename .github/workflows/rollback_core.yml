@@ -1,0 +1,35 @@
+name: Rollback Core Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      revision:
+        description: 'Helm revision to rollback to (optional, defaults to previous revision)'
+        required: false
+        default: ''
+
+jobs:
+  rollback:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Rollback grammr-core Helm release
+        env:
+          REVISION: ${{ github.event.inputs.revision }}
+        run: |
+          set -e
+          RELEASE=grammr-core
+          NAMESPACE=grammr
+          if [ -z "$REVISION" ]; then
+            # Get the previous revision
+            REVISION=$(helm history $RELEASE -n $NAMESPACE --max=2 | awk 'NR==3{print $1}')
+            if [ -z "$REVISION" ]; then
+              echo "Could not determine previous revision."
+              exit 1
+            fi
+          fi
+          echo "Rolling back $RELEASE in $NAMESPACE to revision $REVISION"
+          helm rollback $RELEASE $REVISION -n $NAMESPACE --wait
+

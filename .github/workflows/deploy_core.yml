@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - develop
+    tags:
+      - 'v*.*.*'
     paths:
       - src/**
       - charts/grammr/**
@@ -115,10 +117,11 @@ jobs:
 
   deploy-prod:
     runs-on: self-hosted
-    needs: [ deploy-dev ]
+    needs: [ build_grammr_core ]
     environment: prod
     concurrency: deploy-prod
-    if: github.ref == 'refs/heads/main'
+    # Only run on tag pushes
+    if: startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/tags/prod-')
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
     steps:
