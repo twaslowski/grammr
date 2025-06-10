@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/twaslowski/grammr/compare/v2.1.0...v2.2.0) (2025-06-10)
+
+
+### Features
+
+* **ops:** separate core deployment workflows ([ef6fd04](https://github.com/twaslowski/grammr/commit/ef6fd04982710770c29bc72c8eb566a751f55674))
+
 ## [2.1.0](https://github.com/twaslowski/grammr/compare/v2.0.0...v2.1.0) (2025-06-10)
 
 
