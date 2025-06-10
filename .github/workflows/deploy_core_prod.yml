@@ -1,44 +1,13 @@
-name: Build and deploy Core
+name: Deploy Core to Production
+
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - main
-      - develop
-    paths:
-      - src/**
-      - charts/grammr/**
-      - environments/*/core.values.yaml
-      - pom.xml
-      - Dockerfile
-      - .github/workflows/deploy_core.yml
+    tags:
+      - 'v*.*.*'
 
 jobs:
-  compile_and_test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: 21
-          distribution: corretto
-          cache: maven
-
-      - name: Unit tests
-        run: ./lifecycle/qa.sh
-
-      - name: Upload jar artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: grammr-core-jar
-          path: target/grammr-core-1.0-SNAPSHOT.jar
-
   build_grammr_core:
     runs-on: ubuntu-latest
-    needs: compile_and_test
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,11 +18,15 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Download jar
-        uses: actions/download-artifact@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
         with:
-          name: grammr-core-jar
-          path: target/
+          java-version: 21
+          distribution: corretto
+          cache: maven
+
+      - name: Build jar
+        run: ./mvnw package -DskipTests=false
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -83,32 +56,25 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  deploy-dev:
+  deploy-prod:
     runs-on: self-hosted
     needs: [ build_grammr_core ]
-    concurrency: deploy-dev
-    environment: dev
+    environment: prod
+    concurrency: deploy-prod
     env:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-#      - name: Deploy Postgres
-#        run: |
-#          helm upgrade --install \
-#            --values ./environments/dev/postgres.values.yaml \
-#            --namespace grammr-dev --create-namespace \
-#            --wait --timeout 600s \
-#            postgres oci://registry-1.docker.io/bitnamicharts/postgresql
-
       - name: Deploy core
         run: |
-          export TAG="sha-$(git rev-parse --short HEAD)"
+          export TAG="${GITHUB_REF#refs/tags/}"
           helm upgrade --install \
             --set openai_api_key="$OPENAI_API_KEY" \
             --set image.tag="$TAG" \
-            --values environments/dev/core.values.yaml \
-            --namespace grammr-dev --create-namespace \
+            --values environments/prod/core.values.yaml \
+            --namespace grammr --create-namespace \
             --wait --timeout 600s \
             grammr-core ./charts/grammr
+
