@@ -1,9 +1,5 @@
 package com.grammr.integration;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static com.grammr.integration.OpenAITestUtil.chatRequestContains;
 import static com.grammr.integration.OpenAITestUtil.chatRequestEquals;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -12,8 +8,6 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.entity.UserSpec;
@@ -31,7 +25,6 @@ import io.github.sashirestela.openai.SimpleOpenAI;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -51,8 +44,6 @@ public class IntegrationTestBase {
 
   @Autowired
   protected MockMvc mockMvc;
-
-  protected WireMockServer wireMockServer;
 
   @MockBean
   protected SimpleOpenAI openAIClient;
