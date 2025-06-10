@@ -27,7 +27,7 @@ export const ChatWindow: React.FC = () => {
       void refreshMessages();
       void refreshChats();
     }
-  }, [chatId]);
+  }, [chatId, refreshMessages, refreshChats]);
 
   return (
     <div className='flex h-full bg-white max-w-3xl mx-auto'>

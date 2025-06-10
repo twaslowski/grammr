@@ -1,6 +1,13 @@
 'use client';
 
-import React, {createContext, ReactNode, useCallback, useContext, useEffect, useState} from 'react';
+import React, {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { Chat } from '@/chat/types/chat';
 import { useApi } from '@/hooks/useApi';
 
@@ -34,9 +41,9 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     void fetchChats();
   }, [fetchChats]);
 
-  const refreshChats = async () => {
+  const refreshChats = useCallback(() => {
     void fetchChats();
-  };
+  }, [fetchChats]);
 
   return (
     <ChatContext.Provider value={{ chatId, setChatId, chats: chats, refreshChats }}>

@@ -1,8 +1,8 @@
-import {useEffect, useState} from 'react';
-import {Message} from '@/chat/types/message';
-import {ApiError, useApi} from '@/hooks/useApi';
-import {ChatInitializedDto} from '@/chat/types/chat';
-import {useLanguage} from '@/context/LanguageContext';
+import { useEffect, useState, useCallback } from 'react';
+import { Message } from '@/chat/types/message';
+import { ApiError, useApi } from '@/hooks/useApi';
+import { ChatInitializedDto } from '@/chat/types/chat';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface UseMessagesResult {
   messages: Message[];
@@ -15,17 +15,17 @@ interface UseMessagesResult {
 
 const useMessages = (chatId: string): UseMessagesResult => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const {languageLearned} = useLanguage();
-  const {request, error, isLoading} = useApi();
+  const { languageLearned } = useLanguage();
+  const { request, error, isLoading } = useApi();
 
-  const refreshMessages = async () => {
+  const refreshMessages = useCallback(async () => {
     try {
       const response = await request<Message[]>(`/api/v2/chat/${chatId}/messages`);
       setMessages(response);
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [chatId, request]);
 
   const startChat = async (message: string): Promise<string> => {
     const tempUserMessage = createTempMessage(message);
@@ -67,7 +67,7 @@ const useMessages = (chatId: string): UseMessagesResult => {
       content: message,
       date: new Date().toISOString(),
     };
-  }
+  };
 
   useEffect(() => {
     if (chatId) {
@@ -75,9 +75,9 @@ const useMessages = (chatId: string): UseMessagesResult => {
     } else {
       setMessages([]);
     }
-  }, [chatId]);
+  }, [chatId, refreshMessages]);
 
-  return {messages, sendMessage, startChat, refreshMessages, isLoading, error};
+  return { messages, sendMessage, startChat, refreshMessages, isLoading, error };
 };
 
 export default useMessages;

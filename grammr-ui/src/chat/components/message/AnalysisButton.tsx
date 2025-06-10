@@ -1,12 +1,12 @@
-import { ChatMessage } from '@/chat/types/message';
 import React from 'react';
 import { BookOpenCheck } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import Analysis from '@/types/analysis';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { Message } from '@/chat/types/message';
 
 export const AnalysisButton: React.FC<{
-  message: ChatMessage;
+  message: Message;
   onAnalysis: (result: Analysis) => void;
 }> = ({ message, onAnalysis }) => {
   const [loading, setLoading] = React.useState(false);
