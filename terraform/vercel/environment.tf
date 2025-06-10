@@ -22,6 +22,15 @@ resource "vercel_project_environment_variable" "clerk_secret_key_production" {
   comment    = "Clerk secret key for production"
 }
 
+resource "vercel_project_environment_variable" "tts_host_production" {
+  project_id = vercel_project.project.id
+  key        = "TTS_HOST"
+  value      = "https://b4l7c733qf.execute-api.eu-central-1.amazonaws.com/dev/tts"
+  target     = ["production"]
+  git_branch = var.tracked_staging_branch
+  comment    = "TTS API Gateway URL"
+}
+
 resource "vercel_project_environment_variable" "backend_preview" {
   project_id = vercel_project.project.id
   key        = "BACKEND_HOST"
@@ -47,4 +56,13 @@ resource "vercel_project_environment_variable" "clerk_secret_key_preview" {
   target     = ["preview"]
   git_branch = var.tracked_staging_branch
   comment    = "Clerk secret key for preview"
+}
+
+resource "vercel_project_environment_variable" "tts_host_preview" {
+  project_id = vercel_project.project.id
+  key        = "TTS_HOST"
+  value      = "https://b4l7c733qf.execute-api.eu-central-1.amazonaws.com/dev/tts"
+  target     = ["preview"]
+  git_branch = var.tracked_staging_branch
+  comment    = "TTS API Gateway URL"
 }

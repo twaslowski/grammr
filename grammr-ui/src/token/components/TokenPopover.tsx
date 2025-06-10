@@ -1,7 +1,7 @@
 import { X } from 'lucide-react';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import TTSPlayer from '@/components/buttons/TextToSpeech';
+import { TextToSpeech } from '@/components/buttons/TextToSpeech';
 import { Pos } from '@/components/language/Pos';
 import InflectionTable from '@/inflection/components/InflectionTable';
 import Translation from '@/token/components/Translation';
@@ -59,7 +59,7 @@ const TokenPopover: React.FC<TokenPopoverProps> = ({ onClose, context, token, la
           <div className='space-y-1'>
             <div className='flex items-center space-x-2'>
               <p className='text-2xl font-bold'>{token.text}</p>
-              <TTSPlayer text={token.text} />
+              <TextToSpeech text={token.text} />
             </div>
 
             <div className='border-b pb-2'>

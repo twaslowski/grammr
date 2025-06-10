@@ -1,4 +1,4 @@
-name: Deploy serverless morphology functions
+name: Deploy serverless functions
 
 on:
   push:
@@ -37,15 +37,6 @@ jobs:
         id: version
         run: |
           echo "version=$(cd ./sidecars/morphology && poetry version -s)" >> $GITHUB_OUTPUT
-
-      - name: Parse YAML and create build matrix
-        id: set-matrix
-        run: |
-          # pip install pyyaml
-          # export MATRIX=$(python ./sidecars/morphology/docker/image_generation_helper.py)
-          # echo "Generated matrix for building images: $MATRIX"
-          # echo "matrix=$MATRIX" | tee -a "$GITHUB_OUTPUT"
-          echo "matrix={\"include\":[{\"code\":\"ru\",\"model\":\"ru_core_news_md\"},{\"code\":\"de\",\"model\":\"de_core_news_sm\"},{\"code\":\"en\",\"model\":\"en_core_web_sm\"},{\"code\":\"it\",\"model\":\"it_core_news_md\"},{\"code\":\"es\",\"model\":\"es_core_news_sm\"},{\"code\":\"pt\",\"model\":\"pt_core_news_md\"},{\"code\":\"fr\",\"model\":\"fr_core_news_sm\"}]}" >> $GITHUB_OUTPUT
 
   create-ecr:
     needs: [ prepare ]
@@ -161,8 +152,6 @@ jobs:
 
       - name: Deploy Terraform
         working-directory: terraform/application
-        env:
-          TF_VAR_morphology_image_version: ${{ needs.prepare.outputs.version }}
         run: |
           terraform init -backend-config=config/dev.hcl
           terraform apply -auto-approve
@@ -189,8 +178,6 @@ jobs:
 
       - name: Deploy Terraform
         working-directory: terraform/application
-        env:
-          TF_VAR_morphology_image_version: ${{ needs.prepare.outputs.version }}
         run: |
           terraform init -backend-config=config/prod.hcl
           terraform apply -auto-approve

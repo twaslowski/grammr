@@ -1,16 +1,14 @@
 'use client';
 
 import { Loader, Volume2 } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
 import * as React from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 
-interface TTSPlayerProps {
-  text: string;
-}
-
-export default function TTSPlayer({ text }: TTSPlayerProps) {
+export const TextToSpeech: React.FC<{ text: string }> = ({ text }) => {
+  const { languageLearned } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
-  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  const [_, setIsTooltipVisible] = useState(false);
   const audioCache = useRef<Map<string, Blob>>(new Map());
   const currentAudio = useRef<HTMLAudioElement | null>(null);
 
@@ -36,38 +34,35 @@ export default function TTSPlayer({ text }: TTSPlayerProps) {
         return;
       }
 
-      // Otherwise fetch from API
-      const response = await fetch('/api/v1/speak', {
+      // Otherwise fetch from the new TTS API
+      const response = await fetch(`/tts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({
+          text: text,
+          language: languageLearned,
+        }),
       });
 
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
       }
 
-      // Get the readable stream from the response
-      const reader = response.body!.getReader();
-      const chunks: Uint8Array[] = [];
+      const base64 = await response.text();
 
-      // Read the stream
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        chunks.push(value);
+      // Decode base64 to binary
+      const binary = atob(base64);
+      const len = binary.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binary.charCodeAt(i);
       }
 
-      // Combine all chunks into a single Blob
-      const blob = new Blob(chunks, { type: 'audio/mpeg' });
-
-      // Cache the audio for future use
+      // Create Blob from binary data
+      const blob = new Blob([bytes], { type: 'audio/mpeg' });
       audioCache.current.set(text, blob);
-
-      // Play the audio
       playAudioBlob(blob);
     } catch (error) {
       console.error('Error fetching audio:', error);
@@ -92,7 +87,7 @@ export default function TTSPlayer({ text }: TTSPlayerProps) {
     };
 
     currentAudio.current = audio;
-    audio.play();
+    void audio.play();
   };
 
   return (
@@ -116,4 +111,4 @@ export default function TTSPlayer({ text }: TTSPlayerProps) {
       </button>
     </div>
   );
-}
+};

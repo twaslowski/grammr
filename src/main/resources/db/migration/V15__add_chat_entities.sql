@@ -2,6 +2,11 @@
 ALTER TABLE deck
   DROP CONSTRAINT IF EXISTS deck_user_id_fkey;
 
+-- 4e13d54: Nothing of this has been applied to dev/prod yet, so this change is safe
+-- Remove legacy user ids that are not UUIDs
+DELETE FROM "user"
+  WHERE NOT (id ~* '^[0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12}$');
+
 ALTER TABLE "user"
   ALTER COLUMN id TYPE UUID USING id::UUID;
 

@@ -1,6 +1,8 @@
 resource "aws_api_gateway_rest_api" "grammr_api" {
   name        = "grammr-api-${var.environment}"
   description = "The serverless grammr API"
+
+  binary_media_types = ["audio/mpeg"]
 }
 
 resource "aws_api_gateway_deployment" "deployment" {
@@ -12,6 +14,7 @@ resource "aws_api_gateway_deployment" "deployment" {
     redeployment = join("", [
       filesha1("api_gateway.tf"),
       filesha1("lambda.tf"),
+      filesha1("tts.tf"),
     ])
   }
 

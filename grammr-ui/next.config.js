@@ -3,8 +3,16 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/:path*',
-        destination: `${process.env.BACKEND_HOST}/api/:path*`,
+        source: '/api/v1/:path*',
+        destination: `${process.env.BACKEND_HOST}/api/v1/:path*`,
+      },
+      {
+        source: '/api/v2/:path*',
+        destination: `${process.env.BACKEND_HOST}/api/v2/:path*`,
+      },
+      {
+        source: '/api/tts',
+        destination: `${process.env.TTS_HOST}`,
       },
     ];
   },
@@ -52,6 +60,7 @@ const nextConfig = {
 
   env: {
     BACKEND_HOST: process.env.BACKEND_HOST,
+    TTS_HOST: process.env.TTS_HOST,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,

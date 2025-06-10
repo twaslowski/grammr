@@ -6,6 +6,7 @@ import Token from '@/token/components/Token';
 import Analysis from '@/types/analysis';
 import { useTokenPopover } from '@/context/TokenPopoverContext';
 import { Message } from '@/chat/types/message';
+import { TextToSpeech } from '@/components/buttons/TextToSpeech';
 
 export const AssistantMessageBubble: React.FC<{ message: Message }> = ({ message }) => {
   const [analysis, setAnalysis] = React.useState<Analysis | null>(null);
@@ -40,6 +41,9 @@ export const AssistantMessageBubble: React.FC<{ message: Message }> = ({ message
             ))}
           </div>
         )}
+        <div className='border-t border-gray-300 width-full flex justify-end'>
+          <TextToSpeech text={message.content} />
+        </div>
       </div>
     </div>
   );

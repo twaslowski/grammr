@@ -1,5 +1,5 @@
 import React from 'react';
-import TTSPlayer from '@/components/buttons/TextToSpeech';
+import { TextToSpeech } from '@/components/buttons/TextToSpeech';
 import GenericFlashcardExport from '@/flashcard/components/GenericFlashcardExport';
 import Token from '@/token/components/Token';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,7 +19,7 @@ const AnalysisCard: React.FC<TranslationCardProps> = ({ analysis }) => {
       <CardHeader>
         <CardTitle className='text-lg text-gray-900 dark:text-gray-100 flex justify-between items-center'>
           Translation
-          <TTSPlayer text={analysis.semanticTranslation.translatedPhrase} />
+          <TextToSpeech text={analysis.semanticTranslation.translatedPhrase} />
           <GenericFlashcardExport
             layout='p-4 text-sm h-6'
             front={analysis.semanticTranslation.sourcePhrase}
