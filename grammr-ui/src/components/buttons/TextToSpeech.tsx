@@ -35,7 +35,7 @@ export const TextToSpeech: React.FC<{ text: string }> = ({ text }) => {
       }
 
       // Otherwise fetch from the new TTS API
-      const response = await fetch(`/tts`, {
+      const response = await fetch(`/api/tts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
