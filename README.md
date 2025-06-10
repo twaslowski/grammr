@@ -30,7 +30,6 @@ of languages easier.
 
 - [About](#About)
 - [Features](#Features)
-- [Technical Roadmap](#Technical-Roadmap)
 - [Related projects](#Related-projects)
 - [Running](#Running)
 - [Developing](#Developing)
@@ -66,7 +65,7 @@ tool that can be arbitrarily extended for different languages.
     or a related project and use them as a reference for the LLMs. For one, all meanings of a word
     could be covered; also this would protect against wonky LLM responses.
 - [x] Inflection tables (supported: 🇷🇺🇮🇹🇫🇷🇪🇸🇵🇹)
-- [ ] Anki flashcard export
+- [x] Anki flashcard export
   - [x] Flashcard creation
   - [ ] Flashcard editing
   - [x] Flashcard export
@@ -75,24 +74,6 @@ tool that can be arbitrarily extended for different languages.
 or may not have equivalents in different languages)
 
 ⏰ More will be added as the project progresses. Check back later!
-
-## Technical Roadmap
-
-Beyond the features mentioned above, I'm also looking to make the technology stack more robust.
-I believe that this application should _really_ be able to scale to complexity, so I'm investing
-a lot of time and energy into keeping the architecture as clean as possible.
-
-Features and improvements will include:
-
-- [x] A proper CI/CD pipeline, including automated deployment (halfway there)
-- [x] Adding several more languages, which means creating additional sidecars for morphological
-analyis.
-- [x] Building a frontend. Possibly web-app, possibly cross-platform apps.
-- [x] ~~Extract~~ Delete the Telegram Bot entirely from the core service. It was useful for prototyping, but
-should not be tied to the main application.
-- [ ] Versioning and release management
-- [x] Creating multiple environments for testing and development
-- [ ] Benchmarking against quality regression of prompts
 
 ## Related projects
 
@@ -140,7 +121,7 @@ You can run unit tests with `./lifecycle/unit-test.sh` and integration tests wit
 Alternatively, run both with `./lifecycle/qa.sh`. This will also ensure the most accurate test coverage
 report is generated, which you can access at `target/site/jacoco/index.html`.
 
-## Domain Language
+## Terms
 
 Different projects use different terms to describe similar concepts. For instance, while
 [pymorphy2](https://github.com/pymorphy2/pymorphy2) refers to the root form of a word as the `lexeme`,
