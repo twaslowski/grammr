@@ -1,4 +1,4 @@
-name: Rollback Core Deployment
+name: Rollback Deployment
 
 on:
   workflow_dispatch:
@@ -7,6 +7,14 @@ on:
         description: 'Helm revision to rollback to (optional, defaults to previous revision)'
         required: false
         default: ''
+      namespace:
+        description: 'Kubernetes namespace for the Helm release (optional, defaults to grammr-dev)'
+        required: false
+        default: 'grammr-dev'
+      release:
+        description: 'Helm release name (optional, defaults to grammr-core)'
+        required: false
+        default: 'grammr-core'
 
 jobs:
   rollback:
@@ -20,8 +28,9 @@ jobs:
           REVISION: ${{ github.event.inputs.revision }}
         run: |
           set -e
-          RELEASE=grammr-core
-          NAMESPACE=grammr
+          RELEASE=${{ github.event.inputs.release }}
+          NAMESPACE=${{ github.event.inputs.namespace }}
+
           if [ -z "$REVISION" ]; then
             # Get the previous revision
             REVISION=$(helm history $RELEASE -n $NAMESPACE --max=2 | awk 'NR==3{print $1}')
