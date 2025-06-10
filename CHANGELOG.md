@@ -1,5 +1,32 @@
 # Changelog
 
+## [2.1.0](https://github.com/twaslowski/grammr/compare/v2.0.0...v2.1.0) (2025-06-10)
+
+
+### Features
+
+* **chat:** add entities, repositories for chat; v2 chat controller ([f3a2546](https://github.com/twaslowski/grammr/commit/f3a25465eeb76b96325d96986aa1fb32b9638a37))
+* **chat:** add user-level chat retrieval ([dce89ce](https://github.com/twaslowski/grammr/commit/dce89ce61240aa7133798d17144ea6c397cd5a36))
+* **chat:** create integration test utilizing Wiremock ([e4030f9](https://github.com/twaslowski/grammr/commit/e4030f91e45f93d36d6e414e61f75734ffa7fa73))
+* **chat:** enable chat message retrieval ([1eb9b8e](https://github.com/twaslowski/grammr/commit/1eb9b8e9e0f77b0690582ab44625aaff4be8b57c))
+* **chat:** improve chatWindow responsiveness ([60dcd39](https://github.com/twaslowski/grammr/commit/60dcd39d5cb726b5fcb8f829686f371c7e760457))
+* **chat:** track token usage, visualize messages properly ([fdd714e](https://github.com/twaslowski/grammr/commit/fdd714e519bdff5b3fcc1b443a9f2e2378d0cd58))
+* **ops:** parameterize namespace and release in rollback workflow ([4e13d54](https://github.com/twaslowski/grammr/commit/4e13d54c7c719326d73d1f3387bf618c151e9ac7))
+* **tts:** ensure high-quality text-to-speech output ([eba3775](https://github.com/twaslowski/grammr/commit/eba37756d98253e55ac84efb2af262b6d449796a))
+* **tts:** provide text-to-speech lambda behind API Gateway ([55ccfcf](https://github.com/twaslowski/grammr/commit/55ccfcfe8c1caeaa435aea02be3a2892cb20e3ba))
+
+
+### Bug Fixes
+
+* also drop decks belonging to legacy users ([abc4066](https://github.com/twaslowski/grammr/commit/abc4066fd927dcb9f61b57a63d04e273a69d0400))
+* **chat:** InputArea message sending ([0a1c898](https://github.com/twaslowski/grammr/commit/0a1c898bd5293138052e9dbe74ad4fdf6e3e99ea))
+* **chat:** scripting issues; remove wiremock ([3a9609e](https://github.com/twaslowski/grammr/commit/3a9609e7f1ed2c26691f132e6d49e1aea6f62af9))
+* linter issues ([313e331](https://github.com/twaslowski/grammr/commit/313e33119046503d58f80198ca11743585b861dc))
+* **ops:** bump aws terraform provider versions ([25417ef](https://github.com/twaslowski/grammr/commit/25417efe79a6121f44cf47309b1c72a1714b7e23))
+* **ops:** vercel environment variables, lambda morphology deployment ([0c5d5d1](https://github.com/twaslowski/grammr/commit/0c5d5d1e8169d43098f4fe14c86495e0e4c80df5))
+* **ops:** workflow conditions; ts linter issues ([d91976c](https://github.com/twaslowski/grammr/commit/d91976c036924f589df8500cc0734332c9b75f94))
+* **tts:** text-to-speech api endpoint ([e261005](https://github.com/twaslowski/grammr/commit/e26100559f9b6f348b34a364a5a28d3a864b3c02))
+
 ## [2.0.0](https://github.com/twaslowski/grammr/compare/v1.2.0...v2.0.0) (2025-06-03)
 
 
