@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.2](https://github.com/twaslowski/grammr/compare/v2.2.1...v2.2.2) (2025-06-11)
+
+
+### Bug Fixes
+
+* favicon site.manifest format ([611e7a6](https://github.com/twaslowski/grammr/commit/611e7a69dbf56a3123ea1b1fe67fe63319ace02c))
+
 ## [2.2.1](https://github.com/twaslowski/grammr/compare/v2.2.0...v2.2.1) (2025-06-11)
 
 
