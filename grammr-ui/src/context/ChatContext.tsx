@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 import { Chat } from '@/chat/types/chat';
 import { useApi } from '@/hooks/useApi';
+import { useUser } from '@clerk/nextjs';
 
 type ChatContextType = {
   chatId: string;
@@ -23,9 +24,14 @@ const ChatContext = createContext<ChatContextType | undefined>(undefined);
 export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [chatId, setChatId] = useState('');
   const [chats, setChats] = useState<Chat[]>([]);
+  const { isSignedIn } = useUser();
   const { request } = useApi();
 
   const fetchChats = useCallback(async () => {
+    if (!isSignedIn) {
+      setChats([]);
+      return;
+    }
     try {
       const result = await request<Chat[]>('/api/v2/chat', {
         method: 'GET',
@@ -35,7 +41,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {
       console.error('Failed to fetch chats:', err);
     }
-  }, [request]);
+  }, [request, isSignedIn]);
 
   useEffect(() => {
     void fetchChats();

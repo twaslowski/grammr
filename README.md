@@ -50,27 +50,23 @@ across multiple languages:
 - Inflection (conjugation and declension) of words
 - Anki Flashcard export to make learning easier
 
-I have more ideas for this project, which you can find in the [Features](#Features) and
-[Roadmap](#Roadmap) sections.
-
-This project, therefore, does not take a didactic approach to learning languages, and should
+This project, does not take a didactic approach to learning languages, and should
 not be compared to an app like Duolingo; it rather aims to be a comprehensive, open reference
 tool that can be arbitrarily extended for different languages.
 
-## Features
+However, it **does** offer a chat, to make it easier to learn languages in a conversational
+manner. While chatting, you can perform analyses of phrases which can then be stored for later
+study.
 
-- [x] Translate sentences across arbitrary languages
-- [x] Get literal translations for words
-  - [ ] Could use some improvements: Instead of solely relying on LLMs for translation, maybe fetch translations via Wiktionary
-    or a related project and use them as a reference for the LLMs. For one, all meanings of a word
-    could be covered; also this would protect against wonky LLM responses.
-- [x] Inflection tables (supported: 🇷🇺🇮🇹🇫🇷🇪🇸🇵🇹)
-- [x] Anki flashcard export
-  - [x] Flashcard creation
-  - [ ] Flashcard editing
-  - [x] Flashcard export
-- [ ] Named-entity recognition and explanation of terms
-- [ ] Translations of phrases and sayings (which often do not translate literally and may
+### Features
+
+- Chat with a language model
+- Translate sentences across arbitrary languages
+- Get literal translations for words
+- Text-to-speech for translations
+- Inflection tables (supported: 🇷🇺🇮🇹🇫🇷🇪🇸🇵🇹)
+- Creation and sync of Flashcards for Anki
+
 or may not have equivalents in different languages)
 
 ⏰ More will be added as the project progresses. Check back later!
@@ -95,23 +91,44 @@ so creating inflections should be possible.
 
 ## Running
 
+### Running locally 
 I tried to make running the project yourself as straightforward as possible. What you'll need:
 
-- A Telegram bot token. You can get one by talking to the [BotFather](https://t.me/botfather).
 - An OpenAI API key. You can get one by signing up [here](https://platform.openai.com/signup).
+- A Clerk API key for user management. Ideally, different identity providers should be supported
+to make this more flexible, but for now, due to its user-friendliness, Clerk is the only supported
+identity provider. You can sign up [here](https://clerk.dev/).
 
-Given those, you can run the project with a local configuration or by deploying the packaged
-Helm chart. My recommendation is using an `.envrc` file so you always have your environment variables
-handy, but do whatever works best for you.
+`./lifecycle/run.sh`, gives you a very minimal setup to run the project locally. It starts:
+- A Postgres database, which is used to store user data and translations.
+- Containers for providing morphological analysis for Russian and German.
+- Containers for providing inflections for Russian
+- A anki export server, which is used to package user flashcards into APKG files
+- A mockserver mocking the OpenAI Responses API
 
-By running `./lifecycle/run.sh`, a Postgres container and the Python sidecar running spaCy will be
-launched. The Spring application will be run via `mvn spring-boot:run`.
+### Kubernetes
 
-If you choose to run `./lifecycle/deploy.sh`, a Helm chart will be created and deployed to your
-Kubernetes cluster. This will require a running Kubernetes cluster (you could try using
+Given the complexity of this project, Kubernetes is the recommended way to run it due to the
+sheer amount of services that need to be run. This project comes with multiple Helm charts
+that you can use. This will require a running Kubernetes cluster (you could try using
 [Minikube](https://minikube.sigs.k8s.io/docs/) or [k3s](https://k3s.io/)) and
-[Helm](https://helm.sh/) to be installed. You should set a DATASOURCE_PASSWORD environment variable,
-which will be used to create a secret in the cluster for authentication with Postgres.
+[Helm](https://helm.sh/) to be installed.
+
+Installation:
+
+```shell
+# postgres
+helm install --namespace grammr --create-namespace \
+  postgres oci://registry-1.docker.io/bitnamicharts/postgresql
+  
+# core
+helm install --namespace grammr \
+    --set openai_api_key="$OPENAI_API_KEY" \
+    grammr-core ./charts/grammr
+```
+
+For running the Sidecars, refer to the `charts/` directory and the `environments/` directory
+to see the supplied values.
 
 ## Developing
 

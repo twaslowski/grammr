@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Message } from '@/chat/types/message';
 import { ApiError, useApi } from '@/hooks/useApi';
+import { v4 } from 'uuid';
 import { ChatInitializedDto } from '@/chat/types/chat';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -62,7 +63,7 @@ const useMessages = (chatId: string): UseMessagesResult => {
   const createTempMessage = (message: string): Message => {
     // This temporary message displays immediately in the UI, gets overwritten with refreshMessages()
     return {
-      id: crypto.randomUUID(),
+      id: v4(),
       role: 'USER',
       content: message,
       date: new Date().toISOString(),

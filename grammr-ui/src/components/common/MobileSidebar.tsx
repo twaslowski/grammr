@@ -99,18 +99,10 @@ export const MobileSidebar: React.FC = () => {
           <LanguageSelectionDropdown />
         </div>
         <div className='border border-gray-200 m-4 ' />
-      </div>
-      <SignedIn>
-        <ChatHistory />
-      </SignedIn>
-      <SignedOut>
-        <div className='p-4 text-center'>
-          <p className='text-gray-500'>Please sign in to access chat history.</p>
-          <SignInButton>
-            <button className='mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg'>Sign In</button>
-          </SignInButton>
+        <div className='px-3 py-2'>
+          <ChatHistory />
         </div>
-      </SignedOut>
+      </div>
     </div>
   );
 };

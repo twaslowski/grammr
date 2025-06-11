@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { SendHorizonal } from 'lucide-react';
 
-export const InputArea: React.FC<{ onEnter: (input: string) => void; clear: boolean }> = ({
-  onEnter,
-  clear,
-}) => {
+export const InputArea: React.FC<{
+  placeholder?: string;
+  onEnter: (input: string) => void;
+  clear: boolean;
+}> = ({ placeholder = 'Enter text to translate...', onEnter, clear }) => {
   const [input, setInput] = useState('');
 
   const handleSubmit = () => {
@@ -33,7 +34,7 @@ export const InputArea: React.FC<{ onEnter: (input: string) => void; clear: bool
       >
         <textarea
           className='border-none w-full resize-none focus:outline-none focus:ring-0'
-          placeholder='Enter text to translate...'
+          placeholder={placeholder}
           rows={1}
           value={input}
           onChange={(e) => setInput(e.target.value)}

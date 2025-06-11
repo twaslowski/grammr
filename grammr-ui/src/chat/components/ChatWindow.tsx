@@ -43,13 +43,14 @@ export const ChatWindow: React.FC = () => {
         <div>
           {messages.length === 0 && (
             <Suggestions
+              numberOfSuggestions={2}
               onSuggestionClickAction={(text: string) => {
                 void handleSend(text);
               }}
             />
           )}
         </div>
-        <InputArea onEnter={handleSend} clear={true} />
+        <InputArea placeholder={'What would you like to know?'} onEnter={handleSend} clear={true} />
       </div>
     </div>
   );
