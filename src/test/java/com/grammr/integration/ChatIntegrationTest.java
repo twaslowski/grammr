@@ -67,7 +67,7 @@ public class ChatIntegrationTest extends IntegrationTestBase {
 
   @Test
   void shouldListUserChatsWhenAuthenticated() throws Exception {
-    var user = userRepository.save(UserSpec.valid().build());
+    var user = userRepository.save(UserSpec.validWithoutId().build());
     var auth = createUserAuthentication(user);
     String initialMessage = "Hallo, wie geht es Ihnen?";
 

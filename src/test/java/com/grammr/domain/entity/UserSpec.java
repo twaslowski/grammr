@@ -10,4 +10,9 @@ public class UserSpec {
         .id(UUID.randomUUID())
         .externalId("some-id");
   }
+
+  public static UserBuilder validWithoutId() {
+    return User.builder()
+        .externalId("some-id");
+  }
 }

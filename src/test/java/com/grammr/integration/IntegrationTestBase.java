@@ -31,9 +31,9 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @IntegrationTest
@@ -45,7 +45,7 @@ public class IntegrationTestBase {
   @Autowired
   protected MockMvc mockMvc;
 
-  @MockBean
+  @MockitoBean
   protected SimpleOpenAI openAIClient;
 
   @Autowired
@@ -84,7 +84,7 @@ public class IntegrationTestBase {
   }
 
   protected Authentication createUserAuthentication() {
-    var user = userRepository.save(UserSpec.valid().build());
+    var user = userRepository.save(UserSpec.validWithoutId().build());
     return new UsernamePasswordAuthenticationToken(user, null, List.of());
   }
 

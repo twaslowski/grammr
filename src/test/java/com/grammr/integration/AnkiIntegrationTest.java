@@ -54,7 +54,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @Test
   @SneakyThrows
   void shouldRetrieveDeckWithFlashcards() {
-    var user = userRepository.save(UserSpec.valid().build());
+    var user = userRepository.save(UserSpec.validWithoutId().build());
     var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
     var paradigm = paradigmRepository.save(Paradigm.builder()
         .lemma("Hund")
@@ -85,7 +85,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @Test
   @SneakyThrows
   void shouldExportNonExportedCards() {
-    var user = userRepository.save(UserSpec.valid().build());
+    var user = userRepository.save(UserSpec.validWithoutId().build());
     var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
 
     var paradigm = paradigmRepository.save(Paradigm.builder()
@@ -132,7 +132,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @Test
   @SneakyThrows
   void shouldCreateFlashcard() {
-    var user = userRepository.save(UserSpec.valid().build());
+    var user = userRepository.save(UserSpec.validWithoutId().build());
     var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
     var authentication = createUserAuthentication(user);
     var creationDto = new FlashcardCreationDto(deck.getId(), "Test Question", "Test Answer", null, null);
@@ -157,7 +157,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @Test
   @SneakyThrows
   void shouldExportDeck() {
-    var user = userRepository.save(UserSpec.valid().build());
+    var user = userRepository.save(UserSpec.validWithoutId().build());
     var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
     var authentication = createUserAuthentication(user);
     flashcardRepository.save(Flashcard.builder()
@@ -181,7 +181,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @Test
   @SneakyThrows
   void shouldDeleteDeck() {
-    var user = userRepository.save(UserSpec.valid().build());
+    var user = userRepository.save(UserSpec.validWithoutId().build());
     var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
     var authentication = createUserAuthentication(user);
     flashcardRepository.save(Flashcard.builder()

@@ -1,4 +1,4 @@
-package com.grammr.language.service.v1.translation.semantic;
+package com.grammr.language.service.v2.translation;
 
 public class Prompts {
 
