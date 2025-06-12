@@ -1,11 +1,12 @@
-package com.grammr.language.service.v2.translation;
+package com.grammr.language.service.v2.translation.phrase;
 
-import static com.grammr.language.service.v2.translation.Prompts.SYSTEM_PROMPT;
-import static com.grammr.language.service.v2.translation.Prompts.USER_PROMPT;
+import static com.grammr.language.service.v2.translation.phrase.Prompts.SYSTEM_PROMPT;
+import static com.grammr.language.service.v2.translation.phrase.Prompts.USER_PROMPT;
 
 import com.grammr.chat.value.Message;
 import com.grammr.common.OpenAIResponsesService;
 import com.grammr.domain.enums.LanguageCode;
+import com.grammr.language.service.v2.translation.Translation;
 import com.openai.client.OpenAIClient;
 import com.openai.models.ChatModel;
 import com.openai.models.responses.Response;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class OpenAIResponsesSemanticTranslationService extends OpenAIResponsesService implements PhraseTranslationService {
+public class OpenAIPhraseTranslationService extends OpenAIResponsesService implements PhraseTranslationService {
 
   private final OpenAIClient openAIClient;
 
@@ -40,7 +41,7 @@ public class OpenAIResponsesSemanticTranslationService extends OpenAIResponsesSe
     Response openAIResponse = openAIClient.responses().create(createParams);
     String responseText = extractOutputText(openAIResponse);
 
-    return new Translation(phrase, responseText, sourceLanguage, targetLanguage, null);
+    return new Translation(phrase, responseText, sourceLanguage, targetLanguage, List.of());
   }
 
   private String sanitizePhrase(String input) {

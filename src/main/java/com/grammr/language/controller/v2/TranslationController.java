@@ -2,8 +2,8 @@ package com.grammr.language.controller.v2;
 
 import com.grammr.language.controller.v2.dto.PhraseTranslationRequest;
 import com.grammr.language.service.v2.AnalysisService;
-import com.grammr.language.service.v2.translation.PhraseTranslationService;
 import com.grammr.language.service.v2.translation.Translation;
+import com.grammr.language.service.v2.translation.phrase.PhraseTranslationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,21 +22,6 @@ public class TranslationController {
   private final PhraseTranslationService phraseTranslationService;
   private final AnalysisService analysisService;
 
-//  @Operation(
-//      summary = "Translate a phrase",
-//      description = "Translates a phrase from the source language to the target language. Optionally performs analysis.",
-//      requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-//          required = true,
-//          content = @Content(schema = @Schema(implementation = PhraseTranslationRequest.class))
-//      ),
-//      responses = {
-//          @ApiResponse(
-//              responseCode = "200",
-//              description = "Successful translation",
-//              content = @Content(schema = @Schema(implementation = Translation.class))
-//          )
-//      }
-//  )
   @PostMapping(value = "/phrase", produces = "application/json")
   public ResponseEntity<Translation> translatePhrase(@RequestBody @Valid PhraseTranslationRequest translationRequest) {
     if (translationRequest.sourceLanguage() == translationRequest.targetLanguage()) {
@@ -44,10 +29,12 @@ public class TranslationController {
     }
     var translation = phraseTranslationService.translate(translationRequest.phrase(),
         translationRequest.sourceLanguage(),
-        translationRequest.targetLanguage());
+        translationRequest.targetLanguage()
+    );
 
     if (translationRequest.performAnalysis()) {
-      analysisService.simpleAnalyze(translation.translation(), translation.targetLanguage());
+      var analysis = analysisService.simpleAnalyze(translation.translation(), translation.targetLanguage());
+      translation = translation.withTokens(analysis);
     }
 
     return ResponseEntity.ok(translation);
