@@ -8,7 +8,7 @@ import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.enums.features.Case;
 import com.grammr.domain.enums.features.Feature;
 import com.grammr.domain.enums.features.Person;
-import com.grammr.language.controller.dto.MorphologicalAnalysisRequest;
+import com.grammr.language.controller.v1.dto.MorphologicalAnalysisRequest;
 import com.grammr.domain.value.language.LanguageRecognition;
 import com.grammr.domain.value.language.SemanticTranslation;
 import lombok.SneakyThrows;

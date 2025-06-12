@@ -2,6 +2,7 @@ package com.grammr.chat.service;
 
 import com.grammr.chat.value.Message;
 import com.grammr.common.MessageUtil;
+import com.grammr.common.OpenAIResponsesService;
 import com.grammr.domain.entity.Chat;
 import com.grammr.domain.entity.ChatMessage;
 import com.grammr.domain.entity.ChatMessage.Role;
@@ -13,15 +14,12 @@ import com.openai.models.ChatModel;
 import com.openai.models.responses.Response;
 import com.openai.models.responses.ResponseCreateParams;
 import com.openai.models.responses.ResponseInputItem;
-import com.openai.models.responses.ResponseOutputText;
 import com.openai.models.responses.ResponseStreamEvent;
 import com.openai.models.responses.ResponseTextDeltaEvent;
 import com.openai.models.responses.ResponseUsage;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +29,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class OpenAIChatService {
+public class OpenAIChatService extends OpenAIResponsesService {
 
   private final OpenAIClient client;
   private final MessageUtil messageUtil;
@@ -72,23 +70,6 @@ public class OpenAIChatService {
 
     chatPersistenceService.save(chat, List.of(userMessage, response));
     return Message.fromChatMessage(response);
-  }
-
-  private List<ResponseInputItem> buildInputItems(List<ChatMessage> chatHistory, ChatMessage userMessage) {
-    return Stream.concat(chatHistory.stream(), Stream.of(userMessage))
-        .map(Message::fromChatMessage)
-        .map(Message::toEasyInputMessage)
-        .map(ResponseInputItem::ofEasyInputMessage)
-        .toList();
-  }
-
-  private String extractOutputText(Response response) {
-    return response.output().stream()
-        .flatMap(item -> item.message().stream())
-        .flatMap(message -> message.content().stream())
-        .flatMap(content -> content.outputText().stream())
-        .map(ResponseOutputText::text)
-        .collect(Collectors.joining());
   }
 
   private Long extractInputTokens(Response response) {

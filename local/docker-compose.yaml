@@ -1,9 +1,9 @@
 services:
   analysis-ru:
-    image: tobiaswaslowski/grammr-morphology
-    build:
-      context: ../sidecars/morphology
-      dockerfile: docker/Dockerfile
+    image: tobiaswaslowski/grammr-morphology:0.5.0
+#    build:
+#      context: ../sidecars/morphology
+#      dockerfile: docker/Dockerfile
     healthcheck:
       test: [ "CMD", "curl", "--fail", "http://localhost:8000/health" ]
       interval: 3s
@@ -15,10 +15,10 @@ services:
       - SPACY_MODEL=ru_core_news_sm
 
   analysis-de:
-    image: tobiaswaslowski/grammr-morphology
-    build:
-      context: ../sidecars/morphology
-      dockerfile: docker/Dockerfile
+    image: tobiaswaslowski/grammr-morphology:0.5.0
+#    build:
+#      context: ../sidecars/morphology
+#      dockerfile: docker/Dockerfile
     healthcheck:
       test: [ "CMD", "curl", "--fail", "http://localhost:8000/health" ]
       interval: 3s
@@ -30,10 +30,10 @@ services:
       - SPACY_MODEL=de_core_news_sm
 
   inflection-ru:
-    image: tobiaswaslowski/grammr-inflection-ru
-    build:
-      context: ../sidecars/inflection-ru
-      dockerfile: docker/Dockerfile
+    image: tobiaswaslowski/grammr-inflection-ru:0.2.1
+#    build:
+#      context: ../sidecars/inflection-ru
+#      dockerfile: docker/Dockerfile
     healthcheck:
       test: [ "CMD", "curl", "--fail", "http://localhost:8000/health" ]
       interval: 3s
@@ -43,10 +43,10 @@ services:
       - "8020:8000"
 
   anki:
-    image: tobiaswaslowski/grammr-anki
-    build:
-      context: ../sidecars/anki-exporter
-      dockerfile: docker/Dockerfile
+    image: tobiaswaslowski/grammr-anki:0.1.0
+#    build:
+#      context: ../sidecars/anki-exporter
+#      dockerfile: docker/Dockerfile
     healthcheck:
       test: [ "CMD", "curl", "--fail", "http://localhost:8000/health" ]
       interval: 3s

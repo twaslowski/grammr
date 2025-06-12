@@ -3,7 +3,7 @@ package com.grammr.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.grammr.language.service.TokenService;
+import com.grammr.language.service.v1.TokenService;
 import com.grammr.domain.value.language.MorphologicalAnalysisSpec;
 import com.grammr.domain.value.language.Token;
 import com.grammr.domain.value.language.TokenTranslation;

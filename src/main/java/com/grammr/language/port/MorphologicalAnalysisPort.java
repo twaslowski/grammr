@@ -2,7 +2,7 @@ package com.grammr.language.port;
 
 import com.grammr.config.value.LanguageConfiguration;
 import com.grammr.domain.value.language.MorphologicalAnalysis;
-import com.grammr.language.controller.dto.MorphologicalAnalysisRequest;
+import com.grammr.language.controller.v1.dto.MorphologicalAnalysisRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

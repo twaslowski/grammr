@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.grammr.annotation.BenchmarkTest;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.AnalysisComponentRequest;
-import com.grammr.language.service.TokenService;
-import com.grammr.language.service.translation.literal.OpenAILiteralTranslationService;
+import com.grammr.language.service.v1.TokenService;
+import com.grammr.language.service.v1.translation.literal.OpenAILiteralTranslationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

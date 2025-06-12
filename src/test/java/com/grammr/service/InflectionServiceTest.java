@@ -6,10 +6,10 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.grammr.language.service.InflectionService;
+import com.grammr.language.service.v1.InflectionService;
 import com.grammr.config.value.LanguageConfiguration;
 import com.grammr.domain.entity.Paradigm;
-import com.grammr.language.controller.dto.InflectionsRequest;
+import com.grammr.language.controller.v1.dto.InflectionsRequest;
 import com.grammr.language.port.InflectionPort;
 import com.grammr.repository.ParadigmRepository;
 import java.util.Optional;

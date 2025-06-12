@@ -18,6 +18,10 @@ public record Message(
     return new Message(UUID.randomUUID(), content, Role.SYSTEM, null);
   }
 
+  public static Message userMessage(String content) {
+    return new Message(UUID.randomUUID(), content, Role.USER, null);
+  }
+
   public EasyInputMessage toEasyInputMessage() {
     return EasyInputMessage.builder()
         .role(toEasyInputMessageRole(role))
