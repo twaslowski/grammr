@@ -10,6 +10,6 @@ public class Prompts {
       """;
 
   public static final String USER_PROMPT = """
-       Translate the following from %s to %s:\\n\\"%s\\"
+       Translate the following sentence to %s:\\n\\"%s\\"
       """;
 }

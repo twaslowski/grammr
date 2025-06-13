@@ -24,7 +24,6 @@ public class OpenAILiteralTranslationService implements LiteralTranslationServic
   private final OpenAITokenTranslationService openAITokenTranslationService;
 
   @Override
-  @Timed("analysis.literal_translation")
   public LiteralTranslation createAnalysisComponent(AnalysisComponentRequest request) {
     if (request.getTokens().size() > MAX_TOKENS) {
       return LiteralTranslation.builder()

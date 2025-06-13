@@ -34,4 +34,10 @@ public abstract class OpenAIResponsesService {
         .map(ResponseOutputText::text)
         .collect(Collectors.joining());
   }
+
+  protected String sanitizePhrase(String input) {
+    return input.replaceAll("^\"|\"$", "")
+        .replaceAll("\\p{Cntrl}&&[^\n\t]", "")
+        .trim();
+  }
 }

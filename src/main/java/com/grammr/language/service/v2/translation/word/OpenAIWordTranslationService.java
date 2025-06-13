@@ -1,32 +1,35 @@
-package com.grammr.language.service.v2.translation.phrase;
+package com.grammr.language.service.v2.translation.word;
 
-import static com.grammr.language.service.v2.translation.phrase.Prompts.SYSTEM_PROMPT;
-import static com.grammr.language.service.v2.translation.phrase.Prompts.USER_PROMPT;
+import static com.grammr.language.service.v2.translation.word.Prompts.SYSTEM_PROMPT;
+import static com.grammr.language.service.v2.translation.word.Prompts.USER_PROMPT;
 
 import com.grammr.chat.value.Message;
 import com.grammr.common.OpenAIResponsesService;
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.domain.value.language.v2.Translation;
+import com.grammr.domain.value.language.v2.WordTranslation;
 import com.openai.client.OpenAIClient;
 import com.openai.models.ChatModel;
 import com.openai.models.responses.Response;
 import com.openai.models.responses.ResponseCreateParams;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-public class OpenAIPhraseTranslationService extends OpenAIResponsesService implements PhraseTranslationService {
+public class OpenAIWordTranslationService extends OpenAIResponsesService implements WordTranslationService {
 
   private final OpenAIClient openAIClient;
 
   @Override
-  public Translation translate(String phrase, LanguageCode sourceLanguage, LanguageCode targetLanguage) {
+  public WordTranslation translate(String word, String context, LanguageCode targetLanguage) {
     String userPrompt = String.format(
         USER_PROMPT,
+        word,
         targetLanguage,
-        sanitizePhrase(phrase)
+        sanitizePhrase(context)
     );
 
     var systemPrompt = Message.systemPrompt(SYSTEM_PROMPT);
@@ -39,8 +42,13 @@ public class OpenAIPhraseTranslationService extends OpenAIResponsesService imple
         .build();
 
     Response openAIResponse = openAIClient.responses().create(createParams);
-    String responseText = extractOutputText(openAIResponse);
-
-    return new Translation(phrase, responseText, sourceLanguage, targetLanguage, List.of());
+    String translatedWord = extractOutputText(openAIResponse);
+    log.info("OpenAI literal translation: '{}' -> '{}' (context: '{}')", word, translatedWord, context);
+    return WordTranslation.builder()
+        .source(word)
+        .translation(translatedWord)
+        .targetLanguage(targetLanguage)
+        .context(context)
+        .build();
   }
 }

@@ -1,4 +1,4 @@
-package com.grammr.language.service.v2.translation;
+package com.grammr.domain.value.language.v2;
 
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.language.Token;
