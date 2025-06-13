@@ -20,6 +20,7 @@ jobs:
 
       - name: Build and run Spring Boot app
         run: |
+          docker compose -f local/docker-compose.yaml up postgresql -d
           ./mvnw clean package -DskipTests
           mvn spring-boot:start -Dspring-boot.run.profiles=local
 
