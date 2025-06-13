@@ -4,6 +4,8 @@ import com.grammr.domain.value.language.Token;
 import com.grammr.language.controller.v2.dto.AnalysisRequest;
 import com.grammr.language.controller.v2.dto.PhraseAnalysis;
 import com.grammr.language.service.v2.AnalysisService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
+@Tag(name = "Analysis", description = "v2 Analysis operations")
 @RestController("v2AnalysisController")
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/analysis")
@@ -22,6 +25,7 @@ public class AnalysisController {
 
   private final AnalysisService analysisService;
 
+  @Operation(summary = "Perform phrase analysis", description = "Analyzes a phrase and returns tokenized analysis for the given language.")
   @PostMapping(produces = "application/json")
   public ResponseEntity<PhraseAnalysis> performAnalysis(@RequestBody @Valid AnalysisRequest analysisRequest) {
     log.info("Processing analysis request: {}", analysisRequest);

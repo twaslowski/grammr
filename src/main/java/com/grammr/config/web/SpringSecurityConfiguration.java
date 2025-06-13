@@ -43,6 +43,8 @@ public class SpringSecurityConfiguration {
   private void configureRestAuthorizations(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorizationRegistry) {
     authorizationRegistry
         .requestMatchers("/actuator/*").permitAll()
+        .requestMatchers("/swagger-ui/**").permitAll()
+        .requestMatchers("/v3/api-docs/**").permitAll()
         .requestMatchers("/api/v1/chat").permitAll()
         .requestMatchers("/api/v2/chat").permitAll()
         .requestMatchers("/api/v2/chat/**").permitAll()

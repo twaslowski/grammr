@@ -2,6 +2,7 @@ package com.grammr.chat.controller.v1;
 
 import com.grammr.chat.service.OpenAIChatService;
 import com.grammr.chat.value.Message;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 @Slf4j
+@Hidden
 @CrossOrigin
 @RestController("v1ChatController")
 @RequestMapping("/api/v1/chat")

@@ -51,3 +51,13 @@ grammr:
       endpoint: /create
   languages:
     mount-path: /app/config/languages.yml
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operationsSorter: method
+    tagsSorter: alpha
+    display-request-duration: true
+  api-docs:
+    path: /v3/api-docs

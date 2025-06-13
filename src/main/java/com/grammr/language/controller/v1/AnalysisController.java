@@ -3,6 +3,7 @@ package com.grammr.language.controller.v1;
 import com.grammr.domain.event.AnalysisRequest;
 import com.grammr.domain.value.FullAnalysis;
 import com.grammr.language.service.v1.AnalysisService;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Hidden
 @Slf4j
 @RequiredArgsConstructor
 @RestController
