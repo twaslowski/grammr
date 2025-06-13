@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import TokenType from '@/token/types/tokenType';
 import Token from '@/token/components/Token';
-import Analysis from '@/types/analysis';
+import { Analysis } from '@/types/analysis';
 import { useTokenPopover } from '@/context/TokenPopoverContext';
 import { Message } from '@/chat/types/message';
 import { TextToSpeech } from '@/components/buttons/TextToSpeech';

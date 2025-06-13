@@ -1,4 +1,4 @@
-package com.grammr.integration;
+package com.grammr.integration.v2;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
@@ -12,6 +12,7 @@ import com.grammr.chat.service.OpenAIChatService;
 import com.grammr.chat.value.Message;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.LanguageCode;
+import com.grammr.integration.IntegrationTestBase;
 import com.grammr.repository.ChatMessageRepository;
 import com.grammr.repository.ChatRepository;
 import java.nio.file.Files;

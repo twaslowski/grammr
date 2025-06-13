@@ -1,7 +1,7 @@
 import React from 'react';
 import { BookOpenCheck } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
-import Analysis from '@/types/analysis';
+import { Analysis } from '@/types/analysis';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { Message } from '@/chat/types/message';
 

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import Analysis from '@/types/analysis';
+import { AnalysisV2 } from '@/types/analysis';
 
 const useAnalysis = () => {
-  const [translationData, setTranslationData] = useState<Analysis | null>(null);
+  const [translationData, setTranslationData] = useState<AnalysisV2 | null>(null);
 
   useEffect(() => {
     const storedData = window.sessionStorage.getItem('translationData');
@@ -11,7 +11,7 @@ const useAnalysis = () => {
     }
   }, []);
 
-  const saveTranslation = (data: Analysis) => {
+  const saveTranslation = (data: AnalysisV2) => {
     window.sessionStorage.setItem('translationData', JSON.stringify(data));
     setTranslationData(data);
   };

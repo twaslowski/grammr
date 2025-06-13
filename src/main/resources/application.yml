@@ -37,9 +37,6 @@ openai:
   transcription:
     model: whisper-1
     verbose: false
-  tts:
-    model: tts-1
-    voice: nova
 
 clerk:
   jwt-key: ${CLERK_SECRET_KEY}

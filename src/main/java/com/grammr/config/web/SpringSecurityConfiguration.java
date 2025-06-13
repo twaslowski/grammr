@@ -49,6 +49,8 @@ public class SpringSecurityConfiguration {
         .requestMatchers("/api/v2/chat").permitAll()
         .requestMatchers("/api/v2/chat/**").permitAll()
         .requestMatchers("/api/v2/translations/**").permitAll()
+        .requestMatchers("/api/v2/analysis").permitAll()
+        .requestMatchers("/api/v2/analysis/*").permitAll()
         .requestMatchers("/api/v1/deck").authenticated()
         .requestMatchers("/api/v1/deck/**").authenticated()
         .requestMatchers("/api/v1/flashcard").authenticated()

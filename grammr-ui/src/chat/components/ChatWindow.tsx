@@ -5,7 +5,6 @@ import { InputArea } from '@/components/common/InputArea';
 import useMessages from '@/chat/hooks/use-messages';
 import { useChat } from '@/context/ChatContext';
 import { LoadingMessageBubble } from '@/chat/components/message/LoadingMessageBubble';
-import { AssistantMessageBubble } from '@/chat/components/message/AssistantMessageBubble';
 import { AssistantFailedMessageBubble } from '@/chat/components/message/FailedMessageBubble';
 
 export const ChatWindow: React.FC = () => {

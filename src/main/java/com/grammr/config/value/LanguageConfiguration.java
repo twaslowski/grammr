@@ -32,7 +32,7 @@ public record LanguageConfiguration(
         .map(Language::morphology)
         .map(MorphologyConfiguration::uri)
         .findFirst()
-        .orElseThrow(() -> new ConfigurationNotAvailableException("Morphology host is not available for language: " + languageCode));
+        .orElseThrow(() -> new ConfigurationNotAvailableException("Morphological analysis not available for language: " + languageCode));
   }
 
   public String getInflectionUri(LanguageCode languageCode) {
@@ -41,6 +41,6 @@ public record LanguageConfiguration(
         .map(Language::inflection)
         .map(InflectionConfiguration::uri)
         .findFirst()
-        .orElseThrow(() -> new ConfigurationNotAvailableException("Inflection host is not available for language: " + languageCode));
+        .orElseThrow(() -> new ConfigurationNotAvailableException("Inflections not available for language: " + languageCode));
   }
 }

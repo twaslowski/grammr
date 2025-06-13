@@ -4,11 +4,11 @@ import GenericFlashcardExport from '@/flashcard/components/GenericFlashcardExpor
 import Token from '@/token/components/Token';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import TokenType from '@/token/types/tokenType';
-import Analysis from '@/types/analysis';
+import { AnalysisV2 } from '@/types/analysis';
 import { useTokenPopover } from '@/context/TokenPopoverContext';
 
 interface TranslationCardProps {
-  analysis: Analysis;
+  analysis: AnalysisV2;
 }
 
 const AnalysisCard: React.FC<TranslationCardProps> = ({ analysis }) => {
@@ -19,24 +19,22 @@ const AnalysisCard: React.FC<TranslationCardProps> = ({ analysis }) => {
       <CardHeader>
         <CardTitle className='text-lg text-gray-900 dark:text-gray-100 flex justify-between items-center'>
           Translation
-          <TextToSpeech text={analysis.semanticTranslation.translatedPhrase} />
+          <TextToSpeech text={analysis.translation} />
           <GenericFlashcardExport
             layout='p-4 text-sm h-6'
-            front={analysis.semanticTranslation.sourcePhrase}
-            back={analysis.semanticTranslation.translatedPhrase}
+            front={analysis.source}
+            back={analysis.translation}
           />
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className='flex flex-wrap gap-1'>
-          {analysis.analyzedTokens.map((token: TokenType) => (
+          {analysis.analysedTokens.map((token: TokenType) => (
             <Token
-              context={analysis.semanticTranslation.translatedPhrase}
+              context={analysis.translation}
               key={token.index}
               token={token}
-              onShare={() =>
-                show(token, analysis.semanticTranslation.translatedPhrase, analysis.sourceLanguage)
-              }
+              onShare={() => show(token, analysis.translation, analysis.targetLanguage)}
             />
           ))}
         </div>

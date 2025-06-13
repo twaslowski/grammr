@@ -1,16 +1,17 @@
 package com.grammr.language.controller.v2;
 
-import com.grammr.domain.value.language.Token;
 import com.grammr.language.controller.v2.dto.AnalysisRequest;
 import com.grammr.language.controller.v2.dto.PhraseAnalysis;
 import com.grammr.language.service.v2.AnalysisService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,18 +26,24 @@ public class AnalysisController {
 
   private final AnalysisService analysisService;
 
-  @Operation(summary = "Perform phrase analysis", description = "Analyzes a phrase and returns tokenized analysis for the given language.")
+  @Operation(
+      summary = "Perform phrase analysis",
+      description = "Analyzes a phrase and returns tokenized analysis for the given language."
+  )
   @PostMapping(produces = "application/json")
   public ResponseEntity<PhraseAnalysis> performAnalysis(@RequestBody @Valid AnalysisRequest analysisRequest) {
     log.info("Processing analysis request: {}", analysisRequest);
-    List<Token> analyzedTokens = analysisService.simpleAnalyze(
+    var phraseAnalysis = analysisService.performAnalysis(
         analysisRequest.phrase(),
         analysisRequest.languageCode()
     );
-    return ResponseEntity.ok(new PhraseAnalysis(
-        analysisRequest.phrase(),
-        analysisRequest.languageCode(),
-        analyzedTokens
-    ));
+    return ResponseEntity.ok(phraseAnalysis);
+  }
+
+  @GetMapping(value = "/{analysisId}", produces = "application/json")
+  public ResponseEntity<PhraseAnalysis> retrieveAnalysis(@PathVariable UUID analysisId) {
+    log.info("Retrieving analysis for ID: {}", analysisId);
+    var phraseAnalysis = analysisService.retrieveAnalysis(analysisId);
+    return ResponseEntity.ok(phraseAnalysis);
   }
 }

@@ -20,7 +20,7 @@ public class TokenService {
 
     // Splits the phrase at boundaries between letters (\\p{L}) and punctuation (\\p{P}),
     // and ignores sequences of any characters which are neither letters nor punctuation.
-    // Includes lookaheads and lookbehinds to ensure that punctuation is treated as separate tokens.
+    // Includes lookaheads and lookbehinds to ensure that punctuation is treated as separate analysedTokens.
     return Arrays.stream(phrase.split("(?<=\\p{L})(?=\\p{P})|(?<=\\p{P})(?=\\p{L})|[^\\p{L}\\p{P}]+"))
         .filter(token -> !token.isEmpty())
         .map(token -> Token.fromString(token, indexCounter.getAndIncrement()))

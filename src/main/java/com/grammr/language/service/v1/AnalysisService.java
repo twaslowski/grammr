@@ -29,10 +29,10 @@ public class AnalysisService {
 
   /**
    * User speaks Language A and learns Language B, and that the source phrase is in Language B.
-   * Translates the sentence to Language A; also tokenizes the original sentence and enriches the tokens
+   * Translates the sentence to Language A; also tokenizes the original sentence and enriches the analysedTokens
    * with literal translations and morphological analysis.
    * @param analysisRequest AnalysisRequest object containing the source phrase and user languages.
-   * @return FullAnalysis object containing translation and enriched tokens.
+   * @return FullAnalysis object containing translation and enriched analysedTokens.
    */
 
   public FullAnalysis simpleAnalyze(AnalysisRequest analysisRequest) {
@@ -69,7 +69,7 @@ public class AnalysisService {
    * A translation to Language B is created; afterward, the sentence is tokenized and enriched with
    * literal translations and morphological analysis.
    * @param analysisRequest AnalysisRequest object containing the source phrase and user languages.
-   * @return FullAnalysis object containing translation and enriched tokens.
+   * @return FullAnalysis object containing translation and enriched analysedTokens.
    */
 
   public FullAnalysis translateAndAnalyze(AnalysisRequest analysisRequest) {

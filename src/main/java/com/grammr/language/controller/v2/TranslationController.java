@@ -47,8 +47,8 @@ public class TranslationController {
     );
 
     if (translationRequest.performAnalysis()) {
-      var analysis = analysisService.simpleAnalyze(translation.translation(), translation.targetLanguage());
-      translation = translation.withTokens(analysis);
+      var analysis = analysisService.performAnalysis(translation.translation(), translation.targetLanguage());
+      translation = translation.withTokens(analysis.analysedTokens());
     }
 
     return ResponseEntity.ok(translation);
@@ -67,7 +67,7 @@ public class TranslationController {
         translationRequest.source(),
         translationRequest.context(),
         translationRequest.targetLanguage()
-    ).withSourceLanguage(translationRequest.sourceLanguage());
+    );
 
     return ResponseEntity.ok(translation);
   }

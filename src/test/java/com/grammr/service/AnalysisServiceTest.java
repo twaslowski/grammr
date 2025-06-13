@@ -5,14 +5,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.grammr.language.service.v1.AnalysisService;
-import com.grammr.language.service.v1.TokenService;
 import com.grammr.domain.event.AnalysisRequestEventSpec;
 import com.grammr.domain.value.AnalysisComponentRequest;
 import com.grammr.domain.value.language.LiteralTranslationSpec;
 import com.grammr.domain.value.language.MorphologicalAnalysisSpec;
 import com.grammr.domain.value.language.SemanticTranslationSpec;
 import com.grammr.language.service.MorphologyService;
+import com.grammr.language.service.v1.AnalysisService;
+import com.grammr.language.service.v1.TokenService;
 import com.grammr.language.service.v1.translation.literal.OpenAILiteralTranslationService;
 import com.grammr.language.service.v1.translation.semantic.SemanticTranslationService;
 import org.junit.jupiter.api.Test;
