@@ -22,7 +22,7 @@ jobs:
         run: |
           docker compose -f local/docker-compose.yaml up postgresql -d
           ./mvnw clean package -DskipTests
-          mvn spring-boot:start -Dspring-boot.run.profiles=local
+          OPENAI_API_KEY=some-test-key mvn spring-boot:start -Dspring-boot.run.profiles=local
 
       - name: Fetch OpenAPI spec
         run: |
