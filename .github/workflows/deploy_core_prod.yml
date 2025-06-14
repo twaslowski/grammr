@@ -70,7 +70,7 @@ jobs:
       - name: Deploy core
         run: |
           export TAG="${GITHUB_REF#refs/tags/}"
-          echo $TAG
+          TAG=$(echo "$TAG" | sed 's/^v//')
           helm upgrade --install \
             --set openai_api_key="$OPENAI_API_KEY" \
             --set image.tag="$TAG" \
