@@ -1,9 +1,9 @@
-import {useCallback, useEffect, useState} from 'react';
-import {Message} from '@/chat/types/message';
-import {ApiError, useApi} from '@/hooks/useApi';
-import {v4} from 'uuid';
-import {ChatInitializedDto} from '@/chat/types/chat';
-import {useLanguage} from '@/context/LanguageContext';
+import { useCallback, useEffect, useState } from 'react';
+import { Message } from '@/chat/types/message';
+import { ApiError, useApi } from '@/hooks/useApi';
+import { v4 } from 'uuid';
+import { ChatInitializedDto } from '@/chat/types/chat';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface UseMessagesResult {
   messages: Message[];
@@ -32,8 +32,8 @@ interface UseMessagesResult {
  */
 const useMessages = (chatId: string): UseMessagesResult => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const {languageLearned} = useLanguage();
-  const {request, error, isLoading} = useApi();
+  const { languageLearned } = useLanguage();
+  const { request, error, isLoading } = useApi();
 
   const refreshMessages = useCallback(async () => {
     try {
@@ -93,7 +93,7 @@ const useMessages = (chatId: string): UseMessagesResult => {
     }
   }, [chatId, refreshMessages]);
 
-  return {messages, sendMessage, startChat, refreshMessages, isLoading, error};
+  return { messages, sendMessage, startChat, refreshMessages, isLoading, error };
 };
 
 export default useMessages;

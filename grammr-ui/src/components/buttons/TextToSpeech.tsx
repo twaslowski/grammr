@@ -1,12 +1,15 @@
 'use client';
 
-import {Loader, Volume2} from 'lucide-react';
+import { Loader, Volume2 } from 'lucide-react';
 import * as React from 'react';
-import {useEffect, useRef, useState} from 'react';
-import {useLanguage} from '@/context/LanguageContext';
+import { useEffect, useRef, useState } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
 
-export const TextToSpeech: React.FC<{ text: string; className?: string }> = ({text, className}) => {
-  const {languageLearned} = useLanguage();
+export const TextToSpeech: React.FC<{ text: string; className?: string }> = ({
+  text,
+  className,
+}) => {
+  const { languageLearned } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
   const [_, setIsTooltipVisible] = useState(false);
   const audioCache = useRef<Map<string, Blob>>(new Map());
@@ -61,7 +64,7 @@ export const TextToSpeech: React.FC<{ text: string; className?: string }> = ({te
       }
 
       // Create Blob from binary data
-      const blob = new Blob([bytes], {type: 'audio/mpeg'});
+      const blob = new Blob([bytes], { type: 'audio/mpeg' });
       audioCache.current.set(text, blob);
       playAudioBlob(blob);
     } catch (error) {
@@ -91,22 +94,22 @@ export const TextToSpeech: React.FC<{ text: string; className?: string }> = ({te
   };
 
   return (
-      <button
-          onClick={speakText}
-          disabled={isLoading || !text.trim()}
-          onMouseEnter={() => setIsTooltipVisible(true)}
-          onMouseLeave={() => setIsTooltipVisible(false)}
-          className={`rounded-md cursor-pointer transition-colors ${className}`}
-      >
-        {isLoading ? (
-            <>
-              <Loader className='animate-spin'/>
-            </>
-        ) : (
-            <>
-              <Volume2/>
-            </>
-        )}
-      </button>
+    <button
+      onClick={speakText}
+      disabled={isLoading || !text.trim()}
+      onMouseEnter={() => setIsTooltipVisible(true)}
+      onMouseLeave={() => setIsTooltipVisible(false)}
+      className={`rounded-md cursor-pointer transition-colors ${className}`}
+    >
+      {isLoading ? (
+        <>
+          <Loader className='animate-spin' />
+        </>
+      ) : (
+        <>
+          <Volume2 />
+        </>
+      )}
+    </button>
   );
 };

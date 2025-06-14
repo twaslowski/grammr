@@ -4,4 +4,5 @@ export type Message = {
   chatId: string;
   content: string;
   date: string;
+  analysisId?: string;
 };
