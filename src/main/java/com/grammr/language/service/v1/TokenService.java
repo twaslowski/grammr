@@ -2,7 +2,6 @@ package com.grammr.language.service.v1;
 
 import com.grammr.domain.value.language.MorphologicalAnalysis;
 import com.grammr.domain.value.language.Token;
-import com.grammr.domain.value.language.TokenTranslation;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -29,20 +28,11 @@ public class TokenService {
   }
 
   public List<Token> enrichTokens(List<Token> tokens,
-                                  List<TokenTranslation> translations,
                                   MorphologicalAnalysis analysis) {
     return tokens.stream()
         .map(token -> enrichWithMorphology(token, analysis))
-        .map(token -> enrichWithTranslation(token, translations))
         .sorted(Comparator.comparing(Token::index))
         .toList();
-  }
-
-  private Token enrichWithTranslation(Token token, List<TokenTranslation> literalTranslation) {
-    return literalTranslation.stream().filter(translation -> translation.getIndex() == token.index())
-        .findFirst()
-        .map(token::withTranslation)
-        .orElse(token);
   }
 
   private Token enrichWithMorphology(Token token, MorphologicalAnalysis analysis) {

@@ -41,6 +41,6 @@ public class OpenAIPhraseTranslationService extends OpenAIResponsesService imple
     Response openAIResponse = openAIClient.responses().create(createParams);
     String responseText = extractOutputText(openAIResponse);
 
-    return new Translation(phrase, responseText, sourceLanguage, targetLanguage, List.of());
+    return new Translation(phrase, responseText, sourceLanguage, targetLanguage, null);
   }
 }

@@ -1,8 +1,8 @@
 package com.grammr.config.web;
 
 import com.grammr.common.ErrorResponse;
+import com.grammr.domain.exception.BadRequestException;
 import com.grammr.domain.exception.ConfigurationNotAvailableException;
-import com.grammr.domain.exception.DeckNotFoundException;
 import com.grammr.domain.exception.InflectionNotAvailableException;
 import com.grammr.domain.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -17,19 +17,13 @@ import org.springframework.web.server.MethodNotAllowedException;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
-  @ExceptionHandler(DeckNotFoundException.class)
-  public final ResponseEntity<ErrorResponse> handleDeckNotFound(DeckNotFoundException ex) {
-    log.info(ex.getMessage());
-    return new ResponseEntity<>(ErrorResponse.withMessage(ex.getMessage()), HttpStatus.NOT_FOUND);
-  }
-
   @ExceptionHandler(ResourceNotFoundException.class)
   public final ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex) {
     log.info(ex.getMessage());
     return new ResponseEntity<>(ErrorResponse.withMessage(ex.getMessage()), HttpStatus.NOT_FOUND);
   }
 
-  @ExceptionHandler(ConfigurationNotAvailableException.class)
+  @ExceptionHandler(BadRequestException.class)
   public final ResponseEntity<ErrorResponse> handleConfigurationNotAvailable(ConfigurationNotAvailableException ex) {
     log.info(ex.getMessage());
     return new ResponseEntity<>(ErrorResponse.withMessage(ex.getMessage()), HttpStatus.BAD_REQUEST);

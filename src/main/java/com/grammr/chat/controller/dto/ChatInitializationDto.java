@@ -1,4 +1,4 @@
-package com.grammr.chat.controller.v2.dto;
+package com.grammr.chat.controller.dto;
 
 import com.grammr.domain.enums.LanguageCode;
 import jakarta.validation.constraints.NotNull;

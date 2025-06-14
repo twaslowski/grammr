@@ -1,8 +1,8 @@
-package com.grammr.chat.controller.v2;
+package com.grammr.chat.controller;
 
-import com.grammr.chat.controller.v2.dto.ChatDto;
-import com.grammr.chat.controller.v2.dto.ChatInitializationDto;
-import com.grammr.chat.controller.v2.dto.ChatInitializedDto;
+import com.grammr.chat.controller.dto.ChatDto;
+import com.grammr.chat.controller.dto.ChatInitializationDto;
+import com.grammr.chat.controller.dto.ChatInitializedDto;
 import com.grammr.chat.service.ChatPersistenceService;
 import com.grammr.chat.service.OpenAIChatService;
 import com.grammr.chat.value.Message;

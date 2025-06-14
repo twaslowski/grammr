@@ -9,7 +9,7 @@ export const InputArea: React.FC<{
   const [input, setInput] = useState('');
 
   const handleSubmit = () => {
-    if (input.trim()) {
+    if (input && input.trim()) {
       onEnter(input);
     }
     if (clear) {

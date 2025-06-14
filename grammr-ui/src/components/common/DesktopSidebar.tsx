@@ -73,7 +73,7 @@ export const DesktopSidebar: React.FC = () => {
           <p
             key={link.label}
             onClick={() => navigateTo(link.href)}
-            className='flex items-center hover:bg-gray-200 rounded-full p-2'
+            className='flex items-center hover:bg-gray-200 rounded-full p-2 cursor-pointer'
           >
             <link.icon className='ml-2 mr-2' size={20} />
             {link.label}

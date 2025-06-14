@@ -48,7 +48,7 @@ public class TranslationController {
 
     if (translationRequest.performAnalysis()) {
       var analysis = analysisService.performAnalysis(translation.translation(), translation.targetLanguage());
-      translation = translation.withTokens(analysis.analysedTokens());
+      translation = translation.withAnalysis(analysis);
     }
 
     return ResponseEntity.ok(translation);

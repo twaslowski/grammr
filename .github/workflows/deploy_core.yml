@@ -94,14 +94,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-#      - name: Deploy Postgres
-#        run: |
-#          helm upgrade --install \
-#            --values ./environments/dev/postgres.values.yaml \
-#            --namespace grammr-dev --create-namespace \
-#            --wait --timeout 600s \
-#            postgres oci://registry-1.docker.io/bitnamicharts/postgresql
-
       - name: Deploy core
         run: |
           export TAG="sha-$(git rev-parse --short HEAD)"
@@ -110,5 +102,27 @@ jobs:
             --set image.tag="$TAG" \
             --values environments/dev/core.values.yaml \
             --namespace grammr-dev --create-namespace \
+            --wait --timeout 600s \
+            grammr-core ./charts/grammr
+
+  deploy-prod:
+    runs-on: self-hosted
+    needs: [ build_grammr_core ]
+    environment: prod
+    concurrency: deploy-prod
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy core
+        run: |
+          export TAG="sha-$(git rev-parse --short HEAD)"
+          helm upgrade --install \
+            --set openai_api_key="$OPENAI_API_KEY" \
+            --set image.tag="$TAG" \
+            --values environments/prod/core.values.yaml \
+            --namespace grammr --create-namespace \
             --wait --timeout 600s \
             grammr-core ./charts/grammr

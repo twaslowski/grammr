@@ -35,10 +35,6 @@ const TokenPopover: React.FC<TokenPopoverProps> = ({ onClose, context, token, la
     }
   }, [token]);
 
-  const onTranslationLoaded = useCallback((translation: TokenTranslation) => {
-    setTranslationData(translation);
-  }, []);
-
   const tokenHasNoFeatures = (token: TokenType) => {
     return (
       !token.morphology.features ||
@@ -73,11 +69,7 @@ const TokenPopover: React.FC<TokenPopoverProps> = ({ onClose, context, token, la
             </div>
 
             <div className='py-2 border-b'>
-              <Translation
-                context={context}
-                token={token}
-                onTranslationLoaded={onTranslationLoaded}
-              />
+              <Translation context={context} token={token} onTranslation={() => {}} />
             </div>
 
             <div className='py-2 border-b'>

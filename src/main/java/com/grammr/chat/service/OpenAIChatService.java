@@ -1,7 +1,8 @@
 package com.grammr.chat.service;
 
+import static com.grammr.chat.service.Prompts.getSystemPrompt;
+
 import com.grammr.chat.value.Message;
-import com.grammr.common.MessageUtil;
 import com.grammr.common.OpenAIResponsesService;
 import com.grammr.domain.entity.Chat;
 import com.grammr.domain.entity.ChatMessage;
@@ -32,13 +33,12 @@ import org.springframework.stereotype.Service;
 public class OpenAIChatService extends OpenAIResponsesService {
 
   private final OpenAIClient client;
-  private final MessageUtil messageUtil;
   private final ChatPersistenceService chatPersistenceService;
 
   public Chat initializeChat(LanguageCode languageCode, @Nullable User user, String message) {
     var chat = chatPersistenceService.newChat(user, message);
 
-    var systemPromptMessage = messageUtil.parameterizeMessage("openai.chat.prompt.system", languageCode.getLanguageName());
+    var systemPromptMessage = getSystemPrompt(languageCode);
     var systemPrompt = ChatMessage.from(systemPromptMessage, chat, Role.SYSTEM, 0L);
 
     chatPersistenceService.save(systemPrompt);

@@ -33,7 +33,7 @@ public class InflectionController {
       """)
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Word inflected successfully"),
-      @ApiResponse(responseCode = "422", description = "Language or part of speech not supported",
+      @ApiResponse(responseCode = "400", description = "Language or part of speech not supported",
           content = @Content(
               mediaType = "application/json",
               examples = @ExampleObject(

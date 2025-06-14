@@ -12,7 +12,7 @@ export const AnalysisButton: React.FC<{
   className?: string;
 }> = ({ message, onAnalysis, className }) => {
   const { languageLearned } = useLanguage();
-  const { request, isLoading, error } = useApi();
+  const { request, isLoading } = useApi();
 
   const handleAnalyzeGrammar = async () => {
     try {

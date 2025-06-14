@@ -6,9 +6,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.grammr.annotation.IntegrationTest;
-import com.grammr.chat.controller.v2.ChatController.AnalysisEnrichmentDto;
-import com.grammr.chat.controller.v2.dto.ChatInitializationDto;
-import com.grammr.chat.controller.v2.dto.ChatInitializedDto;
+import com.grammr.chat.controller.ChatController.AnalysisEnrichmentDto;
+import com.grammr.chat.controller.dto.ChatInitializationDto;
+import com.grammr.chat.controller.dto.ChatInitializedDto;
 import com.grammr.chat.service.OpenAIChatService;
 import com.grammr.chat.value.Message;
 import com.grammr.domain.entity.Analysis;

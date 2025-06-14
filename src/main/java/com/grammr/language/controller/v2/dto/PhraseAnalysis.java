@@ -1,5 +1,6 @@
 package com.grammr.language.controller.v2.dto;
 
+import com.grammr.domain.entity.Analysis;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.value.language.Token;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,4 +36,12 @@ public record PhraseAnalysis(
     List<Token> analysedTokens
 ) {
 
+  public static PhraseAnalysis from(Analysis analysis) {
+    return PhraseAnalysis.builder()
+        .analysisId(analysis.getAnalysisId().toString())
+        .phrase(analysis.getPhrase())
+        .sourceLanguage(analysis.getSourceLanguage())
+        .analysedTokens(analysis.getAnalysedTokens())
+        .build();
+  }
 }

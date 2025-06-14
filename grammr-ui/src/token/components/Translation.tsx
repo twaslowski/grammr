@@ -1,7 +1,7 @@
 'use client';
 
 import { Loader2 } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useLanguage } from '@/context/LanguageContext';
 import TokenType from '@/token/types/tokenType';
@@ -11,40 +11,40 @@ import { useApi } from '@/hooks/useApi';
 interface TranslationProps {
   context: string;
   token: TokenType;
-  onTranslationLoaded: (translation: TokenTranslation) => void;
+  onTranslation: (translation: TokenTranslation) => void;
 }
 
-const Translation: React.FC<TranslationProps> = ({ context, token, onTranslationLoaded }) => {
+const Translation: React.FC<TranslationProps> = ({ context, token, onTranslation }) => {
   const { languageSpoken } = useLanguage();
   const { request, isLoading, error } = useApi();
-  const onTranslationLoadedRef = useRef(onTranslationLoaded);
-  const [data, setData] = useState<TokenTranslation | null>(null);
+  const onTranslationRef = useRef(onTranslation);
+  const [data, setData] = useState<TokenTranslation | null>(token.translation);
 
   useEffect(() => {
-    onTranslationLoadedRef.current = onTranslationLoaded;
-  }, [onTranslationLoaded]);
+    onTranslationRef.current = onTranslation;
+  }, [onTranslation]);
+
+  const fetchTranslation = useCallback(async (): Promise<TokenTranslation> => {
+    const result = await request<TokenTranslation>('/api/v2/translations/word', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        context: context,
+        source: token.text,
+        targetLanguage: languageSpoken,
+      }),
+    });
+    setData(result);
+    return result;
+  }, [context, token.text, languageSpoken, request]);
 
   useEffect(() => {
-    const fetchTranslation = async (): Promise<TokenTranslation> => {
-      const data = await request<TokenTranslation>('/api/v2/translations/word', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          context: context,
-          source: token.text,
-          targetLanguage: languageSpoken,
-        }),
-      });
-      setData(data);
-      return data;
-    };
-
     if (!token.translation) {
       fetchTranslation()
-        .then((res) => onTranslationLoaded(res))
+        .then((res) => onTranslationRef.current(res))
         .catch((err) => console.error(err));
     }
-  }, [context, token, languageSpoken, request, onTranslationLoaded]);
+  }, [fetchTranslation, token.translation]);
 
   return (
     <div>

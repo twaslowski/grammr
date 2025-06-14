@@ -3,11 +3,9 @@ package com.grammr.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.grammr.language.service.v1.TokenService;
 import com.grammr.domain.value.language.MorphologicalAnalysisSpec;
 import com.grammr.domain.value.language.Token;
-import com.grammr.domain.value.language.TokenTranslation;
-import java.util.ArrayList;
+import com.grammr.language.service.v1.TokenService;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -44,11 +42,6 @@ class TokenServiceTest {
   @Test
   void shouldCreateAndPopulateToken() {
     var morphologicalAnalysis = MorphologicalAnalysisSpec.valid().build();
-    List<TokenTranslation> translations = List.of(
-        new TokenTranslation(1, "hola", "hello", false),
-        new TokenTranslation(2, "mundo", "world", false),
-        new TokenTranslation(3, "hola", "hello again!", false)
-    );
 
     var tokens = List.of(
         Token.fromString("hola", 1),
@@ -56,24 +49,20 @@ class TokenServiceTest {
         Token.fromString("hola", 3)
     );
 
-    var enrichedTokens = tokenService.enrichTokens(tokens, translations, morphologicalAnalysis);
+    var enrichedTokens = tokenService.enrichTokens(tokens, morphologicalAnalysis);
     assertThat(enrichedTokens).hasSize(3);
-
-    assertThat(enrichedTokens.getFirst().translation().getTranslation()).isEqualTo("hello");
-    assertThat(enrichedTokens.getLast().translation().getTranslation()).isEqualTo("hello again!");
   }
 
   @Test
   void shouldCreatePlainTextToken() {
-    var translations = new ArrayList<TokenTranslation>();
     var analysis = MorphologicalAnalysisSpec.valid().build();
 
     var tokens = List.of(
         Token.fromString("hello", 1),
-        Token.fromString("world",2)
+        Token.fromString("world", 2)
     );
 
-    var enrichedTokens = tokenService.enrichTokens(tokens, translations, analysis);
+    var enrichedTokens = tokenService.enrichTokens(tokens, analysis);
 
     assertThat(enrichedTokens).hasSize(2);
     assertThat(enrichedTokens.getFirst().text()).isEqualTo("hello");

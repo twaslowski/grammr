@@ -1,5 +1,5 @@
-import { Book, ExternalLink } from 'lucide-react';
-import React, { useCallback, useState } from 'react';
+import { Book } from 'lucide-react';
+import React from 'react';
 
 import { Pos } from '@/components/language/Pos';
 import Translation from '@/token/components/Translation';
@@ -8,27 +8,46 @@ import { stringifyFeatures } from '@/token/feature';
 import { getPosColor } from '@/token/pos';
 import { TokenTranslation } from '@/types';
 import TokenType from '@/token/types/tokenType';
+import { useApi } from '@/hooks/useApi';
+import { AnalysisV2 } from '@/types/analysis';
 
 interface TokenProps {
   size?: 'sm' | 'md' | 'lg';
   context: string;
   token: TokenType;
+  analysisId: string;
+  onAnalysisUpdate: (analysis: AnalysisV2) => void;
   onShare(token: TokenType): void;
 }
 
-const Token: React.FC<TokenProps> = ({ size, context, token, onShare }) => {
+const Token: React.FC<TokenProps> = ({
+  size,
+  context,
+  token,
+  onShare,
+  analysisId,
+  onAnalysisUpdate,
+}) => {
   const { index, text, translation, morphology } = token;
-
-  const onTranslationLoaded = useCallback(
-    (translation: TokenTranslation) => {
-      token.translation = translation;
-    },
-    [token],
-  );
+  const { request } = useApi();
 
   if (!morphology || Object.keys(morphology).length === 0) {
     return <span>{text}</span>;
   }
+
+  const onTranslation = async (translation: TokenTranslation): Promise<void> => {
+    const result = await request<AnalysisV2>(`/api/v2/analysis/${analysisId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...token,
+        translation: translation,
+      }),
+    });
+    onAnalysisUpdate(result);
+  };
 
   return (
     <Popover>
@@ -47,7 +66,7 @@ const Token: React.FC<TokenProps> = ({ size, context, token, onShare }) => {
         </div>
 
         <div className='space-y-2 pb-2'>
-          <Translation context={context} token={token} onTranslationLoaded={onTranslationLoaded} />
+          <Translation context={context} token={token} onTranslation={onTranslation} />
         </div>
 
         <div className='border-t pt-2'>

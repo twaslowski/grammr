@@ -1,25 +1,22 @@
 'use client';
 
-import React from 'react';
-import AnalysisCard from '@/components/language/AnalysisCard';
+import React, { useState } from 'react';
+import TranslationCard from '@/components/language/TranslationCard';
 import { useLanguage } from '@/context/LanguageContext';
-import useAnalysis from '@/hooks/useAnalysis';
 import { InputArea } from '@/components/common/InputArea';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import { AnalysisV2 } from '@/types/analysis';
 import { useApi } from '@/hooks/useApi';
 import Error from '@/components/common/Error';
+import { Translation } from '@/types/translation';
 
 const TranslatePage = () => {
   const { languageSpoken, languageLearned } = useLanguage();
   const { request, isLoading, error } = useApi();
-  const { analysis, saveAnalysis, clearAnalysis } = useAnalysis();
+  const [translation, setTranslation] = useState<Translation | null>();
 
   const handleTranslation = async (inputText: string) => {
-    clearAnalysis();
-
     try {
-      const data = await request<AnalysisV2>('/api/v2/translations/phrase', {
+      const data = await request<Translation>('/api/v2/translations/phrase', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -29,8 +26,7 @@ const TranslatePage = () => {
           performAnalysis: true,
         }),
       });
-
-      saveAnalysis(data);
+      setTranslation(data);
     } catch (err) {
       // Handled by useApi hook
     }
@@ -48,9 +44,9 @@ const TranslatePage = () => {
           </div>
         )}
 
-        {analysis && (
+        {translation && (
           <div className='mt-8 space-y-6 max-w-3xl mx-auto'>
-            <AnalysisCard analysis={analysis} />
+            <TranslationCard translation={translation} />
           </div>
         )}
       </div>

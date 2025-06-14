@@ -14,6 +14,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -58,6 +60,21 @@ public class Analysis {
 
   @UpdateTimestamp
   private ZonedDateTime updatedTimestamp;
+
+  public Analysis updateTokensWith(Token token) {
+    if (token.index() >= analysedTokens.size()) {
+      throw new IllegalArgumentException("Token not contained in analysis: " + token.index());
+    }
+
+    var sorted = new ArrayList<>(analysedTokens.stream()
+        .sorted(Comparator.comparing(Token::index))
+        .toList());
+
+    sorted.set((int) token.index(), token);
+
+    this.analysedTokens = sorted;
+    return this;
+  }
 
   public static Analysis from(String phrase, LanguageCode languageCode, List<Token> analysedTokens) {
     return Analysis.builder()

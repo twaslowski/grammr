@@ -6,9 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import TokenType from '@/token/types/tokenType';
-import useAnalysis from '@/hooks/useAnalysis';
 import { useInflections } from '@/inflection/hooks/useInflections';
 import RichFlashcardBack from '@/flashcard/components/RichFlashcardContent';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface FlashcardPreviewProps {
   token: TokenType;
@@ -16,15 +16,15 @@ interface FlashcardPreviewProps {
 }
 
 const TokenFlashcardPreview: React.FC<FlashcardPreviewProps> = ({ token, onClose }) => {
+  const { languageLearned } = useLanguage();
   const [deckId, setDeckId] = useState(-1);
   const [front, setFront] = useState(token.morphology.lemma);
   const [activeCard, setActiveCard] = useState('front');
 
-  const { analysis } = useAnalysis();
   const { inflections } = useInflections(
     token.morphology.lemma,
     token.morphology.pos,
-    analysis?.sourceLanguage ?? 'unknown', // this will always lead to unretrievable inflections
+    languageLearned,
   );
 
   const handleToggle = () => {
