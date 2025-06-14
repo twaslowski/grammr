@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/twaslowski/grammr/compare/v2.3.0...v2.3.1) (2025-06-14)
+
+
+### Bug Fixes
+
+* **ops:** production deployment workflow ([368e19f](https://github.com/twaslowski/grammr/commit/368e19fc778562a8224b5e86a7fd9383bdb50c53))
+
 ## [2.3.0](https://github.com/twaslowski/grammr/compare/v2.2.2...v2.3.0) (2025-06-14)
 
 
