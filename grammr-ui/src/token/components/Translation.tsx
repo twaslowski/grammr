@@ -44,7 +44,7 @@ const Translation: React.FC<TranslationProps> = ({ context, token, onTranslation
         .then((res) => onTranslationLoaded(res))
         .catch((err) => console.error(err));
     }
-  }, [context, token, onTranslationLoaded]);
+  }, [context, token, languageSpoken, request, onTranslationLoaded]);
 
   return (
     <div>

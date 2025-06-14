@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import TokenType from '@/token/types/tokenType';
 import Token from '@/token/components/Token';
@@ -13,6 +13,21 @@ export const AssistantMessageBubble: React.FC<{ message: Message }> = ({ message
   const [analysis, setAnalysis] = React.useState<AnalysisV2 | null>(null);
   const { show } = useTokenPopover();
   const { request, error } = useApi();
+
+  useEffect(() => {
+    const fetchAnalysis = async () => {
+      if (message.analysisId && !analysis) {
+        try {
+          const fetched = await request<AnalysisV2>(`/api/v2/analysis/${message.analysisId}`);
+          setAnalysis(fetched);
+        } catch (err) {
+          console.error(`Failed to fetch analysis for ID ${message.analysisId}`, err);
+        }
+      }
+    };
+
+    void fetchAnalysis();
+  }, [message.analysisId, request, analysis]);
 
   const onAnalysis = (analysis: AnalysisV2): void => {
     setAnalysis(analysis);

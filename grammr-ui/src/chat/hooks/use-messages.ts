@@ -80,6 +80,7 @@ const useMessages = (chatId: string): UseMessagesResult => {
       id: v4(),
       role: 'USER',
       content: message,
+      chatId: chatId,
       date: new Date().toISOString(),
     };
     setMessages((prevMessages) => [...prevMessages, tempUserMessage]);
