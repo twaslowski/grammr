@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.3.0](https://github.com/twaslowski/grammr/compare/v2.2.2...v2.3.0) (2025-06-14)
+
+
+### Features
+
+* **analysis:** enable frontend-side analysis persistence ([3cf9f25](https://github.com/twaslowski/grammr/commit/3cf9f254a3b76eb924c2cca7e5a03d65daa8badb))
+* **analysis:** enable persistence of message-&gt;analysis relation ([bf5f279](https://github.com/twaslowski/grammr/commit/bf5f2798e2f9b9e580f8f4d0dd044ed39e2f4574))
+* **analysis:** lazily retrieve analyses when loading chat ([a04fe80](https://github.com/twaslowski/grammr/commit/a04fe80ceae9f6edcfff937970ca02018f1cb514))
+* **analysis:** migrate /translate to v2 translation and analysis ([c183d67](https://github.com/twaslowski/grammr/commit/c183d67a6b3967e25db76eda69b8dd729842f43a))
+* publish OpenAPI docs to GitHub pages ([7fc28cd](https://github.com/twaslowski/grammr/commit/7fc28cded975d3e44b99c04f89edb5ec278482c4))
+* start implementing translation and analysis controllers to v2 ([1245a90](https://github.com/twaslowski/grammr/commit/1245a90922071d3176bcd601d8bc8328b399e205))
+* **translations:** create v2 word translation service ([06ffff5](https://github.com/twaslowski/grammr/commit/06ffff5ccf15155c0c940fbb6fcc193648c9d1f5))
+* **translations:** enable easy analysis of translated sentence ([c1b1c95](https://github.com/twaslowski/grammr/commit/c1b1c95e5d5b6677c0ba6321f91d120988d03e0c))
+
+
+### Bug Fixes
+
+* Github Token secret reference ([21e87d6](https://github.com/twaslowski/grammr/commit/21e87d698623aa5b6fc60d168ca13529388b85c2))
+* perform replacement in swagger-initializer.js ([1ee2405](https://github.com/twaslowski/grammr/commit/1ee24050ccf29ea7e27b56764da2f23e80b53347))
+* start postgresql so Spring can run properly ([37545d8](https://github.com/twaslowski/grammr/commit/37545d8b2cbb52bdf0029de617ff00f7578e2c29))
+* supply placeholder openai api key ([d506c24](https://github.com/twaslowski/grammr/commit/d506c24db5562a6bdf367d1702c010e53bdb1735))
+
 ## [2.2.2](https://github.com/twaslowski/grammr/compare/v2.2.1...v2.2.2) (2025-06-11)
 
 
