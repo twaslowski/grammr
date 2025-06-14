@@ -5,7 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.grammr.domain.exception.ResourceNotFoundException;
-import com.grammr.language.service.v2.AnalysisService;
+import com.grammr.language.service.v2.analysis.AnalysisService;
 import com.grammr.repository.AnalysisRepository;
 import java.util.Optional;
 import java.util.UUID;

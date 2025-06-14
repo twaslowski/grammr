@@ -38,14 +38,14 @@ public class AnalysisIntegrationTest extends IntegrationTestBase {
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.phrase").value(request.phrase()))
-        .andExpect(jsonPath("$.sourceLanguage").value(request.languageCode().toString()))
+        .andExpect(jsonPath("$.sourceLanguage").value(request.language().toString()))
         .andExpect(jsonPath("$.analysedTokens").isArray())
         .andExpect(jsonPath("$.analysedTokens[*].morphology").exists())
         .andReturn();
 
     var storedAnalysis = analysisRepository.findAll().getFirst();
     assertThat(storedAnalysis.getPhrase()).isEqualTo(request.phrase());
-    assertThat(storedAnalysis.getSourceLanguage()).isEqualTo(request.languageCode());
+    assertThat(storedAnalysis.getSourceLanguage()).isEqualTo(request.language());
     assertThat(storedAnalysis.getAnalysedTokens()).allSatisfy(token -> {
       assertThat(token.translation()).isNull();
       assertThat(token.morphology()).isNotNull();

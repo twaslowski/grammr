@@ -3,6 +3,8 @@ package com.grammr.chat.service;
 import com.grammr.domain.entity.Chat;
 import com.grammr.domain.entity.ChatMessage;
 import com.grammr.domain.entity.User;
+import com.grammr.domain.exception.ResourceNotFoundException;
+import com.grammr.repository.AnalysisRepository;
 import com.grammr.repository.ChatMessageRepository;
 import com.grammr.repository.ChatRepository;
 import java.util.List;
@@ -22,6 +24,7 @@ public class ChatPersistenceService {
 
   private final ChatRepository chatRepository;
   private final ChatMessageRepository chatMessageRepository;
+  private final AnalysisRepository analysisRepository;
 
   public Chat newChat(User user, String message) {
     var chat = Chat.builder()
@@ -31,6 +34,21 @@ public class ChatPersistenceService {
         .summary(message.substring(0, Math.min(message.length(), 100)))
         .build();
     return chatRepository.save(chat);
+  }
+
+  public void enrichMessageWithAnalysis(UUID chatId, UUID messageId, UUID analysisId) {
+    var message = chatMessageRepository.findByMessageId(messageId)
+        .orElseThrow(() -> new ResourceNotFoundException(messageId.toString()));
+
+    if (!analysisRepository.existsByAnalysisId(analysisId)) {
+      throw new ResourceNotFoundException("Analysis not found for id: " + analysisId);
+    }
+    if (!message.getChat().getChatId().equals(chatId)) {
+      throw new IllegalArgumentException("Chat id mismatch");
+    }
+
+    message.setAnalysisId(analysisId);
+    chatMessageRepository.save(message);
   }
 
   public void save(List<ChatMessage> message) {

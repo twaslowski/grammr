@@ -1,4 +1,4 @@
-package com.grammr.language.service.v2;
+package com.grammr.language.service.v2.analysis;
 
 import com.grammr.domain.entity.Analysis;
 import com.grammr.domain.enums.LanguageCode;

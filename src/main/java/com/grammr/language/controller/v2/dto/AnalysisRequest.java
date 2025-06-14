@@ -4,7 +4,7 @@ import com.grammr.domain.enums.LanguageCode;
 
 public record AnalysisRequest(
     String phrase,
-    LanguageCode languageCode
+    LanguageCode language
 ) {
 
 }

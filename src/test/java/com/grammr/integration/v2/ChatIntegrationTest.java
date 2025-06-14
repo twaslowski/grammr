@@ -6,17 +6,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.grammr.annotation.IntegrationTest;
+import com.grammr.chat.controller.v2.ChatController.AnalysisEnrichmentDto;
 import com.grammr.chat.controller.v2.dto.ChatInitializationDto;
 import com.grammr.chat.controller.v2.dto.ChatInitializedDto;
 import com.grammr.chat.service.OpenAIChatService;
 import com.grammr.chat.value.Message;
+import com.grammr.domain.entity.Analysis;
+import com.grammr.domain.entity.ChatMessage.Role;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.integration.IntegrationTestBase;
+import com.grammr.repository.AnalysisRepository;
 import com.grammr.repository.ChatMessageRepository;
 import com.grammr.repository.ChatRepository;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.List;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +40,7 @@ public class ChatIntegrationTest extends IntegrationTestBase {
 
   @Autowired
   private OpenAIChatService chatService;
+  @Autowired private AnalysisRepository analysisRepository;
 
   @BeforeEach
   void setup() {
@@ -114,8 +118,29 @@ public class ChatIntegrationTest extends IntegrationTestBase {
     assertThat(messages).hasSize(3);
   }
 
+  @Test
   @SneakyThrows
-  private String getResponsesMock() {
-    return new String(Files.readAllBytes(Paths.get(MOCK_FILE_PATH)));
+  void shouldEnrichMessageWithAnalysisId() {
+    String initialMessage = "Hallo, wie geht es Ihnen?";
+    var chat = chatService.initializeChat(LanguageCode.DE, null, initialMessage);
+    chatService.respond(null, chat.getChatId(), initialMessage);
+
+    var messages = chatMessageRepository.findByChat(chat);
+    var assistantMessage = messages.stream()
+        .filter(message -> message.getRole().equals(Role.ASSISTANT))
+        .findFirst()
+        .orElseThrow();
+
+    var analysis = analysisRepository.save(Analysis.from("Analysis text", LanguageCode.DE, List.of()));
+    var enrichmentDto = new AnalysisEnrichmentDto(analysis.getAnalysisId());
+
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v2/chat/{chatId}/messages/{messageId}", chat.getChatId(), assistantMessage.getMessageId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(enrichmentDto))
+            .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk()).andReturn();
+
+    assistantMessage = chatMessageRepository.findByMessageId(assistantMessage.getMessageId()).orElseThrow();
+    assertThat(assistantMessage.getAnalysisId()).isNotNull();
   }
 }

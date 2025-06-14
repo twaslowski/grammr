@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -76,5 +77,25 @@ public class ChatController {
   public ResponseEntity<Message> addMessage(@AuthenticationPrincipal User user, @PathVariable UUID chatId, @RequestBody String message) {
     var response = chatService.respond(user, chatId, message);
     return ResponseEntity.ok(response);
+  }
+
+  @PutMapping("/{chatId}/messages/{messageId}")
+  @Operation(summary = "Link analysis", description = """
+      Links an analysis to a message in the chat.
+      Although this endpoint modifies an object that might be owned by somebody, it is not authenticated
+      so that it can be used anonymously. Both chatId and messageId are random UUIDs, which should preserve
+      a degree of security.
+      """)
+  public ResponseEntity<Void> updateMessage(
+      @PathVariable UUID chatId,
+      @PathVariable UUID messageId, @RequestBody AnalysisEnrichmentDto dto) {
+    chatPersistenceService.enrichMessageWithAnalysis(chatId, messageId, dto.analysisId);
+    return ResponseEntity.ok().build();
+  }
+
+  public record AnalysisEnrichmentDto(
+      UUID analysisId
+  ) {
+
   }
 }

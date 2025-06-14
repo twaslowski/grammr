@@ -2,7 +2,7 @@ package com.grammr.language.controller.v2;
 
 import com.grammr.language.controller.v2.dto.AnalysisRequest;
 import com.grammr.language.controller.v2.dto.PhraseAnalysis;
-import com.grammr.language.service.v2.AnalysisService;
+import com.grammr.language.service.v2.analysis.AnalysisService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -35,7 +35,7 @@ public class AnalysisController {
     log.info("Processing analysis request: {}", analysisRequest);
     var phraseAnalysis = analysisService.performAnalysis(
         analysisRequest.phrase(),
-        analysisRequest.languageCode()
+        analysisRequest.language()
     );
     return ResponseEntity.ok(phraseAnalysis);
   }

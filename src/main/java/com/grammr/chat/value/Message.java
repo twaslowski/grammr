@@ -11,15 +11,16 @@ public record Message(
     UUID id,
     String content,
     Role role,
-    String chatId
+    String chatId,
+    UUID analysisId
 ) {
 
   public static Message systemPrompt(String content) {
-    return new Message(UUID.randomUUID(), content, Role.SYSTEM, null);
+    return new Message(UUID.randomUUID(), content, Role.SYSTEM, null, null);
   }
 
   public static Message userMessage(String content) {
-    return new Message(UUID.randomUUID(), content, Role.USER, null);
+    return new Message(UUID.randomUUID(), content, Role.USER, null, null);
   }
 
   public EasyInputMessage toEasyInputMessage() {
@@ -29,19 +30,13 @@ public record Message(
         .build();
   }
 
-  public static Message fromAssistant(String response) {
-    return Message.builder()
-        .content(response)
-        .role(Role.ASSISTANT)
-        .build();
-  }
-
   public static Message fromChatMessage(ChatMessage chatMessage) {
     return Message.builder()
         .id(chatMessage.getMessageId())
         .content(chatMessage.getContent())
         .role(chatMessage.getRole())
         .chatId(chatMessage.getChat().getChatId().toString())
+        .analysisId(chatMessage.getAnalysisId())
         .build();
   }
 

@@ -4,7 +4,7 @@ import com.grammr.domain.value.language.v2.Translation;
 import com.grammr.domain.value.language.v2.WordTranslation;
 import com.grammr.language.controller.v2.dto.PhraseTranslationRequest;
 import com.grammr.language.controller.v2.dto.WordTranslationRequest;
-import com.grammr.language.service.v2.AnalysisService;
+import com.grammr.language.service.v2.analysis.AnalysisService;
 import com.grammr.language.service.v2.translation.phrase.PhraseTranslationService;
 import com.grammr.language.service.v2.translation.word.WordTranslationService;
 import io.swagger.v3.oas.annotations.Operation;

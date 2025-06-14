@@ -8,12 +8,11 @@ export function useTranslation(context: string, word: string, targetLanguage: st
 
   useEffect(() => {
     const fetchTranslation = async () => {
-      if (skip) return;
       try {
         const data = await request<TokenTranslation>('/api/v2/translations/word', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({context, word, targetLanguage}),
+          body: JSON.stringify({context: context, source: word, targetLanguage: targetLanguage}),
         })
         setData(data)
       } catch (err) {

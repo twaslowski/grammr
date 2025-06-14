@@ -54,6 +54,8 @@ public class ChatMessage {
 
   private Long tokenUsage;
 
+  private UUID analysisId;
+
   @CreationTimestamp
   @Column(updatable = false)
   private ZonedDateTime createdTimestamp;
