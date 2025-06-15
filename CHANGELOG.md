@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/twaslowski/grammr/compare/v2.3.1...v3.0.0) (2025-06-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **analysis:** update analyses lazily fetched translations
+
+### Features
+
+* **analysis:** update analyses lazily fetched translations ([d8256c5](https://github.com/twaslowski/grammr/commit/d8256c50217aa7aa106ee823e0e7750950a734eb))
+
 ## [2.3.1](https://github.com/twaslowski/grammr/compare/v2.3.0...v2.3.1) (2025-06-14)
 
 
