@@ -60,7 +60,11 @@ export const AssistantMessageBubble: React.FC<{ message: Message }> = ({ message
             <p className='whitespace-pre-wrap break-words p-2'>{message.content}</p>
           </div>
         )}
-        {analysis && <Analysis analysis={analysis} onAnalysisUpdate={setAnalysis} />}
+        {analysis && (
+          <div className='pb-1'>
+            <Analysis analysis={analysis} onAnalysisUpdate={setAnalysis} />
+          </div>
+        )}
         <div className='border-t border-gray-300 w-full flex justify-end pt-2 pr-2 gap-2'>
           <TextToSpeech className='text-gray-600 hover:text-gray-800' text={message.content} />
           <AnalysisButton
