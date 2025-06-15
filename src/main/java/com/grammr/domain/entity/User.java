@@ -29,8 +29,12 @@ public class User {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  @NotNull
   private String externalId;
+
+  @NotNull
+  private boolean isAnonymous;
+
+  private UUID sessionId;
 
   @JsonIgnore
   @CreationTimestamp
@@ -44,6 +48,13 @@ public class User {
   public static User fromExternalId(String externalId) {
     return User.builder()
         .externalId(externalId)
+        .build();
+  }
+
+  public static User anonymous(String sessionId) {
+    return User.builder()
+        .isAnonymous(true)
+        .sessionId(UUID.fromString(sessionId))
         .build();
   }
 }

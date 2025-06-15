@@ -1,0 +1,8 @@
+ALTER TABLE "user"
+  ADD COLUMN "is_anonymous" BOOLEAN NOT NULL DEFAULT FALSE;
+
+ALTER TABLE "user"
+  ADD COLUMN "session_id" UUID NULL;
+
+ALTER TABLE "user"
+  ALTER COLUMN "external_id" DROP NOT NULL;

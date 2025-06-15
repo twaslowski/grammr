@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, UUID> {
 
   Optional<User> findByExternalId(String externalId);
+
+  Optional<User> findBySessionId(UUID sessionId);
 }

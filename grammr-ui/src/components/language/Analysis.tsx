@@ -13,7 +13,7 @@ export const Analysis: React.FC<Props> = ({ analysis, onAnalysisUpdate }) => {
   const { show } = useTokenPopover();
 
   return (
-    <div className='flex flex-wrap gap-1'>
+    <div className='flex flex-wrap'>
       {analysis.analysedTokens.map((token: TokenType) => (
         <Token
           size='sm'

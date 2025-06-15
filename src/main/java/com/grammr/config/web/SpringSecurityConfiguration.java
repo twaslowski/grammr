@@ -28,7 +28,8 @@ public class SpringSecurityConfiguration {
 
   @Bean
   public SecurityFilterChain configureWebSecurity(HttpSecurity httpSecurity,
-                                                  ClerkJwtValidationFilter clerkJwtValidationFilter
+                                                  ClerkJwtValidationFilter clerkJwtValidationFilter,
+                                                  AnonymousSessionFilter anonymousSessionFilter
   ) throws Exception {
     return httpSecurity
         .cors(Customizer.withDefaults())
@@ -36,6 +37,7 @@ public class SpringSecurityConfiguration {
         .httpBasic(Customizer.withDefaults())
         .authorizeHttpRequests(this::configureRestAuthorizations)
         .addFilterBefore(clerkJwtValidationFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterAfter(anonymousSessionFilter, ClerkJwtValidationFilter.class)
         .sessionManagement(session -> session.sessionCreationPolicy(NEVER))
         .build();
   }
@@ -45,16 +47,15 @@ public class SpringSecurityConfiguration {
         .requestMatchers("/actuator/*").permitAll()
         .requestMatchers("/swagger-ui/**").permitAll()
         .requestMatchers("/v3/api-docs/**").permitAll()
-        .requestMatchers("/api/v1/chat").permitAll()
         .requestMatchers("/api/v2/chat").permitAll()
-        .requestMatchers("/api/v2/chat/**").permitAll()
+        .requestMatchers("/api/v2/chat/**").hasAnyRole("USER", "ANONYMOUS")
         .requestMatchers("/api/v2/translations/**").permitAll()
         .requestMatchers("/api/v2/analysis").permitAll()
         .requestMatchers("/api/v2/analysis/*").permitAll()
-        .requestMatchers("/api/v1/deck").authenticated()
-        .requestMatchers("/api/v1/deck/**").authenticated()
-        .requestMatchers("/api/v1/flashcard").authenticated()
-        .requestMatchers("/api/v1/flashcard/**").authenticated()
+        .requestMatchers("/api/v1/deck").hasRole("USER")
+        .requestMatchers("/api/v1/deck/**").hasRole("USER")
+        .requestMatchers("/api/v1/flashcard").hasRole("USER")
+        .requestMatchers("/api/v1/flashcard/**").hasRole("USER")
         .requestMatchers("/api/v1/**").permitAll()
         .anyRequest().authenticated();
   }

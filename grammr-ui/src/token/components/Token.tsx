@@ -31,8 +31,8 @@ const Token: React.FC<TokenProps> = ({
   const { index, text, translation, morphology } = token;
   const { request } = useApi();
 
-  if (!morphology || Object.keys(morphology).length === 0) {
-    return <span>{text}</span>;
+  function needsSpacing(token: TokenType): boolean {
+    return !['.', ',', '!', '?', ';', ':'].includes(token.text);
   }
 
   const onTranslation = async (translation: TokenTranslation): Promise<void> => {
@@ -48,6 +48,10 @@ const Token: React.FC<TokenProps> = ({
     });
     onAnalysisUpdate(result);
   };
+
+  if (!morphology || Object.keys(morphology).length === 0) {
+    return <span>{text}</span>;
+  }
 
   return (
     <Popover>

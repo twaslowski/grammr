@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -41,7 +42,9 @@ public class ClerkJwtValidationFilter extends OncePerRequestFilter {
   private final UserRepository userRepository;
 
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+  protected void doFilterInternal(@NotNull HttpServletRequest request,
+                                  @NotNull HttpServletResponse response,
+                                  @NotNull FilterChain filterChain) throws ServletException, IOException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (authentication != null && authentication.isAuthenticated()) {
@@ -57,7 +60,11 @@ public class ClerkJwtValidationFilter extends OncePerRequestFilter {
 
     requestState.claims().ifPresent(claims -> {
       var user = getOrCreate(claims.getSubject());
-      Authentication auth = new UsernamePasswordAuthenticationToken(user, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
+      Authentication auth = new UsernamePasswordAuthenticationToken(
+          user,
+          null,
+          List.of(new SimpleGrantedAuthority("ROLE_USER"))
+      );
       SecurityContextHolder.getContext().setAuthentication(auth);
     });
     filterChain.doFilter(request, response);
