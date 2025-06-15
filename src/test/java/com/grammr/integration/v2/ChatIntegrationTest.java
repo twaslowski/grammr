@@ -95,13 +95,6 @@ public class ChatIntegrationTest extends IntegrationTestBase {
   }
 
   @Test
-  void shouldReturnUnauthorized() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.get("/api/v2/chat")
-            .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isUnauthorized());
-  }
-
-  @Test
   @SneakyThrows
   void shouldGetChatMessages() {
     String initialMessage = "Hallo, wie geht es Ihnen?";

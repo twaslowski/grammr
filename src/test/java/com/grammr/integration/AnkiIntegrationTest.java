@@ -12,23 +12,17 @@ import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
 import com.grammr.domain.entity.Paradigm;
-import com.grammr.domain.entity.User;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.ExportDataType;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.flashcards.controller.dto.DeckCreationDto;
-import com.grammr.flashcards.controller.dto.FlashcardCreationDto;
 import com.grammr.flashcards.controller.dto.DeckExportDto;
+import com.grammr.flashcards.controller.dto.FlashcardCreationDto;
 import java.util.List;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @IntegrationTest
@@ -37,7 +31,8 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @Test
   @SneakyThrows
   void shouldCreateDeck() {
-    var auth = createUserAuthentication();
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var auth = createUserAuthentication(user);
     var creationDto = new DeckCreationDto("Test Deck", null);
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/deck")
             .with(authentication(auth))

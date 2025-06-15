@@ -1,17 +1,17 @@
 package com.grammr.config.web;
 
+import static com.grammr.config.web.SessionCookieUtils.addSessionCookie;
+import static com.grammr.config.web.SessionCookieUtils.findSessionId;
+
 import com.grammr.domain.entity.User;
 import com.grammr.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,8 +46,7 @@ public class AnonymousSessionFilter extends OncePerRequestFilter {
       return;
     }
 
-    // Step 1: Try to find session ID from cookie
-    String sessionId = findSessionIdFromCookie(request).orElse(null);
+    String sessionId = findSessionId(request).orElse(null);
 
     User anonymousUser;
     if (sessionId != null) {
@@ -71,23 +70,6 @@ public class AnonymousSessionFilter extends OncePerRequestFilter {
     SecurityContextHolder.getContext().setAuthentication(auth);
 
     filterChain.doFilter(request, response);
-  }
-
-  private Optional<String> findSessionIdFromCookie(HttpServletRequest request) {
-    return Optional.ofNullable(request.getCookies())
-        .flatMap(cookies -> Arrays.stream(cookies)
-            .filter(c -> ANON_COOKIE_NAME.equals(c.getName()))
-            .map(Cookie::getValue)
-            .findFirst());
-  }
-
-  private void addSessionCookie(HttpServletResponse response, String sessionId) {
-    Cookie cookie = new Cookie(ANON_COOKIE_NAME, sessionId);
-    cookie.setHttpOnly(true);
-    cookie.setSecure(true);
-    cookie.setPath("/");
-    cookie.setMaxAge((int) ANON_COOKIE_EXPIRY.getSeconds());
-    response.addCookie(cookie);
   }
 }
 

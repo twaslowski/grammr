@@ -3,7 +3,6 @@ package com.grammr.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.entity.User;
-import com.grammr.domain.entity.UserSpec;
 import com.grammr.repository.DeckRepository;
 import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.ParadigmRepository;
@@ -17,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
 
 @IntegrationTest
@@ -51,12 +51,9 @@ public class IntegrationTestBase {
     paradigmRepository.deleteAll();
   }
 
-  protected Authentication createUserAuthentication() {
-    var user = userRepository.save(UserSpec.validWithoutId().build());
-    return new UsernamePasswordAuthenticationToken(user, null, List.of());
-  }
-
   protected Authentication createUserAuthentication(User user) {
-    return new UsernamePasswordAuthenticationToken(user, null, List.of());
+    return new UsernamePasswordAuthenticationToken(user, null, List.of(
+        new SimpleGrantedAuthority("ROLE_USER")
+    ));
   }
 }
