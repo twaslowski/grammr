@@ -4,6 +4,34 @@ module "morphology_repository" {
   repository_name                 = "morphology"
   repository_image_tag_mutability = "MUTABLE"
 
+  create_repository_policy = true
+  registry_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid       = "AllowAccountPullAccess"
+        Effect    = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::246770851643:root"
+        }
+        Action = [
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:BatchGetImage",
+          "ecr:DescribeImageScanFindings",
+          "ecr:DescribeImages",
+          "ecr:DescribeRepositories",
+          "ecr:GetAuthorizationToken",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:GetLifecyclePolicy",
+          "ecr:GetLifecyclePolicyPreview",
+          "ecr:GetRepositoryPolicy",
+          "ecr:ListImages",
+          "ecr:ListTagsForResource"
+        ]
+      }
+    ]
+  })
+
   repository_lifecycle_policy = local.repository_lifecycle_policy
 }
 
