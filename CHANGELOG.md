@@ -5,7 +5,8 @@
 
 ### ⚠ BREAKING CHANGES
 
-* **analysis:** update analyses lazily fetched translations
+- Removes all previously deprecated `/v1/translate` and `/v1/analysis` endpoints and related services.
+- Removes all usages of the now deprecated `theokanning/openai-java` library.
 
 ### Features
 
