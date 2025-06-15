@@ -12,12 +12,22 @@ livenessProbe:
   httpGet:
     path: /actuator/health
     port: 8080
-  initialDelaySeconds: 90
+  initialDelaySeconds: 180
+  timeoutSeconds: 5
+
 readinessProbe:
   httpGet:
     path: /actuator/health
     port: 8080
-  initialDelaySeconds: 90
+  initialDelaySeconds: 180
+  timeoutSeconds: 5
+
+startupProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8080
+  initialDelaySeconds: 180
+  timeoutSeconds: 5
 
 languages:
   - code: ru

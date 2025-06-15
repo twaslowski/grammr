@@ -78,4 +78,12 @@ public class ChatPersistenceService {
         .stream()
         .toList();
   }
+
+  public void transferChatOwnership(User oldOwner, User newOwner) {
+    chatRepository.findChatsByOwner(oldOwner)
+        .forEach(chat -> {
+          chat.setOwner(newOwner);
+          chatRepository.save(chat);
+        });
+  }
 }

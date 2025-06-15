@@ -1,5 +1,7 @@
 package com.grammr.config.web;
 
+import static com.grammr.config.web.AnonymousSessionFilter.ANON_COOKIE_NAME;
+
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,7 +12,6 @@ import java.util.UUID;
 
 public class SessionCookieUtils {
 
-  public static final String ANON_COOKIE_NAME = "anon_session_id";
   public static final Duration COOKIE_DURATION = Duration.ofDays(90);
 
   public static String generateSessionId() {
@@ -33,6 +34,15 @@ public class SessionCookieUtils {
     cookie.setSecure(true);
     cookie.setPath("/");
     cookie.setMaxAge((int) COOKIE_DURATION.getSeconds());
+    response.addCookie(cookie);
+  }
+
+  public static void clearSessionCookie(HttpServletResponse response) {
+    Cookie cookie = new Cookie(ANON_COOKIE_NAME, "");
+    cookie.setMaxAge(0);
+    cookie.setHttpOnly(true);
+    cookie.setSecure(true);
+    cookie.setPath("/");
     response.addCookie(cookie);
   }
 }

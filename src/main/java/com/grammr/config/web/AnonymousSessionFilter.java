@@ -10,7 +10,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +27,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class AnonymousSessionFilter extends OncePerRequestFilter {
 
-  private static final String ANON_COOKIE_NAME = "anon_session_id";
-  private static final Duration ANON_COOKIE_EXPIRY = Duration.ofDays(90);
+  public static final String ANON_COOKIE_NAME = "anon_session_id";
 
   private final UserRepository userRepository;
 

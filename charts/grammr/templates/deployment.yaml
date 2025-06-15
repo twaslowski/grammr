@@ -44,27 +44,9 @@ spec:
                   name: postgres
                   key: password
             - name: OPENAI_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Release.Name }}-auth
-                  key: openai_api_key
+              value: {{ .Values.openai_api_key }}
             - name: ALLOWED_ORIGIN
               value: {{ .Values.allowedOrigin }}
-            - name: PEPPER_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Release.Name }}-auth
-                  key: pepper
-            - name: ENCRYPTION_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Release.Name }}-encryption
-                  key: encryption_key
-            - name: ENCRYPTION_SALT
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Release.Name }}-encryption
-                  key: salt
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.environment }}
           livenessProbe:

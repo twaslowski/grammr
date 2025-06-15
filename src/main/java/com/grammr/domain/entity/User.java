@@ -36,6 +36,9 @@ public class User {
 
   private UUID sessionId;
 
+  @NotNull
+  private boolean deleted;
+
   @JsonIgnore
   @CreationTimestamp
   @Column(updatable = false)
@@ -47,6 +50,7 @@ public class User {
 
   public static User fromExternalId(String externalId) {
     return User.builder()
+        .deleted(false)
         .externalId(externalId)
         .build();
   }
@@ -54,6 +58,7 @@ public class User {
   public static User anonymous(String sessionId) {
     return User.builder()
         .isAnonymous(true)
+        .deleted(false)
         .sessionId(UUID.fromString(sessionId))
         .build();
   }

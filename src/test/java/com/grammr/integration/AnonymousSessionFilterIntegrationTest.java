@@ -1,5 +1,6 @@
 package com.grammr.integration;
 
+import static com.grammr.config.web.AnonymousSessionFilter.ANON_COOKIE_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -22,8 +23,6 @@ import org.springframework.test.web.servlet.MvcResult;
 @IntegrationTest
 class AnonymousSessionFilterIntegrationTest extends IntegrationTestBase {
 
-  private static final String COOKIE_NAME = "anon_session_id";
-
   @Autowired
   private ChatPersistenceService chatPersistenceService;
 
@@ -38,9 +37,9 @@ class AnonymousSessionFilterIntegrationTest extends IntegrationTestBase {
         .andReturn();
 
     // Check cookie in response
-    Cookie setCookie = result.getResponse().getCookie(COOKIE_NAME);
+    Cookie setCookie = result.getResponse().getCookie(ANON_COOKIE_NAME);
     assertThat(setCookie).isNotNull();
-    assertThat(COOKIE_NAME).isEqualTo(setCookie.getName());
+    assertThat(ANON_COOKIE_NAME).isEqualTo(setCookie.getName());
     assertThat(setCookie.getValue()).isNotEmpty();
 
     // Confirm user was persisted
@@ -55,7 +54,7 @@ class AnonymousSessionFilterIntegrationTest extends IntegrationTestBase {
     var chat = chatPersistenceService.newChat(user, "hello world");
 
     mockMvc.perform(get("/api/v2/chat")
-            .cookie(new Cookie(COOKIE_NAME, sessionId)))
+            .cookie(new Cookie(ANON_COOKIE_NAME, sessionId)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[0].chatId").isNotEmpty())
         .andExpect(jsonPath("$[0].chatId").value(chat.getChatId().toString()));

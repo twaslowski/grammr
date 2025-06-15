@@ -1,5 +1,6 @@
 package com.grammr.integration.v2;
 
+import static com.grammr.config.web.AnonymousSessionFilter.ANON_COOKIE_NAME;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -19,6 +20,7 @@ import com.grammr.integration.IntegrationTestBase;
 import com.grammr.repository.AnalysisRepository;
 import com.grammr.repository.ChatMessageRepository;
 import com.grammr.repository.ChatRepository;
+import jakarta.servlet.http.Cookie;
 import java.util.List;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -109,6 +111,43 @@ public class ChatIntegrationTest extends IntegrationTestBase {
 
     var messages = objectMapper.readValue(response.getContentAsString(), Message[].class);
     assertThat(messages).hasSize(3);
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldTransferChatOwnership() {
+    String initialMessage = "Hallo, wie geht es Ihnen?";
+    var chatInitializationDto = ChatInitializationDto.builder()
+        .message(initialMessage)
+        .languageCode(LanguageCode.DE)
+        .build();
+
+    // Given a chat is initialized with no authentication
+    var result = mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/chat")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(chatInitializationDto)))
+        .andExpect(status().isOk()).andReturn();
+
+    // Retrieve the owner ID
+    var chatInitializedDto = objectMapper.readValue(result.getResponse().getContentAsString(), ChatInitializedDto.class);
+    var chatId = chatInitializedDto.chat().chatId();
+    var chat = chatRepository.findByChatId(chatId).orElseThrow();
+
+    assertThat(chat.getOwner()).isNotNull();
+    assertThat(chat.getOwner().isAnonymous()).isTrue();
+    var sessionId = chat.getOwner().getSessionId();
+
+    // When the user creates an account
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var auth = createUserAuthentication(user);
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v2/chat", chatId)
+            .with(authentication(auth))
+            .cookie(new Cookie(ANON_COOKIE_NAME, sessionId.toString()))
+            .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+
+    assertThat(chatRepository.findByChatId(chatId).orElseThrow().getOwner().getId()).isEqualTo(user.getId());
   }
 
   @Test
