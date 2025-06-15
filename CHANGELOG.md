@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.1.0](https://github.com/twaslowski/grammr/compare/v3.0.0...v3.1.0) (2025-06-15)
+
+
+### Features
+
+* **auth:** enable anonymous user sessions ([a698fef](https://github.com/twaslowski/grammr/commit/a698fef3976491c9b597ec03cf027277c7dcaec9))
+
+
+### Bug Fixes
+
+* **auth:** fix existing mockMvc tests ([87f1c80](https://github.com/twaslowski/grammr/commit/87f1c800c2e0f2ac22dd988cc57bf73515254832))
+
 ## [3.0.0](https://github.com/twaslowski/grammr/compare/v2.3.1...v3.0.0) (2025-06-14)
 
 
