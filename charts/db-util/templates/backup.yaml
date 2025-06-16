@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-backup
+  namespace: {{ .Release.Namespace }}
+
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - env:
+                - name: AWS_ACCESS_KEY_ID
+                  value: {{ .Values.aws.accessKeyId }}
+                - name: AWS_REGION
+                  value: {{ .Values.aws.region }}
+                - name: AWS_SECRET_ACCESS_KEY
+                  value: {{ .Values.aws.secretAccessKey }}
+                - name: AWS_S3_ENDPOINT
+                  value: <AWS_S3_ENDPOINT>
+                - name: POSTGRES_DB
+                  value: {{ .Values.postgres.database }}
+                - name: POSTGRES_HOST
+                  value: postgres.{{ .Release.Namespace }}.svc.cluster.local
+                - name: POSTGRES_PORT
+                  value: {{ .Values.postgres.port | quote }}
+                - name: POSTGRES_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres
+                      key: postgres-password
+                - name: POSTGRES_USER
+                  value: {{ .Values.postgres.user }}
+                - name: POSTGRES_VERSION
+                  value: {{ .Values.postgres.version }}
+              image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+              name: postgres-backup
+  schedule: "0 7 * * *" # this runs on 07:00 every day. see https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-syntax

@@ -10,8 +10,9 @@ service:
 
 primary:
   resourcesPreset: nano
+  nodeSelector:
+    "kubernetes.io/hostname": rpi-master
 
 persistence:
   primary:
     size: 2Gi
-
