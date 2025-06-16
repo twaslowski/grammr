@@ -9,8 +9,8 @@ module "morphology_repository" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid       = "AllowAccountPullAccess"
-        Effect    = "Allow"
+        Sid    = "AllowAccountPullAccess"
+        Effect = "Allow"
         Principal = {
           AWS = "arn:aws:iam::246770851643:root"
         }

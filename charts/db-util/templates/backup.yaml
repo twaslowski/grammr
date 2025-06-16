@@ -10,6 +10,8 @@ spec:
     spec:
       template:
         spec:
+          nodeSelector:
+            k3s.io/hostname: rpi-master
           containers:
             - name: postgres-backup
               image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
@@ -36,5 +38,5 @@ spec:
                 - name: POSTGRES_USER
                   value: {{ .Values.postgres.user }}
                 - name: POSTGRES_VERSION
-                  value: {{ .Values.postgres.version }}
+                  value: {{ .Values.postgres.version | quote }}
           restartPolicy: OnFailure
