@@ -1,4 +1,4 @@
-name: Deploy serverless functions
+name: Deploy terraform
 
 on:
   push:
@@ -38,7 +38,7 @@ jobs:
         run: |
           echo "version=$(cd ./sidecars/morphology && poetry version -s)" >> $GITHUB_OUTPUT
 
-  create-ecr:
+  create-shared-resources:
     needs: [ prepare ]
     runs-on: ubuntu-latest
     steps:
@@ -58,12 +58,14 @@ jobs:
 
       - name: Deploy Terraform
         working-directory: terraform/shared
+        env:
+          TF_VAR_tailscale_auth_key: ${{ secrets.TAILSCALE_AUTH_KEY }}
         run: |
           terraform init -backend-config=config/shared.hcl
           terraform apply -auto-approve
 
   build:
-    needs: [ create-ecr, prepare ]
+    needs: [ create-shared-resources, prepare ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
