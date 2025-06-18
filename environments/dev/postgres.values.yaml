@@ -10,8 +10,6 @@ service:
 
 primary:
   resourcesPreset: nano
-  nodeSelector:
-    "kubernetes.io/hostname": rpi-master
 
 persistence:
   primary:

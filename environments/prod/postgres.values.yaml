@@ -19,8 +19,6 @@ primary:
       cpu: 750m
       memory: 768Mi
       ephemeral-storage: 2Gi
-  nodeSelector:
-    "kubernetes.io/hostname": rpi-master
 
 persistence:
   primary:

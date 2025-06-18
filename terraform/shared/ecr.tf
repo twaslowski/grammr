@@ -5,6 +5,41 @@ module "morphology_repository" {
   repository_image_tag_mutability = "MUTABLE"
 
   create_repository_policy = true
+  registry_policy = local.registry_policy
+
+  repository_lifecycle_policy = local.repository_lifecycle_policy
+}
+
+module "multi_inflection_repository" {
+  source = "terraform-aws-modules/ecr/aws"
+
+  repository_name                 = "multi-inflection"
+  repository_image_tag_mutability = "MUTABLE"
+
+  create_repository_policy = true
+  registry_policy = local.registry_policy
+
+  repository_lifecycle_policy = local.repository_lifecycle_policy
+}
+
+locals {
+  repository_lifecycle_policy = jsonencode({
+    rules = [
+      {
+        rulePriority = 1,
+        description  = "Keep 3 images",
+        selection = {
+          tagStatus   = "any",
+          countType   = "imageCountMoreThan",
+          countNumber = 14
+        },
+        action = {
+          type = "expire"
+        }
+      }
+    ]
+  })
+
   registry_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -28,27 +63,6 @@ module "morphology_repository" {
           "ecr:ListImages",
           "ecr:ListTagsForResource"
         ]
-      }
-    ]
-  })
-
-  repository_lifecycle_policy = local.repository_lifecycle_policy
-}
-
-locals {
-  repository_lifecycle_policy = jsonencode({
-    rules = [
-      {
-        rulePriority = 1,
-        description  = "Keep 3 images",
-        selection = {
-          tagStatus   = "any",
-          countType   = "imageCountMoreThan",
-          countNumber = 14
-        },
-        action = {
-          type = "expire"
-        }
       }
     ]
   })

@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+    paths:
+      - src/**
+      - pom.xml
+      - .github/workflows/deploy_core.yml
+      - .github/workflows/swagger_docs.yaml
 
 jobs:
   build-and-deploy:
