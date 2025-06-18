@@ -2,7 +2,7 @@ name: Run Core tests
 on:
   pull_request:
     branches-ignore:
-      - 'release-please-**'
+      - 'release-please--*'
 
 jobs:
   unit_tests:
