@@ -15,19 +15,3 @@ module "morphology_lambda" {
   api_gateway_id   = aws_api_gateway_rest_api.grammr_api.id
   root_resource_id = aws_api_gateway_rest_api.grammr_api.root_resource_id
 }
-
-# module "multi_inflection" {
-#   source = "./modules/lambda"
-#
-#   for_each = local.multi_inflection_languages
-#
-#   environment = var.environment
-#   name        = "multi-inflection-${each.key}"
-#   image_uri   = "246770851643.dkr.ecr.eu-central-1.amazonaws.com/multi-inflection:${var.multi_inflection_image_version}-${each.key}"
-#
-#   memory  = 3008
-#   timeout = 90
-#
-#   api_gateway_id   = aws_api_gateway_rest_api.grammr_api.id
-#   root_resource_id = aws_api_gateway_rest_api.grammr_api.root_resource_id
-# }

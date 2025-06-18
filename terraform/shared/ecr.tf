@@ -10,18 +10,6 @@ module "morphology_repository" {
   repository_lifecycle_policy = local.repository_lifecycle_policy
 }
 
-module "multi_inflection_repository" {
-  source = "terraform-aws-modules/ecr/aws"
-
-  repository_name                 = "multi-inflection"
-  repository_image_tag_mutability = "MUTABLE"
-
-  create_repository_policy = true
-  registry_policy = local.registry_policy
-
-  repository_lifecycle_policy = local.repository_lifecycle_policy
-}
-
 locals {
   repository_lifecycle_policy = jsonencode({
     rules = [
