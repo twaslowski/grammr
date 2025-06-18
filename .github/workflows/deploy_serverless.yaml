@@ -9,7 +9,7 @@ on:
       - 'sidecars/morphology/**'
       - 'sidecars/multi-inflection/**'
       - 'terraform/**'
-      - '.github/workflows/deploy_morphology_serverless.yaml'
+      - '.github/workflows/deploy_serverless.yaml'
   workflow_dispatch:
 
 permissions:
