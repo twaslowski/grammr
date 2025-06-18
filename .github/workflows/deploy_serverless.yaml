@@ -21,7 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
-      version: ${{ steps.version.outputs.version }}
+      morphology-version: ${{ steps.version.outputs.morphology-version }}
+      multi-inflection-version: ${{ steps.version.outputs.multi-inflection-version }}
 
     steps:
       - name: Checkout code
