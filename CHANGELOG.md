@@ -1,5 +1,28 @@
 # Changelog
 
+## [3.1.0](https://github.com/twaslowski/grammr/compare/v3.0.0...v3.1.0) (2025-06-18)
+
+
+### Features
+
+* **auth:** enable anonymous user sessions ([a698fef](https://github.com/twaslowski/grammr/commit/a698fef3976491c9b597ec03cf027277c7dcaec9))
+* **auth:** enable migration of anonymous users ([7cdd004](https://github.com/twaslowski/grammr/commit/7cdd0044aa09f1c13e503c09cc9ef6a1f778607c))
+* **ops:** begin implementation of lambda handler for serverless multi-inflection image ([3be02d7](https://github.com/twaslowski/grammr/commit/3be02d7b1558496d3e83a5fbd3afea2da471c544))
+* **ops:** create helm chart to allow performing backups ([2588cd7](https://github.com/twaslowski/grammr/commit/2588cd784cf5baa1aec2c2a1bc53a54b3fd3b377))
+* **ops:** create s3 buckets for database backups ([6c32e30](https://github.com/twaslowski/grammr/commit/6c32e3008e25c8014963e554dff98ac170e8e9bb))
+* **ops:** provide serverless implementations of multi-inflection images due to memory constraints ([590a71c](https://github.com/twaslowski/grammr/commit/590a71c7e3997da11b6eb9c9f6992bd2510b584c))
+
+
+### Bug Fixes
+
+* **auth:** fix existing mockMvc tests ([87f1c80](https://github.com/twaslowski/grammr/commit/87f1c800c2e0f2ac22dd988cc57bf73515254832))
+* **ops:** add missing tailscale auth secret ([214d3ab](https://github.com/twaslowski/grammr/commit/214d3ab10b7b3b27c688fcefcf475a968cd2f449))
+* **ops:** db backup chart ([31e4341](https://github.com/twaslowski/grammr/commit/31e434148c340ac4451817f20b75d7dde3060c19))
+* **ops:** db backup chart (2) ([ec7b394](https://github.com/twaslowski/grammr/commit/ec7b394add45238adc5c38884b66e7ea9b79c5b9))
+* **ops:** serverless workflow dependency structure ([66fed7c](https://github.com/twaslowski/grammr/commit/66fed7c2a16407e515253d280c9eb17cef79d55b))
+* **ops:** serverless workflow triggers ([2091497](https://github.com/twaslowski/grammr/commit/20914974baa1baf102fa40af47b11afa71cda051))
+* **ops:** serverless workflow version outputs ([2a86a3c](https://github.com/twaslowski/grammr/commit/2a86a3c1b4ea5a6cf1384bbe2ff8d4844889eb40))
+
 ## [3.0.0](https://github.com/twaslowski/grammr/compare/v2.3.1...v3.0.0) (2025-06-14)
 
 
