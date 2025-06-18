@@ -184,7 +184,7 @@ jobs:
 
 
   deploy-dev:
-    needs: [ prepare, build ]
+    needs: [ prepare, build-morphology, build-multi-inflection ]
     runs-on: ubuntu-latest
     env:
       TF_VAR_environment: "dev"
