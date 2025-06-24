@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: languages-config
-data:
-  languages.yml: |
-    languages:
-      {{ toYaml .Values.languages | nindent 6 }}

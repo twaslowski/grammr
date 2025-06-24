@@ -92,6 +92,7 @@ so creating inflections should be possible.
 ## Running
 
 ### Running locally 
+
 I tried to make running the project yourself as straightforward as possible. What you'll need:
 
 - An OpenAI API key. You can get one by signing up [here](https://platform.openai.com/signup).
@@ -114,17 +115,21 @@ that you can use. This will require a running Kubernetes cluster (you could try 
 [Minikube](https://minikube.sigs.k8s.io/docs/) or [k3s](https://k3s.io/)) and
 [Helm](https://helm.sh/) to be installed.
 
+The Helm charts exist over at [grammr-charts](https://github.com/twaslowski/grammr-charts/).
+
 Installation:
 
 ```shell
-# postgres
+helm repo add grammr https://twaslowski.github.io/grammr-charts
+
+# create the database first
 helm install --namespace grammr --create-namespace \
   postgres oci://registry-1.docker.io/bitnamicharts/postgresql
   
 # core
 helm install --namespace grammr \
     --set openai_api_key="$OPENAI_API_KEY" \
-    grammr-core ./charts/grammr
+    grammr-core grammr/grammr-core
 ```
 
 For running the Sidecars, refer to the `charts/` directory and the `environments/` directory
@@ -138,14 +143,34 @@ You can run unit tests with `./lifecycle/unit-test.sh` and integration tests wit
 Alternatively, run both with `./lifecycle/qa.sh`. This will also ensure the most accurate test coverage
 report is generated, which you can access at `target/site/jacoco/index.html`.
 
-## Terms
+## Glossary
 
-Different projects use different terms to describe similar concepts. For instance, while
-[pymorphy2](https://github.com/pymorphy2/pymorphy2) refers to the root form of a word as the `lexeme`,
-[spaCy](https://spacy.io/) refers to it as the `lemma`. I've tried to standardize the terms used in
-a unified domain language that is to be used across the application and in the APIs it exposes.
+One thing that I attempted to do with this project is develop a clear domain language
+based on [Universal Dependencies](https://universaldependencies.org/).
 
-The design is a work in progress, but I do think it offers some genuine value.
+Unfortunately, this has turned out to be difficult, and currently terms are somewhat inconsistent
+here and there. Note, also, that I am not a linguist and have no relevant training. 
+
+### Lemmas, Lexemes and Paradigms
+
+- **Inflections** are a key component of this project. Inflections are, as per Wikipedia:
+> [...] a process of word formation in which a word is modified to express different grammatical
+> categories such as tense, case, voice, aspect, person, number, gender, mood, animacy, and definiteness.
+
+One achievement of this project is to provide a unified inflections API across multiple languages
+by encapsulating a variety of usually Python-based libraries into a single API.
+
+You will note that a single `Inflection` consists of the root form of the word, its features,
+and the inflected form of the word. Multiple inflections form a `Paradigm`, which is
+"_the complete set of related word forms associated with a given lexeme_"
+[[source](https://en.wikipedia.org/wiki/Morphology_(linguistics)#Paradigms_and_morphosyntax)].
+
+Unfortunately, I mixed up the terms `lexeme` and `lemma` a fair bit. To be precise: A `lemma`
+is a base concept in spaCy and refers to the canonical form of a word, while a `lexeme`
+is a unit of meaning. A `Paradigm` belongs to a `lexeme`, not a `lemma`.
+This is something I got wrong and may have to fix in the future.
+
+### Tokens
 
 - `Token` refers to a singular word of a phrase, that contains
   - a `source_text`
@@ -155,16 +180,6 @@ The design is a work in progress, but I do think it offers some genuine value.
   - an optional `ancestor` (a reference to another `Token` in the phrase that it relates to)._
 
 - `Phrase` refers to a collection of `Tokens` that form a sentence.
-
-- A `SemanticTranslation` is a `Phrase` that is a translation of another `Phrase`. The _meaning_
-of the original phrase is preserved as well as possible in the translation.
-It consists of a `source_phrase` and a `target_phrase`.
-
-- A `LiteralTranslation` is a direct, literal translation of a phrase. This can help users better
-understand how phrases are constructed. It consists of the `source phrase` and a collection of
-`TokenTranslations`, which are a key-value pair of tokens from the source phrase and their
-directly translated counterparts. For example, "Ich bin ein Student" would contain four translated
-tokens: `(Ich, I)`, `(bin, am)`, `(ein, a)`, `(Student, student)`.
 
 - `Tokens` are aggregated through the process of literally translating and grammatically analyzing
 phrases. These processes return Sets of `TokenTranslations` and `TokenMorphology` respectively,
