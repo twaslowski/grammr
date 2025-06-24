@@ -16,7 +16,7 @@ of languages easier.
 
 [![Core](https://github.com/twaslowski/grammr/actions/workflows/deploy_core.yml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_core.yml)
 
-[![Morphology](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology_serverless.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_serverless.yaml)
+[![Morphology](https://github.com/twaslowski/grammr/actions/workflows/deploy_serverless.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_serverless.yaml)
 
 [![Generic inflections](https://github.com/twaslowski/grammr/actions/workflows/deploy_multi_inflection.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology.yaml)
 
