@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record FlashcardCreationDto(
-    @NotNull long deckId,
+    @NotNull UUID deckId,
     @NotNull String question,
     @NotNull String answer,
     PartOfSpeechTag tokenPos,

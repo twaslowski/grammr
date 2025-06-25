@@ -8,6 +8,7 @@ import com.grammr.domain.enums.ExportDataType;
 import com.grammr.flashcards.controller.dto.DeckCreationDto;
 import com.grammr.flashcards.controller.dto.DeckDto;
 import com.grammr.flashcards.controller.dto.DeckExportDto;
+import com.grammr.flashcards.service.DeckService;
 import com.grammr.flashcards.service.FlashcardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -37,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DeckController {
 
   private final FlashcardService flashcardService;
+  private final DeckService deckService;
 
   @Operation(summary = "Create a new deck", description = "Creates a new deck for the authenticated user.")
   @ApiResponses({
@@ -47,8 +50,8 @@ public class DeckController {
   public ResponseEntity<DeckDto> createDeck(
       @AuthenticationPrincipal User user,
       @Parameter(description = "Deck creation data") @RequestBody @Valid DeckCreationDto data) {
-    var deck = flashcardService.createDeck(user.getId(), data.name());
-    var deckDto = new DeckDto(deck, List.of());
+    var deck = deckService.createDeck(user, data.name());
+    var deckDto = DeckDto.from(deck);
     return ResponseEntity.status(201).body(deckDto);
   }
 
@@ -62,8 +65,8 @@ public class DeckController {
   public ResponseEntity<?> exportDeck(
       @Parameter(description = "Export data") @RequestBody @Valid DeckExportDto data,
       @AuthenticationPrincipal User user) {
-    var deck = flashcardService.getDeck(user, data.deckId());
-    byte[] exportedDeck = flashcardService.exportDeck(deck, data.exportDataType());
+    var deck = deckService.getDeck(data.deckId(), user);
+    byte[] exportedDeck = deckService.exportDeck(deck, data.exportDataType());
     var headers = new HttpHeaders();
     var filename = deriveFilename(deck, data.exportDataType());
     headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename);
@@ -81,13 +84,9 @@ public class DeckController {
   public ResponseEntity<DeckDto> syncDeck(
       @AuthenticationPrincipal User user,
       @Parameter(description = "Deck export data") @RequestBody DeckExportDto dto) {
-    var flashcards = flashcardService.retrieveSyncableCards(dto.deckId());
-    var deck = flashcardService.getDeck(user, dto.deckId());
-    DeckDto response = DeckDto.builder()
-        .id(deck.getId())
-        .name(deck.getName())
-        .flashcards(flashcards)
-        .build();
+    // var flashcards = flashcardService.retrieveSyncableCards(dto.deckId());
+    var deck = deckService.getDeck(dto.deckId(), user);
+    DeckDto response = DeckDto.from(deck);
     return ResponseEntity.ok(response);
   }
 
@@ -98,7 +97,9 @@ public class DeckController {
   })
   @GetMapping(produces = APPLICATION_JSON_VALUE)
   public ResponseEntity<List<DeckDto>> getDecks(@AuthenticationPrincipal User user) {
-    var decks = flashcardService.getDecks(user.getId());
+    var decks = deckService.getDecks(user)
+        .stream().map(DeckDto::from)
+        .toList();
     return ResponseEntity.status(200).body(decks);
   }
 
@@ -109,10 +110,9 @@ public class DeckController {
       @ApiResponse(responseCode = "404", description = "Deck not found")
   })
   @GetMapping(value = "/{deckId}", produces = APPLICATION_JSON_VALUE)
-  public ResponseEntity<DeckDto> getDeck(@AuthenticationPrincipal User user, @PathVariable long deckId) {
-    var deck = flashcardService.getDeck(user, deckId);
-    var flashcards = flashcardService.getFlashcards(deck.getId());
-    return ResponseEntity.status(200).body(new DeckDto(deck, flashcards));
+  public ResponseEntity<DeckDto> getDeck(@AuthenticationPrincipal User user, @PathVariable UUID deckId) {
+    var deck = deckService.getDeck(deckId, user);
+    return ResponseEntity.status(200).body(DeckDto.from(deck));
   }
 
   @Operation(summary = "Delete deck", description = "Deletes a deck by its ID")
@@ -122,9 +122,8 @@ public class DeckController {
       @ApiResponse(responseCode = "404", description = "Deck not found")
   })
   @DeleteMapping(value = "/{deckId}")
-  public ResponseEntity<?> deleteDeck(@AuthenticationPrincipal User user, @PathVariable long deckId) {
-    var deck = flashcardService.getDeck(user, deckId);
-    flashcardService.deleteDeck(user, deckId);
+  public ResponseEntity<?> deleteDeck(@AuthenticationPrincipal User user, @PathVariable UUID deckId) {
+    deckService.deleteDeck(deckId, user);
     return ResponseEntity.status(204).build();
   }
 

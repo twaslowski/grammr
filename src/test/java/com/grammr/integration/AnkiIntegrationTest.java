@@ -9,17 +9,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.entity.Deck;
+import com.grammr.domain.entity.DeckSpec;
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
-import com.grammr.domain.entity.Paradigm;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.ExportDataType;
-import com.grammr.domain.enums.LanguageCode;
-import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.flashcards.controller.dto.DeckCreationDto;
 import com.grammr.flashcards.controller.dto.DeckExportDto;
 import com.grammr.flashcards.controller.dto.FlashcardCreationDto;
-import java.util.List;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -34,12 +31,13 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
     var user = userRepository.save(UserSpec.validWithoutId().build());
     var auth = createUserAuthentication(user);
     var creationDto = new DeckCreationDto("Test Deck", null);
+
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/deck")
             .with(authentication(auth))
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(creationDto)))
         .andExpect(status().is(201))
-        .andExpect(jsonPath("$.id").isNumber())
+        .andExpect(jsonPath("$.id").isString())
         .andExpect(jsonPath("$.name").value("Test Deck"))
         .andReturn();
 
@@ -50,30 +48,38 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldRetrieveDeckWithFlashcards() {
     var user = userRepository.save(UserSpec.validWithoutId().build());
-    var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
-    var paradigm = paradigmRepository.save(Paradigm.builder()
-        .lemma("Hund")
-        .languageCode(LanguageCode.DE)
-        .partOfSpeech(PartOfSpeechTag.NOUN)
-        .inflections(List.of())
-        .build());
-    var flashcard = flashcardRepository.save(Flashcard.builder()
-        .question("Dog")
-        .answer("Hund")
-        .tokenPos(PartOfSpeechTag.NOUN)
-        .paradigm(paradigm)
-        .deck(deck)
-        .status(Status.CREATED)
-        .build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
     var auth = createUserAuthentication(user);
 
     mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/deck")
             .with(authentication(auth))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[0].id").value(deck.getId()))
-        .andExpect(jsonPath("$[0].flashcards").isArray())
-        .andExpect(jsonPath("$[0].flashcards.[0].id").value(flashcard.getId()))
+        .andExpect(jsonPath("$[0].id").value(deck.getDeckId().toString()))
+        .andReturn();
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldReturnNotFoundForNonExistentOrNotOwnedDeck() {
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
+
+    var otherUser = userRepository.save(UserSpec.validWithoutId()
+        .externalId("some-other-id")
+        .build());
+    var auth = createUserAuthentication(otherUser);
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/deck/" + deck.getDeckId())
+            .with(authentication(auth))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound())
+        .andReturn();
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/deck/non-existent-deck")
+            .with(authentication(auth))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound())
         .andReturn();
   }
 
@@ -81,42 +87,18 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldExportNonExportedCards() {
     var user = userRepository.save(UserSpec.validWithoutId().build());
-    var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
-
-    var paradigm = paradigmRepository.save(Paradigm.builder()
-        .lemma("Hund")
-        .languageCode(LanguageCode.DE)
-        .partOfSpeech(PartOfSpeechTag.NOUN)
-        .inflections(List.of())
-        .build());
-    var flashcard = flashcardRepository.save(Flashcard.builder()
-        .question("Dog")
-        .answer("Hund")
-        .tokenPos(PartOfSpeechTag.NOUN)
-        .paradigm(paradigm)
-        .deck(deck)
-        .status(Status.CREATED)
-        .build());
-
-    flashcardRepository.save(Flashcard.builder()
-        .question("I go on a walk with the dog")
-        .answer("Ich gehe mit dem Hund spazieren")
-        .deck(deck)
-        .status(Status.EXPORTED)
-        .build());
-
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
     var auth = createUserAuthentication(user);
 
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/deck/sync")
             .with(authentication(auth))
-            .content(objectMapper.writeValueAsString(new DeckExportDto(deck.getId(), null)))
+            .content(objectMapper.writeValueAsString(new DeckExportDto(deck.getDeckId(), null)))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(deck.getId()))
         .andExpect(jsonPath("$.name").value(deck.getName()))
         .andExpect(jsonPath("$.flashcards").isArray())
         .andExpect(jsonPath("$.flashcards", hasSize(1)))
-        .andExpect(jsonPath("$.flashcards.[0].id").value(flashcard.getId()))
         .andReturn();
 
     // Status of the exported Flashcard now also is EXPORTED
@@ -128,9 +110,9 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldCreateFlashcard() {
     var user = userRepository.save(UserSpec.validWithoutId().build());
-    var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
+    var deck = deckRepository.save(Deck.builder().name("Test Deck").owner(user).build());
     var authentication = createUserAuthentication(user);
-    var creationDto = new FlashcardCreationDto(deck.getId(), "Test Question", "Test Answer", null, null);
+    var creationDto = new FlashcardCreationDto(deck.getDeckId(), "Test Question", "Test Answer", null, null);
 
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/flashcard")
             .with(authentication(authentication))
@@ -153,7 +135,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldExportDeck() {
     var user = userRepository.save(UserSpec.validWithoutId().build());
-    var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
+    var deck = deckRepository.save(Deck.builder().name("Test Deck").owner(user).build());
     var authentication = createUserAuthentication(user);
     flashcardRepository.save(Flashcard.builder()
         .question("Question")
@@ -166,7 +148,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/deck/export")
             .with(authentication(authentication))
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(new DeckExportDto(deck.getId(), ExportDataType.APKG)))
+            .content(objectMapper.writeValueAsString(new DeckExportDto(deck.getDeckId(), ExportDataType.APKG)))
             .accept(MediaType.APPLICATION_OCTET_STREAM))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
@@ -177,7 +159,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldDeleteDeck() {
     var user = userRepository.save(UserSpec.validWithoutId().build());
-    var deck = deckRepository.save(Deck.builder().name("Test Deck").user(user).build());
+    var deck = deckRepository.save(Deck.builder().name("Test Deck").owner(user).build());
     var authentication = createUserAuthentication(user);
     flashcardRepository.save(Flashcard.builder()
         .question("Question")

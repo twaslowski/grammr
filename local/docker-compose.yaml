@@ -74,3 +74,5 @@ services:
     image: mockserver/mockserver
     ports:
       - "1080:1080"
+    environment:
+      - MOCKSERVER_LIVENESS_HTTP_GET_PATH="/status"

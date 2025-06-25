@@ -1,0 +1,43 @@
+version: '3'
+tasks:
+  start-env:
+    desc: Start the local environment
+    cmds:
+      - docker compose -f local/docker-compose.yaml up -d --remove-orphans --wait
+      - task: setup-mockserver
+
+  stop-env:
+    desc: Stop the local environment
+    cmds:
+      - docker compose -f local/docker-compose.yaml down
+
+  setup-mockserver:
+    desc: Create mockserver expectations to mock OpenAI Responses API
+    dir: local/expectations
+    cmds:
+      - python set_expectations.py
+
+  unit-test:
+    desc: Run unit tests
+    cmds:
+      - ./mvnw package test
+
+  integration-test:
+    desc: Run integration tests
+    cmds:
+      - task: start-env
+      - ./mvnw package test -P integration
+
+  qa:
+    desc: Run unit tests, start environment, and run integration tests
+    cmds:
+      - task: unit-test
+      - task: integration-test
+
+  run:
+    desc: Start environment and run the application with local profile
+    env:
+      SPRING_PROFILES_ACTIVE: local
+    cmds:
+      - task: start-env
+      - ./mvnw spring-boot:run

@@ -1,10 +1,10 @@
 package com.grammr.domain.exception;
 
-import java.text.MessageFormat;
+import java.util.UUID;
 
 public class DeckNotFoundException extends ResourceNotFoundException {
 
-  public DeckNotFoundException(String userId, long deckId) {
-    super(MessageFormat.format("Deck with id {0} not found for user {1}", deckId, userId));
+  public DeckNotFoundException(UUID deckId) {
+    super(deckId.toString());
   }
 }
