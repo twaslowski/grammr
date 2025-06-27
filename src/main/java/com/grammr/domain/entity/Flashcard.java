@@ -15,6 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,12 +34,17 @@ public class Flashcard {
   public enum Status {
     CREATED,
     UPDATED,
-    EXPORTED
+    EXPORT_INITIATED,
+    EXPORT_COMPLETED,
+    EXPORT_FAILED
   }
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "flashcard_id_seq")
   private long id;
+
+  @NotNull
+  private UUID flashcardId;
 
   @NotNull
   private String question;
@@ -61,6 +67,8 @@ public class Flashcard {
   @NotNull
   @Enumerated(EnumType.STRING)
   private Status status;
+
+  private UUID syncId;
 
   @CreationTimestamp
   @Column(updatable = false)

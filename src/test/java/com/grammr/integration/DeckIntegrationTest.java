@@ -9,8 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.entity.DeckSpec;
-import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
+import com.grammr.domain.entity.FlashcardSpec;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.ExportDataType;
 import com.grammr.flashcards.controller.dto.DeckCreationDto;
@@ -24,7 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @IntegrationTest
-public class AnkiIntegrationTest extends IntegrationTestBase {
+public class DeckIntegrationTest extends IntegrationTestBase {
 
   @Test
   @SneakyThrows
@@ -105,7 +105,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
 
     // Status of the exported Flashcard now also is EXPORTED
     assertThat(flashcardRepository.findAll()).hasSize(2);
-    assertThat(flashcardRepository.findByDeckIdAndStatusNot(deck.getId(), Status.EXPORTED)).hasSize(0);
+    assertThat(flashcardRepository.findByDeckIdAndStatusNot(deck.getId(), Status.EXPORT_INITIATED)).hasSize(0);
   }
 
   @Test
@@ -139,14 +139,9 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   void shouldExportDeck() {
     var user = userRepository.save(UserSpec.validWithoutId().build());
     var deck = deckRepository.save(DeckSpec.withUser(user).build());
+    flashcardRepository.save(FlashcardSpec.withDeck(deck).build());
+
     var authentication = createUserAuthentication(user);
-    flashcardRepository.save(Flashcard.builder()
-        .question("Question")
-        .answer("Answer")
-        .status(Status.CREATED)
-        .deck(deck)
-        .build()
-    );
 
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/deck/export")
             .with(authentication(authentication))
@@ -165,13 +160,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
     var deck = deckRepository.save(DeckSpec.withUser(user).build());
     var authentication = createUserAuthentication(user);
 
-    flashcardRepository.save(Flashcard.builder()
-        .question("Question")
-        .answer("Answer")
-        .status(Status.CREATED)
-        .deck(deck)
-        .build()
-    );
+    flashcardRepository.save(FlashcardSpec.withDeck(deck).build());
 
     mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/deck/" + deck.getDeckId())
             .with(authentication(authentication))

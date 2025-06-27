@@ -1,10 +1,11 @@
-package com.grammr.flashcards.controller;
+package com.grammr.flashcards.controller.v2;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.User;
 import com.grammr.flashcards.controller.dto.FlashcardCreationDto;
+import com.grammr.flashcards.service.DeckService;
 import com.grammr.flashcards.service.FlashcardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +28,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Tag(name = "Flashcards", description = "Flashcard management operations")
 @RequiredArgsConstructor
-@RestController
-@RequestMapping("/api/v1/flashcard")
+@RestController(value = "flashcardControllerV2")
+@RequestMapping("/api/v1/deck/{deckId}/flashcard")
 public class FlashcardController {
 
   private final FlashcardService flashcardService;
+  private final DeckService deckService;
 
   @Operation(summary = "Create a new flashcard", description = "Creates a new flashcard in the specified deck.")
   @ApiResponses({
@@ -40,10 +43,14 @@ public class FlashcardController {
   })
   @PostMapping(produces = APPLICATION_JSON_VALUE)
   public ResponseEntity<Flashcard> createFlashcard(
+      @PathVariable UUID deckId,
       @Parameter(description = "Flashcard creation data") @RequestBody @Valid FlashcardCreationDto data,
       @Parameter(description = "Authenticated user") @AuthenticationPrincipal User user) {
     log.info("Creating flashcard for user {} in deck {}", user.getId(), data.deckId());
-    var flashcard = flashcardService.createFlashcard(user, data.deckId(), data.question(), data.answer(), data.tokenPos(), data.paradigmId());
+    var deck = deckService.getDeck(deckId, user);
+    var flashcard = flashcardService.createFlashcard(
+        user, deck.getDeckId(), data.question(), data.answer(), data.tokenPos(), data.paradigmId()
+    );
     return ResponseEntity.status(201).body(flashcard);
   }
 
@@ -54,9 +61,13 @@ public class FlashcardController {
   })
   @DeleteMapping("/{flashcardId}")
   public ResponseEntity<?> deleteFlashcard(
+      @PathVariable UUID deckId,
       @Parameter(description = "Authenticated user") @AuthenticationPrincipal User user,
       @Parameter(description = "ID of the flashcard to delete") @PathVariable long flashcardId) {
-    flashcardService.deleteFlashcard(user, flashcardId);
+    // getDeck is called for its DeckNotFoundException side effect to ensure resource ownership
+    deckService.getDeck(deckId, user);
+
+    flashcardService.deleteFlashcard(flashcardId);
     return ResponseEntity.status(204).build();
   }
 }

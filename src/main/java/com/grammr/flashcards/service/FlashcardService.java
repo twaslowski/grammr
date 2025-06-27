@@ -1,12 +1,10 @@
 package com.grammr.flashcards.service;
 
-import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.domain.exception.ResourceNotFoundException;
-import com.grammr.repository.DeckRepository;
 import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.ParadigmRepository;
 import java.util.List;
@@ -29,8 +27,8 @@ public class FlashcardService {
   private final ParadigmRepository paradigmRepository;
 
   public List<Flashcard> retrieveSyncableCards(long deckId) {
-    var flashcards = flashcardRepository.findByDeckIdAndStatusNot(deckId, Status.EXPORTED);
-    flashcards.forEach(f -> f.setStatus(Status.EXPORTED));
+    var flashcards = flashcardRepository.findByDeckIdAndStatusNot(deckId, Status.EXPORT_INITIATED);
+    flashcards.forEach(f -> f.setStatus(Status.EXPORT_INITIATED));
     log.info("Synced {} cards for deck {}", flashcards.size(), deckId);
     return flashcards;
   }
@@ -40,16 +38,27 @@ public class FlashcardService {
     var paradigm = Optional.ofNullable(paradigmId)
         .flatMap(paradigmRepository::findById)
         .orElse(null);
+
     var flashcard = Flashcard.builder()
         .question(question)
+        .flashcardId(UUID.randomUUID())
         .answer(answer)
         .tokenPos(tokenPos)
         .paradigm(paradigm)
         .status(Status.CREATED)
         .deck(deck).build();
+
     return flashcardRepository.save(flashcard);
   }
 
+  public void deleteFlashcard(long flashcardId) {
+    var foundFlashcard = flashcardRepository.findById(flashcardId)
+        .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(flashcardId)));
+
+    flashcardRepository.delete(foundFlashcard);
+  }
+
+  // Kept for v1 backward compatibility
   public void deleteFlashcard(User user, long flashcardId) {
     var foundFlashcard = flashcardRepository.findById(flashcardId)
         .filter(flashcard -> Objects.equals(flashcard.getDeck().getOwner().getId(), user.getId()))
