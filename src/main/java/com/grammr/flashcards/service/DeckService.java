@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -32,9 +31,8 @@ public class DeckService {
     return deckRepository.save(deck);
   }
 
-  @PostAuthorize("returnObject.owner.id == user.id")
   public Deck getDeck(UUID deckId, User user) {
-    return deckRepository.findByDeckId(deckId)
+    return deckRepository.findByDeckIdAndOwnerId(deckId, user.getId())
         .orElseThrow(() -> new DeckNotFoundException(deckId));
   }
 
@@ -51,6 +49,6 @@ public class DeckService {
   }
 
   public List<Deck> getDecks(User user) {
-    return deckRepository.findAllByUserId(user.getId());
+    return deckRepository.findAllByOwnerId(user.getId());
   }
 }

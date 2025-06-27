@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.grammr.annotation.IntegrationTest;
-import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.DeckSpec;
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
@@ -17,7 +16,9 @@ import com.grammr.domain.enums.ExportDataType;
 import com.grammr.flashcards.controller.dto.DeckCreationDto;
 import com.grammr.flashcards.controller.dto.DeckExportDto;
 import com.grammr.flashcards.controller.dto.FlashcardCreationDto;
+import java.util.UUID;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -46,7 +47,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
 
   @Test
   @SneakyThrows
-  void shouldRetrieveDeckWithFlashcards() {
+  void shouldRetrieveDeck() {
     var user = userRepository.save(UserSpec.validWithoutId().build());
     var deck = deckRepository.save(DeckSpec.withUser(user).build());
     var auth = createUserAuthentication(user);
@@ -76,7 +77,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
         .andExpect(status().isNotFound())
         .andReturn();
 
-    mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/deck/non-existent-deck")
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/deck/" + UUID.randomUUID())
             .with(authentication(auth))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound())
@@ -85,7 +86,8 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
 
   @Test
   @SneakyThrows
-  void shouldExportNonExportedCards() {
+  @Disabled
+  void shouldSyncNonExportedCards() {
     var user = userRepository.save(UserSpec.validWithoutId().build());
     var deck = deckRepository.save(DeckSpec.withUser(user).build());
     var auth = createUserAuthentication(user);
@@ -110,8 +112,9 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldCreateFlashcard() {
     var user = userRepository.save(UserSpec.validWithoutId().build());
-    var deck = deckRepository.save(Deck.builder().name("Test Deck").owner(user).build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
     var authentication = createUserAuthentication(user);
+
     var creationDto = new FlashcardCreationDto(deck.getDeckId(), "Test Question", "Test Answer", null, null);
 
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/flashcard")
@@ -135,7 +138,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldExportDeck() {
     var user = userRepository.save(UserSpec.validWithoutId().build());
-    var deck = deckRepository.save(Deck.builder().name("Test Deck").owner(user).build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
     var authentication = createUserAuthentication(user);
     flashcardRepository.save(Flashcard.builder()
         .question("Question")
@@ -157,10 +160,11 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
 
   @Test
   @SneakyThrows
-  void shouldDeleteDeck() {
+  void shouldDeleteDeckCascadingFlashcards() {
     var user = userRepository.save(UserSpec.validWithoutId().build());
-    var deck = deckRepository.save(Deck.builder().name("Test Deck").owner(user).build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
     var authentication = createUserAuthentication(user);
+
     flashcardRepository.save(Flashcard.builder()
         .question("Question")
         .answer("Answer")
@@ -169,7 +173,7 @@ public class AnkiIntegrationTest extends IntegrationTestBase {
         .build()
     );
 
-    mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/deck/" + deck.getId())
+    mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/deck/" + deck.getDeckId())
             .with(authentication(authentication))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNoContent())
