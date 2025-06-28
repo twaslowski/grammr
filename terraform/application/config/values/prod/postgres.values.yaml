@@ -1,0 +1,25 @@
+architecture: standalone
+
+auth:
+  username: grammr
+  database: grammr
+nameOverride: "postgres"
+
+service:
+  port: 5432
+
+primary:
+  # corresponds to the `small` preset
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+      ephemeral-storage: 50Mi
+    limits:
+      cpu: 750m
+      memory: 768Mi
+      ephemeral-storage: 2Gi
+
+persistence:
+  primary:
+    size: 8Gi

@@ -1,1 +1,3 @@
-data "aws_caller_identity" "current" {}
+data "external" "git_hash" {
+  program = ["git", "log", "--pretty=format:{ \"sha\": \"%H\" }", "-1", "HEAD"]
+}

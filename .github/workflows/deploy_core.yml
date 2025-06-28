@@ -102,24 +102,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy Postgres
-        run: |
-          helm upgrade --install \
-            --values ./environments/dev/postgres.values.yaml \
-            --namespace grammr-dev --create-namespace \
-            --wait --timeout 600s \
-            postgres oci://registry-1.docker.io/bitnamicharts/postgresql
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.11.1
 
-      - name: Deploy core
+      - name: Deploy Terraform
+        working-directory: terraform/application
         run: |
-          export TAG="sha-$(git rev-parse --short HEAD)"
-          helm upgrade --install \
-            --set openai_api_key="$OPENAI_API_KEY" \
-            --set image.tag="$TAG" \
-            --values environments/dev/core.values.yaml \
-            --namespace grammr-dev --create-namespace \
-            --wait --timeout 600s \
-            grammr-core ./charts/grammr
+          terraform init -backend-config=config/dev.hcl
+          terraform apply -auto-approve -var-file=config/dev.tfvars
 
   deploy-prod:
     name: Deploy to prod environment
@@ -133,21 +125,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy Postgres
-        run: |
-          helm upgrade --install \
-            --values ./environments/prod/postgres.values.yaml \
-            --namespace grammr --create-namespace \
-            --wait --timeout 600s \
-            postgres oci://registry-1.docker.io/bitnamicharts/postgresql
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.11.1
 
-      - name: Deploy core
+      - name: Deploy Terraform
+        working-directory: terraform/application
         run: |
-          export TAG="sha-$(git rev-parse --short HEAD)"
-          helm upgrade --install \
-            --set openai_api_key="$OPENAI_API_KEY" \
-            --set image.tag="$TAG" \
-            --values environments/prod/core.values.yaml \
-            --namespace grammr --create-namespace \
-            --wait --timeout 600s \
-            grammr-core ./charts/grammr
+          terraform init -backend-config=config/dev.hcl
+          terraform apply -auto-approve -var-file=config/dev.tfvars

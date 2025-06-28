@@ -6,7 +6,7 @@ on:
     paths:
       - 'environments/*/morphology.values.yaml'
       - 'sidecars/morphology/**'
-      - 'terraform/**'
+      - 'terraform/serverless/**'
       - '.github/workflows/deploy_serverless.yaml'
   workflow_dispatch:
 
@@ -152,7 +152,7 @@ jobs:
           terraform_version: 1.11.1
 
       - name: Deploy Terraform
-        working-directory: terraform/application
+        working-directory: terraform/serverless
         run: |
           terraform init -backend-config=config/dev.hcl
           terraform apply -auto-approve -var-file=config/dev.tfvars
@@ -178,7 +178,7 @@ jobs:
           terraform_version: 1.11.1
 
       - name: Deploy Terraform
-        working-directory: terraform/application
+        working-directory: terraform/serverless
         run: |
           terraform init -backend-config=config/prod.hcl
           terraform apply -auto-approve -var-file=config/prod.tfvars

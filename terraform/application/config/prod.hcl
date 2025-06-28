@@ -1,3 +1,3 @@
-key    = "state-prod/terraform.tfstate"
-bucket = "grammr-state"
-region = "eu-central-1"
+secret_suffix = "core"
+namespace     = "grammr"
+config_path   = "~/.kube/config"

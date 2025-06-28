@@ -1,0 +1,16 @@
+architecture: standalone
+
+auth:
+  username: grammr
+  database: grammr
+nameOverride: "postgres"
+
+service:
+  port: 5432
+
+primary:
+  resourcesPreset: nano
+
+persistence:
+  primary:
+    size: 2Gi
