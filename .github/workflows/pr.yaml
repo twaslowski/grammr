@@ -25,22 +25,22 @@ jobs:
       - name: Unit tests
         run: task unit-test
 
-  name: Run integration tests
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+  integration_tests:
+    name: Run integration tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Install Task
-      uses: arduino/setup-task@v2
+      - name: Install Task
+        uses: arduino/setup-task@v2
 
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: 21
-        distribution: corretto
-        cache: maven
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: corretto
+          cache: maven
 
-    - name: Integration tests
-      run: task integration-test
-
+      - name: Integration tests
+        run: task integration-test
