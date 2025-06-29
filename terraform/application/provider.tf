@@ -19,5 +19,5 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  kubernetes {}
+  kubernetes = {}
 }
