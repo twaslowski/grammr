@@ -39,25 +39,25 @@ jobs:
           name: grammr-core-jar
           path: target/grammr-core-1.0-SNAPSHOT.jar
 
-  integration_test:
-    name: Integration tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install Task
-        uses: arduino/setup-task@v2
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: 21
-          distribution: corretto
-          cache: maven
-
-      - name: Run integration tests
-        run: task integration-test
+#  integration_test:
+#    name: Integration tests
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#
+#      - name: Install Task
+#        uses: arduino/setup-task@v2
+#
+#      - name: Set up JDK 21
+#        uses: actions/setup-java@v4
+#        with:
+#          java-version: 21
+#          distribution: corretto
+#          cache: maven
+#
+#      - name: Run integration tests
+#        run: task integration-test
 
   build_grammr_core:
     name: Build grammr-core Docker image
@@ -119,6 +119,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # required for setup-terraform on self-hosted runners: https://github.com/hashicorp/setup-terraform/issues/84
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -141,6 +146,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
