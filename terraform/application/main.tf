@@ -42,7 +42,7 @@ resource "helm_release" "grammr_core" {
     },
     {
       name  = "image.tag"
-      value = data.external.current_commit_hash.result.sha
+      value = "sha-${data.external.current_commit_hash.result.sha}"
     }
   ]
 }
