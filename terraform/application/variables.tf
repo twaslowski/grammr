@@ -9,7 +9,7 @@ variable "openai_api_key" {
   sensitive   = true
 }
 
-variable "image_tag" {
-  description = "Image tag for grammr-core Docker image"
+variable "namespace" {
+  description = "Kubernetes namespace for the application"
   type        = string
 }
