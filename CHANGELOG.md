@@ -1,5 +1,42 @@
 # Changelog
 
+## [3.1.0](https://github.com/twaslowski/grammr/compare/v3.0.0...v3.1.0) (2025-06-30)
+
+
+### Features
+
+* **anki:** improve flashcard api structure, enrich flashcard entity to enable stable sync process ([3c00c20](https://github.com/twaslowski/grammr/commit/3c00c2067e350fc7c27f69bfd4435118736e7be4))
+* **auth:** enable anonymous user sessions ([a698fef](https://github.com/twaslowski/grammr/commit/a698fef3976491c9b597ec03cf027277c7dcaec9))
+* **auth:** enable migration of anonymous users ([7cdd004](https://github.com/twaslowski/grammr/commit/7cdd0044aa09f1c13e503c09cc9ef6a1f778607c))
+* **ops:** automatically deploy grammr via terraform ([f956f3d](https://github.com/twaslowski/grammr/commit/f956f3d689a82057dd66eb774fc90409f9e60f6f))
+* **ops:** begin implementation of lambda handler for serverless multi-inflection image ([3be02d7](https://github.com/twaslowski/grammr/commit/3be02d7b1558496d3e83a5fbd3afea2da471c544))
+* **ops:** create helm chart to allow performing backups ([2588cd7](https://github.com/twaslowski/grammr/commit/2588cd784cf5baa1aec2c2a1bc53a54b3fd3b377))
+* **ops:** create s3 buckets for database backups ([6c32e30](https://github.com/twaslowski/grammr/commit/6c32e3008e25c8014963e554dff98ac170e8e9bb))
+* **ops:** deploy anki-exporter ([40ff3fb](https://github.com/twaslowski/grammr/commit/40ff3fba89fd7ca98fb22970db3a9d0b43080cc7))
+* **ops:** provide serverless implementations of multi-inflection images due to memory constraints ([590a71c](https://github.com/twaslowski/grammr/commit/590a71c7e3997da11b6eb9c9f6992bd2510b584c))
+* **ops:** use terraform to manage application ([d1d2a20](https://github.com/twaslowski/grammr/commit/d1d2a20245139fb15b883997adb02eda13da2323))
+* **quality:** separate functionalities around decks and flashcards more cleanly ([6e88402](https://github.com/twaslowski/grammr/commit/6e88402c7a35720417919b69dd3f0d40974c1dc8))
+* solve deck ownership check via custom query to improve performance ([0db94ac](https://github.com/twaslowski/grammr/commit/0db94acab065d4f15f956194c78eb850f7597517))
+
+
+### Bug Fixes
+
+* **auth:** fix existing mockMvc tests ([87f1c80](https://github.com/twaslowski/grammr/commit/87f1c800c2e0f2ac22dd988cc57bf73515254832))
+* backend secret reference ([7abeee6](https://github.com/twaslowski/grammr/commit/7abeee66946959eefe360ad4c3b67c4ad0d03769))
+* helm provider config ([5747358](https://github.com/twaslowski/grammr/commit/574735859ff69ab4d22ab72b2cd7ef64815f171b))
+* image sha values ([2c93e9e](https://github.com/twaslowski/grammr/commit/2c93e9ef5e392ce8eb9eb641869d0eac29ab2a99))
+* **ops:** add missing tailscale auth secret ([214d3ab](https://github.com/twaslowski/grammr/commit/214d3ab10b7b3b27c688fcefcf475a968cd2f449))
+* **ops:** db backup chart ([31e4341](https://github.com/twaslowski/grammr/commit/31e434148c340ac4451817f20b75d7dde3060c19))
+* **ops:** db backup chart (2) ([ec7b394](https://github.com/twaslowski/grammr/commit/ec7b394add45238adc5c38884b66e7ea9b79c5b9))
+* **ops:** install task for integration test step ([fe28867](https://github.com/twaslowski/grammr/commit/fe28867300d793dcc446159132c0caa8f0692e2d))
+* **ops:** job dependencies ([644c0bd](https://github.com/twaslowski/grammr/commit/644c0bdeb10f08d0dbdbf6af5bc6973a024bc473))
+* **ops:** pr pipeline yaml structure ([b8a7cc4](https://github.com/twaslowski/grammr/commit/b8a7cc4a698898311627f43359e72b372fe58618))
+* **ops:** serverless workflow dependency structure ([66fed7c](https://github.com/twaslowski/grammr/commit/66fed7c2a16407e515253d280c9eb17cef79d55b))
+* **ops:** serverless workflow triggers ([2091497](https://github.com/twaslowski/grammr/commit/20914974baa1baf102fa40af47b11afa71cda051))
+* **ops:** serverless workflow version outputs ([2a86a3c](https://github.com/twaslowski/grammr/commit/2a86a3c1b4ea5a6cf1384bbe2ff8d4844889eb40))
+* **ops:** set up nodejs before terraform in deployment ([13c6c0d](https://github.com/twaslowski/grammr/commit/13c6c0d1ba681f90bf4370f4fc79bcb6f47c9bb8))
+* use in-cluster configuration to deploy ([2c2f9c5](https://github.com/twaslowski/grammr/commit/2c2f9c592b6795491cf48627a3d22f97e4a775f6))
+
 ## [3.0.0](https://github.com/twaslowski/grammr/compare/v2.3.1...v3.0.0) (2025-06-14)
 
 
