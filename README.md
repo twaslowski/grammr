@@ -18,10 +18,6 @@ of languages easier.
 
 [![Morphology](https://github.com/twaslowski/grammr/actions/workflows/deploy_serverless.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_serverless.yaml)
 
-[![Generic inflections](https://github.com/twaslowski/grammr/actions/workflows/deploy_multi_inflection.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_morphology.yaml)
-
-[![Russian inflections](https://github.com/twaslowski/grammr/actions/workflows/deploy_inflection_ru.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_inflection_ru.yaml)
-
 ![Vercel Deploy](https://deploy-badge.vercel.app/vercel/grammr)
 
 ---

@@ -53,6 +53,7 @@ public class AnonymousSessionFilter extends OncePerRequestFilter {
       sessionId = UUID.randomUUID().toString();
       anonymousUser = userRepository.save(User.anonymous(sessionId));
       addSessionCookie(response, sessionId);
+      log.info("Created new anonymous user with session ID: {}", sessionId);
     }
 
     if (anonymousUser == null) {
