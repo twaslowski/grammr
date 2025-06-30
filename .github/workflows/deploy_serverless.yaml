@@ -4,7 +4,6 @@ on:
   push:
     branches: [main]
     paths:
-      - 'environments/*/morphology.values.yaml'
       - 'sidecars/morphology/**'
       - 'terraform/serverless/**'
       - '.github/workflows/deploy_serverless.yaml'

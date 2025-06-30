@@ -61,7 +61,7 @@ jobs:
   build_grammr_core:
     name: Build grammr-core Docker image
     runs-on: ubuntu-latest
-    needs: [compile_and_test]
+    needs: [compile_and_test, integration_test]
     steps:
       - name: Checkout
         uses: actions/checkout@v4

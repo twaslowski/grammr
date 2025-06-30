@@ -1,4 +1,4 @@
-name: Build and deploy anki sidecar
+name: Build anki-exporter sidecar
 on:
   workflow_dispatch:
   push:

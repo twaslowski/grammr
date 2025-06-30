@@ -1,11 +1,10 @@
-name: Build and deploy multi-languge inflections
+name: Build multi-languge inflections sidecar
 on:
   workflow_dispatch:
   push:
     branches:
       - main
     paths:
-      - 'environments/*/multi-inflection.values.yaml'
       - 'charts/multi-inflection/**'
       - 'sidecars/multi-inflection/**'
       - '.github/workflows/build_sidecar.yml'
