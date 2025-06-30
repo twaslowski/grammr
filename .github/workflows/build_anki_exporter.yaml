@@ -37,35 +37,3 @@ jobs:
     with:
       directory: "./sidecars/anki-exporter"
       image_name: "tobiaswaslowski/grammr-anki-exporter"
-
-  deploy-dev:
-    runs-on: self-hosted
-    environment: dev
-    needs:
-      - build-anki-inflection-sidecar
-      - check_changes
-    if: always()
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: deploy
-        run: |
-          helm upgrade --install \
-            --namespace grammr-dev --create-namespace \
-            anki-exporter ./charts/anki-exporter
-
-  deploy-prod:
-    runs-on: self-hosted
-    needs: [ deploy-dev ]
-    environment: prod
-    if: always()
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: deploy
-        run: |
-          helm upgrade --install \
-            --namespace grammr-dev --create-namespace \
-            anki-exporter ./charts/anki-exporter

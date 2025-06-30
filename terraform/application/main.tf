@@ -11,7 +11,7 @@ resource "helm_release" "postgres" {
   namespace = kubernetes_namespace_v1.namespace.metadata[0].name
   version   = "16.7.14"
 
-  timeout = 180
+  timeout = 300
   wait    = true
 
   values = [
@@ -28,7 +28,7 @@ resource "helm_release" "grammr_core" {
   version    = "0.3.2"
 
   namespace = kubernetes_namespace_v1.namespace.metadata[0].name
-  timeout   = 180
+  timeout   = 300
   wait      = true
 
   values = [

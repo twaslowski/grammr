@@ -37,35 +37,3 @@ jobs:
     with:
       directory: "./sidecars/inflection-ru"
       image_name: "tobiaswaslowski/grammr-inflection-ru"
-
-  deploy-dev:
-    runs-on: self-hosted
-    environment: dev
-    needs:
-      - build_ru_inflection_sidecar
-      - check_changes
-    if: always()
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: deploy
-        run: |
-          helm upgrade --install \
-            --namespace grammr-dev --create-namespace \
-            inflection-ru ./charts/inflection-ru
-
-  deploy-prod:
-    runs-on: self-hosted
-    needs: [ deploy-dev ]
-    environment: prod
-    if: always()
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: deploy
-        run: |
-          helm upgrade --install \
-            --namespace grammr --create-namespace \
-            inflection-ru ./charts/inflection-ru
