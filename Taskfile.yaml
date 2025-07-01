@@ -34,10 +34,17 @@ tasks:
       - task: unit-test
       - task: integration-test
 
+  start-frontend:
+    desc: Run the Next.js frontend
+    dir: grammr-ui
+    cmds:
+      - pnpm run dev
+
   run:
     desc: Start environment and run the application with local profile
     env:
       SPRING_PROFILES_ACTIVE: local
     cmds:
       - task: start-env
-      - ./mvnw spring-boot:run
+      - ./mvnw spring-boot:run &
+      - task: start-frontend

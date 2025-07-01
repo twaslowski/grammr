@@ -74,7 +74,11 @@
               },
               {
                 "color": "#EAB839",
-                "value": 3000
+                "value": 2000
+              },
+              {
+                "color": "dark-red",
+                "value": 6000
               }
             ]
           },
@@ -137,7 +141,7 @@
           "statistic": "Average"
         }
       ],
-      "title": "Invocation Time",
+      "title": "Morphology Duration",
       "type": "timeseries"
     },
     {
@@ -193,7 +197,11 @@
               },
               {
                 "color": "#EAB839",
-                "value": 3000
+                "value": 2000
+              },
+              {
+                "color": "dark-red",
+                "value": 5000
               }
             ]
           },
@@ -281,7 +289,7 @@
           "statistic": "Average"
         }
       ],
-      "title": "TTS Invocation Time",
+      "title": "TTS Duration",
       "type": "timeseries"
     },
     {
@@ -401,5 +409,5 @@
   "timezone": "browser",
   "title": "Lambdas",
   "uid": "4e7126e4-4b1d-476d-932a-139642a0667b",
-  "version": 6
+  "version": 9
 }

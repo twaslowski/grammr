@@ -31,10 +31,6 @@ const Token: React.FC<TokenProps> = ({
   const { index, text, translation, morphology } = token;
   const { request } = useApi();
 
-  function needsSpacing(token: TokenType): boolean {
-    return !['.', ',', '!', '?', ';', ':'].includes(token.text);
-  }
-
   const onTranslation = async (translation: TokenTranslation): Promise<void> => {
     const result = await request<AnalysisV2>(`/api/v2/analysis/${analysisId}`, {
       method: 'PUT',
