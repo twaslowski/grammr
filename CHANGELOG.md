@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.2.0](https://github.com/twaslowski/grammr/compare/v3.1.0...v3.2.0) (2025-07-01)
+
+
+### Features
+
+* **observability:** create serverless dashboard ([80f1165](https://github.com/twaslowski/grammr/commit/80f1165dfc0567e069df1fb7d74b16185e416eb2))
+* **ui:** fix spacing between tokens in analysis ([64b71e9](https://github.com/twaslowski/grammr/commit/64b71e9f8f9533c291f26149b69e12d667cd1af8))
+
+
+### Bug Fixes
+
+* **ui:** formatting issues ([4b10a56](https://github.com/twaslowski/grammr/commit/4b10a561bc1a126cdf96d7c1986e977a66149fb7))
+
 ## [3.1.0](https://github.com/twaslowski/grammr/compare/v3.0.0...v3.1.0) (2025-06-30)
 
 
