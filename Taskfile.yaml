@@ -40,6 +40,14 @@ tasks:
     cmds:
       - pnpm run dev
 
+  lint:
+    desc: Run linter
+    dir: grammr-ui
+    cmds:
+      - pnpm lint:fix
+      - pnpm lint:strict
+      - pnpm build
+
   run:
     desc: Start environment and run the application with local profile
     env:
