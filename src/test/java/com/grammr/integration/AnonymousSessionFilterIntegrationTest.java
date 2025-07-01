@@ -47,6 +47,21 @@ class AnonymousSessionFilterIntegrationTest extends IntegrationTestBase {
   }
 
   @Test
+  @SneakyThrows
+  void shouldNotCreateAnonymousUserOnIrrelevantEndpoint() {
+    MvcResult result = mockMvc.perform(get("/actuator/health"))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    // Check cookie in response
+    Cookie setCookie = result.getResponse().getCookie(ANON_COOKIE_NAME);
+    assertThat(setCookie).isNull();
+
+    assertThat(userRepository.findAll()).isEmpty();
+  }
+
+
+  @Test
   void shouldLoadAnonymousUserWithSessionTokenPresent() throws Exception {
     String sessionId = UUID.randomUUID().toString();
     var user = userRepository.save(User.anonymous(sessionId));

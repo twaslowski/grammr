@@ -44,6 +44,13 @@ public class AnonymousSessionFilter extends OncePerRequestFilter {
       return;
     }
 
+    // Only create anonymous users for chat API requests
+    String requestPath = request.getRequestURI();
+    if (!requestPath.startsWith("/api/v2/chat")) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+
     String sessionId = findSessionId(request).orElse(null);
 
     User anonymousUser;
@@ -71,4 +78,3 @@ public class AnonymousSessionFilter extends OncePerRequestFilter {
     filterChain.doFilter(request, response);
   }
 }
-
