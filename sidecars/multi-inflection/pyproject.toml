@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "inflection-multi"
-version = "0.2.1"
+version = "0.2.2"
 description = "Inflections for multiple romanic languages"
-authors = ["Tobias Waslowski <tobiaswaslowski@gmail.com>"]
+authors = ["Tobias Waslowski <contact@twaslowski.com>"]
 license = "MIT"
 readme = "README.md"
 

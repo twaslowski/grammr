@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "morphology"
 version = "0.5.0"
-description = ""
-authors = ["Tobias Waslowski <tobiaswaslowski@gmail.com>"]
+description = "Provides morphological analysis for arbitrary languages"
+authors = ["Tobias Waslowski <contact@twaslowski.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

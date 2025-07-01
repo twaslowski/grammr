@@ -2,7 +2,7 @@
 name = "inflection-de"
 version = "0.1.0"
 description = "Inflections for German"
-authors = ["Tobias Waslowski <tobiaswaslowski@gmail.com>"]
+authors = ["Tobias Waslowski <contact@twaslowski.com>"]
 license = "MIT"
 readme = "README.md"
 
