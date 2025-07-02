@@ -2,6 +2,16 @@ environment: prod
 allowedOrigin: "https://grammr.app"
 fullnameOverride: "core"
 
+environmentVariables:
+  - name: DATASOURCE_URL
+    value: "jdbc:postgresql://postgres.grammr.svc.cluster.local:5432/grammr?currentSchema=grammr"
+  - name: ALLOWED_ORIGIN
+    value: "https://grammr.app"
+  - name: ANKI_EXPORTER_URL
+    value: "http://anki-exporter.grammr.svc.cluster.local:8000"
+  - name: SPRING_PROFILES_ACTIVE
+    value: prod
+
 ingress:
   enabled: true
   className: "cloudflare-tunnel"

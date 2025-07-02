@@ -2,14 +2,14 @@ spring:
   cors:
     allowed-origin: "${ALLOWED_ORIGIN}"
   datasource:
-    url: jdbc:postgresql://postgres.grammr.svc.cluster.local:5432/grammr?currentSchema=grammr
+    url: jdbc:${DATASOURCE_URL}
     username: grammr
     password: ${DATASOURCE_PASSWORD}
 
 grammr:
   anki:
     api:
-      host: http://anki-exporter.grammr.svc.cluster.local:8000
+      host: ${ANKI_EXPORTER_URL}
 
 clerk:
   jwt-key: '-----BEGIN PUBLIC KEY-----

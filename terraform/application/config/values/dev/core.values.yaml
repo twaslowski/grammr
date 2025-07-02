@@ -1,6 +1,15 @@
-allowedOrigin: "https://grammr.app"
 environment: dev
 fullnameOverride: "core"
+
+environmentVariables:
+  - name: DATASOURCE_URL
+    value: "jdbc:postgresql://postgres.grammr-dev.svc.cluster.local:5432/grammr?currentSchema=grammr"
+  - name: ALLOWED_ORIGIN
+    value: "https://dev.grammr.app"
+  - name: ANKI_EXPORTER_URL
+    value: "http://anki-exporter.grammr-dev.svc.cluster.local:8000"
+  - name: SPRING_PROFILES_ACTIVE
+    value: dev
 
 ingress:
   enabled: true

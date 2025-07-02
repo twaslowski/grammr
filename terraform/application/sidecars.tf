@@ -6,7 +6,7 @@ resource "helm_release" "morphology_ru" {
   version    = "0.2.3"
 
   namespace = kubernetes_namespace_v1.namespace.metadata[0].name
-  timeout   = 300
+  timeout   = 180
   wait      = true
 }
 
@@ -21,7 +21,7 @@ resource "helm_release" "multi_inflection" {
   ]
 
   namespace = kubernetes_namespace_v1.namespace.metadata[0].name
-  timeout   = 300
+  timeout   = 450
   wait      = true
 }
 
@@ -32,6 +32,6 @@ resource "helm_release" "anki_exporter" {
   version    = "0.2.0"
 
   namespace = kubernetes_namespace_v1.namespace.metadata[0].name
-  timeout   = 300
+  timeout   = 180
   wait      = true
 }
