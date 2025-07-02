@@ -2,7 +2,7 @@ spring:
   cors:
     allowed-origin: "${ALLOWED_ORIGIN}"
   datasource:
-    url: jdbc:${DATASOURCE_URL}
+    url: ${DATASOURCE_URL}
     username: grammr
     password: ${DATASOURCE_PASSWORD}
 
