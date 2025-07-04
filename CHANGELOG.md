@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.3.0](https://github.com/twaslowski/grammr/compare/v3.2.0...v3.3.0) (2025-07-04)
+
+
+### Features
+
+* **core:** create rudimentary database monitoring ([79e549c](https://github.com/twaslowski/grammr/commit/79e549ce0e7f09f729234e8949657a68a0de368a))
+
+
+### Bug Fixes
+
+* **core:** environment variables ([1b2d9ab](https://github.com/twaslowski/grammr/commit/1b2d9ab889da5f5d94a35dc2a982417d20777416))
+* **core:** provider configuration ([b405c1f](https://github.com/twaslowski/grammr/commit/b405c1f04e0df3c28e9b28d60eb4334693b60c18))
+* ensure anonymous users are only created for chat requests ([5e054f1](https://github.com/twaslowski/grammr/commit/5e054f1108e2f33df830221fa7317e6a268175df))
+
 ## [3.2.0](https://github.com/twaslowski/grammr/compare/v3.1.0...v3.2.0) (2025-07-01)
 
 
