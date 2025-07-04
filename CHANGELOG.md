@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.3.1](https://github.com/twaslowski/grammr/compare/v3.3.0...v3.3.1) (2025-07-04)
+
+
+### Bug Fixes
+
+* **flashcards:** deck and flashcard fetching from backend ([aeb0761](https://github.com/twaslowski/grammr/commit/aeb0761f6bf76b3de986745ebaa3358a375c5966))
+* **flashcards:** deck and flashcard fetching from backend ([5e08770](https://github.com/twaslowski/grammr/commit/5e08770556808bd1d792b2febee7856c4cf3bd69))
+
 ## [3.3.0](https://github.com/twaslowski/grammr/compare/v3.2.0...v3.3.0) (2025-07-04)
 
 
