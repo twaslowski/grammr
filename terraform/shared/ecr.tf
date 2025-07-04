@@ -2,7 +2,7 @@ module "morphology_repository" {
   source = "terraform-aws-modules/ecr/aws"
 
   repository_name                 = "morphology"
-  repository_image_tag_mutability = "MUTABLE"
+  repository_image_tag_mutability = "IMMUTABLE"
 
   create_repository_policy = true
   registry_policy = local.registry_policy
@@ -17,9 +17,9 @@ locals {
         rulePriority = 1,
         description  = "Keep 3 images",
         selection = {
-          tagStatus   = "any",
+          tagStatus   = "untagged",
           countType   = "imageCountMoreThan",
-          countNumber = 14
+          countNumber = 30
         },
         action = {
           type = "expire"
