@@ -2,6 +2,7 @@ package com.grammr.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.grammr.domain.enums.PartOfSpeechTag;
+import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

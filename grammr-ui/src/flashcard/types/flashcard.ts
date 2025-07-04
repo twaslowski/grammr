@@ -1,7 +1,7 @@
 export interface Flashcard {
   question: string;
   answer: string;
-  id: number;
+  id: string;
   createdTimestamp: string;
   updatedTimestamp: string;
 }

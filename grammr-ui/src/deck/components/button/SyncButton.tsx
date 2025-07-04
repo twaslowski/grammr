@@ -6,6 +6,7 @@ import Deck from '@/deck/types/deck';
 import SyncIcon from '@/components/common/SyncIcon';
 import { toast } from '@/hooks/use-toast';
 import { useApi } from '@/hooks/useApi';
+import { Flashcard } from '@/flashcard/types/flashcard';
 
 interface Note {
   fields: Fields;
@@ -21,8 +22,8 @@ interface Fields {
 export default function SyncButton({ deck }: { deck: Deck }) {
   const { isLoading, error, request } = useApi();
 
-  const fetchNonSyncedFlashcards = async (deckId: number): Promise<Deck> => {
-    return await request<Deck>(`/api/v1/deck/sync`, {
+  const fetchNonSyncedFlashcards = async (deckId: number): Promise<Flashcard[]> => {
+    return await request<Flashcard[]>(`/api/v1/deck/sync`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -65,7 +66,7 @@ export default function SyncButton({ deck }: { deck: Deck }) {
   const syncFlashcards = async (deck: Deck) => {
     const nonSyncedFlashcards = await fetchNonSyncedFlashcards(deck.id);
 
-    const notes: Note[] = nonSyncedFlashcards.flashcards.map((flashcard) => ({
+    const notes: Note[] = nonSyncedFlashcards.map((flashcard) => ({
       fields: {
         front: flashcard.question,
         back: flashcard.answer,

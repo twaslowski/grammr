@@ -10,11 +10,11 @@ interface FlashcardListProps {
 }
 
 export default function FlashcardList(props: FlashcardListProps) {
-  const [expandedCardId, setExpandedCardId] = useState<number | null>(null);
+  const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const [visibleSide, setVisibleSide] = useState('front');
   const router = useRouter();
 
-  const toggleCardExpansion = (cardId: number) => {
+  const toggleCardExpansion = (cardId: string) => {
     if (expandedCardId === cardId) {
       setExpandedCardId(null);
     } else {
@@ -27,7 +27,7 @@ export default function FlashcardList(props: FlashcardListProps) {
     setVisibleSide(visibleSide === 'front' ? 'back' : 'front');
   };
 
-  const handleDeleteCard = async (cardId: number, e: MouseEvent) => {
+  const handleDeleteCard = async (cardId: string, e: MouseEvent) => {
     e.stopPropagation();
 
     if (!confirm('Are you sure you want to delete this flashcard?')) {
@@ -51,7 +51,7 @@ export default function FlashcardList(props: FlashcardListProps) {
     }
   };
 
-  const handleEditCard = (cardId: number, e: MouseEvent) => {
+  const handleEditCard = (cardId: string, e: MouseEvent) => {
     e.stopPropagation();
     router.push(`/user/decks/${props.deckId}/cards/${cardId}/edit`);
   };

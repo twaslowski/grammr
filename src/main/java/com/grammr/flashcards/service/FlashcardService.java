@@ -1,5 +1,6 @@
 package com.grammr.flashcards.service;
 
+import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
 import com.grammr.domain.entity.User;
@@ -25,6 +26,11 @@ public class FlashcardService {
   private final FlashcardRepository flashcardRepository;
   private final DeckService deckService;
   private final ParadigmRepository paradigmRepository;
+
+  public List<Flashcard> getFlashcards(Deck deck) {
+    log.info("Retrieving flashcards for deck {}", deck.getDeckId());
+    return flashcardRepository.findByDeckId(deck.getId());
+  }
 
   public List<Flashcard> retrieveSyncableCards(long deckId) {
     var flashcards = flashcardRepository.findByDeckIdAndStatusNot(deckId, Status.EXPORT_INITIATED);

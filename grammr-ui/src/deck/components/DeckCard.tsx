@@ -14,7 +14,7 @@ export default function DeckCard(props: DeckCardProps) {
   const deck = props.deck;
   const router = useRouter();
 
-  const cardCount = deck.flashcards.length;
+  // const cardCount = deck.flashcards.length;
   const lastUpdated = new Date(deck.updatedTimestamp).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
@@ -31,9 +31,9 @@ export default function DeckCard(props: DeckCardProps) {
         <div className='p-4 flex-1'>
           <div className='mb-2 line-clamp-2 h-12'>{deck.description || 'No description'}</div>
 
-          <div className='text-sm text-gray-600 mt-4'>
-            {cardCount} {cardCount === 1 ? 'card' : 'cards'}
-          </div>
+          {/*<div className='text-sm text-gray-600 mt-4'>*/}
+          {/*  {cardCount} {cardCount === 1 ? 'card' : 'cards'}*/}
+          {/*</div>*/}
 
           <div className='text-xs text-gray-500 mt-1'>Last updated: {lastUpdated}</div>
         </div>

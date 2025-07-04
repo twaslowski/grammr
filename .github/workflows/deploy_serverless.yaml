@@ -6,6 +6,7 @@ on:
     paths:
       - 'sidecars/morphology/**'
       - 'terraform/serverless/**'
+      - 'terraform/shared/**'
       - '.github/workflows/deploy_serverless.yaml'
   workflow_dispatch:
 

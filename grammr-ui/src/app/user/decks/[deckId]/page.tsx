@@ -14,11 +14,13 @@ import SyncButton from '@/deck/components/button/SyncButton';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import { useApi } from '@/hooks/useApi';
+import { Flashcard } from '@/flashcard/types/flashcard';
 
 export default function DeckPage(props: { params: Promise<{ deckId: string }> }) {
   const { deckId } = use(props.params);
   const { isLoading, error, request } = useApi();
   const [deck, setDeck] = useState<Deck | null>(null);
+  const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const router = useRouter();
 
   const handleDeleteDeck = async () => {
@@ -42,11 +44,22 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
   };
 
   useEffect(() => {
-    request<Deck>(`/api/v1/deck/${deckId}`, {
-      method: 'GET',
-    })
-      .then((d) => setDeck(d))
-      .catch(() => {});
+    const fetchDeck = async () => {
+      const fetchedDeck = await request<Deck>(`/api/v1/deck/${deckId}`, {
+        method: 'GET',
+      });
+      setDeck(fetchedDeck);
+    };
+
+    const fetchFlashcards = async () => {
+      const flashcards = await request<Flashcard[]>(`/api/v2/deck/${deckId}/flashcard`, {
+        method: 'GET',
+      });
+      setFlashcards(flashcards);
+    };
+
+    void fetchDeck();
+    void fetchFlashcards();
   }, [deckId, request]);
 
   if (isLoading) {
@@ -115,7 +128,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4 text-sm'>
             <div className='bg-gray-50 p-3 rounded'>
               <div className='text-gray-500 mb-1'>Total Cards</div>
-              <div className='font-semibold'>{deck.flashcards.length || 0}</div>
+              <div className='font-semibold'>{flashcards.length || 0}</div>
             </div>
 
             <div className='bg-gray-50 p-3 rounded'>
@@ -154,8 +167,8 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
             </DisabledButton>
           </div>
 
-          {deck.flashcards && deck.flashcards.length > 0 ? (
-            <FlashcardList cards={deck.flashcards} deckId={deck.id} />
+          {flashcards.length > 0 ? (
+            <FlashcardList cards={flashcards} deckId={deck.id} />
           ) : (
             <div className='text-center py-12 bg-gray-50 rounded-lg'>
               <p className='text-gray-500 mb-4'>This deck doesn't have any flashcards yet.</p>
