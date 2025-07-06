@@ -27,9 +27,8 @@ module "lambda" {
       {
         Effect = "Allow"
         Action = [
-          "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage",
-          "ecr:BatchCheckLayerAvailability"
+          "ecr:GetDownloadUrlForLayer",
         ]
         Resource = "arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:repository/morphology"
       }

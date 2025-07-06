@@ -28,11 +28,23 @@ locals {
     ]
   })
 
+  # https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#gettingstarted-images-permissions
   registry_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
         Sid    = "AllowAccountPullAccess"
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+        Action = [
+          "ecr:BatchGetImage",
+          "ecr:GetDownloadUrlForLayer"
+        ]
+      },
+      {
+        Sid    = "AllowModifications"
         Effect = "Allow"
         Principal = {
           AWS = "arn:aws:iam::246770851643:root"

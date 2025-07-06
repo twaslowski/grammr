@@ -57,8 +57,6 @@ jobs:
 
       - name: Deploy Terraform
         working-directory: terraform/shared
-        env:
-          TF_VAR_tailscale_auth_key: ${{ secrets.TAILSCALE_AUTH_KEY }}
         run: |
           terraform init -backend-config=config/shared.hcl
           terraform apply -auto-approve
