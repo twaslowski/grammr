@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.4.0](https://github.com/twaslowski/grammr/compare/v3.3.0...v3.4.0) (2025-07-06)
+
+
+### Features
+
+* **ops:** alert if morphology lambdas go down ([da06334](https://github.com/twaslowski/grammr/commit/da0633494b0fc23521ffc534c790eee1da7a818c))
+* **ops:** enable health checks in ingress ([bdead57](https://github.com/twaslowski/grammr/commit/bdead57833874b4059c4bec593b619f5b6c3a431))
+
+
+### Bug Fixes
+
+* **flashcards:** deck and flashcard fetching from backend ([aeb0761](https://github.com/twaslowski/grammr/commit/aeb0761f6bf76b3de986745ebaa3358a375c5966))
+* **flashcards:** deck and flashcard fetching from backend ([5e08770](https://github.com/twaslowski/grammr/commit/5e08770556808bd1d792b2febee7856c4cf3bd69))
+* **ops:** prod ingress spec ([ea3067b](https://github.com/twaslowski/grammr/commit/ea3067b313d8ca64bbffb3e70a06d8e69beb2bd0))
+* **serverless:** lambda permissions for ECR pull access ([48b39f7](https://github.com/twaslowski/grammr/commit/48b39f71b069d5757503d5fa10acee2c194bc2b3))
+* **serverless:** provide SetRepositoryPolicy to morphology lambdas ([010996e](https://github.com/twaslowski/grammr/commit/010996e9e44d9fdce19aad7f65eab598f3ecfbe0))
+
 ## [3.3.0](https://github.com/twaslowski/grammr/compare/v3.2.0...v3.3.0) (2025-07-04)
 
 
