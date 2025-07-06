@@ -25,7 +25,7 @@ resource "helm_release" "grammr_core" {
 
   repository = "https://twaslowski.github.io/grammr-charts"
   chart      = "grammr"
-  version    = "3.3.1"
+  version    = "3.4.0"
 
   namespace = kubernetes_namespace_v1.namespace.metadata[0].name
   timeout   = 300

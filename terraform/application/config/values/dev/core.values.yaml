@@ -15,7 +15,9 @@ ingress:
   enabled: true
   className: "cloudflare-tunnel"
   host: server-dev.grammr.app
-  path: /api/
+  paths:
+    - /api/
+    - /actuator/health
 
 livenessProbe:
   httpGet:
