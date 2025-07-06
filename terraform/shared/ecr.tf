@@ -40,7 +40,9 @@ locals {
         }
         Action = [
           "ecr:BatchGetImage",
-          "ecr:GetDownloadUrlForLayer"
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:SetRepositoryPolicy",
+          "ecr:GetRepositoryPolicy"
         ]
       },
       {
