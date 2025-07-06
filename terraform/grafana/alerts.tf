@@ -53,7 +53,7 @@ resource "grafana_rule_group" "grammr_rules" {
     is_paused = false
 
     notification_settings {
-      contact_point = "email"
+      contact_point = local.grafana_contact_point
       group_by      = null
       mute_timings  = null
     }
