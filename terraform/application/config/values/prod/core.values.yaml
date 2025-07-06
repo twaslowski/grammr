@@ -16,6 +16,7 @@ ingress:
   enabled: true
   className: "cloudflare-tunnel"
   host: server-prod.grammr.app
+  paths:
     - /api/
     - /actuator/health
 
