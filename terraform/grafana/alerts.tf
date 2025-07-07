@@ -15,8 +15,8 @@ resource "grafana_rule_group" "grammr_rules" {
         to   = 0
       }
 
-      datasource_uid = data.grafana_data_source.cloudwatch.id
-      model          = "{\"alias\":\"\",\"datasource\":{\"type\":\"cloudwatch\",\"uid\":\"${data.grafana_data_source.cloudwatch.id}\"},\"dimensions\":{\"FunctionName\":[\"morphology-ru-prod\"]},\"expression\":\"SEARCH('{AWS/Lambda,FunctionName} FunctionName=~\\\"*-prod\\\" \\\"Invocations\\\"', \\\"Average\\\", 300)\",\"id\":\"\",\"instant\":false,\"intervalMs\":1000,\"label\":\"\",\"logGroups\":[],\"matchExact\":true,\"maxDataPoints\":43200,\"metricEditorMode\":1,\"metricName\":\"Duration\",\"metricQueryType\":0,\"namespace\":\"AWS/Lambda\",\"period\":\"\",\"queryLanguage\":\"CWLI\",\"queryMode\":\"Metrics\",\"range\":true,\"refId\":\"A\",\"region\":\"eu-central-1\",\"sqlExpression\":\"\",\"statistic\":\"Average\"}"
+      datasource_uid = data.grafana_data_source.cloudwatch.uid
+      model          = "{\"alias\":\"\",\"datasource\":{\"type\":\"cloudwatch\",\"uid\":\"${data.grafana_data_source.cloudwatch.uid}\"},\"dimensions\":{\"FunctionName\":[\"morphology-ru-prod\"]},\"expression\":\"SEARCH('{AWS/Lambda,FunctionName} FunctionName=~\\\"*-prod\\\" \\\"Invocations\\\"', \\\"Average\\\", 300)\",\"id\":\"\",\"instant\":false,\"intervalMs\":1000,\"label\":\"\",\"logGroups\":[],\"matchExact\":true,\"maxDataPoints\":43200,\"metricEditorMode\":1,\"metricName\":\"Duration\",\"metricQueryType\":0,\"namespace\":\"AWS/Lambda\",\"period\":\"\",\"queryLanguage\":\"CWLI\",\"queryMode\":\"Metrics\",\"range\":true,\"refId\":\"A\",\"region\":\"eu-central-1\",\"sqlExpression\":\"\",\"statistic\":\"Average\"}"
     }
     data {
       ref_id = "B"
