@@ -17,13 +17,13 @@ spring:
       ddl-auto: validate
     properties:
       hibernate:
-        default_schema: "\"grammr\""
+        default_schema: grammr
     open-in-view: false
   datasource:
     hikari:
       driver-class-name: org.postgresql.Driver
   flyway:
-    default-schema: "\"grammr\""
+    default-schema: grammr
 
 management:
   endpoints:
