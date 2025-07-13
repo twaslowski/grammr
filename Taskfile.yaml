@@ -28,7 +28,7 @@ tasks:
       - task: start-env
       - ./mvnw package test -P integration
 
-  qa:
+  test:
     desc: Run unit tests, start environment, and run integration tests
     cmds:
       - task: unit-test

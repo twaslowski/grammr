@@ -95,17 +95,24 @@ I tried to make running the project yourself as straightforward as possible. Wha
 - A Clerk API key for user management. Ideally, different identity providers should be supported
 to make this more flexible, but for now, due to its user-friendliness, Clerk is the only supported
 identity provider. You can sign up [here](https://clerk.dev/).
+- Ensure you have Task installed. You can install it by following the instructions [here](https://taskfile.dev/#/installation).
 
-`./lifecycle/run.sh`, gives you a very minimal setup to run the project locally. It starts:
-- A Postgres database, which is used to store user data and translations.
-- Containers for providing morphological analysis for Russian and German.
-- Containers for providing inflections for Russian
-- A anki export server, which is used to package user flashcards into APKG files
-- A mockserver mocking the OpenAI Responses API
+Then simply run `task run`. It will start the following services:
+
+- The core server at `http://localhost:8080`
+- The frontend at `http://localhost:3000`
+- spaCy morphology servers for Russian (`http://localhost:8010`), German (`http://localhost:8011`)
+- Inflections for Russian at `http://localhost:8020`
+- Anki exporter at `http://localhost:8030`
+- PostgreSQL database at `http://localhost:5432`
+- Mockserver to imitate the OpenAI API at `http://localhost:1080`
+
+Note that the Mockserver is not used by default right now. You can, however, enable it by
+setting the `openai.base_url` environment variable to `http://localhost:1080`.
 
 ### Kubernetes
 
-Given the complexity of this project, Kubernetes is the recommended way to run it due to the
+Given the complexity of this project, Kubernetes is the only recommended way to run it due to the
 sheer amount of services that need to be run. This project comes with multiple Helm charts
 that you can use. This will require a running Kubernetes cluster (you could try using
 [Minikube](https://minikube.sigs.k8s.io/docs/) or [k3s](https://k3s.io/)) and
@@ -128,16 +135,19 @@ helm install --namespace grammr \
     grammr-core grammr/grammr-core
 ```
 
-For running the Sidecars, refer to the `charts/` directory and the `environments/` directory
-to see the supplied values.
+All charts are available at the [grammr-charts](https://github.com/twaslowski/grammr-charts/) repository.
 
 ## Developing
 
 PRs are welcome! I'm happy to help you get started with the project, so feel free to reach out.
 
-You can run unit tests with `./lifecycle/unit-test.sh` and integration tests with `./lifecycle/integration-test.sh`.
-Alternatively, run both with `./lifecycle/qa.sh`. This will also ensure the most accurate test coverage
-report is generated, which you can access at `target/site/jacoco/index.html`.
+The project lifecycle is managed by [Task](https://taskfile.dev/), so you can run `task` to see all available tasks.
+
+The most important ones are:
+
+- `task run` - runs the project locally
+- `task test` - runs all tests
+- `task lint` - runs prettier and eslint against the frontend
 
 ## Glossary
 
