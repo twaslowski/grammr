@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.5.0](https://github.com/twaslowski/grammr/compare/v3.4.0...v3.5.0) (2025-07-13)
+
+
+### Features
+
+* consolidate dev and prod profiles ([d2dfbc1](https://github.com/twaslowski/grammr/commit/d2dfbc1f2e0cc17539f6b31bd2c967ce71eba06c))
+
+
+### Bug Fixes
+
+* **ops:** contact point for alerting ([a4655de](https://github.com/twaslowski/grammr/commit/a4655dec344ba4fb5384da2af79b9b56606a1bdf))
+* **ops:** grafana cloudwatch data source ([dcc4088](https://github.com/twaslowski/grammr/commit/dcc408804204a05cc8175240f1a7162d148eee1e))
+
 ## [3.4.0](https://github.com/twaslowski/grammr/compare/v3.3.0...v3.4.0) (2025-07-06)
 
 
