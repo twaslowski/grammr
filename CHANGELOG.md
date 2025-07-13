@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.2](https://github.com/twaslowski/grammr/compare/v3.5.1...v3.5.2) (2025-07-13)
+
+
+### Bug Fixes
+
+* ensure flyway uses correct schema ([9d082e6](https://github.com/twaslowski/grammr/commit/9d082e644e719b8c96aabe39e77af4b4b415eda3))
+
 ## [3.5.1](https://github.com/twaslowski/grammr/compare/v3.5.0...v3.5.1) (2025-07-13)
 
 
