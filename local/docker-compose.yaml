@@ -14,6 +14,21 @@ services:
     environment:
       - SPACY_MODEL=ru_core_news_sm
 
+  analysis-de:
+    image: tobiaswaslowski/grammr-morphology:0.5.0
+#    build:
+#      context: ../sidecars/morphology
+#      dockerfile: docker/Dockerfile
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:8000/health" ]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "8011:8000"
+    environment:
+      - SPACY_MODEL=de_core_news_sm
+
   inflection-ru:
     image: tobiaswaslowski/grammr-inflection-ru:0.2.1
 #    build:
