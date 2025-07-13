@@ -10,18 +10,8 @@
             <appender-ref ref="CONSOLE"/>
         </root>
     </springProfile>
-    <springProfile name="prod">
-        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder>
-                <pattern>%d{ISO8601} %-5level %t %C{1} - [%X] %msg%n</pattern>
-            </encoder>
-        </appender>
 
-        <root level="info">
-            <appender-ref ref="CONSOLE"/>
-        </root>
-    </springProfile>
-    <springProfile name="dev">
+    <springProfile name="runtime">
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <pattern>%d{ISO8601} %-5level %t %C{1} - [%X] %msg%n</pattern>
