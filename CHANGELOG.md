@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.1](https://github.com/twaslowski/grammr/compare/v3.5.0...v3.5.1) (2025-07-13)
+
+
+### Bug Fixes
+
+* logback profiles ([5f8ad7f](https://github.com/twaslowski/grammr/commit/5f8ad7f7ff74b094ef0b1f082ad7e6b45058e683))
+
 ## [3.5.0](https://github.com/twaslowski/grammr/compare/v3.4.0...v3.5.0) (2025-07-13)
 
 
