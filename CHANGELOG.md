@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.3](https://github.com/twaslowski/grammr/compare/v3.5.2...v3.5.3) (2025-07-13)
+
+
+### Bug Fixes
+
+* alignment of hibernate and flyway schemas ([b0abf8d](https://github.com/twaslowski/grammr/commit/b0abf8d2d21f8473ba6ede98c605464f2180f44f))
+
 ## [3.5.2](https://github.com/twaslowski/grammr/compare/v3.5.1...v3.5.2) (2025-07-13)
 
 
