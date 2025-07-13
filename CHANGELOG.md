@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.4](https://github.com/twaslowski/grammr/compare/v3.5.3...v3.5.4) (2025-07-13)
+
+
+### Bug Fixes
+
+* re-add morphology-de in local setup ([f25d78c](https://github.com/twaslowski/grammr/commit/f25d78c613439802b395cfe8ebd95bf9f0e6a5e9))
+
 ## [3.5.3](https://github.com/twaslowski/grammr/compare/v3.5.2...v3.5.3) (2025-07-13)
 
 
