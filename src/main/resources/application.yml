@@ -22,6 +22,8 @@ spring:
   datasource:
     hikari:
       driver-class-name: org.postgresql.Driver
+  flyway:
+    default-schema: "\"grammr\""
 
 management:
   endpoints:
