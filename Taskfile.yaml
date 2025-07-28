@@ -3,13 +3,13 @@ tasks:
   start-env:
     desc: Start the local environment
     cmds:
-      - docker compose -f local/docker-compose.yaml up -d --remove-orphans --wait
+      - podman compose -f local/docker-compose.yaml up -d --remove-orphans --wait
       - task: setup-mockserver
 
   stop-env:
     desc: Stop the local environment
     cmds:
-      - docker compose -f local/docker-compose.yaml down
+      - podman compose -f local/docker-compose.yaml down
 
   setup-mockserver:
     desc: Create mockserver expectations to mock OpenAI Responses API

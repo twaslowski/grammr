@@ -16,6 +16,7 @@ import com.grammr.domain.enums.ExportDataType;
 import com.grammr.flashcards.controller.dto.DeckCreationDto;
 import com.grammr.flashcards.controller.dto.DeckExportDto;
 import com.grammr.flashcards.controller.dto.FlashcardCreationDto;
+import java.util.Set;
 import java.util.UUID;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Disabled;
@@ -105,7 +106,7 @@ public class DeckIntegrationTest extends IntegrationTestBase {
 
     // Status of the exported Flashcard now also is EXPORTED
     assertThat(flashcardRepository.findAll()).hasSize(2);
-    assertThat(flashcardRepository.findByDeckIdAndStatusNot(deck.getId(), Status.EXPORT_INITIATED)).hasSize(0);
+    assertThat(flashcardRepository.findByDeckIdAndStatusIn(deck.getId(), Set.of(Status.CREATED))).hasSize(0);
   }
 
   @Test

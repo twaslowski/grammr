@@ -22,16 +22,43 @@ interface Fields {
 export default function SyncButton({ deck }: { deck: Deck }) {
   const { isLoading, error, request } = useApi();
 
+  const precheckAnkiConnect = async () => {
+    try {
+      const response = await fetch('http://localhost:8765', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'version',
+          version: 6,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('AnkiConnect is not running or not reachable.');
+      }
+
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+    } catch (err) {
+      toast({
+        title: 'Error',
+        description:
+          'AnkiConnect is not running or not reachable. Please ensure Anki is open with the AnkiConnect plugin installed.',
+        variant: 'destructive',
+      });
+      throw err;
+    }
+  }
+
   const fetchNonSyncedFlashcards = async (deckId: number): Promise<Flashcard[]> => {
-    return await request<Flashcard[]>(`/api/v1/deck/sync`, {
+    return await request<Flashcard[]>(`/api/v2/deck/${deckId}/sync`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
-      body: JSON.stringify({
-        deckId: deckId,
-      }),
     });
   };
 
@@ -64,6 +91,13 @@ export default function SyncButton({ deck }: { deck: Deck }) {
   }
 
   const syncFlashcards = async (deck: Deck) => {
+    // Check if AnkiConnect is available
+    try {
+      await precheckAnkiConnect();
+    } catch (err) {
+      return;
+    }
+
     const nonSyncedFlashcards = await fetchNonSyncedFlashcards(deck.id);
 
     const notes: Note[] = nonSyncedFlashcards.map((flashcard) => ({

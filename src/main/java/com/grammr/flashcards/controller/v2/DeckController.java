@@ -5,12 +5,14 @@ import static java.lang.String.format;
 
 import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.ExportDataType;
-import com.grammr.flashcards.controller.dto.DeckDto;
+import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
 import com.grammr.flashcards.service.DeckService;
+import com.grammr.flashcards.service.FlashcardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,7 @@ public class DeckController {
   private static final ExportDataType EXPORT_DATA_TYPE = APKG;
 
   private final DeckService deckService;
+  private final FlashcardService flashcardService;
 
   @Operation(summary = "Export a deck", description = "Exports a deck in the APGK format")
   @ApiResponses({
@@ -64,11 +67,29 @@ public class DeckController {
       @ApiResponse(responseCode = "404", description = "Deck not found")
   })
   @PostMapping(value = "/{deckId}/sync")
-  public ResponseEntity<DeckDto> syncDeck(
+  public ResponseEntity<List<FlashcardDto>> syncDeck(
       @AuthenticationPrincipal User user, @PathVariable UUID deckId) {
-    // var flashcards = flashcardService.retrieveSyncableCards(dto.deckId());
     var deck = deckService.getDeck(deckId, user);
-    DeckDto response = DeckDto.from(deck);
-    return ResponseEntity.ok(response);
+    var flashcards = flashcardService.retrieveSyncableCards(deck.getId()).stream()
+        .map(FlashcardDto::fromEntity)
+        .toList();
+    return ResponseEntity.ok(flashcards);
+  }
+
+  @Operation(
+      summary = "Confirm sync operation",
+      description = "Confirms that the flashcards have been synced to AnkiConnect from the frontend."
+  )
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "Sync confirmed"),
+      @ApiResponse(responseCode = "400", description = "deckId or syncId is not a valid UUID"),
+      @ApiResponse(responseCode = "404", description = "Deck or sync operation not found")
+  })
+  @PostMapping(value = "/{deckId}/sync/{syncId}/confirm")
+  public ResponseEntity<Void> confirmSync(
+      @AuthenticationPrincipal User user, @PathVariable UUID deckId, @PathVariable UUID syncId) {
+    var deck = deckService.getDeck(deckId, user);
+    flashcardService.confirmSync(deck.getId(), syncId);
+    return ResponseEntity.ok().build();
   }
 }

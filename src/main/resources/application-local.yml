@@ -12,6 +12,10 @@ openai:
 grammr:
   languages:
     mount-path: src/test/resources/languages.yml
+  anki:
+    api:
+      host: http://localhost:8030
+
 
 clerk:
   jwt-key: '-----BEGIN PUBLIC KEY-----

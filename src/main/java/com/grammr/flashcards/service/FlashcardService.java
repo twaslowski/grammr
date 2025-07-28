@@ -11,6 +11,7 @@ import com.grammr.repository.ParadigmRepository;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,10 +34,16 @@ public class FlashcardService {
   }
 
   public List<Flashcard> retrieveSyncableCards(long deckId) {
-    var flashcards = flashcardRepository.findByDeckIdAndStatusNot(deckId, Status.EXPORT_INITIATED);
+    var flashcards = flashcardRepository.findByDeckIdAndStatusIn(deckId, Set.of(Status.CREATED, Status.UPDATED));
     flashcards.forEach(f -> f.setStatus(Status.EXPORT_INITIATED));
-    log.info("Synced {} cards for deck {}", flashcards.size(), deckId);
+    log.info("Initiated flashcard sync for deck {}", deckId);
     return flashcards;
+  }
+
+  public void confirmSync(long id, UUID syncId) {
+    flashcardRepository.findByDeckIdAndSyncId(id, syncId)
+        .map(Flashcard::confirmSync)
+        .forEach(flashcardRepository::save);
   }
 
   public Flashcard createFlashcard(User user, UUID deckId, String question, String answer, PartOfSpeechTag tokenPos, UUID paradigmId) {

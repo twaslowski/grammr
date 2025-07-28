@@ -6,14 +6,11 @@ resource "aws_api_gateway_rest_api" "grammr_api" {
 }
 
 resource "aws_api_gateway_deployment" "deployment" {
-  depends_on = [module.morphology_lambda]
-
   rest_api_id = aws_api_gateway_rest_api.grammr_api.id
 
   triggers = {
     redeployment = join("", [
       filesha1("api_gateway.tf"),
-      filesha1("lambda.tf"),
       filesha1("tts.tf"),
     ])
   }

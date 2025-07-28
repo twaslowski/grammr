@@ -77,4 +77,9 @@ public class Flashcard {
 
   @UpdateTimestamp
   private ZonedDateTime updatedTimestamp;
+
+  public Flashcard confirmSync() {
+    this.status = Status.EXPORT_COMPLETED;
+    return this;
+  }
 }

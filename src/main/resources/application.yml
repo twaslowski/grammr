@@ -8,6 +8,8 @@ server:
     enabled: false
 
 spring:
+  cors:
+    allowed-origin: ${ALLOWED_ORIGIN}
   application:
     name: grammr
   jpa:
@@ -22,6 +24,7 @@ spring:
   datasource:
     hikari:
       driver-class-name: org.postgresql.Driver
+    url: ${DATASOURCE_URL}
   flyway:
     default-schema: grammr
 
@@ -42,11 +45,12 @@ openai:
 
 clerk:
   jwt-key: ${CLERK_SECRET_KEY}
+  authorized-party: ${ALLOWED_ORIGIN}
 
 grammr:
   anki:
     api:
-      host: http://localhost:8030
+      host: ${ANKI_EXPORTER_URL}
       endpoint: /create
   languages:
     mount-path: /app/config/languages.yml
