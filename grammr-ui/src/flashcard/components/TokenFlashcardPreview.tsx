@@ -17,7 +17,7 @@ interface FlashcardPreviewProps {
 
 const TokenFlashcardPreview: React.FC<FlashcardPreviewProps> = ({ token, onClose }) => {
   const { languageLearned } = useLanguage();
-  const [deckId, setDeckId] = useState(-1);
+  const [deckId, setDeckId] = useState('-1');
   const [front, setFront] = useState(token.morphology.lemma);
   const [activeCard, setActiveCard] = useState('front');
 
@@ -36,7 +36,7 @@ const TokenFlashcardPreview: React.FC<FlashcardPreviewProps> = ({ token, onClose
   };
 
   const createTokenFlashcard = async (
-    deckId: number,
+    deckId: string,
     token: TokenType,
     paradigmId: string | undefined,
   ) => {
@@ -124,7 +124,7 @@ const TokenFlashcardPreview: React.FC<FlashcardPreviewProps> = ({ token, onClose
               void createTokenFlashcard(deckId, token, inflections?.paradigmId);
               onClose();
             }}
-            disabled={deckId === -1}
+            disabled={deckId === '-1'}
           >
             Save
           </Button>

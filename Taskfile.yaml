@@ -46,6 +46,7 @@ tasks:
     cmds:
       - pnpm lint:fix
       - pnpm lint:strict
+      - pnpm run typecheck
       - pnpm build
 
   run:
