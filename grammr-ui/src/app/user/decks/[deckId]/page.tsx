@@ -2,7 +2,7 @@
 
 import { ArrowLeft, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { use, useEffect, useState } from 'react';
+import React, { use, useCallback, useEffect, useState } from 'react';
 
 import ExportButton from '@/deck/components/button/ExportButton';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -46,12 +46,12 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
   };
 
   // Move fetchFlashcards outside useEffect so it can be called from anywhere
-  const fetchFlashcards = async () => {
+  const fetchFlashcards = useCallback(async () => {
     const flashcards = await request<Flashcard[]>(`/api/v2/deck/${deckId}/flashcard`, {
       method: 'GET',
     });
     setFlashcards(flashcards);
-  };
+  }, [deckId, request]);
 
   useEffect(() => {
     const fetchDeck = async () => {
@@ -63,7 +63,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
 
     void fetchDeck();
     void fetchFlashcards();
-  }, [deckId, request]);
+  }, [deckId, request, fetchFlashcards]);
 
   if (isLoading) {
     return <LoadingSpinner message='Loading deck...' />;
