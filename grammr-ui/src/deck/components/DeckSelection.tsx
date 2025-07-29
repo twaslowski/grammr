@@ -19,11 +19,11 @@ interface DeckSelectionProps {
 const NEW_DECK_CREATION = '_createNewDeck';
 
 const DeckSelection: React.FC<DeckSelectionProps> = ({
-  initialDeckId = NEW_DECK_CREATION,
+  initialDeckId,
   onDeckSelect,
 }) => {
   const { decks, addDeck, isLoading } = useDecks();
-  const [selectedDeckId, setSelectedDeckId] = useState<string>(initialDeckId);
+  const [selectedDeckId, setSelectedDeckId] = useState<string | undefined>(initialDeckId);
   const [showNewDeckDialog, setShowNewDeckDialog] = useState(false);
 
   const deckMap = React.useMemo(() => {

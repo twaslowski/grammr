@@ -14,9 +14,3 @@ languages:
       uri: "http://localhost:8011/morphological-analysis"
     inflections:
       enabled: false
-  - code: en
-    model: en_core_web_sm
-    morphology:
-      enabled: false
-    inflections:
-      enabled: false
