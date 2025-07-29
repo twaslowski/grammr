@@ -1,6 +1,7 @@
 package com.grammr.flashcards.controller.v2.dto;
 
 import com.grammr.domain.entity.Flashcard;
+import com.grammr.domain.entity.Flashcard.Status;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import java.time.ZonedDateTime;
@@ -25,6 +26,12 @@ public record FlashcardDto(
         requiredMode = Schema.RequiredMode.REQUIRED
     )
     String answer,
+    @Schema(
+        description = "Current status of the flashcard, indicating its lifecycle stage",
+        example = "CREATED",
+        requiredMode = Schema.RequiredMode.REQUIRED
+    )
+    Status status,
     @Schema(
         description = "If the flashcard is associated with a single word, this field contains the part of speech tag",
         example = "NOUN",
@@ -56,6 +63,7 @@ public record FlashcardDto(
         flashcard.getFlashcardId(),
         flashcard.getQuestion(),
         flashcard.getAnswer(),
+        flashcard.getStatus(),
         flashcard.getTokenPos() != null ? flashcard.getTokenPos().name() : null,
         flashcard.getParadigm() != null ? flashcard.getParadigm().getId().toString() : null,
         flashcard.getCreatedTimestamp(),

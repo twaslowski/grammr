@@ -6,7 +6,7 @@ import Deck from '@/deck/types/deck';
 import SyncIcon from '@/components/common/SyncIcon';
 import { toast } from '@/hooks/use-toast';
 import { useApi } from '@/hooks/useApi';
-import { Flashcard } from '@/flashcard/types/flashcard';
+import { Sync } from '@/flashcard/types/sync';
 
 interface Note {
   fields: Fields;
@@ -19,7 +19,7 @@ interface Fields {
   back: string;
 }
 
-export default function SyncButton({ deck }: { deck: Deck }) {
+export default function SyncButton({ deck }: { deck: Deck; onSync: () => void }) {
   const { isLoading, error, request } = useApi();
 
   const precheckAnkiConnect = async () => {
@@ -50,10 +50,20 @@ export default function SyncButton({ deck }: { deck: Deck }) {
       });
       throw err;
     }
-  }
+  };
 
-  const fetchNonSyncedFlashcards = async (deckId: number): Promise<Flashcard[]> => {
-    return await request<Flashcard[]>(`/api/v2/deck/${deckId}/sync`, {
+  const performSync = async (deckId: string): Promise<Sync> => {
+    return await request<Sync>(`/api/v2/deck/${deckId}/sync`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+  };
+
+  const confirmSync = async (deckId: string, syncId: string): Promise<void> => {
+    return await request<void>(`/api/v2/deck/${deckId}/sync/${syncId}/confirm`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -98,9 +108,8 @@ export default function SyncButton({ deck }: { deck: Deck }) {
       return;
     }
 
-    const nonSyncedFlashcards = await fetchNonSyncedFlashcards(deck.id);
-
-    const notes: Note[] = nonSyncedFlashcards.map((flashcard) => ({
+    const sync = await performSync(deck.id);
+    const notes: Note[] = sync.flashcards.map((flashcard) => ({
       fields: {
         front: flashcard.question,
         back: flashcard.answer,
@@ -121,6 +130,7 @@ export default function SyncButton({ deck }: { deck: Deck }) {
           variant: 'destructive',
         });
       } else {
+        void confirmSync(deck.id, sync.syncId);
         toast({
           title: 'Success',
           description: 'Flashcards synced successfully!',

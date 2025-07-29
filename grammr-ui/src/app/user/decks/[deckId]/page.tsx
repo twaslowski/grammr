@@ -1,10 +1,9 @@
 'use client';
 
-import { ArrowLeft, Edit, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { use, useEffect, useState } from 'react';
 
-import DisabledButton from '@/components/buttons/DisabledButton';
 import ExportButton from '@/deck/components/button/ExportButton';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import NotFound from '@/components/common/NotFound';
@@ -15,12 +14,15 @@ import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import { useApi } from '@/hooks/useApi';
 import { Flashcard } from '@/flashcard/types/flashcard';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import GenericFlashcardPreview from '@/flashcard/components/GenericFlashcardPreview';
 
 export default function DeckPage(props: { params: Promise<{ deckId: string }> }) {
   const { deckId } = use(props.params);
   const { isLoading, error, request } = useApi();
   const [deck, setDeck] = useState<Deck | null>(null);
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
+  const [showPreviewDialog, setShowPreviewDialog] = useState(false);
   const router = useRouter();
 
   const handleDeleteDeck = async () => {
@@ -43,19 +45,20 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
       });
   };
 
+  // Move fetchFlashcards outside useEffect so it can be called from anywhere
+  const fetchFlashcards = async () => {
+    const flashcards = await request<Flashcard[]>(`/api/v2/deck/${deckId}/flashcard`, {
+      method: 'GET',
+    });
+    setFlashcards(flashcards);
+  };
+
   useEffect(() => {
     const fetchDeck = async () => {
       const fetchedDeck = await request<Deck>(`/api/v1/deck/${deckId}`, {
         method: 'GET',
       });
       setDeck(fetchedDeck);
-    };
-
-    const fetchFlashcards = async () => {
-      const flashcards = await request<Flashcard[]>(`/api/v2/deck/${deckId}/flashcard`, {
-        method: 'GET',
-      });
-      setFlashcards(flashcards);
     };
 
     void fetchDeck();
@@ -103,16 +106,8 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
             </div>
 
             <div className='flex space-x-2 mt-4 md:mt-0'>
-              <DisabledButton
-                tooltipText='Editing decks is not supported yet.'
-                className='flex items-center px-3 py-2 rounded'
-                icon={<Edit size={16} />}
-              >
-                Edit
-              </DisabledButton>
-
               <ExportButton deck={deck} />
-              <SyncButton deck={deck} />
+              <SyncButton deck={deck} onSync={fetchFlashcards} />
 
               <Button
                 onClick={handleDeleteDeck}
@@ -158,13 +153,21 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
         <div className='bg-white rounded-lg shadow-md p-6'>
           <div className='flex justify-between items-center mb-6'>
             <h2 className='text-xl font-semibold'>Flashcards</h2>
-            <DisabledButton
-              tooltipText='Adding cards is currently possible from text translation only.'
-              className='flex items-center px-3 py-2 rounded'
-              icon={<Plus size={16} />}
-            >
-              Add card
-            </DisabledButton>
+            <Button onClick={() => setShowPreviewDialog(true)}>Add card</Button>
+            <Dialog open={showPreviewDialog} onOpenChange={setShowPreviewDialog}>
+              <DialogContent className='max-w-3xl'>
+                <DialogHeader>
+                  <DialogTitle>Preview Flashcard</DialogTitle>
+                </DialogHeader>
+                <GenericFlashcardPreview
+                  initialDeckId={deck.id}
+                  initialFront={''}
+                  initialBack={''}
+                  onClose={() => setShowPreviewDialog(false)}
+                  onCardAdded={fetchFlashcards}
+                />
+              </DialogContent>
+            </Dialog>
           </div>
 
           {flashcards.length > 0 ? (

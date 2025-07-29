@@ -6,13 +6,12 @@ import { Flashcard } from '@/flashcard/types/flashcard';
 
 interface FlashcardListProps {
   cards: Flashcard[];
-  deckId: number;
+  deckId: string;
 }
 
-export default function FlashcardList(props: FlashcardListProps) {
+export default function FlashcardList({ cards, deckId }: FlashcardListProps) {
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const [visibleSide, setVisibleSide] = useState('front');
-  const router = useRouter();
 
   const toggleCardExpansion = (cardId: string) => {
     if (expandedCardId === cardId) {
@@ -35,7 +34,7 @@ export default function FlashcardList(props: FlashcardListProps) {
     }
 
     try {
-      const response = await fetch(`/api/v1/flashcard/${cardId}`, {
+      const response = await fetch(`/api/v2/deck/${deckId}/flashcard/${cardId}`, {
         method: 'DELETE',
       });
 
@@ -51,14 +50,32 @@ export default function FlashcardList(props: FlashcardListProps) {
     }
   };
 
-  const handleEditCard = (cardId: string, e: MouseEvent) => {
-    e.stopPropagation();
-    router.push(`/user/decks/${props.deckId}/cards/${cardId}/edit`);
-  };
+  // const handleEditCard = (cardId: string, e: MouseEvent) => {
+  //   e.stopPropagation();
+  //   router.push(`/user/decks/${deckId}/cards/${cardId}/edit`);
+  // };
+
+  // Utility to get background color class based on card status
+  function getStatusBgClass(status: Flashcard['status'] | undefined) {
+    switch (status) {
+      case 'CREATED':
+        return 'bg-gray-100 text-gray-700';
+      case 'UPDATED':
+        return 'bg-blue-100 text-blue-700';
+      case 'EXPORT_INITIATED':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'EXPORT_COMPLETED':
+        return 'bg-green-100 text-green-700';
+      case 'EXPORT_FAILED':
+        return 'bg-red-100 text-red-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
+    }
+  }
 
   return (
     <div className='divide-y'>
-      {props.cards.map((card) => (
+      {cards.map((card) => (
         <div key={card.id} className='py-4'>
           <div
             className='flex items-center justify-between cursor-pointer'
@@ -77,9 +94,12 @@ export default function FlashcardList(props: FlashcardListProps) {
             </div>
 
             <div className='flex space-x-2'>
+              <span className={`text-sm px-2 py-0.5 rounded ${getStatusBgClass(card.status)}`}>
+                {card.status || 'CREATED'}
+              </span>
               <button
                 disabled
-                onClick={(e) => handleEditCard(card.id, e)}
+                // onClick={(e) => handleEditCard(card.id, e)}
                 className='p-1 text-gray-400 cursor-not-allowed'
                 title='Edit Card'
               >

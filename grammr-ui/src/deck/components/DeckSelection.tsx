@@ -12,24 +12,37 @@ import Deck from '@/deck/types/deck';
 import { toast } from '@/hooks/use-toast';
 
 interface DeckSelectionProps {
-  onDeckSelect: (deckId: number) => void;
+  initialDeckId?: string;
+  onDeckSelect: (deckId: string) => void;
 }
 
-const DeckSelection: React.FC<DeckSelectionProps> = ({ onDeckSelect }) => {
+const NEW_DECK_CREATION = '_createNewDeck';
+
+const DeckSelection: React.FC<DeckSelectionProps> = ({
+  initialDeckId = NEW_DECK_CREATION,
+  onDeckSelect,
+}) => {
   const { decks, addDeck, isLoading } = useDecks();
-  const [selectedDeck, setSelectedDeck] = useState<Deck | null>(null);
+  const [selectedDeckId, setSelectedDeckId] = useState<string>(initialDeckId);
   const [showNewDeckDialog, setShowNewDeckDialog] = useState(false);
 
-  const NEW_DECK_CREATION = '_createNewDeck';
+  const deckMap = React.useMemo(() => {
+    const map = new Map<string, Deck>();
+    decks.forEach((deck) => map.set(deck.id, deck));
+    return map;
+  }, [decks]);
+
+  React.useEffect(() => {
+    setSelectedDeckId(initialDeckId);
+  }, [initialDeckId]);
 
   const handleDeckChange = (deckId: string) => {
     if (deckId === NEW_DECK_CREATION) {
       setShowNewDeckDialog(true);
     } else {
-      const deck = decks.find((d) => d.id.toString() === deckId) || null;
-      setSelectedDeck(deck);
-      if (deck) {
-        onDeckSelect(deck.id);
+      setSelectedDeckId(deckId);
+      if (deckMap.has(deckId)) {
+        onDeckSelect(deckId);
       }
     }
   };
@@ -37,7 +50,10 @@ const DeckSelection: React.FC<DeckSelectionProps> = ({ onDeckSelect }) => {
   const createNewDeck = async (name: string, description: string) => {
     try {
       const newDeck = await addDeck(name, description);
-      if (newDeck) onDeckSelect(newDeck.id);
+      if (newDeck) {
+        setSelectedDeckId(newDeck.id);
+        onDeckSelect(newDeck.id);
+      }
       setShowNewDeckDialog(false);
     } catch {
       toast({
@@ -50,17 +66,13 @@ const DeckSelection: React.FC<DeckSelectionProps> = ({ onDeckSelect }) => {
 
   return (
     <div>
-      <Select
-        value={selectedDeck ? selectedDeck.id.toString() : ''}
-        onValueChange={handleDeckChange}
-        disabled={isLoading}
-      >
+      <Select value={selectedDeckId} onValueChange={handleDeckChange} disabled={isLoading}>
         <SelectTrigger className='w-full'>
           <SelectValue placeholder='Select a deck' />
         </SelectTrigger>
         <SelectContent>
           {decks.map((deck) => (
-            <SelectItem key={deck.id} value={deck.id.toString()}>
+            <SelectItem key={deck.id} value={deck.id}>
               {deck.name}
             </SelectItem>
           ))}

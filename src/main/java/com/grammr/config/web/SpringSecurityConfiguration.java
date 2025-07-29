@@ -56,6 +56,7 @@ public class SpringSecurityConfiguration {
         .requestMatchers("/api/v2/analysis/*").permitAll()
         .requestMatchers("/api/v1/deck").hasRole("USER")
         .requestMatchers("/api/v1/deck/**").hasRole("USER")
+        .requestMatchers("/api/v2/deck/**").hasRole("USER")
         .requestMatchers("/api/v1/flashcard").hasRole("USER")
         .requestMatchers("/api/v1/flashcard/**").hasRole("USER")
         .requestMatchers("/api/v1/**").permitAll()
@@ -66,7 +67,7 @@ public class SpringSecurityConfiguration {
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
     config.setAllowedOrigins(List.of(allowedOrigin));
-    config.setAllowedMethods(List.of("GET", "POST", "OPTIONS", "PUT"));
+    config.setAllowedMethods(List.of("GET", "POST", "OPTIONS", "PUT", "DELETE"));
     config.setAllowedHeaders(List.of("*"));
     config.setAllowCredentials(true);
 

@@ -8,17 +8,21 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
 
 interface FlashcardPreviewProps {
+  initialDeckId?: string;
   initialFront: string;
   initialBack: string;
   onClose: () => void;
+  onCardAdded?: () => void;
 }
 
 const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
+  initialDeckId = '-1',
+  onCardAdded = () => {},
   initialFront,
   initialBack,
   onClose,
 }) => {
-  const [deckId, setDeckId] = useState(-1);
+  const [deckId, setDeckId] = useState<string>(initialDeckId);
   const [isLoading, setIsLoading] = useState(false);
   const [front, setFront] = useState(initialFront);
   const [back, setBack] = useState(initialBack);
@@ -57,7 +61,10 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
           variant: 'destructive',
         });
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+        onCardAdded();
+      });
   };
 
   return (
@@ -118,8 +125,8 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
       <div className='space-y-4 pt-4 border-t'>
         <h3 className='text-sm font-medium'>Select Deck</h3>
         <div className='flex items-center gap-4'>
-          <DeckSelection onDeckSelect={setDeckId} />
-          <Button onClick={createFlashcard} disabled={isLoading || deckId === -1}>
+          <DeckSelection initialDeckId={deckId} onDeckSelect={setDeckId} />
+          <Button onClick={createFlashcard} disabled={isLoading || deckId === '-1'}>
             Save
           </Button>
         </div>

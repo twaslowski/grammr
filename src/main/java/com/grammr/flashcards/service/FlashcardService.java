@@ -5,7 +5,6 @@ import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.PartOfSpeechTag;
-import com.grammr.domain.exception.BadRequestException;
 import com.grammr.domain.exception.ResourceNotFoundException;
 import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.ParadigmRepository;
@@ -71,8 +70,8 @@ public class FlashcardService {
     return flashcardRepository.save(flashcard);
   }
 
-  public void deleteFlashcard(long flashcardId) {
-    var foundFlashcard = flashcardRepository.findById(flashcardId)
+  public void deleteFlashcard(UUID flashcardId) {
+    var foundFlashcard = flashcardRepository.findByFlashcardId(flashcardId)
         .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(flashcardId)));
 
     flashcardRepository.delete(foundFlashcard);

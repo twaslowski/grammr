@@ -81,7 +81,7 @@ public class FlashcardController {
   public ResponseEntity<?> deleteFlashcard(
       @PathVariable UUID deckId,
       @Parameter(description = "Authenticated user") @AuthenticationPrincipal User user,
-      @Parameter(description = "ID of the flashcard to delete") @PathVariable long flashcardId) {
+      @Parameter(description = "ID of the flashcard to delete") @PathVariable UUID flashcardId) {
     // getDeck is called for its DeckNotFoundException side effect to ensure resource ownership
     deckService.getDeck(deckId, user);
 

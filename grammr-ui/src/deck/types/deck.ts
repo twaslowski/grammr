@@ -1,5 +1,5 @@
 export default interface Deck {
-  id: number;
+  id: string;
   name: string;
   description: string;
   createdTimestamp: string;
