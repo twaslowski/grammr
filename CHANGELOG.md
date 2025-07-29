@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.1](https://github.com/twaslowski/grammr/compare/v3.6.0...v3.6.1) (2025-07-29)
+
+
+### Bug Fixes
+
+* **security:** clerk configuration ([27c4eb4](https://github.com/twaslowski/grammr/commit/27c4eb4cb9081ddeed417977b2dc3ad47a49ef28))
+
 ## [3.6.0](https://github.com/twaslowski/grammr/compare/v3.5.4...v3.6.0) (2025-07-29)
 
 
