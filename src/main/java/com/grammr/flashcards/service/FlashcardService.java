@@ -5,6 +5,7 @@ import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.PartOfSpeechTag;
+import com.grammr.domain.exception.BadRequestException;
 import com.grammr.domain.exception.ResourceNotFoundException;
 import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.ParadigmRepository;
@@ -33,17 +34,23 @@ public class FlashcardService {
     return flashcardRepository.findByDeckId(deck.getId());
   }
 
-  public List<Flashcard> retrieveSyncableCards(long deckId) {
+  public List<Flashcard> retrieveSyncableCards(long deckId, UUID syncId) {
     var flashcards = flashcardRepository.findByDeckIdAndStatusIn(deckId, Set.of(Status.CREATED, Status.UPDATED));
-    flashcards.forEach(f -> f.setStatus(Status.EXPORT_INITIATED));
+    flashcards.forEach(f -> f.initiateSync(syncId));
     log.info("Initiated flashcard sync for deck {}", deckId);
     return flashcards;
   }
 
   public void confirmSync(long id, UUID syncId) {
-    flashcardRepository.findByDeckIdAndSyncId(id, syncId)
-        .map(Flashcard::confirmSync)
-        .forEach(flashcardRepository::save);
+    List<Flashcard> flashcards = flashcardRepository.findByDeckIdAndSyncId(id, syncId);
+
+    if (flashcards.isEmpty()) {
+      log.warn("No flashcards found for deck {} with syncId {}", id, syncId);
+      throw new ResourceNotFoundException(syncId.toString());
+    }
+
+    log.info("Confirming sync for {} flashcards in deck {}", flashcards.size(), id);
+    flashcards.forEach(Flashcard::confirmSync);
   }
 
   public Flashcard createFlashcard(User user, UUID deckId, String question, String answer, PartOfSpeechTag tokenPos, UUID paradigmId) {

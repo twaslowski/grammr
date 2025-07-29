@@ -2,7 +2,6 @@ package com.grammr.config.web;
 
 import com.grammr.common.ErrorResponse;
 import com.grammr.domain.exception.BadRequestException;
-import com.grammr.domain.exception.ConfigurationNotAvailableException;
 import com.grammr.domain.exception.InflectionNotAvailableException;
 import com.grammr.domain.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,7 @@ public class CustomExceptionHandler {
   }
 
   @ExceptionHandler(BadRequestException.class)
-  public final ResponseEntity<ErrorResponse> handleConfigurationNotAvailable(ConfigurationNotAvailableException ex) {
+  public final ResponseEntity<ErrorResponse> handleConfigurationNotAvailable(BadRequestException ex) {
     log.info(ex.getMessage());
     return new ResponseEntity<>(ErrorResponse.withMessage(ex.getMessage()), HttpStatus.BAD_REQUEST);
   }

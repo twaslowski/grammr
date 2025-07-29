@@ -39,9 +39,6 @@ openai:
   api-key: ${OPENAI_API_KEY}
   completions:
     model: gpt-4o-mini
-  transcription:
-    model: whisper-1
-    verbose: false
 
 clerk:
   jwt-key: ${CLERK_SECRET_KEY}

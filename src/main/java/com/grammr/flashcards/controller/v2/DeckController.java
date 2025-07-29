@@ -6,6 +6,7 @@ import static java.lang.String.format;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.ExportDataType;
 import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
+import com.grammr.flashcards.controller.v2.dto.SyncDto;
 import com.grammr.flashcards.service.DeckService;
 import com.grammr.flashcards.service.FlashcardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -67,13 +68,14 @@ public class DeckController {
       @ApiResponse(responseCode = "404", description = "Deck not found")
   })
   @PostMapping(value = "/{deckId}/sync")
-  public ResponseEntity<List<FlashcardDto>> syncDeck(
+  public ResponseEntity<SyncDto> syncDeck(
       @AuthenticationPrincipal User user, @PathVariable UUID deckId) {
     var deck = deckService.getDeck(deckId, user);
-    var flashcards = flashcardService.retrieveSyncableCards(deck.getId()).stream()
+    var syncId = UUID.randomUUID();
+    var flashcards = flashcardService.retrieveSyncableCards(deck.getId(), syncId).stream()
         .map(FlashcardDto::fromEntity)
         .toList();
-    return ResponseEntity.ok(flashcards);
+    return ResponseEntity.ok(SyncDto.of(syncId, flashcards));
   }
 
   @Operation(
@@ -82,7 +84,7 @@ public class DeckController {
   )
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Sync confirmed"),
-      @ApiResponse(responseCode = "400", description = "deckId or syncId is not a valid UUID"),
+      @ApiResponse(responseCode = "400", description = "deckId or syncId is not a valid UUID; or no flashcards found for syncId"),
       @ApiResponse(responseCode = "404", description = "Deck or sync operation not found")
   })
   @PostMapping(value = "/{deckId}/sync/{syncId}/confirm")
