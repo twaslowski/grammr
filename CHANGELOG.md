@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.6.0](https://github.com/twaslowski/grammr/compare/v3.5.4...v3.6.0) (2025-07-29)
+
+
+### Features
+
+* **anki:** implement multi-stage flashcard sync for robustness ([e8b2cb8](https://github.com/twaslowski/grammr/commit/e8b2cb8533ea55cf9368203270102087b839dcb5))
+* **anki:** implement sync confirmation ([81cead6](https://github.com/twaslowski/grammr/commit/81cead6234f32b0571a81e42f15ddb87da2945ad))
+* **anki:** label flashcards on export status; enable flashcard creation from frontend ([967b3a8](https://github.com/twaslowski/grammr/commit/967b3a8797df37a6a085c7e7c61ad46cbcdeaf09))
+
+
+### Bug Fixes
+
+* **anki:** address linter issues ([26c7906](https://github.com/twaslowski/grammr/commit/26c79062cb15dc50baef4442c17eb3fc9b93c429))
+* **anki:** DeckSelector regression ([9d597ad](https://github.com/twaslowski/grammr/commit/9d597ada60f24f8409fbf8956d25a5072d737497))
+* **anki:** prettier formatting issues ([b5fa004](https://github.com/twaslowski/grammr/commit/b5fa004f574879e0ba2aecfe79a9f132732af6f5))
+* **anki:** provide empty SyncButton onSync parameter ([ce013d4](https://github.com/twaslowski/grammr/commit/ce013d4b3a47e9262d64a60d9bc3af20d7d42eaf))
+* **anki:** typescript typing issues ([3dfcc92](https://github.com/twaslowski/grammr/commit/3dfcc9251ace86db9f22e85b55bf2fe3769b8a0e))
+
 ## [3.5.4](https://github.com/twaslowski/grammr/compare/v3.5.3...v3.5.4) (2025-07-13)
 
 
