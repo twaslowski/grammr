@@ -37,11 +37,9 @@ management:
 openai:
   base-url: https://api.openai.com/v1
   api-key: ${OPENAI_API_KEY}
-  completions:
-    model: gpt-4o-mini
 
 clerk:
-  jwt-key: ${CLERK_SECRET_KEY}
+  jwt-key: ${JWT_PUBLIC_KEY}
   authorized-party: ${ALLOWED_ORIGIN}
 
 grammr:
