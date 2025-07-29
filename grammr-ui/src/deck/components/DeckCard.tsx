@@ -40,7 +40,7 @@ export default function DeckCard(props: DeckCardProps) {
       </div>
       <div className='border-t p-3 flex justify-between items-center'>
         <span className='text-sm font-medium'>View Details</span>
-        <SyncButton deck={deck} />
+        <SyncButton deck={deck} onSync={() => {}}/>
       </div>
     </div>
   );
