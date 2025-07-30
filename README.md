@@ -82,7 +82,7 @@ They are maintained in the `sidecars` directory.
 ### core
 
 [![Build core](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml)
-[![core](https://img.shields.io/docker/v/tobiaswaslowski/grammr-core)](https://hub.docker.com/r/tobiaswaslowski/grammr-core)
+[![core](https://img.shields.io/docker/v/tobiaswaslowski/grammr-core?sort=semver)](https://hub.docker.com/r/tobiaswaslowski/grammr-core)
 
 The main backend service that coordinates all other components and provides the primary API for the
 application.
@@ -90,7 +90,7 @@ application.
 ### morphology
 
 [![Build morphology](https://github.com/twaslowski/grammr/actions/workflows/build_morphology.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_morphology.yaml)
-[![morphology](https://img.shields.io/docker/v/tobiaswaslowski/grammr-core?sort=semver)](https://hub.docker.com/r/tobiaswaslowski/grammr-morphology)
+[![morphology](https://img.shields.io/docker/v/tobiaswaslowski/grammr-morphology)](https://hub.docker.com/r/tobiaswaslowski/grammr-morphology)
 
 A microservice responsible for morphological analysis (e.g., part-of-speech tagging, lemmatization)
 for supported languages. Based on [spaCy](https://spacy.io/), it provides a unified interface
