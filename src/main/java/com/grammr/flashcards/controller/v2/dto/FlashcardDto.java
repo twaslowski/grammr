@@ -61,8 +61,8 @@ public record FlashcardDto(
   public static FlashcardDto fromEntity(Flashcard flashcard) {
     return new FlashcardDto(
         flashcard.getFlashcardId(),
-        flashcard.getQuestion(),
-        flashcard.getAnswer(),
+        flashcard.getFront(),
+        flashcard.getBack(),
         flashcard.getStatus(),
         flashcard.getTokenPos() != null ? flashcard.getTokenPos().name() : null,
         flashcard.getParadigm() != null ? flashcard.getParadigm().getId().toString() : null,

@@ -5,6 +5,7 @@ import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.PartOfSpeechTag;
+import com.grammr.domain.exception.ResourceExistsException;
 import com.grammr.domain.exception.ResourceNotFoundException;
 import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.ParadigmRepository;
@@ -54,14 +55,20 @@ public class FlashcardService {
 
   public Flashcard createFlashcard(User user, UUID deckId, String question, String answer, PartOfSpeechTag tokenPos, UUID paradigmId) {
     var deck = deckService.getDeck(deckId, user);
+
+    var existingFlashcard = flashcardRepository.findByFrontAndDeck(question, deck);
+    if (existingFlashcard.isPresent()) {
+      throw new ResourceExistsException("Flashcard with the same question already exists: %s".formatted(question));
+    }
+
     var paradigm = Optional.ofNullable(paradigmId)
         .flatMap(paradigmRepository::findById)
         .orElse(null);
 
     var flashcard = Flashcard.builder()
-        .question(question)
+        .front(question)
+        .back(answer)
         .flashcardId(UUID.randomUUID())
-        .answer(answer)
         .tokenPos(tokenPos)
         .paradigm(paradigm)
         .status(Status.CREATED)

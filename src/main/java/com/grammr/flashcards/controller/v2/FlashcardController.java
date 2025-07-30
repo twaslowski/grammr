@@ -2,9 +2,8 @@ package com.grammr.flashcards.controller.v2;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.User;
-import com.grammr.flashcards.controller.dto.FlashcardCreationDto;
+import com.grammr.flashcards.controller.v2.dto.FlashcardCreationDto;
 import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
 import com.grammr.flashcards.service.DeckService;
 import com.grammr.flashcards.service.FlashcardService;
@@ -60,16 +59,16 @@ public class FlashcardController {
       @ApiResponse(responseCode = "404", description = "Deck not found")
   })
   @PostMapping(produces = APPLICATION_JSON_VALUE)
-  public ResponseEntity<Flashcard> createFlashcard(
+  public ResponseEntity<FlashcardDto> createFlashcard(
       @PathVariable UUID deckId,
       @Parameter(description = "Flashcard creation data") @RequestBody @Valid FlashcardCreationDto data,
       @Parameter(description = "Authenticated user") @AuthenticationPrincipal User user) {
-    log.info("Creating flashcard for user {} in deck {}", user.getId(), data.deckId());
+    log.info("Creating flashcard for user {} in deck {}", user.getId(), deckId);
     var deck = deckService.getDeck(deckId, user);
     var flashcard = flashcardService.createFlashcard(
         user, deck.getDeckId(), data.question(), data.answer(), data.tokenPos(), data.paradigmId()
     );
-    return ResponseEntity.status(201).body(flashcard);
+    return ResponseEntity.status(201).body(FlashcardDto.fromEntity(flashcard));
   }
 
   @Operation(summary = "Delete a flashcard", description = "Deletes a flashcard by its ID")

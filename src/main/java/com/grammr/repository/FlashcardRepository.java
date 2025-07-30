@@ -1,5 +1,6 @@
 package com.grammr.repository;
 
+import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
 import java.util.List;
@@ -17,4 +18,6 @@ public interface FlashcardRepository extends JpaRepository<Flashcard, Long> {
   List<Flashcard> findByDeckIdAndSyncId(long deckId, UUID syncId);
 
   Optional<Flashcard> findByFlashcardId(UUID flashcardId);
+
+  Optional<Flashcard> findByFrontAndDeck(String front, Deck deck);
 }

@@ -47,10 +47,10 @@ public class Flashcard {
   private UUID flashcardId;
 
   @NotNull
-  private String question;
+  private String front;
 
   @NotNull
-  private String answer;
+  private String back;
 
   @Enumerated(EnumType.STRING)
   private PartOfSpeechTag tokenPos;

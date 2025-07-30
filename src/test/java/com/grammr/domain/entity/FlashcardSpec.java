@@ -8,8 +8,8 @@ public class FlashcardSpec {
   public static Flashcard.FlashcardBuilder withDeck(Deck deck) {
     return Flashcard.builder()
         .flashcardId(UUID.randomUUID())
-        .question("What is the capital of France?")
-        .answer("Paris")
+        .front("What is the capital of France?")
+        .back("Paris")
         .deck(deck)
         .status(Status.CREATED);
   }

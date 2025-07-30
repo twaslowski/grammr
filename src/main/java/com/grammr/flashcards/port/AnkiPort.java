@@ -2,6 +2,7 @@ package com.grammr.flashcards.port;
 
 import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
+import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
 import com.grammr.flashcards.port.dto.OutboundAnkiDeckExportDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,10 @@ public class AnkiPort {
 
   public byte[] exportDeck(Deck deck, List<Flashcard> flashcards) {
     var uri = constructUri();
-    var requestBody = new OutboundAnkiDeckExportDto(deck.getId(), deck.getName(), flashcards);
+    var flashcardDtos = flashcards.stream()
+        .map(FlashcardDto::fromEntity)
+        .toList();
+    var requestBody = new OutboundAnkiDeckExportDto(deck.getId(), deck.getDescription(), deck.getName(), flashcardDtos);
     try {
       return restClient
           .post()

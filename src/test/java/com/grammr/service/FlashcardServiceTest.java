@@ -1,6 +1,7 @@
 package com.grammr.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -9,6 +10,7 @@ import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Paradigm;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.PartOfSpeechTag;
+import com.grammr.domain.exception.ResourceExistsException;
 import com.grammr.flashcards.service.DeckService;
 import com.grammr.flashcards.service.FlashcardService;
 import com.grammr.repository.FlashcardRepository;
@@ -17,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -55,8 +56,8 @@ class FlashcardServiceTest {
     var flashcard = flashcardService.createFlashcard(user, deck.getDeckId(), question, answer, tokenPos, paradigmId);
 
     assertThat(flashcard).isNotNull();
-    assertThat(flashcard.getQuestion()).isEqualTo(question);
-    assertThat(flashcard.getAnswer()).isEqualTo(answer);
+    assertThat(flashcard.getFront()).isEqualTo(question);
+    assertThat(flashcard.getBack()).isEqualTo(answer);
     assertThat(flashcard.getTokenPos()).isEqualTo(tokenPos);
     assertThat(flashcard.getDeck()).isEqualTo(deck);
     assertThat(flashcard.getParadigm()).isNull();
@@ -79,8 +80,8 @@ class FlashcardServiceTest {
     var flashcard = flashcardService.createFlashcard(user, deck.getDeckId(), question, answer, tokenPos, paradigmId);
 
     assertThat(flashcard).isNotNull();
-    assertThat(flashcard.getQuestion()).isEqualTo(question);
-    assertThat(flashcard.getAnswer()).isEqualTo(answer);
+    assertThat(flashcard.getFront()).isEqualTo(question);
+    assertThat(flashcard.getBack()).isEqualTo(answer);
     assertThat(flashcard.getTokenPos()).isEqualTo(tokenPos);
     assertThat(flashcard.getDeck()).isEqualTo(deck);
     assertThat(flashcard.getParadigm()).isEqualTo(paradigm);
@@ -101,5 +102,20 @@ class FlashcardServiceTest {
     assertThat(syncableCards).hasSize(2);
     assertThat(syncableCards.get(0).getStatus()).isEqualTo(Flashcard.Status.EXPORT_INITIATED);
     assertThat(syncableCards.get(1).getStatus()).isEqualTo(Flashcard.Status.EXPORT_INITIATED);
+  }
+
+  @Test
+  void shouldThrowExceptionIfFlashcardWithIdenticalQuestionExists() {
+    var user = UserSpec.valid().build();
+    var deck = DeckSpec.withUser(user).build();
+    var question = "What is the capital of France?";
+    var answer = "Paris";
+
+    when(deckService.getDeck(deck.getDeckId(), user)).thenReturn(deck);
+    when(flashcardRepository.findByFrontAndDeck(question, deck)).thenReturn(Optional.of(new Flashcard()));
+
+    assertThatThrownBy(() -> flashcardService.createFlashcard(
+        user, deck.getDeckId(), question, answer, null, null)
+    ).isInstanceOf(ResourceExistsException.class);
   }
 }
