@@ -2,6 +2,6 @@ from pydantic import BaseModel
 
 
 class Note(BaseModel):
-    id: int
+    id: str
     question: str
     answer: str
