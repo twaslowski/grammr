@@ -63,7 +63,7 @@ jobs:
         id: check-image
         shell: bash
         run: |
-          IMAGE="tobiaswaslowski/${{ inputs.image_name }}:${{ steps.version.outputs.version }}"
+          IMAGE="${{ inputs.image_name }}:${{ steps.version.outputs.version }}"
           if docker manifest inspect $IMAGE &>/dev/null; then
             echo "Image already exists, skipping build"
             echo "exists=true" >> $GITHUB_OUTPUT
