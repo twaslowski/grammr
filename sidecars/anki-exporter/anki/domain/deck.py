@@ -4,6 +4,6 @@ from pydantic import BaseModel, Field
 
 class Deck(BaseModel):
     id: int = Field(..., alias="deckId")
-    description: str
     name: str
+    description: str | None
     notes: list[Note]
