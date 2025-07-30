@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.7.0](https://github.com/twaslowski/grammr/compare/v3.6.1...v3.7.0) (2025-07-30)
+
+
+### Features
+
+* **anki:** exporter sidecar uses UUID for unique flashcard id ([e7da348](https://github.com/twaslowski/grammr/commit/e7da348cdd6017a2a47cadc61553dd1bce97c503))
+* **anki:** introduce uniqueness constraint on anki flashcards ([d720f09](https://github.com/twaslowski/grammr/commit/d720f09255b77b800b1feefb65a3acd6f96e4341))
+* **docs:** enhance readme with build badges ([009aa20](https://github.com/twaslowski/grammr/commit/009aa200c5588c54ca7062e0c62151ef6eecf030))
+* **ops:** streamline build workflows ([fa24d41](https://github.com/twaslowski/grammr/commit/fa24d41e1ef38348c570ab9117fc13ef51726ccd))
+
+
+### Bug Fixes
+
+* **anki:** accept null as deck description in exporter ([a7d66d5](https://github.com/twaslowski/grammr/commit/a7d66d5c6b9c6bb6a05844c6745f3c2f2c0955d8))
+* **docs:** ensure only grammr-core semver version is displayed on badge ([fc3c4a0](https://github.com/twaslowski/grammr/commit/fc3c4a08310c723a64dec0c1af3df943a4bb79a9))
+* **docs:** fix badge placement ([da6c06c](https://github.com/twaslowski/grammr/commit/da6c06cec84c2b3bc3141ac5e3b51b970d0fe9e1))
+* **ops:** docker image existence check ([c8c723c](https://github.com/twaslowski/grammr/commit/c8c723c26341d27716a9d240a0a2aa74fa88a527))
+
 ## [3.6.1](https://github.com/twaslowski/grammr/compare/v3.6.0...v3.6.1) (2025-07-29)
 
 
