@@ -81,16 +81,16 @@ They are maintained in the `sidecars` directory.
 
 ### core
 
+[![Build core](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml)
 [![core](https://img.shields.io/docker/v/tobiaswaslowski/grammr-core)](https://hub.docker.com/r/tobiaswaslowski/grammr-core)
-[![Build core](https://github.com/twaslowski/grammr/actions/workflows/build_core.yml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_core.yml)
 
 The main backend service that coordinates all other components and provides the primary API for the
 application.
 
 ### morphology
 
+[![Build morphology](https://github.com/twaslowski/grammr/actions/workflows/build_morphology.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_morphology.yaml)
 [![morphology](https://img.shields.io/docker/v/tobiaswaslowski/grammr-morphology)](https://hub.docker.com/r/tobiaswaslowski/grammr-morphology)
-[![Build core](https://github.com/twaslowski/grammr/actions/workflows/build_core.yml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_core.yml)
 
 A microservice responsible for morphological analysis (e.g., part-of-speech tagging, lemmatization)
 for supported languages. Based on [spaCy](https://spacy.io/), it provides a unified interface
@@ -98,12 +98,14 @@ for morphological data across multiple languages.
 
 ### anki-exporter
 
+[![Build anki-exporter](https://github.com/twaslowski/grammr/actions/workflows/build_anki_exporter.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_anki_exporter.yaml)
 [![anki-exporter](https://img.shields.io/docker/v/tobiaswaslowski/grammr-anki-exporter)](https://hub.docker.com/r/tobiaswaslowski/grammr-anki-exporter)
 
 A service that exports Decks as Anki-compatible `APKG` files.
 
 ### inflection-ru
 
+[![Build inflection-ru](https://github.com/twaslowski/grammr/actions/workflows/build_inflection_ru.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_inflection_ru.yaml)
 [![inflection-ru](https://img.shields.io/docker/v/tobiaswaslowski/grammr-inflection-ru)](https://hub.docker.com/r/tobiaswaslowski/grammr-inflection-ru)
 
 A microservice dedicated to generating inflection tables (conjugation, declension) for Russian words
@@ -112,6 +114,7 @@ standardized REST API to retrieve inflections.
 
 ### multi-inflection
 
+[![Build multi-inflection](https://github.com/twaslowski/grammr/actions/workflows/build_multi_inflection.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_multi_inflection.yaml)
 [![multi-inflection](https://img.shields.io/docker/v/tobiaswaslowski/grammr-multi-inflection)](https://hub.docker.com/r/tobiaswaslowski/grammr-multi-inflection)
 
 A microservice dedicated to generating inflection tables (conjugations only) for French, Italian,
