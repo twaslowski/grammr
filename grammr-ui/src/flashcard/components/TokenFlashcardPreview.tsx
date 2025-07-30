@@ -41,7 +41,7 @@ const TokenFlashcardPreview: React.FC<FlashcardPreviewProps> = ({ token, onClose
     paradigmId: string | undefined,
   ) => {
     console.log(deckId, token, paradigmId);
-    return await fetch('/api/v1/flashcard', {
+    return await fetch(`/api/v2/deck/${deckId}/flashcard`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

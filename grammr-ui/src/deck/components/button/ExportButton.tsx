@@ -15,7 +15,7 @@ const ExportButton = ({ deck }: { deck: Deck }) => {
     try {
       setIsExporting(true);
 
-      const response = await fetch('/api/v1/deck/export', {
+      const response = await fetch(`/api/v2/deck/${deck.id}/export`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,0 +1,19 @@
+name: Build morphology sidecar
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'sidecars/morphology/**'
+      - '.github/workflows/build_sidecar.yml'
+      - '.github/workflows/build_morphology.yaml'
+
+jobs:
+  build-morphology-sidecar:
+    uses: ./.github/workflows/build_sidecar.yml
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+    with:
+      directory: "./sidecars/morphology"
+      image_name: "tobiaswaslowski/grammr-morphology"

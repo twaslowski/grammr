@@ -29,7 +29,12 @@ public class AnkiPort {
     var flashcardDtos = flashcards.stream()
         .map(FlashcardDto::fromEntity)
         .toList();
-    var requestBody = new OutboundAnkiDeckExportDto(deck.getId(), deck.getDescription(), deck.getName(), flashcardDtos);
+    var requestBody = OutboundAnkiDeckExportDto.builder()
+        .deckId(deck.getId())
+        .name(deck.getName())
+        .description(deck.getDescription())
+        .notes(flashcardDtos)
+        .build();
     try {
       return restClient
           .post()

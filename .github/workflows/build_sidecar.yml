@@ -32,16 +32,20 @@ jobs:
         uses: snok/install-poetry@v1
 
       - name: Install dependencies
-        run: cd ${{ inputs.directory }} && poetry install --all-groups --no-root
+        working-directory: ${{ inputs.directory }}
+        run: poetry install --all-groups --no-root
 
       - name: Run tests
         env:
           PYTHONPATH: .
-        run: cd ${{ inputs.directory }} && poetry run pytest test/
+        working-directory: ${{ inputs.directory }}
+        run: poetry run pytest test/
 
-  build_morphology_sidecar:
-    needs: [ test ]
+  prepare:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      exists: ${{ steps.check-image.outputs.exists }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -51,8 +55,33 @@ jobs:
 
       - name: Derive and store version
         id: version
+        working-directory: ${{ inputs.directory }}
         run: |
-          echo "VERSION=$(cd ${{ inputs.directory }} && poetry version -s)" >> $GITHUB_ENV
+          echo "version=$(poetry version -s)" >> $GITHUB_OUTPUT
+
+      - name: Check if image already exists
+        id: check-image
+        shell: bash
+        run: |
+          IMAGE="tobiaswaslowski/${{ inputs.image_name }}:${{ steps.version.outputs.version }}"
+          if docker manifest inspect $IMAGE &>/dev/null; then
+            echo "Image already exists, skipping build"
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Image does not exist, will build"
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+  build_sidecar:
+    needs: [ prepare, test ]
+    runs-on: ubuntu-latest
+    if: ${{ needs.prepare.outputs.exists != 'true' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -73,7 +102,7 @@ jobs:
           file:  ${{ inputs.directory }}/docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ inputs.image_name }}:${{ env.VERSION }}
+          tags: ${{ inputs.image_name }}:${{ needs.prepare.outputs.version }}
           labels: ${{ steps.docker-metadata.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

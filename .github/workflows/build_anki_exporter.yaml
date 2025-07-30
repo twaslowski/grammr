@@ -5,32 +5,13 @@ on:
     branches:
       - main
     paths:
-      - 'charts/anki-exporter/**'
       - 'sidecars/anki-exporter/**'
       - '.github/workflows/build_sidecar.yml'
       - '.github/workflows/deploy_anki.yaml'
 
 jobs:
-  check_changes:
-    runs-on: ubuntu-latest
-    outputs:
-      sidecar_changed: ${{ steps.filter.outputs.sidecar_changed }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Check for changes
-        id: filter
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            sidecar_changed:
-              - 'sidecars/anki-exporter/**'
-
-  build-anki-inflection-sidecar:
+  build-anki-exporter-sidecar:
     uses: ./.github/workflows/build_sidecar.yml
-    if: ${{ needs.check_changes.outputs.sidecar_changed == 'true' }}
-    needs: check_changes
     secrets:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}

@@ -43,7 +43,7 @@ services:
       - "8020:8000"
 
   anki:
-    image: tobiaswaslowski/grammr-anki-exporter:0.3.0
+    image: tobiaswaslowski/grammr-anki-exporter:0.3.1
 #    build:
 #      context: ../sidecars/anki-exporter
 #      dockerfile: docker/Dockerfile

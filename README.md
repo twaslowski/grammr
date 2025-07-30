@@ -14,11 +14,9 @@ of languages easier.
 
 ---
 
-[![Core](https://github.com/twaslowski/grammr/actions/workflows/deploy_core.yml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_core.yml)
+[![Build core](https://github.com/twaslowski/grammr/actions/workflows/build_core.yml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_core.yml)
 
-[![Morphology](https://github.com/twaslowski/grammr/actions/workflows/deploy_serverless.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/deploy_serverless.yaml)
-
-![Vercel Deploy](https://deploy-badge.vercel.app/vercel/grammr)
+![Vercel Deployment](https://deploy-badge.vercel.app/vercel/grammr)
 
 ---
 
@@ -26,8 +24,16 @@ of languages easier.
 
 - [About](#About)
 - [Features](#Features)
-- [Related projects](#Related-projects)
+- [Components](#Components)
+  - [core](#core)
+  - [morphology](#morphology)
+  - [anki-exporter](#anki-exporter)
+  - [inflection-ru](#inflection-ru)
+  - [multi-inflection](#multi-inflection)
 - [Running](#Running)
+  - [locally](#Running-locally)
+  - [Kubernetes](#Kubernetes)
+- [Related projects](#Related-projects)
 - [Developing](#Developing)
 - [Domain Language](#glossary)
 
@@ -67,35 +73,64 @@ or may not have equivalents in different languages)
 
 ⏰ More will be added as the project progresses. Check back later!
 
-## Related projects
+## Components
 
-Listed here are projects that I am either using or would consider integrating into this project.
+With the core being situated in the `src` folder, all other components listed here are Python-based
+microservices that can be run independently to support different languages and functionalities.
+They are maintained in the `sidecars` directory.
 
-- [spaCy](https://spacy.io/): Morphological morphology for a variety of languages.
-- [pymorphy3](https://github.com/no-plagiarism/pymorphy3): Fork of the currently unmaintained [pymorphy2](https://github.com/pymorphy2/pymorphy2).
-Provides inflections for Russian.
+### core
 
-Interesting related projects:
+[![core](https://img.shields.io/docker/v/tobiaswaslowski/grammr-core)](https://hub.docker.com/r/tobiaswaslowski/grammr-core)
+[![Build core](https://github.com/twaslowski/grammr/actions/workflows/build_core.yml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_core.yml)
 
-- [textile](https://github.com/SalahEddineGhamri/textile): Inspiration for the UI
-- [mathigatti/spanish_inflections](https://github.com/mathigatti/spanish_inflections?tab=readme-ov-file): Inflections for Spanish
-- [DuyguA/DEMorphy](https://github.com/DuyguA/DEMorphy): Inflections for German. Technically, this library
-only provides _morphological analysis_, but it does use a comprehensive lexicon under the hood,
-so creating inflections should be possible.
-- [TimoBechtel/satzbau](https://github.com/TimoBechtel/satzbau): Creation of natural language German texts, including declension and conjugation.
-- [verbecc](https://github.com/bretttolbert/verbecc): Verb conjugation for a variety of roman languages.
+The main backend service that coordinates all other components and provides the primary API for the
+application.
+
+### morphology
+
+[![morphology](https://img.shields.io/docker/v/tobiaswaslowski/grammr-morphology)](https://hub.docker.com/r/tobiaswaslowski/grammr-morphology)
+[![Build core](https://github.com/twaslowski/grammr/actions/workflows/build_core.yml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_core.yml)
+
+A microservice responsible for morphological analysis (e.g., part-of-speech tagging, lemmatization)
+for supported languages. Based on [spaCy](https://spacy.io/), it provides a unified interface
+for morphological data across multiple languages.
+
+### anki-exporter
+
+[![anki-exporter](https://img.shields.io/docker/v/tobiaswaslowski/grammr-anki-exporter)](https://hub.docker.com/r/tobiaswaslowski/grammr-anki-exporter)
+
+A service that exports Decks as Anki-compatible `APKG` files.
+
+### inflection-ru
+
+[![inflection-ru](https://img.shields.io/docker/v/tobiaswaslowski/grammr-inflection-ru)](https://hub.docker.com/r/tobiaswaslowski/grammr-inflection-ru)
+
+A microservice dedicated to generating inflection tables (conjugation, declension) for Russian words
+using the [pymorphy3](https://github.com/no-plagiarism/pymorphy3) library. It provides a
+standardized REST API to retrieve inflections.
+
+### multi-inflection
+
+[![multi-inflection](https://img.shields.io/docker/v/tobiaswaslowski/grammr-multi-inflection)](https://hub.docker.com/r/tobiaswaslowski/grammr-multi-inflection)
+
+A microservice dedicated to generating inflection tables (conjugations only) for French, Italian,
+Spanish, Portuguese and Romanian
+using the [verbecc](https://github.com/bretttolbert/verbecc) library.
+It provides a standardized REST API to retrieve inflections for these languages.
 
 ## Running
 
-### Running locally 
+### Running locally
 
 I tried to make running the project yourself as straightforward as possible. What you'll need:
 
 - An OpenAI API key. You can get one by signing up [here](https://platform.openai.com/signup).
 - A Clerk API key for user management. Ideally, different identity providers should be supported
-to make this more flexible, but for now, due to its user-friendliness, Clerk is the only supported
-identity provider. You can sign up [here](https://clerk.dev/).
-- Ensure you have Task installed. You can install it by following the instructions [here](https://taskfile.dev/#/installation).
+  to make this more flexible, but for now, due to its user-friendliness, Clerk is the only supported
+  identity provider. You can sign up [here](https://clerk.dev/).
+- Ensure you have Task installed. You can install it by following the
+  instructions [here](https://taskfile.dev/#/installation).
 
 Then simply run `task run`. It will start the following services:
 
@@ -135,13 +170,38 @@ helm install --namespace grammr \
     grammr-core grammr/grammr-core
 ```
 
-All charts are available at the [grammr-charts](https://github.com/twaslowski/grammr-charts/) repository.
+All charts are available at the [grammr-charts](https://github.com/twaslowski/grammr-charts/)
+repository.
+
+## Related projects
+
+Listed here are projects that I am either using or would consider integrating into this project.
+
+- [spaCy](https://spacy.io/): Morphological morphology for a variety of languages.
+- [pymorphy3](https://github.com/no-plagiarism/pymorphy3): Fork of the currently
+  unmaintained [pymorphy2](https://github.com/pymorphy2/pymorphy2).
+  Provides inflections for Russian.
+
+Interesting related projects:
+
+- [textile](https://github.com/SalahEddineGhamri/textile): Inspiration for the UI
+- [mathigatti/spanish_inflections](https://github.com/mathigatti/spanish_inflections?tab=readme-ov-file):
+  Inflections for Spanish
+- [DuyguA/DEMorphy](https://github.com/DuyguA/DEMorphy): Inflections for German. Technically, this
+  library
+  only provides _morphological analysis_, but it does use a comprehensive lexicon under the hood,
+  so creating inflections should be possible.
+- [TimoBechtel/satzbau](https://github.com/TimoBechtel/satzbau): Creation of natural language German
+  texts, including declension and conjugation.
+- [verbecc](https://github.com/bretttolbert/verbecc): Verb conjugation for a variety of roman
+  languages.
 
 ## Developing
 
 PRs are welcome! I'm happy to help you get started with the project, so feel free to reach out.
 
-The project lifecycle is managed by [Task](https://taskfile.dev/), so you can run `task` to see all available tasks.
+The project lifecycle is managed by [Task](https://taskfile.dev/), so you can run `task` to see all
+available tasks.
 
 The most important ones are:
 
@@ -155,13 +215,15 @@ One thing that I attempted to do with this project is develop a clear domain lan
 based on [Universal Dependencies](https://universaldependencies.org/).
 
 Unfortunately, this has turned out to be difficult, and currently terms are somewhat inconsistent
-here and there. Note, also, that I am not a linguist and have no relevant training. 
+here and there. Note, also, that I am not a linguist and have no relevant training.
 
 ### Lemmas, Lexemes and Paradigms
 
 - **Inflections** are a key component of this project. Inflections are, as per Wikipedia:
+
 > [...] a process of word formation in which a word is modified to express different grammatical
-> categories such as tense, case, voice, aspect, person, number, gender, mood, animacy, and definiteness.
+> categories such as tense, case, voice, aspect, person, number, gender, mood, animacy, and
+> definiteness.
 
 One achievement of this project is to provide a unified inflections API across multiple languages
 by encapsulating a variety of usually Python-based libraries into a single API.
@@ -181,25 +243,29 @@ This is something I got wrong and may have to fix in the future.
 - `Token` refers to a singular word of a phrase, that contains
   - a `source_text`
   - a `lemma`
-  - a `pos` (part of speech, such as `NOUN`). [Reference](https://universaldependencies.org/u/pos/index.html).
-  _- a `feature_set` (a set of features, such as `NUMBER=PLURAL` and `CASE=GEN`). [Reference](https://universaldependencies.org/u/feat/index.html).
+  - a `pos` (part of speech, such as
+    `NOUN`). [Reference](https://universaldependencies.org/u/pos/index.html).
+    _- a `feature_set` (a set of features, such as `NUMBER=PLURAL` and
+    `CASE=GEN`). [Reference](https://universaldependencies.org/u/feat/index.html).
   - an optional `ancestor` (a reference to another `Token` in the phrase that it relates to)._
 
 - `Phrase` refers to a collection of `Tokens` that form a sentence.
 
 - `Tokens` are aggregated through the process of literally translating and grammatically analyzing
-phrases. These processes return Sets of `TokenTranslations` and `TokenMorphology` respectively,
-which are coalesced into `Tokens` that ultimately make up a `Phrase`.
-Therefore, a `Analysis` consists of a set of `Tokens` holding their literal translation
-and grammatical morphology, as well as the semantic translation of the phrase.
+  phrases. These processes return Sets of `TokenTranslations` and `TokenMorphology` respectively,
+  which are coalesced into `Tokens` that ultimately make up a `Phrase`.
+  Therefore, a `Analysis` consists of a set of `Tokens` holding their literal translation
+  and grammatical morphology, as well as the semantic translation of the phrase.
 
 ### Part of Speech & Features
 
 I've decided to use the [Universal Dependencies](https://universaldependencies.org/) as reference
 for my part-of-speech and feature definitions as well as the domain language defined above.
 
-- `Part of Speech` (POS) is a grammatical category of words that have similar grammatical properties.
-Read more: https://universaldependencies.org/u/pos/index.html
+- `Part of Speech` (POS) is a grammatical category of words that have similar grammatical
+  properties.
+  Read more: https://universaldependencies.org/u/pos/index.html
 
 - `Features` are morphological and syntactic properties of words. They are used to distinguish
-between different grammatical categories of words. Read more: https://universaldependencies.org/u/feat/index.html
+  between different grammatical categories of words. Read
+  more: https://universaldependencies.org/u/feat/index.html
