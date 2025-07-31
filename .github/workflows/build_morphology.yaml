@@ -16,4 +16,4 @@ jobs:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     with:
       directory: "./sidecars/morphology"
-      image_name: "tobiaswaslowski/grammr-morphology"
+      image_name: "grammrapp/morphology"

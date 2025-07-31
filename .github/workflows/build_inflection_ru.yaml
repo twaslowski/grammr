@@ -16,4 +16,4 @@ jobs:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     with:
       directory: "./sidecars/inflection-ru"
-      image_name: "tobiaswaslowski/grammr-inflection-ru"
+      image_name: "grammrapp/inflections-ru"
