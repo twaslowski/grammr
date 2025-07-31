@@ -7,7 +7,7 @@ on:
     paths:
       - 'sidecars/anki-exporter/**'
       - '.github/workflows/build_sidecar.yml'
-      - '.github/workflows/deploy_anki.yaml'
+      - '.github/workflows/build_anki_exporter.yaml'
 
 jobs:
   build-anki-exporter-sidecar:
