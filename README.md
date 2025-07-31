@@ -14,7 +14,7 @@ of languages easier.
 
 ---
 
-[![Build core](https://github.com/twaslowski/grammr/actions/workflows/build_core.yml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_core.yml)
+[![Build core](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml)
 
 ![Vercel Deployment](https://deploy-badge.vercel.app/vercel/grammr)
 
@@ -82,7 +82,7 @@ They are maintained in the `sidecars` directory.
 ### core
 
 [![Build core](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml)
-[![core](https://img.shields.io/docker/v/tobiaswaslowski/grammr-core?sort=semver)](https://hub.docker.com/r/tobiaswaslowski/grammr-core)
+[![core](https://img.shields.io/docker/v/grammrapp/grammr-core?sort=semver)](https://hub.docker.com/r/grammrapp/grammr-core)
 
 The main backend service that coordinates all other components and provides the primary API for the
 application.
@@ -90,7 +90,7 @@ application.
 ### morphology
 
 [![Build morphology](https://github.com/twaslowski/grammr/actions/workflows/build_morphology.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_morphology.yaml)
-[![morphology](https://img.shields.io/docker/v/tobiaswaslowski/grammr-morphology)](https://hub.docker.com/r/tobiaswaslowski/grammr-morphology)
+[![morphology](https://img.shields.io/docker/v/grammrapp/morphology)](https://hub.docker.com/r/grammrapp/morphology)
 
 A microservice responsible for morphological analysis (e.g., part-of-speech tagging, lemmatization)
 for supported languages. Based on [spaCy](https://spacy.io/), it provides a unified interface
@@ -99,14 +99,14 @@ for morphological data across multiple languages.
 ### anki-exporter
 
 [![Build anki-exporter](https://github.com/twaslowski/grammr/actions/workflows/build_anki_exporter.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_anki_exporter.yaml)
-[![anki-exporter](https://img.shields.io/docker/v/tobiaswaslowski/grammr-anki-exporter)](https://hub.docker.com/r/tobiaswaslowski/grammr-anki-exporter)
+[![anki-exporter](https://img.shields.io/docker/v/grammrapp/anki-exporter)](https://hub.docker.com/r/grammrapp/anki-exporter)
 
 A service that exports Decks as Anki-compatible `APKG` files.
 
 ### inflection-ru
 
 [![Build inflection-ru](https://github.com/twaslowski/grammr/actions/workflows/build_inflection_ru.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_inflection_ru.yaml)
-[![inflection-ru](https://img.shields.io/docker/v/tobiaswaslowski/grammr-inflection-ru)](https://hub.docker.com/r/tobiaswaslowski/grammr-inflection-ru)
+[![inflection-ru](https://img.shields.io/docker/v/grammrapp/inflections-ru)](https://hub.docker.com/r/grammrapp/inflections-ru)
 
 A microservice dedicated to generating inflection tables (conjugation, declension) for Russian words
 using the [pymorphy3](https://github.com/no-plagiarism/pymorphy3) library. It provides a
@@ -115,7 +115,7 @@ standardized REST API to retrieve inflections.
 ### multi-inflection
 
 [![Build multi-inflection](https://github.com/twaslowski/grammr/actions/workflows/build_multi_inflection.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_multi_inflection.yaml)
-[![multi-inflection](https://img.shields.io/docker/v/tobiaswaslowski/grammr-multi-inflection)](https://hub.docker.com/r/tobiaswaslowski/grammr-multi-inflection)
+[![multi-inflection](https://img.shields.io/docker/v/grammrapp/inflections-romanic)](https://hub.docker.com/r/grammrapp/inflections-romanic)
 
 A microservice dedicated to generating inflection tables (conjugations only) for French, Italian,
 Spanish, Portuguese and Romanian
