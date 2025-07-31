@@ -15,6 +15,7 @@ const TranslatePage = () => {
   const [translation, setTranslation] = useState<Translation | null>();
 
   const handleTranslation = async (inputText: string) => {
+    setTranslation(null);
     try {
       const data = await request<Translation>('/api/v2/translations/phrase', {
         method: 'POST',
