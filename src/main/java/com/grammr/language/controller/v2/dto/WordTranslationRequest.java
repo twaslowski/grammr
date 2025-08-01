@@ -13,7 +13,15 @@ public record WordTranslationRequest(
     String source,
     @NotNull
     @Schema(
-        description = "The context in which the word is used, to help disambiguate meanings",
+        description = "Whether or not to use context for disambiguation. Default is false.",
+        example = "false"
+    )
+    boolean useContext,
+    @Schema(
+        description = """
+            The context in which the word is used, to help disambiguate meanings.
+            Required if useContext is true.
+            """,
         example = "Ich gehe nachher zur Bank, um Geld abzuheben."
     )
     String context,

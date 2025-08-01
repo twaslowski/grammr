@@ -1,5 +1,6 @@
 package com.grammr.language.controller.v2;
 
+import com.grammr.domain.exception.BadRequestException;
 import com.grammr.domain.value.language.v2.Translation;
 import com.grammr.domain.value.language.v2.WordTranslation;
 import com.grammr.language.controller.v2.dto.PhraseTranslationRequest;
@@ -62,13 +63,25 @@ public class TranslationController {
           """
   )
   @PostMapping(value = "/word", produces = "application/json")
-  public ResponseEntity<WordTranslation> translateWord(@RequestBody @Valid WordTranslationRequest translationRequest) {
-    var translation = wordTranslationService.translate(
-        translationRequest.source(),
-        translationRequest.context(),
-        translationRequest.targetLanguage()
-    );
-
+  public ResponseEntity<WordTranslation> translateWord(
+      @RequestBody @Valid WordTranslationRequest translationRequest
+  ) {
+    WordTranslation translation;
+    if (translationRequest.useContext()) {
+      if (translationRequest.context() == null) {
+        throw new BadRequestException("Context must be provided when useContext is true.");
+      }
+      translation = wordTranslationService.translate(
+          translationRequest.source(),
+          translationRequest.context(),
+          translationRequest.targetLanguage()
+      );
+    } else {
+      translation = wordTranslationService.translateWithoutContext(
+          translationRequest.source(),
+          translationRequest.targetLanguage()
+      );
+    }
     return ResponseEntity.ok(translation);
   }
 }

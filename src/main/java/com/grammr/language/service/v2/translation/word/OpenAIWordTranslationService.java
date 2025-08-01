@@ -1,5 +1,7 @@
 package com.grammr.language.service.v2.translation.word;
 
+import static com.grammr.language.service.v2.translation.word.Prompts.NO_CONTEXT_SYSTEM_PROMPT;
+import static com.grammr.language.service.v2.translation.word.Prompts.NO_CONTEXT_USER_PROMPT;
 import static com.grammr.language.service.v2.translation.word.Prompts.SYSTEM_PROMPT;
 import static com.grammr.language.service.v2.translation.word.Prompts.USER_PROMPT;
 
@@ -49,6 +51,34 @@ public class OpenAIWordTranslationService extends OpenAIResponsesService impleme
         .translation(translatedWord)
         .targetLanguage(targetLanguage)
         .context(context)
+        .build();
+  }
+
+  @Override
+  public WordTranslation translateWithoutContext(String word, LanguageCode targetLanguage) {
+    String userPrompt = String.format(
+        NO_CONTEXT_USER_PROMPT,
+        word,
+        targetLanguage
+    );
+
+    var systemPrompt = Message.systemPrompt(NO_CONTEXT_SYSTEM_PROMPT);
+    var userMessage = Message.userMessage(userPrompt);
+    var inputItems = buildInputItems(List.of(systemPrompt, userMessage));
+
+    ResponseCreateParams createParams = ResponseCreateParams.builder()
+        .inputOfResponse(inputItems)
+        .model(ChatModel.GPT_4O)
+        .build();
+
+    Response openAIResponse = openAIClient.responses().create(createParams);
+    String translatedWord = extractOutputText(openAIResponse);
+    log.info("OpenAI literal translation: '{}' -> '{}' (no context)", word, translatedWord);
+    return WordTranslation.builder()
+        .source(word)
+        .translation(translatedWord)
+        .targetLanguage(targetLanguage)
+        .context("")
         .build();
   }
 }

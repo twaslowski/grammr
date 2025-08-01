@@ -6,4 +6,6 @@ import com.grammr.domain.value.language.v2.WordTranslation;
 public interface WordTranslationService {
 
   WordTranslation translate(String word, String context, LanguageCode targetLanguage);
+
+  WordTranslation translateWithoutContext(String word, LanguageCode targetLanguage);
 }
