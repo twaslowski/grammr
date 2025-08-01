@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "inflection-ru"
-version = "0.2.3"
+version = "0.3.0"
 description = "Inflections for russian words"
 authors = ["Tobias Waslowski <contact@twaslowski.com>"]
 license = "MIT"

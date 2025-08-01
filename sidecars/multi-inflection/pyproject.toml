@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "inflection-multi"
-version = "0.2.2"
+version = "0.3.0"
 description = "Inflections for multiple romanic languages"
 authors = ["Tobias Waslowski <contact@twaslowski.com>"]
 license = "MIT"

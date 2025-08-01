@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "anki-exporter"
-version = "0.3.1"
+version = "0.4.0"
 description = "Anki flashcard generator"
 authors = ["Tobias Waslowski <contact@twaslowski.com>"]
 license = "MIT"
