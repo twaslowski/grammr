@@ -107,3 +107,46 @@ jobs:
           labels: ${{ steps.docker-metadata.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  deploy-swagger:
+    runs-on: ubuntu-latest
+    needs: [ compile-and-test, integration-test ]
+    name: Deploy Swagger UI to Github Pages
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '21'
+
+      - name: Build and run Spring Boot app
+        run: |
+          docker compose -f local/docker-compose.yaml up postgresql -d
+          ./mvnw clean package -DskipTests
+          OPENAI_API_KEY=some-test-key mvn spring-boot:start -Dspring-boot.run.profiles=local
+
+      - name: Fetch OpenAPI spec
+        run: |
+          curl http://localhost:8080/v3/api-docs > openapi.json
+
+      - name: Kill Spring Boot app
+        run: |
+          mvn spring-boot:stop
+
+      - name: Generate Swagger UI
+        run: |
+          mkdir swagger-ui
+          curl -L https://github.com/swagger-api/swagger-ui/archive/refs/heads/master.zip -o swagger-ui.zip
+          unzip swagger-ui.zip
+          mv swagger-ui-master/dist/* swagger-ui/
+          cp openapi.json swagger-ui/
+          sed -i 's|https://petstore.swagger.io/v2/swagger.json|openapi.json|g' swagger-ui/swagger-initializer.js
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: ./swagger-ui
