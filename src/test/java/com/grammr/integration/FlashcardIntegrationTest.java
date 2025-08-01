@@ -29,7 +29,7 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
     var deck = deckRepository.save(DeckSpec.withUser(user).build());
     var authentication = createUserAuthentication(user);
 
-    var creationDto = new com.grammr.flashcards.controller.dto.FlashcardCreationDto(deck.getDeckId(), "Test Question", "Test Answer", null, null);
+    var creationDto = new FlashcardCreationDto("Test Question", "Test Answer", null, null);
 
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/deck/%s/flashcard".formatted(deck.getDeckId()))
             .with(authentication(authentication))

@@ -1,4 +1,4 @@
-package com.grammr.flashcards.controller.dto;
+package com.grammr.flashcards.controller.v2.dto;
 
 import jakarta.validation.constraints.NotNull;
 

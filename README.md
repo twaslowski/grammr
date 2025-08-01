@@ -18,6 +18,8 @@ of languages easier.
 
 ![Vercel Deployment](https://deploy-badge.vercel.app/vercel/grammr)
 
+Swagger docs for the latest build available [here](https://twaslowski.github.io/grammr).
+
 ---
 
 ## In this doc
@@ -83,6 +85,8 @@ They are maintained in the `sidecars` directory.
 
 [![Build core](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml)
 [![core](https://img.shields.io/docker/v/grammrapp/grammr-core?sort=semver)](https://hub.docker.com/r/grammrapp/grammr-core)
+
+[Swagger docs](https://twaslowski.github.io/grammr)
 
 The main backend service that coordinates all other components and provides the primary API for the
 application.

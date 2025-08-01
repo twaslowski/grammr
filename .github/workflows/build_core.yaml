@@ -12,7 +12,7 @@ on:
       - terraform/application/**
       - pom.xml
       - Dockerfile
-      - .github/workflows/deploy_core.yml
+      - .github/workflows/build_core.yaml
 
 jobs:
   compile-and-test:
