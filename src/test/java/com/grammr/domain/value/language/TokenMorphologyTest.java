@@ -20,7 +20,7 @@ public class TokenMorphologyTest {
     assertThat(morphology.getFullFeatureIdentifier(FeatureType.CASE)).isEqualTo("Nominative");
 
     assertThat(morphology.getFeature(FeatureType.NUMBER)).isEmpty();
-    assertThat(morphology.getFullFeatureIdentifier(FeatureType.NUMBER)).isEqualTo("");
+    assertThat(morphology.getFullFeatureIdentifier(FeatureType.NUMBER)).isEmpty();
   }
 
   @Test

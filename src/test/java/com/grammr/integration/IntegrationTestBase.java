@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(Lifecycle.PER_CLASS)
-public class IntegrationTestBase {
+class IntegrationTestBase {
 
   @Autowired
   protected MockMvc mockMvc;

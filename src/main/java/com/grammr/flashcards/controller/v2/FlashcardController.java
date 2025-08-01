@@ -77,7 +77,7 @@ public class FlashcardController {
       @ApiResponse(responseCode = "404", description = "Flashcard not found")
   })
   @DeleteMapping("/{flashcardId}")
-  public ResponseEntity<?> deleteFlashcard(
+  public ResponseEntity<Void> deleteFlashcard(
       @PathVariable UUID deckId,
       @Parameter(description = "Authenticated user") @AuthenticationPrincipal User user,
       @Parameter(description = "ID of the flashcard to delete") @PathVariable UUID flashcardId) {

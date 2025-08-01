@@ -20,7 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @IntegrationTest
-public class DeckIntegrationTest extends IntegrationTestBase {
+class DeckIntegrationTest extends IntegrationTestBase {
 
   @Test
   @SneakyThrows

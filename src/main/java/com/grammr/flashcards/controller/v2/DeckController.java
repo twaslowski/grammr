@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +43,7 @@ public class DeckController {
       @ApiResponse(responseCode = "404", description = "Deck not found")
   })
   @PostMapping(value = "/{deckId}/export")
-  public ResponseEntity<?> exportDeck(@AuthenticationPrincipal User user, @PathVariable UUID deckId) {
+  public ResponseEntity<byte[]> exportDeck(@AuthenticationPrincipal User user, @PathVariable UUID deckId) {
     var deck = deckService.getDeck(deckId, user);
     byte[] exportedDeck = deckService.exportDeck(deck, EXPORT_DATA_TYPE);
     var filename = format("%s.%s", deck.getName(), EXPORT_DATA_TYPE);

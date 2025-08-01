@@ -17,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @IntegrationTest
-public class InflectionIntegrationTest extends IntegrationTestBase {
+class InflectionIntegrationTest extends IntegrationTestBase {
 
   @Autowired
   private ParadigmRepository paradigmRepository;

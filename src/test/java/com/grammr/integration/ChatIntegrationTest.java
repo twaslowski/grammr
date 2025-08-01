@@ -1,4 +1,4 @@
-package com.grammr.integration.v2;
+package com.grammr.integration;
 
 import static com.grammr.config.web.AnonymousSessionFilter.ANON_COOKIE_NAME;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -16,7 +16,6 @@ import com.grammr.domain.entity.Analysis;
 import com.grammr.domain.entity.ChatMessage.Role;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.integration.IntegrationTestBase;
 import com.grammr.repository.AnalysisRepository;
 import com.grammr.repository.ChatMessageRepository;
 import com.grammr.repository.ChatRepository;

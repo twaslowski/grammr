@@ -9,13 +9,13 @@ import com.grammr.domain.enums.features.FeatureType;
 import com.grammr.domain.enums.features.Number;
 import com.grammr.domain.enums.features.Person;
 import com.grammr.domain.enums.features.Tense;
-import com.grammr.domain.value.AnalysisComponentRequest;
+import com.grammr.domain.value.MorphologicalAnalysisRequest;
 import com.grammr.language.service.MorphologyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @IntegrationTest
-public class MorphologicalAnalysisIntegrationTest extends IntegrationTestBase {
+class MorphologicalAnalysisIntegrationTest extends IntegrationTestBase {
 
   @Autowired
   private MorphologyService analysisService;
@@ -23,11 +23,11 @@ public class MorphologicalAnalysisIntegrationTest extends IntegrationTestBase {
   @Test
   void shouldCreateAnalysis() {
     var phrase = "Ich lerne Deutsch.";
-    var analysisComponentRequest = AnalysisComponentRequest.builder()
+    var analysisComponentRequest = MorphologicalAnalysisRequest.builder()
         .phrase(phrase)
         .sourceLanguage(LanguageCode.DE)
         .build();
-    var analysis = analysisService.createAnalysisComponent(analysisComponentRequest);
+    var analysis = analysisService.createMorphologicalAnalysis(analysisComponentRequest);
 
     assertThat(analysis).isNotNull();
     assertThat(analysis.getTokens().size()).isEqualTo(4);
@@ -55,11 +55,11 @@ public class MorphologicalAnalysisIntegrationTest extends IntegrationTestBase {
         
         Как ты бы ответил на её вопрос: "Как дела?"
         """;
-    var analysisComponentRequest = AnalysisComponentRequest.builder()
+    var analysisComponentRequest = MorphologicalAnalysisRequest.builder()
         .phrase(phrase)
         .sourceLanguage(LanguageCode.RU)
         .build();
-    var analysis = analysisService.createAnalysisComponent(analysisComponentRequest);
+    var analysis = analysisService.createMorphologicalAnalysis(analysisComponentRequest);
 
     assertThat(analysis).isNotNull();
 

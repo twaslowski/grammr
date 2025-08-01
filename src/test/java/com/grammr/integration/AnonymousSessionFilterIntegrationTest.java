@@ -39,7 +39,7 @@ class AnonymousSessionFilterIntegrationTest extends IntegrationTestBase {
     // Check cookie in response
     Cookie setCookie = result.getResponse().getCookie(ANON_COOKIE_NAME);
     assertThat(setCookie).isNotNull();
-    assertThat(ANON_COOKIE_NAME).isEqualTo(setCookie.getName());
+    assertThat(setCookie.getName()).isEqualTo(ANON_COOKIE_NAME);
     assertThat(setCookie.getValue()).isNotEmpty();
 
     // Confirm user was persisted
@@ -59,7 +59,6 @@ class AnonymousSessionFilterIntegrationTest extends IntegrationTestBase {
 
     assertThat(userRepository.findAll()).isEmpty();
   }
-
 
   @Test
   void shouldLoadAnonymousUserWithSessionTokenPresent() throws Exception {

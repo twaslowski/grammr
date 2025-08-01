@@ -1,4 +1,4 @@
-package com.grammr.integration.v2;
+package com.grammr.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.enums.LanguageCode;
-import com.grammr.integration.IntegrationTestBase;
 import com.grammr.language.controller.v2.dto.AnalysisRequest;
 import com.grammr.repository.AnalysisRepository;
 import java.util.UUID;

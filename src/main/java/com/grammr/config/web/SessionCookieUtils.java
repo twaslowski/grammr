@@ -8,15 +8,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.UUID;
 
 public class SessionCookieUtils {
 
-  public static final Duration COOKIE_DURATION = Duration.ofDays(90);
-
-  public static String generateSessionId() {
-    return UUID.randomUUID().toString();
+  private SessionCookieUtils() {
+    // Utility class, no instantiation
   }
+
+  public static final Duration COOKIE_DURATION = Duration.ofDays(90);
 
   public static Optional<String> findSessionId(HttpServletRequest request) {
     if (request.getCookies() == null) {

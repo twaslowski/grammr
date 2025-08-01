@@ -10,7 +10,7 @@ import org.springframework.lang.Nullable;
 
 @Data
 @Builder
-public class AnalysisComponentRequest {
+public class MorphologicalAnalysisRequest {
 
   @Nullable
   private String phrase;
@@ -24,8 +24,8 @@ public class AnalysisComponentRequest {
   @Nullable
   private List<Token> tokens;
 
-  public static AnalysisComponentRequest from(AnalysisRequest analysisRequest) {
-    return AnalysisComponentRequest.builder()
+  public static MorphologicalAnalysisRequest from(AnalysisRequest analysisRequest) {
+    return MorphologicalAnalysisRequest.builder()
         .phrase(analysisRequest.phrase())
         .sourceLanguage(analysisRequest.userLanguageLearned())
         .targetLanguage(analysisRequest.userLanguageSpoken())
@@ -33,8 +33,8 @@ public class AnalysisComponentRequest {
         .build();
   }
 
-  public static AnalysisComponentRequest from(AnalysisRequest analysisRequest, List<Token> tokens) {
-    return AnalysisComponentRequest.builder()
+  public static MorphologicalAnalysisRequest from(AnalysisRequest analysisRequest, List<Token> tokens) {
+    return MorphologicalAnalysisRequest.builder()
         .phrase(analysisRequest.phrase())
         .sourceLanguage(analysisRequest.userLanguageSpoken())
         .targetLanguage(analysisRequest.userLanguageLearned())

@@ -13,7 +13,7 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
-public class ObjectMapperTest {
+class ObjectMapperTest {
 
   private final ObjectMapper objectMapper = new ObjectMapperConfiguration().objectMapper();
 

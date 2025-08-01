@@ -54,7 +54,7 @@ public record TokenMorphology(
 
   public String getFullFeatureIdentifier(FeatureType featureType) {
     return getFeature(featureType)
-        .map(feature -> ((FeatureProperty) feature).fullIdentifier())
+        .map(FeatureProperty::fullIdentifier)
         .orElse("");
   }
 }

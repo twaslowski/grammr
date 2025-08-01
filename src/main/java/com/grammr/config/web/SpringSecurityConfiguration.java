@@ -57,8 +57,6 @@ public class SpringSecurityConfiguration {
         .requestMatchers("/api/v1/deck").hasRole("USER")
         .requestMatchers("/api/v1/deck/**").hasRole("USER")
         .requestMatchers("/api/v2/deck/**").hasRole("USER")
-        .requestMatchers("/api/v1/flashcard").hasRole("USER")
-        .requestMatchers("/api/v1/flashcard/**").hasRole("USER")
         .requestMatchers("/api/v1/**").permitAll()
         .anyRequest().authenticated();
   }

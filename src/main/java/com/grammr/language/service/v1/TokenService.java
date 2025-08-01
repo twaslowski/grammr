@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,7 @@ public class TokenService {
         .filter(token -> !token.isEmpty())
         .map(token -> Token.fromString(token, indexCounter.getAndIncrement()))
         .filter(token -> !token.text().isBlank())
-        .collect(Collectors.toList());
+        .toList();
   }
 
   public List<Token> enrichTokens(List<Token> tokens,

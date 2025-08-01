@@ -20,7 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @IntegrationTest
-public class FlashcardIntegrationTest extends IntegrationTestBase {
+class FlashcardIntegrationTest extends IntegrationTestBase {
 
   @Test
   @SneakyThrows
