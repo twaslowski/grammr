@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.8.0](https://github.com/twaslowski/grammr/compare/v3.7.0...v3.8.0) (2025-08-01)
+
+
+### Features
+
+* **translations:** enable context-free literal translations ([1720e55](https://github.com/twaslowski/grammr/commit/1720e556c5f380ef2a92cd220df1dc9d0c262d9d))
+
+
+### Bug Fixes
+
+* **anki:** workflow trigger ([5ae5fcc](https://github.com/twaslowski/grammr/commit/5ae5fcca5a8a6b828249c7e152813c0f0c255bf1))
+* **translations:** remove old translation when loading new one ([f70b536](https://github.com/twaslowski/grammr/commit/f70b536e02af977e3ddca0ad8ebd577fe93635d3))
+
 ## [3.7.0](https://github.com/twaslowski/grammr/compare/v3.6.1...v3.7.0) (2025-07-30)
 
 
