@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.9.0](https://github.com/twaslowski/grammr/compare/v3.8.0...v3.9.0) (2025-08-02)
+
+
+### Features
+
+* **core:** deploy swagger docs after running tests ([2e1cbd5](https://github.com/twaslowski/grammr/commit/2e1cbd5ad1ca3cdac6d710c35870471ce930ab4a))
+* **ui:** use deck v2 endpoints ([9146a80](https://github.com/twaslowski/grammr/commit/9146a806c2af5a7ef66f755d63c867ff4791b0ef))
+
 ## [3.8.0](https://github.com/twaslowski/grammr/compare/v3.7.0...v3.8.0) (2025-08-01)
 
 
