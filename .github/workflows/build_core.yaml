@@ -52,7 +52,9 @@ jobs:
           cache: maven
 
       - name: Run integration tests
-        run: ./mvnw package test -P integration
+        run: |
+          docker compose -f local/docker-compose.yaml up -d --remove-orphans --wait
+          ./mvnw package test -P integration
 
   build-grammr-core:
     name: Build grammr-core Docker image
