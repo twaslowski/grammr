@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.11.0](https://github.com/twaslowski/grammr/compare/v3.10.0...v3.11.0) (2025-08-02)
+
+
+### Features
+
+* **ops:** perform sonarqube analysis on push ([ca7c47c](https://github.com/twaslowski/grammr/commit/ca7c47c4d255732b0d9178bea8193b2094b84aa9))
+
+
+### Bug Fixes
+
+* **ops:** integration test workflows ([5744eaf](https://github.com/twaslowski/grammr/commit/5744eaf0be2df08144f2879e702729a7257f6521))
+* **ops:** remove bad copy-paste ([079acb3](https://github.com/twaslowski/grammr/commit/079acb3aa59ab254d7f59bb77f35671548d2f997))
+* **ops:** set up mockserver in test workflow ([1daed66](https://github.com/twaslowski/grammr/commit/1daed6632f09db0675f2d229d010eaa5b09d400e))
+* **ops:** sonarqube job indentation ([a535b8c](https://github.com/twaslowski/grammr/commit/a535b8c7f6fe57003c20578b99d4f43e7daf60d6))
+* **ops:** wait for mockserver to be up ([f58f027](https://github.com/twaslowski/grammr/commit/f58f027e62a0dae123cc545e1a06a668d8e2631d))
+* **sonar:** java distribution typo ([d0ae386](https://github.com/twaslowski/grammr/commit/d0ae3861e56fdddb73d0197c640e73eab47cf1c8))
+
 ## [3.10.0](https://github.com/twaslowski/grammr/compare/v3.9.0...v3.10.0) (2025-08-02)
 
 
