@@ -8,10 +8,9 @@ import * as React from 'react';
 import { siteConfig } from '@/constant/config';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { Toaster } from '@/components/ui/toaster';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Header } from '@/components/common/Header';
 import { TokenPopoverProvider } from '@/context/TokenPopoverContext';
 import { ChatProvider } from '@/context/ChatContext';
+import LayoutShell from '@/components/common/LayoutShell';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -54,8 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <LanguageProvider>
             <TokenPopoverProvider>
               <ChatProvider>
-                <Header />
-                <main className='flex-grow'>{children}</main>
+                <LayoutShell>{children}</LayoutShell>
               </ChatProvider>
             </TokenPopoverProvider>
           </LanguageProvider>

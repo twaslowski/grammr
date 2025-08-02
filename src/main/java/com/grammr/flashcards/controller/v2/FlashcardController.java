@@ -90,7 +90,7 @@ public class FlashcardController {
     // This approach incurs a performance overhead, but I don't have to perform the extra flashcard ownership check
     // If this turns out to be a performance bottleneck, we can optimize it later
     var deck = deckService.getDeck(deckId, user);
-    var flashcard = flashcardService.getFlashcard(flashcardId, deck.getId());
+    var flashcard = flashcardService.getFlashcard(flashcardId, deck);
     flashcard = flashcardService.updateFlashcardWith(flashcard, data);
     return ResponseEntity.ok().body(FlashcardDto.fromEntity(flashcard));
   }
