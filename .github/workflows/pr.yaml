@@ -37,4 +37,6 @@ jobs:
           cache: maven
 
       - name: Integration tests
-        run: ./mvnw package test
+        run: |
+          docker compose -f local/docker-compose.yaml up -d --remove-orphans --wait
+          ./mvnw package test -P integration
