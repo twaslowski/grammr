@@ -2,6 +2,7 @@ package com.grammr.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.grammr.domain.enums.PartOfSpeechTag;
+import com.grammr.flashcards.controller.v2.dto.FlashcardCreationDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -77,13 +78,20 @@ public class Flashcard {
   @UpdateTimestamp
   private ZonedDateTime updatedTimestamp;
 
-  public Flashcard confirmSync() {
+  public void confirmSync() {
     this.status = Status.EXPORT_COMPLETED;
-    return this;
   }
 
   public void initiateSync(UUID syncId) {
     this.status = Status.EXPORT_INITIATED;
     this.syncId = syncId;
+  }
+
+  public Flashcard updateWith(FlashcardCreationDto data) {
+    this.front = data.question();
+    this.back = data.answer();
+    // Leaving updating Paradigm and tokenPos for the future
+    this.status = Status.UPDATED;
+    return this;
   }
 }

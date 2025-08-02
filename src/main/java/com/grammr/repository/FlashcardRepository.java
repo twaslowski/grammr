@@ -13,6 +13,8 @@ public interface FlashcardRepository extends JpaRepository<Flashcard, Long> {
 
   List<Flashcard> findByDeckId(long id);
 
+  Optional<Flashcard> findByFlashcardIdAndDeckId(UUID id, long deckId);
+
   List<Flashcard> findByDeckIdAndStatusIn(long deckId, Set<Status> statuses);
 
   List<Flashcard> findByDeckIdAndSyncId(long deckId, UUID syncId);

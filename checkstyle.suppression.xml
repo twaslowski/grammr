@@ -11,4 +11,5 @@
     <suppress checks="CommentsIndentation" files=".*\.java"/>
     <suppress checks="OverloadMethodsDeclarationOrder" files=".*\.java"/>
     <suppress checks="LambdaParameterName" files=".*\.java"/>
+    <suppress checks="CustomImportOrder" files=".*\.java"/>
 </suppressions>
