@@ -38,7 +38,7 @@ jobs:
 
       - name: Set up local environment
         run: |
-          docker compose -f local/docker-compose.yaml up postgresql --wait -d
+          docker compose -f local/docker-compose.yaml up -d --remove-orphans --wait
           cd local/expectations && python set_expectations.py
 
       - name: Integration tests
