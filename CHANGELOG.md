@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.10.0](https://github.com/twaslowski/grammr/compare/v3.9.0...v3.10.0) (2025-08-02)
+
+
+### Features
+
+* **anki:** enable editing flashcards in the frontend ([465cad8](https://github.com/twaslowski/grammr/commit/465cad853f647739b7a7f0e74cae12e7c9eb4b69))
+* **anki:** enable PUT capabilities for flashcards ([#49](https://github.com/twaslowski/grammr/issues/49)) ([9ff6dc8](https://github.com/twaslowski/grammr/commit/9ff6dc8cfcdf288ea64dfdcf285e1ede1b291bf9))
+
+
+### Bug Fixes
+
+* **vercel:** stop vercel from attempting to deploy from gh-pages ([c4d444d](https://github.com/twaslowski/grammr/commit/c4d444d9c911e3864ff84fe0ff71213d642a1e3a))
+
 ## [3.9.0](https://github.com/twaslowski/grammr/compare/v3.8.0...v3.9.0) (2025-08-02)
 
 
