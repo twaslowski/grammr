@@ -1,4 +1,11 @@
-# grammr
+[![Build core](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml)
+[![core](https://img.shields.io/docker/v/grammrapp/grammr-core?sort=semver)](https://hub.docker.com/r/grammrapp/grammr-core)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=twaslowski_grammr&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=twaslowski_grammr)
+[![Documentation](https://img.shields.io/badge/docs-swagger-orange)](https://twaslowski.github.io/grammr)
+![License](https://img.shields.io/github/license/twaslowski/grammr)
+[![Vercel Deployment](https://deploy-badge.vercel.app/vercel/grammr)](https://vercel.com/tobias-waslowskis-projects/grammr/deployments)
+
+## About
 
 `grammr` is a language learning tool that aims to make understanding the grammar of a variety
 of languages easier.
@@ -8,19 +15,11 @@ of languages easier.
 - 🔎 Get a grammatical analysis for every word in the text
 - 💡 Conjugate and decline words
 - 📚 Create flashcards to memorize words and phrases
-- 🌈 Many more features coming! Check out the [Roadmap](#Features) for more information.
+
+Flashcards can be exported and continuously synced with [Anki](https://apps.ankiweb.net/),
+a popular open-source spaced repetition flashcard app.
 
 ### 👉🏼 [Try it out](https://grammr.app).
-
----
-
-[![Build core](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml)
-
-[![Vercel Deployment](https://deploy-badge.vercel.app/vercel/grammr)](https://vercel.com/tobias-waslowskis-projects/grammr/deployments
-
-Swagger docs for the latest build available [here](https://twaslowski.github.io/grammr).
-
----
 
 ## In this doc
 
