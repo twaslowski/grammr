@@ -21,9 +21,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Task
-        uses: arduino/setup-task@v2
-
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -32,7 +29,7 @@ jobs:
           cache: maven
 
       - name: Unit tests
-        run: task unit-test
+        run: ./mvnw package test
 
       - name: Upload jar artifact
         uses: actions/upload-artifact@v4
@@ -47,9 +44,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Task
-        uses: arduino/setup-task@v2
-
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -58,7 +52,7 @@ jobs:
           cache: maven
 
       - name: Run integration tests
-        run: task integration-test
+        run: ./mvnw package test -P integration
 
   build-grammr-core:
     name: Build grammr-core Docker image
