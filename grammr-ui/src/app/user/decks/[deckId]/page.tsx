@@ -30,7 +30,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
       return;
     }
 
-    await fetch(`/api/v1/deck/${deckId}`, {
+    await fetch(`/api/v2/deck/${deckId}`, {
       method: 'DELETE',
     })
       .then(() => {
@@ -55,7 +55,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
 
   useEffect(() => {
     const fetchDeck = async () => {
-      const fetchedDeck = await request<Deck>(`/api/v1/deck/${deckId}`, {
+      const fetchedDeck = await request<Deck>(`/api/v2/deck/${deckId}`, {
         method: 'GET',
       });
       setDeck(fetchedDeck);

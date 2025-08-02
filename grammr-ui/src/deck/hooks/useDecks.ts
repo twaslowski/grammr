@@ -9,7 +9,7 @@ export const useDecks = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await request<Deck[]>('/api/v1/deck');
+        const result = await request<Deck[]>('/api/v2/deck');
         if (result) setDecks(result);
       } catch (err) {
         //
@@ -19,7 +19,7 @@ export const useDecks = () => {
   }, [request]);
 
   const addDeck = async (name: string, description: string) => {
-    const newDeck = await request<Deck>('/api/v1/deck', {
+    const newDeck = await request<Deck>('/api/v2/deck', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },

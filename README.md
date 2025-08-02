@@ -16,7 +16,7 @@ of languages easier.
 
 [![Build core](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml)
 
-![Vercel Deployment](https://deploy-badge.vercel.app/vercel/grammr)
+[![Vercel Deployment](https://deploy-badge.vercel.app/vercel/grammr)](https://vercel.com/tobias-waslowskis-projects/grammr/deployments
 
 Swagger docs for the latest build available [here](https://twaslowski.github.io/grammr).
 
