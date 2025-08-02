@@ -4,7 +4,6 @@ import React, { MouseEvent, useState } from 'react';
 import { Flashcard } from '@/flashcard/types/flashcard';
 import GenericFlashcardPreview from '@/flashcard/components/GenericFlashcardPreview';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { toast } from '@/hooks/use-toast';
 
 interface FlashcardListProps {
   cards: Flashcard[];
@@ -14,7 +13,7 @@ interface FlashcardListProps {
 export default function FlashcardList({ cards, deckId }: FlashcardListProps) {
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const [visibleSide, setVisibleSide] = useState('front');
-  const [showPreviewDialog, setShowPreviewDialog] = useState(false);
+  const [previewDialogCardId, setPreviewDialogCardId] = useState<string | null>(null);
 
   const toggleCardExpansion = (cardId: string) => {
     if (expandedCardId === cardId) {
@@ -95,10 +94,10 @@ export default function FlashcardList({ cards, deckId }: FlashcardListProps) {
               <span className={`text-sm px-2 py-0.5 rounded ${getStatusBgClass(card.status)}`}>
                 {card.status || 'CREATED'}
               </span>
-              <button onClick={() => setShowPreviewDialog(true)} title='Edit Card'>
+              <button onClick={() => setPreviewDialogCardId(card.id)} title='Edit Card'>
                 <Edit size={16} />
               </button>
-              <Dialog open={showPreviewDialog} onOpenChange={setShowPreviewDialog}>
+              <Dialog open={previewDialogCardId === card.id} onOpenChange={(open) => setPreviewDialogCardId(open ? card.id : null)}>
                 <DialogContent className='max-w-3xl'>
                   <DialogHeader>
                     <DialogTitle>Preview Flashcard</DialogTitle>
@@ -108,7 +107,7 @@ export default function FlashcardList({ cards, deckId }: FlashcardListProps) {
                     initialBack={card.answer}
                     initialDeckId={deckId}
                     flashcardId={card.id}
-                    onClose={() => setShowPreviewDialog(false)}
+                    onClose={() => setPreviewDialogCardId(null)}
                     onCardAdded={() => window.location.reload()}
                     submitAction='update'
                   />
