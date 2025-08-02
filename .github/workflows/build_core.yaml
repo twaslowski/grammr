@@ -72,7 +72,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 21
-          distribution: coretto
+          distribution: corretto
           cache: maven
 
       - name: Cache SonarQube packages
