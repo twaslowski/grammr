@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.11.1](https://github.com/twaslowski/grammr/compare/v3.11.0...v3.11.1) (2025-08-02)
+
+
+### Bug Fixes
+
+* **anki:** ensure the correct flashcards are edited ([024a017](https://github.com/twaslowski/grammr/commit/024a0172687a0723ce6d47f8dad7b624d831ed4a))
+* **sonar:** remove from workflow temporarily ([6885e9d](https://github.com/twaslowski/grammr/commit/6885e9d4b40907ec4faf17948547465c0e832765))
+
 ## [3.11.0](https://github.com/twaslowski/grammr/compare/v3.10.0...v3.11.0) (2025-08-02)
 
 
