@@ -53,10 +53,10 @@ public class FlashcardService {
     flashcards.forEach(Flashcard::confirmSync);
   }
 
-  public Flashcard getFlashcard(UUID flashcardId, long deckId) {
-    log.info("Retrieving flashcard {} for deck {}", flashcardId, deckId);
-    return flashcardRepository.findByFlashcardIdAndDeckId(flashcardId, deckId)
-        .orElseThrow(() -> new ResourceNotFoundException("Flashcard not found: %s in deck %s".formatted(flashcardId, deckId)));
+  public Flashcard getFlashcard(UUID flashcardId, Deck deck) {
+    log.info("Retrieving flashcard {} for deck {}", flashcardId, deck.getDeckId());
+    return flashcardRepository.findByFlashcardIdAndDeck(flashcardId, deck)
+        .orElseThrow(() -> new ResourceNotFoundException("Flashcard not found: %s in deck %s".formatted(flashcardId, deck.getDeckId())));
   }
 
   public Flashcard updateFlashcardWith(Flashcard flashcard, FlashcardCreationDto data) {

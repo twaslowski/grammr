@@ -1,8 +1,10 @@
 import { ChevronDown, ChevronRight, Edit, Trash2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import React, { MouseEvent, useState } from 'react';
 
 import { Flashcard } from '@/flashcard/types/flashcard';
+import GenericFlashcardPreview from '@/flashcard/components/GenericFlashcardPreview';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { toast } from '@/hooks/use-toast';
 
 interface FlashcardListProps {
   cards: Flashcard[];
@@ -12,6 +14,7 @@ interface FlashcardListProps {
 export default function FlashcardList({ cards, deckId }: FlashcardListProps) {
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const [visibleSide, setVisibleSide] = useState('front');
+  const [showPreviewDialog, setShowPreviewDialog] = useState(false);
 
   const toggleCardExpansion = (cardId: string) => {
     if (expandedCardId === cardId) {
@@ -49,11 +52,6 @@ export default function FlashcardList({ cards, deckId }: FlashcardListProps) {
       alert('Failed to delete card. Please try again.');
     }
   };
-
-  // const handleEditCard = (cardId: string, e: MouseEvent) => {
-  //   e.stopPropagation();
-  //   router.push(`/user/decks/${deckId}/cards/${cardId}/edit`);
-  // };
 
   // Utility to get background color class based on card status
   function getStatusBgClass(status: Flashcard['status'] | undefined) {
@@ -97,14 +95,25 @@ export default function FlashcardList({ cards, deckId }: FlashcardListProps) {
               <span className={`text-sm px-2 py-0.5 rounded ${getStatusBgClass(card.status)}`}>
                 {card.status || 'CREATED'}
               </span>
-              <button
-                disabled
-                // onClick={(e) => handleEditCard(card.id, e)}
-                className='p-1 text-gray-400 cursor-not-allowed'
-                title='Edit Card'
-              >
+              <button onClick={() => setShowPreviewDialog(true)} title='Edit Card'>
                 <Edit size={16} />
               </button>
+              <Dialog open={showPreviewDialog} onOpenChange={setShowPreviewDialog}>
+                <DialogContent className='max-w-3xl'>
+                  <DialogHeader>
+                    <DialogTitle>Preview Flashcard</DialogTitle>
+                  </DialogHeader>
+                  <GenericFlashcardPreview
+                    initialFront={card.question}
+                    initialBack={card.answer}
+                    initialDeckId={deckId}
+                    flashcardId={card.id}
+                    onClose={() => setShowPreviewDialog(false)}
+                    onCardAdded={() => window.location.reload()}
+                    submitAction='update'
+                  />
+                </DialogContent>
+              </Dialog>
 
               <button
                 onClick={(e) => handleDeleteCard(card.id, e)}

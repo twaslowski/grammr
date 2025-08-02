@@ -1,6 +1,6 @@
 {
-  "git" : {
-    "deploymentEnabled" : {
+  "git": {
+    "deploymentEnabled": {
       "main": true,
       "develop": true,
       "gh-pages": false

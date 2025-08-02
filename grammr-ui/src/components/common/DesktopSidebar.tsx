@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { ClerkLoading, SignedIn, SignedOut, SignInButton } from '@clerk/nextjs';
@@ -18,8 +18,10 @@ import { SidebarLeftIcon } from '@/components/ui/icons';
 import { ChatHistory } from '@/chat/components/ChatHistory';
 import { LanguageSelectionDropdown } from '@/components/common/LanguageSelectionDropdown';
 
-export const DesktopSidebar: React.FC = () => {
-  const [menuOpen, setMenuOpen] = useState(true);
+export const DesktopSidebar: React.FC<{
+  menuOpen: boolean;
+  setMenuOpen: (open: boolean) => void;
+}> = ({ menuOpen, setMenuOpen }) => {
   const router = useRouter();
 
   const navigateTo = (path: string) => {

@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
+import { Flashcard } from '@/flashcard/types/flashcard';
+import { useApi } from '@/hooks/useApi';
 
 interface FlashcardPreviewProps {
   initialDeckId?: string;
@@ -13,6 +15,8 @@ interface FlashcardPreviewProps {
   initialBack: string;
   onClose: () => void;
   onCardAdded?: () => void;
+  flashcardId?: string;
+  submitAction?: 'create' | 'update';
 }
 
 const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
@@ -21,9 +25,11 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
   initialFront,
   initialBack,
   onClose,
+  flashcardId = '',
+  submitAction = 'create',
 }) => {
+  const { isLoading, request } = useApi();
   const [deckId, setDeckId] = useState<string>(initialDeckId);
-  const [isLoading, setIsLoading] = useState(false);
   const [front, setFront] = useState(initialFront);
   const [back, setBack] = useState(initialBack);
   const [activeCard, setActiveCard] = useState('front');
@@ -36,9 +42,16 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
     }
   };
 
+  const handleSubmit = () => {
+    if (submitAction === 'create') {
+      void createFlashcard();
+    } else {
+      void handleUpdateCard(flashcardId);
+    }
+  };
+
   const createFlashcard = async () => {
-    setIsLoading(true);
-    await fetch(`/api/v2/deck/${deckId}/flashcard`, {
+    await request<Flashcard>(`/api/v2/deck/${deckId}/flashcard`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -62,9 +75,35 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
         });
       })
       .finally(() => {
-        setIsLoading(false);
         onCardAdded();
       });
+  };
+
+  const handleUpdateCard = async (cardId: string) => {
+    await fetch(`/api/v2/deck/${deckId}/flashcard/${cardId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        deckId: deckId,
+        question: front,
+        answer: back,
+      }),
+    })
+      .then(() => {
+        toast({
+          title: 'Success',
+          description: 'Flashcard updated successfully',
+        });
+        onClose();
+      })
+      .catch(() => {
+        toast({
+          title: 'Error',
+          description: 'Error updating flashcard',
+          variant: 'destructive',
+        });
+      })
+      .finally(() => onCardAdded());
   };
 
   return (
@@ -126,7 +165,7 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
         <h3 className='text-sm font-medium'>Select Deck</h3>
         <div className='flex items-center gap-4'>
           <DeckSelection initialDeckId={deckId} onDeckSelect={setDeckId} />
-          <Button onClick={createFlashcard} disabled={isLoading || deckId === '-1'}>
+          <Button onClick={handleSubmit} disabled={isLoading || deckId === '-1'}>
             Save
           </Button>
         </div>
