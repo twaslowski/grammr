@@ -1,4 +1,11 @@
 {
+  "git" : {
+    "deploymentEnabled" : {
+      "main": true,
+      "develop": true,
+      "gh-pages": false
+    }
+  },
   "headers": [
     {
       "source": "/fonts/inter-var-latin.woff2",
