@@ -51,9 +51,13 @@ jobs:
           distribution: corretto
           cache: maven
 
+      - name: Set up local environment
+        run: |
+          docker compose -f local/docker-compose.yaml up postgresql -d
+          cd local/expectations && python set_expectations.py
+
       - name: Run integration tests
         run: |
-          docker compose -f local/docker-compose.yaml up -d --remove-orphans --wait
           ./mvnw package test -P integration
 
   build-grammr-core:
