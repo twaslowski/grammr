@@ -7,10 +7,10 @@ import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.domain.exception.ResourceExistsException;
 import com.grammr.domain.exception.ResourceNotFoundException;
+import com.grammr.flashcards.controller.v2.dto.FlashcardCreationDto;
 import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.ParadigmRepository;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -53,6 +53,17 @@ public class FlashcardService {
     flashcards.forEach(Flashcard::confirmSync);
   }
 
+  public Flashcard getFlashcard(UUID flashcardId, long deckId) {
+    log.info("Retrieving flashcard {} for deck {}", flashcardId, deckId);
+    return flashcardRepository.findByFlashcardIdAndDeckId(flashcardId, deckId)
+        .orElseThrow(() -> new ResourceNotFoundException("Flashcard not found: %s in deck %s".formatted(flashcardId, deckId)));
+  }
+
+  public Flashcard updateFlashcardWith(Flashcard flashcard, FlashcardCreationDto data) {
+    log.info("Updating flashcard {}", flashcard.getFlashcardId());
+    return flashcardRepository.save(flashcard.updateWith(data));
+  }
+
   public Flashcard createFlashcard(User user, UUID deckId, String question, String answer, PartOfSpeechTag tokenPos, UUID paradigmId) {
     var deck = deckService.getDeck(deckId, user);
 
@@ -81,14 +92,6 @@ public class FlashcardService {
     var foundFlashcard = flashcardRepository.findByFlashcardId(flashcardId)
         .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(flashcardId)));
 
-    flashcardRepository.delete(foundFlashcard);
-  }
-
-  // Kept for v1 backward compatibility
-  public void deleteFlashcard(User user, long flashcardId) {
-    var foundFlashcard = flashcardRepository.findById(flashcardId)
-        .filter(flashcard -> Objects.equals(flashcard.getDeck().getOwner().getId(), user.getId()))
-        .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(flashcardId)));
     flashcardRepository.delete(foundFlashcard);
   }
 }

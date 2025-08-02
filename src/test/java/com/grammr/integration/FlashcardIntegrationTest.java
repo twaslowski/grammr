@@ -1,10 +1,5 @@
 package com.grammr.integration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.entity.DeckSpec;
 import com.grammr.domain.entity.Flashcard.Status;
@@ -12,12 +7,18 @@ import com.grammr.domain.entity.FlashcardSpec;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.flashcards.controller.v2.dto.FlashcardCreationDto;
 import com.grammr.flashcards.controller.v2.dto.SyncDto;
-import java.util.List;
-import java.util.UUID;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @IntegrationTest
 class FlashcardIntegrationTest extends IntegrationTestBase {
@@ -162,5 +163,47 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound())
         .andReturn();
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldReturnNotFoundWhenUpdatingNonExistentFlashcard() {
+    // Given
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
+    var authentication = createUserAuthentication(user);
+    var nonExistentFlashcardId = UUID.randomUUID();
+    var updatePayload = new FlashcardCreationDto("Updated Front", "Updated Back", null, null);
+
+    // When & Then
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v2/deck/%s/flashcard/%s".formatted(deck.getDeckId(), nonExistentFlashcardId))
+            .with(authentication(authentication))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(updatePayload)))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldUpdateFlashcardSuccessfully() {
+    // Given
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
+    var flashcard = flashcardRepository.save(FlashcardSpec.withDeck(deck).build());
+    var authentication = createUserAuthentication(user);
+    var updatePayload = new FlashcardCreationDto("Updated Front", "Updated Back", null, null);
+
+
+    // When & Then
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v2/deck/%s/flashcard/%s".formatted(deck.getDeckId(), flashcard.getFlashcardId()))
+            .with(authentication(authentication))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(updatePayload)))
+        .andExpect(status().isOk());
+
+    // Verify update
+    var updated = flashcardRepository.findById(flashcard.getId()).orElseThrow();
+    assertThat(updated.getFront()).isEqualTo(updatePayload.question());
+    assertThat(updated.getBack()).isEqualTo(updatePayload.answer());
   }
 }
