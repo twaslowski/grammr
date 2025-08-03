@@ -15,14 +15,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import java.time.ZonedDateTime;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -35,10 +36,22 @@ public class Flashcard {
   public enum Status {
     CREATED,
     UPDATED,
-    EXPORT_INITIATED,
-    EXPORT_COMPLETED,
-    EXPORT_FAILED,
-    MARKED_FOR_DELETION
+    MARKED_FOR_DELETION,
+
+    // Export statuses
+    CREATION_INITIATED,
+    CREATION_SUCCEEDED,
+    CREATION_FAILED,
+
+    // Update statuses
+    UPDATE_INITIATED,
+    UPDATE_SUCCEEDED,
+    UPDATE_FAILED,
+
+    // Deletion statuses
+    DELETION_INITIATED,
+    DELETION_SUCCEEDED,
+    DELETION_FAILED;
   }
 
   @Id
@@ -70,8 +83,6 @@ public class Flashcard {
   @Enumerated(EnumType.STRING)
   private Status status;
 
-  private UUID syncId;
-
   @CreationTimestamp
   @Column(updatable = false)
   private ZonedDateTime createdTimestamp;
@@ -80,12 +91,30 @@ public class Flashcard {
   private ZonedDateTime updatedTimestamp;
 
   public void confirmSync() {
-    this.status = Status.EXPORT_COMPLETED;
+    this.status = switch (this.status) {
+      case CREATION_INITIATED -> Status.CREATION_SUCCEEDED;
+      case UPDATE_INITIATED -> Status.UPDATE_SUCCEEDED;
+      case DELETION_INITIATED -> Status.DELETION_SUCCEEDED;
+      default -> throw new IllegalStateException("Cannot confirm sync for flashcard with status: " + this.status);
+    };
   }
 
-  public void initiateSync(UUID syncId) {
-    this.status = Status.EXPORT_INITIATED;
-    this.syncId = syncId;
+  public void failSync() {
+    this.status = switch (this.status) {
+      case CREATION_INITIATED -> Status.CREATION_FAILED;
+      case UPDATE_INITIATED -> Status.UPDATE_FAILED;
+      case DELETION_INITIATED -> Status.DELETION_FAILED;
+      default -> throw new IllegalStateException("Cannot fail sync for flashcard with status: " + this.status);
+    };
+  }
+
+  public void initiateSync() {
+    this.status = switch (this.status) {
+      case CREATED -> Status.CREATION_INITIATED;
+      case UPDATED -> Status.UPDATE_INITIATED;
+      case MARKED_FOR_DELETION -> Status.DELETION_INITIATED;
+      default -> throw new IllegalStateException("Cannot initiate sync for flashcard with status: " + this.status);
+    };
   }
 
   public Flashcard updateWith(FlashcardCreationDto data) {

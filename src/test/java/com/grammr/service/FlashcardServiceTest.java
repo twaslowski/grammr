@@ -2,6 +2,7 @@ package com.grammr.service;
 
 import com.grammr.domain.entity.DeckSpec;
 import com.grammr.domain.entity.Flashcard;
+import com.grammr.domain.entity.FlashcardSpec;
 import com.grammr.domain.entity.Paradigm;
 import com.grammr.domain.entity.UserSpec;
 import com.grammr.domain.enums.PartOfSpeechTag;
@@ -12,6 +13,8 @@ import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.ParadigmRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -88,22 +91,21 @@ class FlashcardServiceTest {
     assertThat(flashcard.getParadigm()).isEqualTo(paradigm);
   }
 
-  @Test
-  void shouldRetrieveSyncableFlashcards() {
-    var deckId = 1L;
-    var flashcard1 = Flashcard.builder().id(1L).status(Flashcard.Status.CREATED).build();
-    var flashcard2 = Flashcard.builder().id(2L).status(Flashcard.Status.UPDATED).build();
+  @ParameterizedTest
+  @EnumSource(value = Flashcard.Status.class, names = {"CREATED", "UPDATED", "MARKED_FOR_DELETION"})
+  void shouldRetrieveSyncableFlashcards(Flashcard.Status status) {
+    var deck = DeckSpec.withUser(UserSpec.valid().build()).build();
+    var flashcard = FlashcardSpec.withDeck(deck).status(status).build();
 
-    when(flashcardRepository.findByDeckIdAndStatusIn(deckId,
-        Set.of(Flashcard.Status.CREATED, Flashcard.Status.UPDATED, Flashcard.Status.MARKED_FOR_DELETION)
-    )).thenReturn(List.of(flashcard1, flashcard2));
+    when(flashcardRepository.findByDeckAndStatusIn(
+        deck,
+        Set.of(Flashcard.Status.CREATED, Flashcard.Status.UPDATED, Flashcard.Status.MARKED_FOR_DELETION))
+    ).thenReturn(List.of(flashcard));
 
-    var syncId = UUID.randomUUID();
-    var syncableCards = flashcardService.retrieveSyncableCards(deckId, syncId);
+    var syncableCards = flashcardService.retrieveSyncableCards(deck);
 
-    assertThat(syncableCards).hasSize(2);
-    assertThat(syncableCards.get(0).getStatus()).isEqualTo(Flashcard.Status.EXPORT_INITIATED);
-    assertThat(syncableCards.get(1).getStatus()).isEqualTo(Flashcard.Status.EXPORT_INITIATED);
+    assertThat(syncableCards).hasSize(1);
+    assertThat(syncableCards.getFirst().status()).isEqualTo(status);
   }
 
   @Test

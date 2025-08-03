@@ -40,7 +40,7 @@ class DeckIntegrationTest extends IntegrationTestBase {
 
   @Test
   @SneakyThrows
-  void shouldRetrieveDeck() {
+  void shouldRetrieveDecks() {
     var user = userRepository.save(UserSpec.validWithoutId().build());
     var deck = deckRepository.save(DeckSpec.withUser(user).build());
     var auth = createUserAuthentication(user);
