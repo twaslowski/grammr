@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.12.0](https://github.com/twaslowski/grammr/compare/v3.11.0...v3.12.0) (2025-08-03)
+
+
+### Features
+
+* **anki:** improve flashcard lifecycle workflow and sync process ([76c43e7](https://github.com/twaslowski/grammr/commit/76c43e733e7193a1cf657f3efd79f0c90e1ae424))
+* **anki:** introduce MARKED_FOR_DELETION status to propagate flashcard deletion to anki ([170ae96](https://github.com/twaslowski/grammr/commit/170ae96e12dad0b7cb5aceb027f7aa343a52dee6))
+
+
+### Bug Fixes
+
+* **anki:** ensure the correct flashcards are edited ([024a017](https://github.com/twaslowski/grammr/commit/024a0172687a0723ce6d47f8dad7b624d831ed4a))
+* **sonar:** remove from workflow temporarily ([6885e9d](https://github.com/twaslowski/grammr/commit/6885e9d4b40907ec4faf17948547465c0e832765))
+
 ## [3.11.0](https://github.com/twaslowski/grammr/compare/v3.10.0...v3.11.0) (2025-08-02)
 
 
