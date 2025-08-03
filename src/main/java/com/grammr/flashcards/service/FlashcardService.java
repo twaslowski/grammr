@@ -10,14 +10,15 @@ import com.grammr.domain.exception.ResourceNotFoundException;
 import com.grammr.flashcards.controller.v2.dto.FlashcardCreationDto;
 import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.ParadigmRepository;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -35,10 +36,28 @@ public class FlashcardService {
   }
 
   public List<Flashcard> retrieveSyncableCards(long deckId, UUID syncId) {
-    var flashcards = flashcardRepository.findByDeckIdAndStatusIn(deckId, Set.of(Status.CREATED, Status.UPDATED));
-    flashcards.forEach(f -> f.initiateSync(syncId));
+    var flashcards = flashcardRepository.findByDeckIdAndStatusIn(deckId,
+        Set.of(Status.CREATED, Status.UPDATED, Status.MARKED_FOR_DELETION)
+    );
+
+    // Separate cards to delete and to sync
+    var toDelete = flashcards.stream()
+        .filter(f -> f.getStatus() == Status.MARKED_FOR_DELETION)
+        .toList();
+
+    var toSync = flashcards.stream()
+        .filter(f -> f.getStatus() != Status.MARKED_FOR_DELETION)
+        .toList();
+
+    // Delete marked cards
+    if (!toDelete.isEmpty()) {
+      flashcardRepository.deleteAll(toDelete);
+      log.info("Deleted {} flashcards marked for deletion in deck {}", toDelete.size(), deckId);
+    }
+
+    toSync.forEach(f -> f.initiateSync(syncId));
     log.info("Initiated flashcard sync for deck {}", deckId);
-    return flashcards;
+    return toSync;
   }
 
   public void confirmSync(long id, UUID syncId) {
@@ -92,6 +111,7 @@ public class FlashcardService {
     var foundFlashcard = flashcardRepository.findByFlashcardId(flashcardId)
         .orElseThrow(() -> new ResourceNotFoundException(String.valueOf(flashcardId)));
 
-    flashcardRepository.delete(foundFlashcard);
+    foundFlashcard.setStatus(Status.MARKED_FOR_DELETION);
+    flashcardRepository.save(foundFlashcard);
   }
 }

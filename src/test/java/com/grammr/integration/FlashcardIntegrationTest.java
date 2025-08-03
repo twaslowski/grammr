@@ -206,4 +206,32 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
     assertThat(updated.getFront()).isEqualTo(updatePayload.question());
     assertThat(updated.getBack()).isEqualTo(updatePayload.answer());
   }
+
+  @Test
+  @SneakyThrows
+  void shouldDeleteFlashcardAfterSync() {
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
+    var flashcard = flashcardRepository.save(FlashcardSpec.withDeck(deck).build());
+    var authentication = createUserAuthentication(user);
+
+    // Mark flashcard for deletion
+    mockMvc.perform(MockMvcRequestBuilders.delete("/api/v2/deck/%s/flashcard/%s"
+            .formatted(deck.getDeckId(), flashcard.getFlashcardId()))
+        .with(authentication(authentication)))
+        .andExpect(status().isNoContent());
+
+    // Ensure flashcard is marked for deletion, not yet deleted
+    var marked = flashcardRepository.findById(flashcard.getId()).orElseThrow();
+    assertThat(marked.getStatus()).isEqualTo(Status.MARKED_FOR_DELETION);
+
+    // Call sync endpoint
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/deck/%s/sync".formatted(deck.getDeckId()))
+            .with(authentication(authentication))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+
+    // Flashcard should be deleted from repository
+    assertThat(flashcardRepository.findById(flashcard.getId())).isEmpty();
+  }
 }

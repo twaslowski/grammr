@@ -37,7 +37,8 @@ public class Flashcard {
     UPDATED,
     EXPORT_INITIATED,
     EXPORT_COMPLETED,
-    EXPORT_FAILED
+    EXPORT_FAILED,
+    MARKED_FOR_DELETION
   }
 
   @Id
