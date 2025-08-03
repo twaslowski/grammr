@@ -8,6 +8,7 @@ import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.domain.exception.ResourceExistsException;
 import com.grammr.domain.exception.ResourceNotFoundException;
 import com.grammr.flashcards.controller.v2.dto.FlashcardCreationDto;
+import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
 import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.ParadigmRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,8 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class FlashcardService {
 
   private final FlashcardRepository flashcardRepository;
@@ -35,41 +36,37 @@ public class FlashcardService {
     return flashcardRepository.findByDeckId(deck.getId());
   }
 
-  public List<Flashcard> retrieveSyncableCards(long deckId, UUID syncId) {
-    var flashcards = flashcardRepository.findByDeckIdAndStatusIn(deckId,
+  public List<FlashcardDto> retrieveSyncableCards(Deck deck) {
+    var flashcards = flashcardRepository.findByDeckAndStatusIn(
+        deck,
         Set.of(Status.CREATED, Status.UPDATED, Status.MARKED_FOR_DELETION)
     );
 
-    // Separate cards to delete and to sync
-    var toDelete = flashcards.stream()
-        .filter(f -> f.getStatus() == Status.MARKED_FOR_DELETION)
+    var dtos = flashcards.stream()
+        .map(FlashcardDto::fromEntity)
         .toList();
 
-    var toSync = flashcards.stream()
-        .filter(f -> f.getStatus() != Status.MARKED_FOR_DELETION)
-        .toList();
-
-    // Delete marked cards
-    if (!toDelete.isEmpty()) {
-      flashcardRepository.deleteAll(toDelete);
-      log.info("Deleted {} flashcards marked for deletion in deck {}", toDelete.size(), deckId);
-    }
-
-    toSync.forEach(f -> f.initiateSync(syncId));
-    log.info("Initiated flashcard sync for deck {}", deckId);
-    return toSync;
+    flashcards.forEach(Flashcard::initiateSync);
+    log.info("Initiated flashcard sync for deck {}", deck.getDeckId());
+    return dtos;
   }
 
-  public void confirmSync(long id, UUID syncId) {
-    List<Flashcard> flashcards = flashcardRepository.findByDeckIdAndSyncId(id, syncId);
+  public void confirmSync(Deck deck, List<UUID> successfulSyncIds, List<UUID> failedSyncIds) {
+    List<Flashcard> successfulSyncs = flashcardRepository.findAllByFlashcardIdInAndDeckEquals(successfulSyncIds, deck);
+    List<Flashcard> failedSyncs = flashcardRepository.findAllByFlashcardIdInAndDeckEquals(failedSyncIds, deck);
 
-    if (flashcards.isEmpty()) {
-      log.warn("No flashcards found for deck {} with syncId {}", id, syncId);
-      throw new ResourceNotFoundException(syncId.toString());
+    log.info("Confirming successful sync for {} flashcards", successfulSyncs.size());
+    successfulSyncs.forEach(flashcard -> {
+      flashcard.confirmSync();
+      if (flashcard.getStatus() == Status.DELETION_SUCCEEDED) {
+        flashcardRepository.delete(flashcard);
+      }
+    });
+
+    if (!failedSyncs.isEmpty()) {
+      log.warn("Failed sync for {} flashcards", failedSyncs.size());
+      failedSyncs.forEach(Flashcard::failSync);
     }
-
-    log.info("Confirming sync for {} flashcards in deck {}", flashcards.size(), id);
-    flashcards.forEach(Flashcard::confirmSync);
   }
 
   public Flashcard getFlashcard(UUID flashcardId, Deck deck) {
