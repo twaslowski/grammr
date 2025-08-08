@@ -46,7 +46,6 @@ public class FlashcardService {
         .map(FlashcardDto::fromEntity)
         .toList();
 
-    flashcards.forEach(Flashcard::initiateSync);
     log.info("Initiated flashcard sync for deck {}", deck.getDeckId());
     return dtos;
   }
@@ -57,15 +56,15 @@ public class FlashcardService {
 
     log.info("Confirming successful sync for {} flashcards", successfulSyncs.size());
     successfulSyncs.forEach(flashcard -> {
-      flashcard.confirmSync();
-      if (flashcard.getStatus() == Status.DELETION_SUCCEEDED) {
+      if (flashcard.getStatus() == Status.MARKED_FOR_DELETION) {
+        log.info("Deleting flashcard after successful sync: {}", flashcard.getFlashcardId());
         flashcardRepository.delete(flashcard);
       }
+      flashcard.confirmSync();
     });
 
     if (!failedSyncs.isEmpty()) {
-      log.warn("Failed sync for {} flashcards", failedSyncs.size());
-      failedSyncs.forEach(Flashcard::failSync);
+      log.warn("{} flashcards failed to sync", failedSyncs.size());
     }
   }
 

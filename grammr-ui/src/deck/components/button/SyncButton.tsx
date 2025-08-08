@@ -6,54 +6,19 @@ import Deck from '@/deck/types/deck';
 import SyncIcon from '@/components/common/SyncIcon';
 import { toast } from '@/hooks/use-toast';
 import { useApi } from '@/hooks/useApi';
-import { Sync } from '@/flashcard/types/sync';
-
-interface Note {
-  fields: Fields;
-  modelName: string;
-  deckName: string;
-}
-
-interface Fields {
-  front: string;
-  back: string;
-}
+import {
+  createDeck,
+  createNotes,
+  getNote,
+  precheckAnkiConnect,
+} from '@/deck/components/button/anki-connect';
+import { Flashcard } from '@/flashcard/types/flashcard';
 
 export default function SyncButton({ deck }: { deck: Deck; onSync: () => void }) {
-  const { isLoading, error, request } = useApi();
+  const { isLoading, request } = useApi();
 
-  const precheckAnkiConnect = async () => {
-    try {
-      const response = await fetch('http://localhost:8765', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'version',
-          version: 6,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('AnkiConnect is not running or not reachable.');
-      }
-
-      const data = await response.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
-    } catch (err) {
-      toast({
-        title: 'Error',
-        description:
-          'AnkiConnect is not running or not reachable. Please ensure Anki is open with the AnkiConnect plugin installed.',
-        variant: 'destructive',
-      });
-      throw err;
-    }
-  };
-
-  const performSync = async (deckId: string): Promise<Sync> => {
-    return await request<Sync>(`/api/v2/deck/${deckId}/sync`, {
+  const performSync = async (deckId: string): Promise<Flashcard[]> => {
+    return await request<Flashcard[]>(`/api/v2/deck/${deckId}/sync`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -62,43 +27,23 @@ export default function SyncButton({ deck }: { deck: Deck; onSync: () => void })
     });
   };
 
-  const confirmSync = async (deckId: string, syncId: string): Promise<void> => {
-    return await request<void>(`/api/v2/deck/${deckId}/sync/${syncId}/confirm`, {
+  const confirmSync = async (
+    deckId: string,
+    successfulSyncs: string[],
+    failedSyncs: string[],
+  ): Promise<void> => {
+    return await request<void>(`/api/v2/deck/${deckId}/sync/confirm`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        successfulSyncs,
+        failedSyncs,
+      }),
       credentials: 'include',
     });
   };
-
-  async function createDeck(deck: Deck) {
-    await fetch('http://localhost:8765', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'createDeck',
-        version: 6,
-        params: {
-          deck: deck.name,
-        },
-      }),
-    });
-  }
-
-  async function createNotes(notes: Note[]) {
-    return await fetch('http://localhost:8765', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'addNotes',
-        version: 6,
-        params: {
-          notes: notes,
-        },
-      }),
-    });
-  }
 
   const syncFlashcards = async (deck: Deck) => {
     // Check if AnkiConnect is available
@@ -108,29 +53,29 @@ export default function SyncButton({ deck }: { deck: Deck; onSync: () => void })
       return;
     }
 
-    const sync = await performSync(deck.id);
-    const notes: Note[] = sync.flashcards.map((flashcard) => ({
+    const flashcards = await performSync(deck.id);
+    const notes: Note[] = flashcards.map((flashcard) => ({
       fields: {
         front: flashcard.question,
         back: flashcard.answer,
       },
       deckName: deck.name,
       modelName: 'Basic',
+      id: flashcard.id,
     }));
 
     try {
       await createDeck(deck);
       const result = await createNotes(notes);
-      const data = await result.json();
+      void confirmSync(deck.id, result.successfulSyncs, result.failedSyncs);
 
-      if (data.error) {
+      if (result.failedSyncs && result.failedSyncs.length > 0) {
         toast({
           title: 'Error',
-          description: `Failed to sync flashcards: ${data.error}`,
+          description: `Failed to sync some flashcards`,
           variant: 'destructive',
         });
       } else {
-        void confirmSync(deck.id, sync.syncId);
         toast({
           title: 'Success',
           description: 'Flashcards synced successfully!',
@@ -140,8 +85,7 @@ export default function SyncButton({ deck }: { deck: Deck; onSync: () => void })
     } catch {
       toast({
         title: 'Error',
-        description:
-          'Failed to sync flashcards. Ensure that Anki is running with the AnkiConnect plugin installed.',
+        description: 'An unexpected error occurred while syncing flashcards to Anki.',
         variant: 'destructive',
       });
     }

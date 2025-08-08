@@ -7,7 +7,7 @@ import React, { use, useCallback, useEffect, useState } from 'react';
 import ExportButton from '@/deck/components/button/ExportButton';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import NotFound from '@/components/common/NotFound';
-import FlashcardList from '@/flashcard/components/FlashcardList';
+import { FlashcardList } from '@/flashcard/components/FlashcardList';
 import Deck from '@/deck/types/deck';
 import SyncButton from '@/deck/components/button/SyncButton';
 import { Button } from '@/components/ui/button';

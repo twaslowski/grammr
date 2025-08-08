@@ -37,21 +37,7 @@ public class Flashcard {
     CREATED,
     UPDATED,
     MARKED_FOR_DELETION,
-
-    // Export statuses
-    CREATION_INITIATED,
-    CREATION_SUCCEEDED,
-    CREATION_FAILED,
-
-    // Update statuses
-    UPDATE_INITIATED,
-    UPDATE_SUCCEEDED,
-    UPDATE_FAILED,
-
-    // Deletion statuses
-    DELETION_INITIATED,
-    DELETION_SUCCEEDED,
-    DELETION_FAILED;
+    SYNCED,
   }
 
   @Id
@@ -91,30 +77,7 @@ public class Flashcard {
   private ZonedDateTime updatedTimestamp;
 
   public void confirmSync() {
-    this.status = switch (this.status) {
-      case CREATION_INITIATED -> Status.CREATION_SUCCEEDED;
-      case UPDATE_INITIATED -> Status.UPDATE_SUCCEEDED;
-      case DELETION_INITIATED -> Status.DELETION_SUCCEEDED;
-      default -> throw new IllegalStateException("Cannot confirm sync for flashcard with status: " + this.status);
-    };
-  }
-
-  public void failSync() {
-    this.status = switch (this.status) {
-      case CREATION_INITIATED -> Status.CREATION_FAILED;
-      case UPDATE_INITIATED -> Status.UPDATE_FAILED;
-      case DELETION_INITIATED -> Status.DELETION_FAILED;
-      default -> throw new IllegalStateException("Cannot fail sync for flashcard with status: " + this.status);
-    };
-  }
-
-  public void initiateSync() {
-    this.status = switch (this.status) {
-      case CREATED -> Status.CREATION_INITIATED;
-      case UPDATED -> Status.UPDATE_INITIATED;
-      case MARKED_FOR_DELETION -> Status.DELETION_INITIATED;
-      default -> throw new IllegalStateException("Cannot initiate sync for flashcard with status: " + this.status);
-    };
+    this.status = Status.SYNCED;
   }
 
   public Flashcard updateWith(FlashcardCreationDto data) {
