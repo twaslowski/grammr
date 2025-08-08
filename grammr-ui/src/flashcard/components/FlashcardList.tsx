@@ -10,7 +10,7 @@ interface FlashcardListProps {
   deckId: string;
 }
 
-export default function FlashcardList({ cards, deckId }: FlashcardListProps) {
+export const FlashcardList: React.FC<FlashcardListProps> = ({ cards, deckId }) => {
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const [visibleSide, setVisibleSide] = useState('front');
   const [previewDialogCardId, setPreviewDialogCardId] = useState<string | null>(null);
@@ -52,21 +52,12 @@ export default function FlashcardList({ cards, deckId }: FlashcardListProps) {
     }
   };
 
-  // Utility to get background color class based on card status
-  function getStatusBgClass(status: Flashcard['status'] | undefined) {
+  function getStatusBgClass(status: Flashcard['status']) {
     switch (status) {
       case 'CREATED':
         return 'bg-gray-100 text-gray-700';
       case 'UPDATED':
         return 'bg-blue-100 text-blue-700';
-      case 'EXPORT_INITIATED':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'EXPORT_COMPLETED':
-        return 'bg-green-100 text-green-700';
-      case 'EXPORT_FAILED':
-        return 'bg-red-100 text-red-700';
-      default:
-        return 'bg-gray-100 text-gray-700';
     }
   }
 
@@ -92,7 +83,7 @@ export default function FlashcardList({ cards, deckId }: FlashcardListProps) {
 
             <div className='flex space-x-2'>
               <span className={`text-sm px-2 py-0.5 rounded ${getStatusBgClass(card.status)}`}>
-                {card.status || 'CREATED'}
+                {card.status}
               </span>
               <button onClick={() => setPreviewDialogCardId(card.id)} title='Edit Card'>
                 <Edit size={16} />
@@ -109,7 +100,6 @@ export default function FlashcardList({ cards, deckId }: FlashcardListProps) {
                     initialFront={card.question}
                     initialBack={card.answer}
                     initialDeckId={deckId}
-                    flashcardId={card.id}
                     onClose={() => setPreviewDialogCardId(null)}
                     onCardAdded={() => window.location.reload()}
                     submitAction='update'
@@ -150,4 +140,4 @@ export default function FlashcardList({ cards, deckId }: FlashcardListProps) {
       ))}
     </div>
   );
-}
+};
