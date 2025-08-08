@@ -9,15 +9,17 @@ import { useApi } from '@/hooks/useApi';
 import {
   createDeck,
   createNotes,
-  getNote,
+  deleteNotes,
+  updateNotes,
   precheckAnkiConnect,
 } from '@/deck/components/button/anki-connect';
 import { Flashcard } from '@/flashcard/types/flashcard';
+import { fromFlashcard, Note } from '@/deck/types/note';
 
 export default function SyncButton({ deck }: { deck: Deck; onSync: () => void }) {
   const { isLoading, request } = useApi();
 
-  const performSync = async (deckId: string): Promise<Flashcard[]> => {
+  const triggerSync = async (deckId: string): Promise<Flashcard[]> => {
     return await request<Flashcard[]>(`/api/v2/deck/${deckId}/sync`, {
       method: 'POST',
       headers: {
@@ -50,26 +52,44 @@ export default function SyncButton({ deck }: { deck: Deck; onSync: () => void })
     try {
       await precheckAnkiConnect();
     } catch (err) {
+      toast({
+        title: 'AnkiConnect Error',
+        description:
+          'AnkiConnect is not available. Please ensure Anki is running and AnkiConnect is installed.',
+        variant: 'destructive',
+      });
       return;
     }
 
-    const flashcards = await performSync(deck.id);
-    const notes: Note[] = flashcards.map((flashcard) => ({
-      fields: {
-        front: flashcard.question,
-        back: flashcard.answer,
-      },
-      deckName: deck.name,
-      modelName: 'Basic',
-      id: flashcard.id,
-    }));
+    const flashcards = await triggerSync(deck.id);
+    const toCreate: Note[] = flashcards
+      .filter((f) => f.status === 'CREATED')
+      .map((f) => fromFlashcard(f, deck.name));
+
+    const toUpdate: Note[] = flashcards
+      .filter((f) => f.status === 'UPDATED')
+      .map((f) => fromFlashcard(f, deck.name));
+
+    const toDelete: Note[] = flashcards
+      .filter((f) => f.status === 'MARKED_FOR_DELETION')
+      .map((f) => fromFlashcard(f, deck.name));
 
     try {
-      await createDeck(deck);
-      const result = await createNotes(notes);
-      void confirmSync(deck.id, result.successfulSyncs, result.failedSyncs);
+      await createDeck(deck.name);
+      const created = await createNotes(toCreate);
+      const updated = await updateNotes(toUpdate);
+      const deleted = await deleteNotes(toDelete);
 
-      if (result.failedSyncs && result.failedSyncs.length > 0) {
+      const successfulSyncs = created.successfulSyncs
+        .concat(updated.successfulSyncs)
+        .concat(deleted.successfulSyncs);
+      const failedSyncs = created.failedSyncs
+        .concat(updated.failedSyncs)
+        .concat(deleted.failedSyncs);
+
+      void confirmSync(deck.id, successfulSyncs, failedSyncs);
+
+      if (failedSyncs.length > 0) {
         toast({
           title: 'Error',
           description: `Failed to sync some flashcards`,
