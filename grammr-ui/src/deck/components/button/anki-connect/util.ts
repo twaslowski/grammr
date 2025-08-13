@@ -1,10 +1,10 @@
 export const precheckAnkiConnect = async () => {
-  const response = await fetch('http://localhost:8765', {
+  const response = await fetch('ANKI_CONNECT_URL', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       action: 'version',
-      version: 6,
+      version: ANKI_CONNECT_VERSION,
     }),
   });
 

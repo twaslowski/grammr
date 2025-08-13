@@ -13,7 +13,7 @@ const ANKI_CONNECT_VERSION = 6;
  */
 
 export async function findNoteByFront(deckName: string, front: string): Promise<number> {
-  const response = await fetch('http://localhost:8765', {
+  const response = await fetch('ANKI_CONNECT_URL', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -43,7 +43,7 @@ export async function findNoteByFront(deckName: string, front: string): Promise<
  * @throws Error if no note is found or if Anki Connect returns an error.
  */
 export async function createNotes(notes: Note[]): Promise<SyncResult> {
-  const result = await fetch('http://localhost:8765', {
+  const result = await fetch('ANKI_CONNECT_URL', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -75,7 +75,7 @@ export async function updateNotes(notes: Note[]): Promise<SyncResult> {
 }
 
 export async function updateNote(noteId: number, note: Note): Promise<SyncResult> {
-  const result = await fetch('http://localhost:8765', {
+  const result = await fetch('ANKI_CONNECT_URL', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -117,7 +117,7 @@ export async function deleteNotes(notes: Note[]): Promise<SyncResult> {
     try {
       const noteId = await findNoteByFront(note.deckName, note.fields.front);
 
-      await fetch('http://localhost:8765', {
+      await fetch('ANKI_CONNECT_URL', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
