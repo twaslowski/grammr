@@ -15,10 +15,7 @@
       "options": {
         "allowDuplicate": false
       },
-      "tags": [
-        "latin",
-        "declension"
-      ]
+      "tags": ["latin", "declension"]
     }
   }
 }

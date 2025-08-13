@@ -12,6 +12,7 @@ import {
   deleteNotes,
   updateNotes,
   precheckAnkiConnect,
+  precheckModels,
 } from '@/deck/components/button/anki-connect';
 import { Flashcard } from '@/flashcard/types/flashcard';
 import { fromFlashcard, Note } from '@/deck/types/note';
@@ -51,6 +52,7 @@ export default function SyncButton({ deck }: { deck: Deck; onSync: () => void })
     // Check if AnkiConnect is available
     try {
       await precheckAnkiConnect();
+      await precheckModels();
     } catch (err) {
       toast({
         title: 'AnkiConnect Error',
