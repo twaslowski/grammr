@@ -1,5 +1,9 @@
 package com.grammr.flashcards.controller.v2;
 
+import static com.grammr.domain.enums.ExportDataType.APKG;
+import static java.lang.String.format;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.ExportDataType;
 import com.grammr.flashcards.controller.v2.dto.DeckCreationDto;
@@ -14,6 +18,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -26,13 +32,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.UUID;
-
-import static com.grammr.domain.enums.ExportDataType.APKG;
-import static java.lang.String.format;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @Tag(name = "Decks", description = "Deck management operations")
