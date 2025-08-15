@@ -1,5 +1,7 @@
 package com.grammr.flashcards.controller.v2;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 import com.grammr.domain.entity.User;
 import com.grammr.flashcards.controller.v2.dto.FlashcardCreationDto;
 import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
@@ -11,6 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +27,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.UUID;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 
 @Slf4j
 @Tag(name = "Flashcards", description = "Flashcard management operations")
@@ -94,7 +92,6 @@ public class FlashcardController {
     flashcard = flashcardService.updateFlashcardWith(flashcard, data);
     return ResponseEntity.ok().body(FlashcardDto.fromEntity(flashcard));
   }
-
 
   @Operation(summary = "Delete a flashcard", description = "Deletes a flashcard by its ID")
   @ApiResponses({
