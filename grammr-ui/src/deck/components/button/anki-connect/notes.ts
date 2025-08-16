@@ -1,7 +1,5 @@
 import { Note } from '@/deck/types/note';
 
-const ANKI_CONNECT_VERSION = 6;
-
 /**
  * Finds a note by its front field in a specific deck.
  * This way we can avoid having to track note IDs, since front fields are unique per deck.
@@ -13,12 +11,12 @@ const ANKI_CONNECT_VERSION = 6;
  */
 
 export async function findNoteByFront(deckName: string, front: string): Promise<number> {
-  const response = await fetch(ANKI_CONNECT_URL, {
+  const response = await fetch('http://localhost:8765', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       action: 'findNotes',
-      version: ANKI_CONNECT_VERSION,
+      version: 6,
       params: {
         query: `deck:${deckName} front:${front}`,
       },
@@ -43,12 +41,12 @@ export async function findNoteByFront(deckName: string, front: string): Promise<
  * @throws Error if no note is found or if Anki Connect returns an error.
  */
 export async function createNotes(notes: Note[]): Promise<SyncResult> {
-  const result = await fetch(ANKI_CONNECT_URL, {
+  const result = await fetch('http://localhost:8765', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       action: 'addNotes',
-      version: ANKI_CONNECT_VERSION,
+      version: 6,
       params: {
         notes: notes,
       },
@@ -75,12 +73,12 @@ export async function updateNotes(notes: Note[]): Promise<SyncResult> {
 }
 
 export async function updateNote(noteId: number, note: Note): Promise<SyncResult> {
-  const result = await fetch(ANKI_CONNECT_URL, {
+  const result = await fetch('http://localhost:8765', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       action: 'updateNote',
-      version: ANKI_CONNECT_VERSION,
+      version: 6,
       params: {
         note: {
           id: noteId,
@@ -117,12 +115,12 @@ export async function deleteNotes(notes: Note[]): Promise<SyncResult> {
     try {
       const noteId = await findNoteByFront(note.deckName, note.fields.front);
 
-      await fetch(ANKI_CONNECT_URL, {
+      await fetch('http://localhost:8765', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'deleteNotes',
-          version: ANKI_CONNECT_VERSION,
+          version: 6,
           params: {
             notes: [noteId],
           },

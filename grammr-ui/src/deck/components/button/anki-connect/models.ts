@@ -1,10 +1,10 @@
 export const precheckModels = async () => {
-  const response = await fetch(ANKI_CONNECT_URL, {
+  const response = await fetch('http://localhost:8765', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       action: 'modelNames',
-      version: ANKI_CONNECT_VERSION,
+      version: 6,
     }),
   });
 
@@ -24,14 +24,14 @@ export const precheckModels = async () => {
 };
 
 export const createModel = async (): Promise<void> => {
-  await fetch(ANKI_CONNECT_URL, {
+  await fetch('http://localhost:8765', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       action: 'createModel',
-      version: ANKI_CONNECT_VERSION,
+      version: 6,
       params: {
-        modelName: INFLECTIONS_MODEL_NAME,
+        modelName: 'inflections',
         inOrderFields: ['Lemma', 'Translation', 'PartOfSpeech', 'InflectionData', 'Notes'],
         css: 'table {border-collapse: collapse; width: 100%; max-width: 400px; margin-top: 10px;} th, td {border: 1px solid #aaa; padding: 4px 6px; text-align: center; font-size: 0.9em;} th {background-color: #f0f0f0;} .lemma {font-size: 1.5em; font-weight: bold; margin-bottom: 10px;} .meta {margin-bottom: 10px; font-style: italic;} @media (max-width: 480px) { table {font-size: 0.8em;} th, td {padding: 3px;}}',
         isCloze: false,
