@@ -1,0 +1,2 @@
+ALTER TABLE flashcard
+  ADD COLUMN type VARCHAR(255) NOT NULL DEFAULT 'basic';

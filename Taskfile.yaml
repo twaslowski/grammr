@@ -20,13 +20,13 @@ tasks:
   unit-test:
     desc: Run unit tests
     cmds:
-      - ./mvnw package test
+      - ./mvnw clean package test
 
   integration-test:
     desc: Run integration tests
     cmds:
       - task: start-env
-      - ./mvnw package test -P integration
+      - ./mvnw clean package test -P integration
 
   test:
     desc: Run unit tests, start environment, and run integration tests

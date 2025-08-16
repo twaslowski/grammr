@@ -3,6 +3,7 @@ package com.grammr.flashcards.service;
 import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
+import com.grammr.domain.entity.Flashcard.Type;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.domain.exception.ResourceExistsException;
@@ -90,14 +91,18 @@ public class FlashcardService {
         .flatMap(paradigmRepository::findById)
         .orElse(null);
 
+    Type type = paradigm == null || tokenPos == null ? Type.BASIC : Type.INFLECTION;
+
     var flashcard = Flashcard.builder()
         .front(question)
         .back(answer)
         .flashcardId(UUID.randomUUID())
         .tokenPos(tokenPos)
         .paradigm(paradigm)
+        .type(type)
         .status(Status.CREATED)
-        .deck(deck).build();
+        .deck(deck)
+        .build();
 
     return flashcardRepository.save(flashcard);
   }

@@ -39,6 +39,10 @@ public class Flashcard {
     SYNCED,
   }
 
+  public  enum Type {
+    BASIC, INFLECTION
+  }
+
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "flashcard_id_seq")
   private long id;
@@ -74,6 +78,10 @@ public class Flashcard {
 
   @UpdateTimestamp
   private ZonedDateTime updatedTimestamp;
+
+  @NotNull
+  @Enumerated(EnumType.STRING)
+  private Type type;
 
   public void confirmSync() {
     this.status = Status.SYNCED;

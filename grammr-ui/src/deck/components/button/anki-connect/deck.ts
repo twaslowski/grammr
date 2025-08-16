@@ -5,12 +5,12 @@
  * @param name - Name of the deck to create.
  */
 export async function createDeck(name: string): Promise<void> {
-  await fetch(ANKI_CONNECT_URL, {
+  await fetch('http://localhost:8765', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       action: 'createDeck',
-      version: ANKI_CONNECT_VERSION,
+      version: 6,
       params: {
         deck: name,
       },

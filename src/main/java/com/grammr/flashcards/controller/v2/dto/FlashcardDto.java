@@ -2,6 +2,7 @@ package com.grammr.flashcards.controller.v2.dto;
 
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
+import com.grammr.domain.entity.Flashcard.Type;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import java.time.ZonedDateTime;
@@ -33,13 +34,25 @@ public record FlashcardDto(
     )
     Status status,
     @Schema(
-        description = "If the flashcard is associated with a single word, this field contains the part of speech tag",
+        description = "Type of the flashcard, indicating its category or usage",
+        example = "BASIC | INFLECTION",
+        requiredMode = Schema.RequiredMode.REQUIRED
+    )
+    Type type,
+    @Schema(
+        description = """
+            If the flashcard is associated with a single word, this field contains the part of speech tag.
+            Required if type == 'INFLECTION'.
+            """,
         example = "NOUN",
         requiredMode = RequiredMode.NOT_REQUIRED
     )
     String tokenPos,
     @Schema(
-        description = "Unique identifier for the paradigm associated with the flashcard, if applicable",
+        description = """
+            Unique identifier for the paradigm associated with the flashcard, if applicable.
+            Required if type == 'INFLECTION'.
+            """,
         example = "123e4567-e89b-12d3-a456-426614174000",
         requiredMode = RequiredMode.NOT_REQUIRED
     )
@@ -64,6 +77,7 @@ public record FlashcardDto(
         flashcard.getFront(),
         flashcard.getBack(),
         flashcard.getStatus(),
+        flashcard.getType(),
         flashcard.getTokenPos() != null ? flashcard.getTokenPos().name() : null,
         flashcard.getParadigm() != null ? flashcard.getParadigm().getId().toString() : null,
         flashcard.getCreatedTimestamp(),
