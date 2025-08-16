@@ -1,5 +1,5 @@
 export const precheckAnkiConnect = async () => {
-  const response = await fetch('ANKI_CONNECT_URL', {
+  const response = await fetch(ANKI_CONNECT_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
