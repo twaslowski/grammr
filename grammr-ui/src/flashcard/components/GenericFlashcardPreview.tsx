@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
 import { Flashcard } from '@/flashcard/types/flashcard';
 import { useApi } from '@/hooks/useApi';
+import { Paradigm } from '@/flashcard/types/paradigm';
 
 interface FlashcardPreviewProps {
   initialDeckId?: string;

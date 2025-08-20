@@ -3,6 +3,7 @@ package com.grammr.flashcards.controller.v2.dto;
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
 import com.grammr.domain.entity.Flashcard.Type;
+import com.grammr.domain.enums.PartOfSpeechTag;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import java.time.ZonedDateTime;
@@ -47,7 +48,7 @@ public record FlashcardDto(
         example = "NOUN",
         requiredMode = RequiredMode.NOT_REQUIRED
     )
-    String tokenPos,
+    PartOfSpeechTag tokenPos,
     @Schema(
         description = """
             Unique identifier for the paradigm associated with the flashcard, if applicable.
@@ -56,7 +57,7 @@ public record FlashcardDto(
         example = "123e4567-e89b-12d3-a456-426614174000",
         requiredMode = RequiredMode.NOT_REQUIRED
     )
-    String paradigmId,
+    ParadigmDto paradigmId,
     @Schema(
         description = "Timestamp when the flashcard was created",
         example = "CREATED",
@@ -78,8 +79,8 @@ public record FlashcardDto(
         flashcard.getBack(),
         flashcard.getStatus(),
         flashcard.getType(),
-        flashcard.getTokenPos() != null ? flashcard.getTokenPos().name() : null,
-        flashcard.getParadigm() != null ? flashcard.getParadigm().getId().toString() : null,
+        flashcard.getTokenPos(),
+        ParadigmDto.fromEntity(flashcard.getParadigm()),
         flashcard.getCreatedTimestamp(),
         flashcard.getUpdatedTimestamp()
     );
