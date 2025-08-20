@@ -4,8 +4,9 @@ import { SendHorizonal } from 'lucide-react';
 export const InputArea: React.FC<{
   placeholder?: string;
   onEnter: (input: string) => void;
+  onChange?: (input: string) => void;
   clear: boolean;
-}> = ({ placeholder = 'Enter text to translate...', onEnter, clear }) => {
+}> = ({ placeholder = 'Enter text to translate...', onEnter, onChange, clear }) => {
   const [input, setInput] = useState('');
 
   const handleSubmit = () => {
@@ -18,6 +19,9 @@ export const InputArea: React.FC<{
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (onChange) {
+      onChange(input);
+    }
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       void handleSubmit();
