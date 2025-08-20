@@ -58,6 +58,8 @@ export const FlashcardList: React.FC<FlashcardListProps> = ({ cards, deckId }) =
         return 'bg-green-100 text-green-700';
       case 'UPDATED':
         return 'bg-blue-100 text-blue-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
     }
   }
 
