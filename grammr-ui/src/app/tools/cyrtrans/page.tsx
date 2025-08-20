@@ -5,7 +5,7 @@ import { InputArea } from '@/components/common/InputArea';
 import cyrillicToTranslit from 'cyrillic-to-translit-js';
 import { CopyIcon } from 'lucide-react';
 
-const TranslatePage = () => {
+const TransliterationPage = () => {
   const [transliteration, setTransliteration] = useState<string>('');
   const [copyFeedback, setCopyFeedback] = useState<boolean>(false);
 
@@ -55,4 +55,4 @@ const TranslatePage = () => {
   );
 };
 
-export default TranslatePage;
+export default TransliterationPage;

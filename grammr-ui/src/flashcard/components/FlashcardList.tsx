@@ -97,7 +97,10 @@ export default function FlashcardList({ cards, deckId }: FlashcardListProps) {
               <button onClick={() => setPreviewDialogCardId(card.id)} title='Edit Card'>
                 <Edit size={16} />
               </button>
-              <Dialog open={previewDialogCardId === card.id} onOpenChange={(open) => setPreviewDialogCardId(open ? card.id : null)}>
+              <Dialog
+                open={previewDialogCardId === card.id}
+                onOpenChange={(open) => setPreviewDialogCardId(open ? card.id : null)}
+              >
                 <DialogContent className='max-w-3xl'>
                   <DialogHeader>
                     <DialogTitle>Preview Flashcard</DialogTitle>
