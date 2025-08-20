@@ -1,5 +1,6 @@
 package com.grammr.integration;
 
+import static com.grammr.domain.entity.Flashcard.Type.INFLECTION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -18,6 +19,7 @@ import com.grammr.flashcards.controller.v2.dto.FlashcardCreationDto;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -71,26 +73,31 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
 
     var creationDto = new FlashcardCreationDto("Test Question", "Test Answer", PartOfSpeechTag.NOUN, paradigm.getId());
 
-    mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/deck/%s/flashcard".formatted(deck.getDeckId()))
+    var result = mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/deck/%s/flashcard".formatted(deck.getDeckId()))
             .with(authentication(authentication))
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(creationDto)))
         .andExpect(status().is(201))
-        .andExpect(jsonPath("$.id").isString())
-        .andExpect(jsonPath("$.question").value("Test Question"))
-        .andExpect(jsonPath("$.answer").value("Test Answer"))
-        .andExpect(jsonPath("$.paradigmId").value(paradigm.getId().toString()))
-        .andExpect(jsonPath("$.type").value("INFLECTION"))
         .andReturn();
 
+    var flashcardDto = objectMapper.readValue(result.getResponse().getContentAsString(), FlashcardDto.class);
+
+    assertThat(flashcardDto.question()).isEqualTo("Test Question");
+    assertThat(flashcardDto.answer()).isEqualTo("Test Answer");
+    assertThat(flashcardDto.tokenPos()).isEqualTo(PartOfSpeechTag.NOUN);
+    assertThat(flashcardDto.type()).isEqualTo(INFLECTION);
+    assertThat(flashcardDto.paradigm()).isNotNull();
+    assertThat(flashcardDto.paradigm().inflections()).hasSize(2);
+
     var flashcards = flashcardRepository.findByDeckId(deck.getId());
+
     assertThat(flashcards).hasSize(1);
     var flashcard = flashcards.getFirst();
     assertThat(flashcard.getFront()).isEqualTo("Test Question");
     assertThat(flashcard.getBack()).isEqualTo("Test Answer");
     assertThat(flashcard.getParadigm()).isNotNull();
     assertThat(flashcard.getParadigm().getId()).isEqualTo(paradigm.getId());
-    assertThat(flashcard.getType()).isEqualTo(Flashcard.Type.INFLECTION);
+    assertThat(flashcard.getType()).isEqualTo(INFLECTION);
   }
 
   @Test
