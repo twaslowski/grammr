@@ -34,6 +34,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cyrillic-to-translit-js": "^3.2.1",
     "jest-fetch-mock": "^3.0.3",
     "lucide-react": "^0.438.0",
     "next": "15.3.1",
