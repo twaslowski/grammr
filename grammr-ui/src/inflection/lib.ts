@@ -1,12 +1,12 @@
 import { Feature } from '@/types/feature';
 import {
   Inflection,
-  Inflections,
   InflectionsNotAvailableError,
   InflectionTableData,
 } from '@/inflection/types/inflections';
+import { Paradigm } from '@/flashcard/types/paradigm';
 
-export const organizeInflectionTable = (inflections: Inflections): InflectionTableData => {
+export const organizeInflectionTable = (inflections: Paradigm): InflectionTableData => {
   if (inflections.partOfSpeech === 'NOUN' || inflections.partOfSpeech === 'ADJ') {
     return organizeNounInflectionTable(inflections.inflections);
   } else {
@@ -102,7 +102,7 @@ export const fetchInflections = async (
   lemma: string,
   pos: string,
   languageCode: string,
-): Promise<Inflections> => {
+): Promise<Paradigm> => {
   const response = await fetch(`/api/v1/inflection`, {
     method: 'POST',
     headers: {
@@ -126,5 +126,5 @@ export const fetchInflections = async (
   }
 
   const data = await response.json();
-  return data as Inflections;
+  return data as Paradigm;
 };

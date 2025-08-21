@@ -10,8 +10,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { stringifyFeatures } from '@/token/feature';
 import { TokenTranslation } from '@/types';
 import TokenType from '@/token/types/tokenType';
-import TokenFlashcardExport from '@/flashcard/components/TokenFlashcardExport';
-import { useInflections } from '@/inflection/hooks/useInflections';
+import { useInflections } from '@/inflection/hooks/use-inflections';
+import GenericFlashcardExport from '@/flashcard/components/GenericFlashcardExport';
 
 interface TokenPopoverProps {
   onClose: () => void;
@@ -21,7 +21,7 @@ interface TokenPopoverProps {
 }
 
 const TokenPopover: React.FC<TokenPopoverProps> = ({ onClose, context, token, languageCode }) => {
-  const { inflections, error, notAvailableInfo } = useInflections(
+  const { isLoading, inflections, error } = useInflections(
     token.morphology.lemma,
     token.morphology.pos,
     languageCode,
@@ -73,15 +73,15 @@ const TokenPopover: React.FC<TokenPopoverProps> = ({ onClose, context, token, la
             </div>
 
             <div className='py-2 border-b'>
-              <InflectionTable
-                inflections={inflections}
-                error={error}
-                notAvailableInfo={notAvailableInfo}
-              />
+              <InflectionTable inflections={inflections} isLoading={isLoading} error={error} />
             </div>
 
             <div className='py-2'>
-              <TokenFlashcardExport token={token} />
+              <GenericFlashcardExport
+                paradigm={inflections}
+                front={token.text}
+                back={token.translation.translation}
+              />
             </div>
           </div>
         </CardContent>

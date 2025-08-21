@@ -1,16 +1,18 @@
 import { InfoIcon, Loader2 } from 'lucide-react';
 
 import { capitalize } from '@/lib/utils';
-import { Inflections, InflectionTableData } from '@/inflection/types/inflections';
+import { InflectionTableData } from '@/inflection/types/inflections';
 import React, { useEffect, useState } from 'react';
 import { organizeInflectionTable } from '@/inflection/lib';
+import { Paradigm } from '@/flashcard/types/paradigm';
+import { ApiError } from '@/hooks/useApi';
 
 interface InflectionTableProps {
+  inflections: Paradigm | null;
+  error: ApiError | null;
   textSize?: string;
   showHeader?: boolean;
-  inflections: Inflections | null;
-  error: string | null;
-  notAvailableInfo: string | null;
+  isLoading: boolean;
 }
 
 const InflectionTable: React.FC<InflectionTableProps> = ({
@@ -18,7 +20,7 @@ const InflectionTable: React.FC<InflectionTableProps> = ({
   textSize = 'text-md',
   inflections,
   error,
-  notAvailableInfo,
+  isLoading,
 }) => {
   const [inflectionTable, setInflectionTable] = useState<InflectionTableData>({});
 
@@ -33,19 +35,21 @@ const InflectionTable: React.FC<InflectionTableProps> = ({
     <>
       {showHeader && <h3 className='text-lg font-semibold'>Inflections</h3>}
 
-      {inflections === null && error === null && notAvailableInfo === null && (
+      {isLoading && (
         <div className='flex items-center justify-center py-4' role='status' aria-live='polite'>
           <Loader2 className='h-6 w-6 animate-spin text-gray-500' />
         </div>
       )}
 
-      {error && <div className='text-red-500 text-sm p-3 bg-red-50 rounded py-4'>{error}</div>}
-
-      {notAvailableInfo && (
+      {error && error.code === 422 && (
         <div className='text-sm p-3 bg-blue-50 rounded border-b'>
           <InfoIcon className='h-6 w-6 inline-block text-blue-500 mr-2' />
-          {notAvailableInfo}
+          {error.message}
         </div>
+      )}
+
+      {error && error.code !== 422 && (
+        <div className='text-red-500 text-sm p-3 bg-red-50 rounded py-4'>{error.message}</div>
       )}
 
       {inflections && Object.keys(inflectionTable).length > 0 && (
