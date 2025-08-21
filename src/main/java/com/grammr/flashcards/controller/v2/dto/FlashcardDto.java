@@ -57,7 +57,7 @@ public record FlashcardDto(
         example = "123e4567-e89b-12d3-a456-426614174000",
         requiredMode = RequiredMode.NOT_REQUIRED
     )
-    ParadigmDto paradigm,
+    String paradigmId,
     @Schema(
         description = "Timestamp when the flashcard was created",
         example = "CREATED",
@@ -80,7 +80,7 @@ public record FlashcardDto(
         flashcard.getStatus(),
         flashcard.getType(),
         flashcard.getTokenPos(),
-        ParadigmDto.fromEntity(flashcard.getParadigm()),
+        flashcard.getParadigmId(),
         flashcard.getCreatedTimestamp(),
         flashcard.getUpdatedTimestamp()
     );
