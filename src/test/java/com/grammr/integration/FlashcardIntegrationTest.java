@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.entity.DeckSpec;
-import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.FlashcardSpec;
 import com.grammr.domain.entity.Paradigm;
 import com.grammr.domain.entity.UserSpec;
@@ -86,8 +85,7 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
     assertThat(flashcardDto.answer()).isEqualTo("Test Answer");
     assertThat(flashcardDto.tokenPos()).isEqualTo(PartOfSpeechTag.NOUN);
     assertThat(flashcardDto.type()).isEqualTo(INFLECTION);
-    assertThat(flashcardDto.paradigm()).isNotNull();
-    assertThat(flashcardDto.paradigm().inflections()).hasSize(2);
+    assertThat(flashcardDto.paradigmId()).isEqualTo(paradigm.getId().toString());
 
     var flashcards = flashcardRepository.findByDeckId(deck.getId());
 

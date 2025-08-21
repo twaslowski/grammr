@@ -94,4 +94,8 @@ public class Flashcard {
     this.status = Status.UPDATED;
     return this;
   }
+
+  public String getParadigmId() {
+    return paradigm != null ? paradigm.getId().toString() : null;
+  }
 }
