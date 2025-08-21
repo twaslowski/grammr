@@ -7,13 +7,6 @@ export interface Inflection {
   features: Feature[];
 }
 
-export interface Inflections {
-  paradigmId: string;
-  lemma: string;
-  partOfSpeech: string;
-  inflections: Inflection[];
-}
-
 export interface InflectionTableData {
   [key: string]: {
     singular: string;

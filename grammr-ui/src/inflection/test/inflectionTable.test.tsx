@@ -1,32 +1,41 @@
 import { render, screen } from '@testing-library/react';
 import InflectionTable from '@/inflection/components/InflectionTable';
-import { Inflections } from '@/inflection/types/inflections';
+import { Paradigm } from '@/flashcard/types/paradigm';
 
 describe('InflectionTable', () => {
   it('renders a loading spinner when no data is provided', () => {
-    render(<InflectionTable inflections={null} error={null} notAvailableInfo={null} />);
+    render(<InflectionTable inflections={null} isLoading={true} error={null} />);
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
   it('renders an error message when error is provided', () => {
     render(
-      <InflectionTable inflections={null} error='Error loading data' notAvailableInfo={null} />,
+      <InflectionTable
+        inflections={null}
+        error={{ code: 500, message: 'some-message' }}
+        isLoading={false}
+      />,
     );
-    expect(screen.getByText('Error loading data')).toBeInTheDocument();
+    expect(screen.getByText('some-message')).toBeInTheDocument();
   });
 
   it('renders a "not available" message when notAvailableInfo is provided', () => {
     render(
-      <InflectionTable inflections={null} error={null} notAvailableInfo='Data not available' />,
+      <InflectionTable
+        inflections={null}
+        error={{ code: 422, message: 'Data not available' }}
+        isLoading={false}
+      />,
     );
     expect(screen.getByText('Data not available')).toBeInTheDocument();
   });
 
   it('renders the inflection table when valid inflections are provided', () => {
-    const mockInflections: Inflections = {
+    const mockInflections: Paradigm = {
       lemma: 'dog',
       partOfSpeech: 'NOUN',
       paradigmId: '1',
+      languageCode: 'en',
       inflections: [
         {
           lemma: 'dog',
@@ -47,7 +56,7 @@ describe('InflectionTable', () => {
       ],
     };
 
-    render(<InflectionTable inflections={mockInflections} error={null} notAvailableInfo={null} />);
+    render(<InflectionTable inflections={mockInflections} error={null} isLoading={false} />);
     expect(screen.getByText('Nom')).toBeInTheDocument();
     expect(screen.getByText('dog')).toBeInTheDocument();
     expect(screen.getByText('dogs')).toBeInTheDocument();

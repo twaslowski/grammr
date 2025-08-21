@@ -1,9 +1,11 @@
 import { ChevronDown, ChevronRight, Edit, Trash2 } from 'lucide-react';
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, useEffect, useState } from 'react';
 
 import { Flashcard } from '@/flashcard/types/flashcard';
 import GenericFlashcardPreview from '@/flashcard/components/GenericFlashcardPreview';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Paradigm } from '@/flashcard/types/paradigm';
+import { useApi } from '@/hooks/useApi';
 
 interface FlashcardListProps {
   cards: Flashcard[];
@@ -14,6 +16,42 @@ export const FlashcardList: React.FC<FlashcardListProps> = ({ cards, deckId }) =
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const [visibleSide, setVisibleSide] = useState('front');
   const [previewDialogCardId, setPreviewDialogCardId] = useState<string | null>(null);
+  const [paradigmMap, setParadigmMap] = useState<Map<string, Paradigm>>(new Map());
+  const { request } = useApi();
+
+  // Fetch paradigms for flashcards that have paradigmId
+  useEffect(() => {
+    const fetchParadigms = async () => {
+      const paradigmPromises = cards
+        .filter((card) => card.paradigmId)
+        .map(async (card) => {
+          try {
+            const paradigm = await request<Paradigm>(`/api/v1/inflection/${card.paradigmId}`, {
+              method: 'GET',
+            });
+            return { cardId: card.id, paradigm };
+          } catch (error) {
+            console.error(`Error fetching paradigm for card ${card.id}:`, error);
+            return null;
+          }
+        });
+
+      const results = await Promise.all(paradigmPromises);
+      const newParadigmMap = new Map<string, Paradigm>();
+
+      results.forEach((result) => {
+        if (result) {
+          newParadigmMap.set(result.cardId, result.paradigm);
+        }
+      });
+
+      setParadigmMap(newParadigmMap);
+    };
+
+    if (cards.length > 0) {
+      void fetchParadigms();
+    }
+  }, [cards, request]);
 
   const toggleCardExpansion = (cardId: string) => {
     if (expandedCardId === cardId) {
@@ -104,6 +142,7 @@ export const FlashcardList: React.FC<FlashcardListProps> = ({ cards, deckId }) =
                       initialFront={card.question}
                       initialBack={card.answer}
                       initialDeckId={deckId}
+                      paradigm={card.paradigmId ? paradigmMap.get(card.id) : undefined}
                       onClose={() => setPreviewDialogCardId(null)}
                       onCardAdded={() => window.location.reload()}
                       submitAction='update'

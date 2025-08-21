@@ -41,6 +41,7 @@ describe('organizeInflectionTable', () => {
       organizeInflectionTable({
         paradigmId: '1',
         inflections: inflections,
+        languageCode: 'en',
         partOfSpeech: 'NOUN',
         lemma: 'test',
       }),
@@ -53,6 +54,7 @@ describe('organizeInflectionTable', () => {
       organizeInflectionTable({
         paradigmId: '1',
         inflections: inflections,
+        languageCode: 'en',
         partOfSpeech: 'NOUN',
         lemma: 'test',
       }),
@@ -72,6 +74,7 @@ describe('organizeInflectionTable', () => {
       organizeInflectionTable({
         paradigmId: '1',
         inflections: inflections,
+        languageCode: 'en',
         partOfSpeech: 'NOUN',
         lemma: 'test',
       }),
@@ -109,6 +112,7 @@ describe('organizeInflectionTable', () => {
       organizeInflectionTable({
         paradigmId: '1',
         inflections: inflections,
+        languageCode: 'en',
         partOfSpeech: 'VERB',
         lemma: 'test',
       }),

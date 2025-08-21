@@ -1,7 +1,8 @@
 import { Inflection } from '@/inflection/types/inflections';
 
 export interface Paradigm {
-  id: string;
+  paradigmId: string;
+  lemma: string;
   languageCode: string;
   partOfSpeech: string;
   inflections: Inflection[];
