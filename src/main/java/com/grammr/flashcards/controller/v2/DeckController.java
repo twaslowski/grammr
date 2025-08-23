@@ -160,4 +160,11 @@ public class DeckController {
     deckService.deleteDeck(deckId, user);
     return ResponseEntity.status(204).build();
   }
+
+  @PostMapping(value = "/{deckId}/reset-sync")
+  public ResponseEntity<Void> resetDeckSync(@AuthenticationPrincipal User user, @PathVariable UUID deckId) {
+    var deck = deckService.getDeck(deckId, user);
+    flashcardService.resetDeckSync(deck);
+    return ResponseEntity.status(204).build();
+  }
 }

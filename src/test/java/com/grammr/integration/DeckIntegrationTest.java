@@ -1,5 +1,6 @@
 package com.grammr.integration;
 
+import static com.grammr.domain.entity.Flashcard.Status.CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -8,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.grammr.annotation.IntegrationTest;
 import com.grammr.domain.entity.DeckSpec;
+import com.grammr.domain.entity.Flashcard.Status;
 import com.grammr.domain.entity.FlashcardSpec;
 import com.grammr.domain.entity.UserSpec;
 import java.util.UUID;
@@ -112,5 +114,26 @@ class DeckIntegrationTest extends IntegrationTestBase {
 
     assertThat(deckRepository.findAll()).isEmpty();
     assertThat(flashcardRepository.findAll()).isEmpty();
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldResetSyncStatus() {
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
+    var authentication = createUserAuthentication(user);
+
+    flashcardRepository.save(FlashcardSpec.withDeck(deck).front("some-front").status(Status.SYNCED).build());
+    flashcardRepository.save(FlashcardSpec.withDeck(deck).front("some-other-front").status(Status.UPDATED).build());
+
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/deck/%s/reset-sync".formatted(deck.getDeckId()))
+            .with(authentication(authentication))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNoContent())
+        .andReturn();
+
+    var flashcards = flashcardRepository.findAll();
+    assertThat(flashcards).hasSize(2);
+    assertThat(flashcards).allMatch(f -> f.getStatus() == CREATED);
   }
 }
