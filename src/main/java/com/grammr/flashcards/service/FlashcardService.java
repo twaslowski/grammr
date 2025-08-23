@@ -3,6 +3,7 @@ package com.grammr.flashcards.service;
 import com.grammr.domain.entity.Deck;
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
+import com.grammr.domain.entity.Flashcard.Type;
 import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.domain.exception.ResourceExistsException;
@@ -11,15 +12,14 @@ import com.grammr.flashcards.controller.v2.dto.FlashcardCreationDto;
 import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
 import com.grammr.repository.FlashcardRepository;
 import com.grammr.repository.ParadigmRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -46,7 +46,6 @@ public class FlashcardService {
         .map(FlashcardDto::fromEntity)
         .toList();
 
-    flashcards.forEach(Flashcard::initiateSync);
     log.info("Initiated flashcard sync for deck {}", deck.getDeckId());
     return dtos;
   }
@@ -57,15 +56,15 @@ public class FlashcardService {
 
     log.info("Confirming successful sync for {} flashcards", successfulSyncs.size());
     successfulSyncs.forEach(flashcard -> {
-      flashcard.confirmSync();
-      if (flashcard.getStatus() == Status.DELETION_SUCCEEDED) {
+      if (flashcard.getStatus() == Status.MARKED_FOR_DELETION) {
+        log.info("Deleting flashcard after successful sync: {}", flashcard.getFlashcardId());
         flashcardRepository.delete(flashcard);
       }
+      flashcard.confirmSync();
     });
 
     if (!failedSyncs.isEmpty()) {
-      log.warn("Failed sync for {} flashcards", failedSyncs.size());
-      failedSyncs.forEach(Flashcard::failSync);
+      log.warn("{} flashcards failed to sync", failedSyncs.size());
     }
   }
 
@@ -92,14 +91,18 @@ public class FlashcardService {
         .flatMap(paradigmRepository::findById)
         .orElse(null);
 
+    Type type = paradigm == null || tokenPos == null ? Type.BASIC : Type.INFLECTION;
+
     var flashcard = Flashcard.builder()
         .front(question)
         .back(answer)
         .flashcardId(UUID.randomUUID())
         .tokenPos(tokenPos)
         .paradigm(paradigm)
+        .type(type)
         .status(Status.CREATED)
-        .deck(deck).build();
+        .deck(deck)
+        .build();
 
     return flashcardRepository.save(flashcard);
   }
@@ -110,5 +113,12 @@ public class FlashcardService {
 
     foundFlashcard.setStatus(Status.MARKED_FOR_DELETION);
     flashcardRepository.save(foundFlashcard);
+  }
+
+  public void resetDeckSync(Deck deck) {
+    var flashcards = flashcardRepository.findByDeckId(deck.getId());
+    flashcards.forEach(flashcard -> flashcard.setStatus(Status.CREATED));
+    flashcardRepository.saveAll(flashcards);
+    log.info("Reset sync status for all flashcards in deck {}", deck.getDeckId());
   }
 }

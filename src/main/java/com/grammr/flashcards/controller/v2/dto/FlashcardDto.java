@@ -2,9 +2,12 @@ package com.grammr.flashcards.controller.v2.dto;
 
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.Flashcard.Status;
+import com.grammr.domain.entity.Flashcard.Type;
+import com.grammr.language.controller.v1.dto.ParadigmDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import java.time.ZonedDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 public record FlashcardDto(
@@ -33,17 +36,20 @@ public record FlashcardDto(
     )
     Status status,
     @Schema(
-        description = "If the flashcard is associated with a single word, this field contains the part of speech tag",
-        example = "NOUN",
-        requiredMode = RequiredMode.NOT_REQUIRED
+        description = "Type of the flashcard, indicating its category or usage",
+        example = "BASIC | INFLECTION",
+        requiredMode = Schema.RequiredMode.REQUIRED
     )
-    String tokenPos,
+    Type type,
     @Schema(
-        description = "Unique identifier for the paradigm associated with the flashcard, if applicable",
+        description = """
+            Paradigm data, if available.
+            Required if type == 'INFLECTION'.
+            """,
         example = "123e4567-e89b-12d3-a456-426614174000",
         requiredMode = RequiredMode.NOT_REQUIRED
     )
-    String paradigmId,
+    ParadigmDto paradigm,
     @Schema(
         description = "Timestamp when the flashcard was created",
         example = "CREATED",
@@ -59,13 +65,17 @@ public record FlashcardDto(
 ) {
 
   public static FlashcardDto fromEntity(Flashcard flashcard) {
+    ParadigmDto paradigmDto = Optional.ofNullable(flashcard.getParadigm())
+        .map(ParadigmDto::fromEntity)
+        .orElse(null);
+
     return new FlashcardDto(
         flashcard.getFlashcardId(),
         flashcard.getFront(),
         flashcard.getBack(),
         flashcard.getStatus(),
-        flashcard.getTokenPos() != null ? flashcard.getTokenPos().name() : null,
-        flashcard.getParadigm() != null ? flashcard.getParadigm().getId().toString() : null,
+        flashcard.getType(),
+        paradigmDto,
         flashcard.getCreatedTimestamp(),
         flashcard.getUpdatedTimestamp()
     );

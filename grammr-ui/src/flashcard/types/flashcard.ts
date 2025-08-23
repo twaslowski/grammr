@@ -1,8 +1,12 @@
+import { Paradigm } from '@/flashcard/types/paradigm';
+
 export interface Flashcard {
   question: string;
   answer: string;
   id: string;
-  status: 'CREATED' | 'UPDATED' | 'EXPORT_INITIATED' | 'EXPORT_COMPLETED' | 'EXPORT_FAILED';
+  type: 'BASIC' | 'INFLECTION';
+  status: 'CREATED' | 'UPDATED' | 'MARKED_FOR_DELETION' | 'SYNCED';
+  paradigm: Paradigm | null;
   createdTimestamp: string;
   updatedTimestamp: string;
 }

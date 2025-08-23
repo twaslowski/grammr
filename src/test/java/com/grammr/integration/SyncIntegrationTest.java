@@ -6,20 +6,22 @@ import com.grammr.domain.entity.DeckSpec;
 import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.entity.FlashcardSpec;
 import com.grammr.domain.entity.UserSpec;
-import com.grammr.flashcards.controller.v2.dto.FlashcardSyncActionDto;
+import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
 import com.grammr.flashcards.controller.v2.dto.SyncResultDto;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static com.grammr.flashcards.controller.v2.dto.SyncAction.CREATE;
-import static com.grammr.flashcards.controller.v2.dto.SyncAction.DELETE;
-import static com.grammr.flashcards.controller.v2.dto.SyncAction.UPDATE;
+import static com.grammr.domain.entity.Flashcard.Status.CREATED;
+import static com.grammr.domain.entity.Flashcard.Status.MARKED_FOR_DELETION;
+import static com.grammr.domain.entity.Flashcard.Status.SYNCED;
+import static com.grammr.domain.entity.Flashcard.Status.UPDATED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,100 +29,64 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 public class SyncIntegrationTest extends IntegrationTestBase {
 
+  @Test
   @SneakyThrows
-  @ParameterizedTest
-  @EnumSource(value = Flashcard.Status.class,
-      names = {"CREATION_INITIATED", "CREATION_SUCCEEDED", "CREATION_FAILED",
-          "DELETION_INITIATED", "DELETION_FAILED",
-          "UPDATE_INITIATED", "UPDATE_SUCCEEDED", "UPDATE_FAILED"}
-  )
-  void shouldReturnOnlySyncableFlashcards(Flashcard.Status status) {
+  void shouldReturnOnlySyncableFlashcards() {
+    // Given four flashcards with different statuses
     var user = userRepository.save(UserSpec.validWithoutId().build());
     var deck = deckRepository.save(DeckSpec.withUser(user).build());
     var auth = createUserAuthentication(user);
 
-    var createdFlashcard = FlashcardSpec.withDeck(deck)
-        .front("Create me")
-        .status(Flashcard.Status.CREATED)
-        .build();
+    List.of(CREATED, UPDATED, SYNCED, MARKED_FOR_DELETION)
+        .forEach(status -> flashcardRepository.save(
+            FlashcardSpec.withDeck(deck)
+                .front("Flashcard with status: " + status)
+                .status(status)
+                .build()
+        ));
 
-    var updatedFlashcard = FlashcardSpec.withDeck(deck)
-        .front("Update me")
-        .status(Flashcard.Status.UPDATED)
-        .build();
-
-    var deletedFlashcard = FlashcardSpec.withDeck(deck)
-        .front("Delete me")
-        .status(Flashcard.Status.MARKED_FOR_DELETION)
-        .build();
-
-    var exportedFlashcard = FlashcardSpec.withDeck(deck)
-        .front("Do not sync me")
-        .status(status)
-        .build();
-
-    flashcardRepository.saveAll(
-        List.of(createdFlashcard, exportedFlashcard, updatedFlashcard, deletedFlashcard)
-    );
-
+    // When syncing the deck
     var response = mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/deck/%s/sync".formatted(deck.getDeckId()))
             .with(authentication(auth))
             .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andReturn();
 
-    var responseContent = objectMapper.readValue(response.getResponse().getContentAsString(), new TypeReference<List<FlashcardSyncActionDto>>() {
-    });
+    // SYNCED flashcards should not be returned
+    var responseContent = objectMapper.readValue(
+        response.getResponse().getContentAsString(), new TypeReference<List<FlashcardDto>>() {
+        });
 
     assertThat(responseContent).hasSize(3);
-
-    assertThat(flashcardRepository.findById(createdFlashcard.getId()))
-        .isPresent()
-        .get()
-        .extracting(Flashcard::getStatus)
-        .isEqualTo(Flashcard.Status.CREATION_INITIATED);
-
-    assertThat(flashcardRepository.findById(updatedFlashcard.getId()))
-        .isPresent()
-        .get()
-        .extracting(Flashcard::getStatus)
-        .isEqualTo(Flashcard.Status.UPDATE_INITIATED);
-
-    assertThat(flashcardRepository.findById(deletedFlashcard.getId()))
-        .isPresent()
-        .get()
-        .extracting(Flashcard::getStatus)
-        .isEqualTo(Flashcard.Status.DELETION_INITIATED);
   }
 
   @Test
   @SneakyThrows
   void shouldConfirmSync() {
-    // Given
+    // Given flashcards that were previously synced
     var user = userRepository.save(UserSpec.validWithoutId().build());
     var deck = deckRepository.save(DeckSpec.withUser(user).build());
 
-    var createdFlashcard = FlashcardSpec.withDeck(deck)
-        .status(Flashcard.Status.CREATION_INITIATED)
-        .front("Create me")
-        .build();
-
-    var updatedFlashcard = FlashcardSpec.withDeck(deck)
-        .status(Flashcard.Status.UPDATE_INITIATED)
-        .front("Update me")
-        .build();
-
-    var deletedFlashcard = FlashcardSpec.withDeck(deck)
-        .status(Flashcard.Status.DELETION_INITIATED)
-        .front("Delete me")
-        .build();
+    Map<Flashcard.Status, Flashcard> flashcards = Stream.of(CREATED, UPDATED, SYNCED, MARKED_FOR_DELETION)
+        .map(status -> flashcardRepository.save(
+            FlashcardSpec.withDeck(deck)
+                .front("Flashcard with status: " + status)
+                .status(status)
+                .build()
+        )).collect(Collectors.toMap(Flashcard::getStatus, flashcard -> flashcard));
 
     var authentication = createUserAuthentication(user);
-    flashcardRepository.saveAll(List.of(createdFlashcard, updatedFlashcard, deletedFlashcard));
 
+    // When confirming the sync
     var syncConfirmation = new SyncResultDto(
-        List.of(createdFlashcard.getFlashcardId(), deletedFlashcard.getFlashcardId()),
-        List.of(updatedFlashcard.getFlashcardId())
+        // Successful syncs
+        List.of(
+            flashcards.get(CREATED).getFlashcardId(),
+            flashcards.get(UPDATED).getFlashcardId(),
+            flashcards.get(MARKED_FOR_DELETION).getFlashcardId()
+        ),
+        // Failed syncs
+        List.of()
     );
 
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/deck/%s/sync/confirm".formatted(deck.getDeckId()))
@@ -130,19 +96,21 @@ public class SyncIntegrationTest extends IntegrationTestBase {
         .andExpect(status().isOk())
         .andReturn();
 
-    assertThat(flashcardRepository.findById(createdFlashcard.getId()))
+    // Then the statuses of the flashcards should be updated accordingly,
+    // and the deleted flashcard should be removed from the repository
+    assertThat(flashcardRepository.findById(flashcards.get(CREATED).getId()))
         .isPresent()
         .get()
         .extracting(Flashcard::getStatus)
-        .isEqualTo(Flashcard.Status.CREATION_SUCCEEDED);
+        .isEqualTo(SYNCED);
 
-    assertThat(flashcardRepository.findById(updatedFlashcard.getId()))
+    assertThat(flashcardRepository.findById(flashcards.get(UPDATED).getId()))
         .isPresent()
         .get()
         .extracting(Flashcard::getStatus)
-        .isEqualTo(Flashcard.Status.UPDATE_FAILED);
+        .isEqualTo(SYNCED);
 
-    assertThat(flashcardRepository.findById(deletedFlashcard.getId()))
+    assertThat(flashcardRepository.findById(flashcards.get(MARKED_FOR_DELETION).getId()))
         .isEmpty();
   }
 }

@@ -9,8 +9,6 @@ import com.grammr.repository.DeckRepository;
 import com.grammr.repository.FlashcardRepository;
 import java.util.List;
 import java.util.UUID;
-
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

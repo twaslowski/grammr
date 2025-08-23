@@ -4,6 +4,7 @@ import com.grammr.domain.enums.features.Feature;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import java.util.Set;
+import lombok.Builder;
 
 /**
  * Represents the inflected form of a word. For instance, "gehst" would have the following features:
@@ -12,6 +13,7 @@ import java.util.Set;
  * features: Number: Sing, Person: Second, Tense: Present
  */
 
+@Builder
 public record Inflection(
     @NotNull
     @Schema(

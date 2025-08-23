@@ -7,7 +7,7 @@ import React, { use, useCallback, useEffect, useState } from 'react';
 import ExportButton from '@/deck/components/button/ExportButton';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import NotFound from '@/components/common/NotFound';
-import FlashcardList from '@/flashcard/components/FlashcardList';
+import { FlashcardList } from '@/flashcard/components/FlashcardList';
 import Deck from '@/deck/types/deck';
 import SyncButton from '@/deck/components/button/SyncButton';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ import { useApi } from '@/hooks/useApi';
 import { Flashcard } from '@/flashcard/types/flashcard';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import GenericFlashcardPreview from '@/flashcard/components/GenericFlashcardPreview';
+import ResetSyncButton from '@/deck/components/button/ResetSyncButton';
 
 export default function DeckPage(props: { params: Promise<{ deckId: string }> }) {
   const { deckId } = use(props.params);
@@ -108,6 +109,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
             <div className='flex space-x-2 mt-4 md:mt-0'>
               <ExportButton deck={deck} />
               <SyncButton deck={deck} onSync={fetchFlashcards} />
+              <ResetSyncButton deck={deck} />
 
               <Button
                 onClick={handleDeleteDeck}
@@ -163,6 +165,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
                   initialDeckId={deck.id}
                   initialFront={''}
                   initialBack={''}
+                  paradigm={null}
                   onClose={() => setShowPreviewDialog(false)}
                   onCardAdded={fetchFlashcards}
                 />

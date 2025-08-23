@@ -5,8 +5,8 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import com.grammr.config.value.LanguageConfiguration;
 import com.grammr.domain.entity.Paradigm;
 import com.grammr.domain.exception.InflectionNotAvailableException;
-import com.grammr.domain.value.language.ParadigmDTO;
 import com.grammr.language.controller.v1.dto.InflectionsRequest;
+import com.grammr.language.controller.v1.dto.ParadigmDto;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,12 +26,12 @@ public class InflectionPort {
     var uri = languageConfiguration.getInflectionUri(request.languageCode());
     log.info("Inflecting word '{}'", request.lemma());
     try {
-      ParadigmDTO paradigmDTO = restClient
+      ParadigmDto paradigmDTO = restClient
           .post()
           .uri(uri)
           .body(request)
           .retrieve()
-          .body(ParadigmDTO.class);
+          .body(ParadigmDto.class);
 
       return Optional.ofNullable(paradigmDTO)
           .map(Paradigm::from)

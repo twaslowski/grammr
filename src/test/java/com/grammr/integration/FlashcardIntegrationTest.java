@@ -1,21 +1,28 @@
 package com.grammr.integration;
 
-import com.grammr.annotation.IntegrationTest;
-import com.grammr.domain.entity.DeckSpec;
-import com.grammr.domain.entity.FlashcardSpec;
-import com.grammr.domain.entity.UserSpec;
-import com.grammr.flashcards.controller.v2.dto.FlashcardCreationDto;
-import lombok.SneakyThrows;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.UUID;
-
+import static com.grammr.domain.entity.Flashcard.Type.INFLECTION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.grammr.annotation.IntegrationTest;
+import com.grammr.domain.entity.DeckSpec;
+import com.grammr.domain.entity.FlashcardSpec;
+import com.grammr.domain.entity.Paradigm;
+import com.grammr.domain.entity.UserSpec;
+import com.grammr.domain.enums.LanguageCode;
+import com.grammr.domain.enums.PartOfSpeechTag;
+import com.grammr.domain.value.language.Inflection;
+import com.grammr.flashcards.controller.v2.dto.FlashcardCreationDto;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @IntegrationTest
 class FlashcardIntegrationTest extends IntegrationTestBase {
@@ -44,6 +51,51 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
     var flashcard = flashcards.getFirst();
     assertThat(flashcard.getFront()).isEqualTo("Test Question");
     assertThat(flashcard.getBack()).isEqualTo("Test Answer");
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldCreateFlashcardWithParadigm() {
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
+    var authentication = createUserAuthentication(user);
+
+    var paradigm = paradigmRepository.save(Paradigm.builder()
+        .partOfSpeech(PartOfSpeechTag.NOUN)
+        .languageCode(LanguageCode.DE)
+        .inflections(List.of(
+            new Inflection("nominative", "singular", Set.of()),
+            new Inflection("genitive", "singular", Set.of())
+        ))
+        .lemma("test")
+        .build());
+
+    var creationDto = new FlashcardCreationDto("Test Question", "Test Answer", PartOfSpeechTag.NOUN, paradigm.getId());
+
+    var result = mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/deck/%s/flashcard".formatted(deck.getDeckId()))
+            .with(authentication(authentication))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(creationDto)))
+        .andExpect(status().is(201))
+        .andReturn();
+
+    var flashcardDto = objectMapper.readValue(result.getResponse().getContentAsString(), FlashcardDto.class);
+
+    assertThat(flashcardDto.question()).isEqualTo("Test Question");
+    assertThat(flashcardDto.answer()).isEqualTo("Test Answer");
+    assertThat(flashcardDto.type()).isEqualTo(INFLECTION);
+    assertThat(flashcardDto.paradigm().paradigmId()).isEqualTo(paradigm.getId().toString());
+    assertThat(flashcardDto.paradigm().partOfSpeech()).isEqualTo(paradigm.getPartOfSpeech());
+
+    var flashcards = flashcardRepository.findByDeckId(deck.getId());
+
+    assertThat(flashcards).hasSize(1);
+    var flashcard = flashcards.getFirst();
+    assertThat(flashcard.getFront()).isEqualTo("Test Question");
+    assertThat(flashcard.getBack()).isEqualTo("Test Answer");
+    assertThat(flashcard.getParadigm()).isNotNull();
+    assertThat(flashcard.getParadigm().getId()).isEqualTo(paradigm.getId());
+    assertThat(flashcard.getType()).isEqualTo(INFLECTION);
   }
 
   @Test
@@ -80,7 +132,6 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
     assertThat(flashcardRepository.findAll()).hasSize(1);
   }
 
-
   @Test
   @SneakyThrows
   void shouldReturnNotFoundWhenUpdatingNonExistentFlashcard() {
@@ -108,7 +159,6 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
     var flashcard = flashcardRepository.save(FlashcardSpec.withDeck(deck).build());
     var authentication = createUserAuthentication(user);
     var updatePayload = new FlashcardCreationDto("Updated Front", "Updated Back", null, null);
-
 
     // When & Then
     mockMvc.perform(MockMvcRequestBuilders.put("/api/v2/deck/%s/flashcard/%s".formatted(deck.getDeckId(), flashcard.getFlashcardId()))
