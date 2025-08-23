@@ -23,7 +23,7 @@ public class InflectionService {
   private final InflectionPort inflectionPort;
 
   public ParadigmDto inflect(InflectionsRequest inflectionRequest) {
-    return getParadigm(inflectionRequest).toDTO();
+    return ParadigmDto.fromEntity(getParadigm(inflectionRequest));
   }
 
   public Paradigm getParadigm(InflectionsRequest inflectionRequest) {

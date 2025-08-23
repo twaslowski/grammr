@@ -1,5 +1,6 @@
 package com.grammr.language.controller.v1.dto;
 
+import com.grammr.domain.entity.Paradigm;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.domain.value.language.Inflection;
@@ -38,4 +39,13 @@ public record ParadigmDto(
     )
     List<Inflection> inflections) {
 
+  public static ParadigmDto fromEntity(Paradigm paradigm) {
+    return new ParadigmDto(
+        paradigm.getId().toString(),
+        paradigm.getPartOfSpeech(),
+        paradigm.getLemma(),
+        paradigm.getLanguageCode(),
+        paradigm.getInflections()
+    );
+  }
 }

@@ -19,7 +19,7 @@ interface FlashcardPreviewProps {
   onClose: () => void;
   onCardAdded?: () => void;
   flashcardId?: string;
-  paradigm?: Paradigm;
+  paradigm: Paradigm | null;
   submitAction?: 'create' | 'update';
 }
 
@@ -29,8 +29,8 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
   initialFront,
   initialBack,
   onClose,
+  paradigm,
   flashcardId = '',
-  paradigm = undefined,
   submitAction = 'create',
 }) => {
   const { isLoading, request } = useApi();
