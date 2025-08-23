@@ -72,47 +72,54 @@ export const createConjugationModel = async (): Promise<void> => {
             Name: 'Conjugation Table Card',
             Front: '<div class="lemma">{{front}}</div>',
             Back: `<div class="lemma">{{front}}</div><div class="meta">{{partOfSpeech}}</div><div><strong>Translation:</strong> {{back}}</div><div id="table-container"></div><script>
-            const dataField = \`{{inflections}}\`.trim();
-            try {
-              const inflections = JSON.parse(dataField);
-              
-              // Create conjugation table for verbs (person x number)
-              const conjugationTable = {
-                singular: { first: '', second: '', third: '' },
-                plural: { first: '', second: '', third: '' }
-              };
-              
-              // Parse inflection data
-              inflections.forEach(item => {
-                let person = '';
-                let number = '';
-                
-                item.features.forEach(feature => {
-                  if (feature.type === 'PERSON') {
-                    person = feature.value.toLowerCase();
-                  } else if (feature.type === 'NUMBER') {
-                    number = feature.value.toLowerCase();
-                  }
-                });
-                
-                if (person && number && conjugationTable[number] && conjugationTable[number][person] !== undefined) {
-                  conjugationTable[number][person] = item.inflected;
-                }
-              });
-              
-              // Build table HTML
-              let table = '<table>';
-              table += '<tr><th></th><th>Singular</th><th>Plural</th></tr>';
-              table += \`<tr><th>1st person</th><td>\${conjugationTable.singular.first}</td><td>\${conjugationTable.plural.first}</td></tr>\`;
-              table += \`<tr><th>2nd person</th><td>\${conjugationTable.singular.second}</td><td>\${conjugationTable.plural.second}</td></tr>\`;
-              table += \`<tr><th>3rd person</th><td>\${conjugationTable.singular.third}</td><td>\${conjugationTable.plural.third}</td></tr>\`;
-              table += '</table>';
-              
-              document.getElementById('table-container').innerHTML = table;
-            } catch (e) {
-              document.getElementById('table-container').innerHTML = '<em>Invalid conjugation data</em>';
-            }
-            </script><hr>`,
+const dataField = \`{{inflections}}\`.trim();
+try {
+  const inflections = JSON.parse(dataField);
+  
+  // Create conjugation table for verbs (person x number)
+  const conjugationTable = {
+    singular: { first: '', second: '', third: '' },
+    plural: { first: '', second: '', third: '' }
+  };
+  
+  // Parse inflection data
+  inflections.forEach(item => {
+    let person = '';
+    let number = '';
+    
+    item.features.forEach(feature => {
+      if (feature.type === 'PERSON') {
+        // Map FIRST/SECOND/THIRD to first/second/third
+        const personValue = feature.value.toLowerCase();
+        if (personValue === 'first') person = 'first';
+        else if (personValue === 'second') person = 'second';
+        else if (personValue === 'third') person = 'third';
+      } else if (feature.type === 'NUMBER') {
+        // Map SING/PLUR to singular/plural
+        const numberValue = feature.value.toLowerCase();
+        if (numberValue === 'sing') number = 'singular';
+        else if (numberValue === 'plur') number = 'plural';
+      }
+    });
+    
+    if (person && number && conjugationTable[number] && conjugationTable[number][person] !== undefined) {
+      conjugationTable[number][person] = item.inflected;
+    }
+  });
+  
+  // Build table HTML
+  let table = '<table>';
+  table += '<tr><th></th><th>Singular</th><th>Plural</th></tr>';
+  table += \`<tr><th>1st person</th><td>\${conjugationTable.singular.first}</td><td>\${conjugationTable.plural.first}</td></tr>\`;
+  table += \`<tr><th>2nd person</th><td>\${conjugationTable.singular.second}</td><td>\${conjugationTable.plural.second}</td></tr>\`;
+  table += \`<tr><th>3rd person</th><td>\${conjugationTable.singular.third}</td><td>\${conjugationTable.plural.third}</td></tr>\`;
+  table += '</table>';
+  
+  document.getElementById('table-container').innerHTML = table;
+} catch (e) {
+  document.getElementById('table-container').innerHTML = '<em>Invalid conjugation data</em>';
+}
+</script><hr>`,
           },
         ],
       },
