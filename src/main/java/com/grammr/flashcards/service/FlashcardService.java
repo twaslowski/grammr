@@ -114,4 +114,11 @@ public class FlashcardService {
     foundFlashcard.setStatus(Status.MARKED_FOR_DELETION);
     flashcardRepository.save(foundFlashcard);
   }
+
+  public void resetDeckSync(Deck deck) {
+    var flashcards = flashcardRepository.findByDeckId(deck.getId());
+    flashcards.forEach(flashcard -> flashcard.setStatus(Status.CREATED));
+    flashcardRepository.saveAll(flashcards);
+    log.info("Reset sync status for all flashcards in deck {}", deck.getDeckId());
+  }
 }
