@@ -1,3 +1,5 @@
+import { MODEL_NAMES } from '@/constant/constants';
+
 export const precheckModels = async () => {
   const response = await fetch('http://localhost:8765', {
     method: 'POST',
@@ -31,7 +33,7 @@ export const createModel = async (): Promise<void> => {
       action: 'createModel',
       version: 6,
       params: {
-        modelName: 'inflections',
+        modelName: MODEL_NAMES.INFLECTION,
         inOrderFields: ['Lemma', 'Translation', 'PartOfSpeech', 'InflectionData', 'Notes'],
         css: 'table {border-collapse: collapse; width: 100%; max-width: 400px; margin-top: 10px;} th, td {border: 1px solid #aaa; padding: 4px 6px; text-align: center; font-size: 0.9em;} th {background-color: #f0f0f0;} .lemma {font-size: 1.5em; font-weight: bold; margin-bottom: 10px;} .meta {margin-bottom: 10px; font-style: italic;} @media (max-width: 480px) { table {font-size: 0.8em;} th, td {padding: 3px;}}',
         isCloze: false,
@@ -48,5 +50,5 @@ export const createModel = async (): Promise<void> => {
 };
 
 function inflectionsModelExists(models: string[]): boolean {
-  return models.includes('inflections');
+  return models.includes(MODEL_NAMES.INFLECTION);
 }
