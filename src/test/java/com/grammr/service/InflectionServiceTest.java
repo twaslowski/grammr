@@ -6,6 +6,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.grammr.domain.entity.ParadigmSpec;
 import com.grammr.language.service.v1.InflectionService;
 import com.grammr.config.value.LanguageConfiguration;
 import com.grammr.domain.entity.Paradigm;
@@ -51,7 +52,7 @@ public class InflectionServiceTest {
   void shouldInteractWithInflectionPortWhenParadigmDoesNotExist() {
     // Given
     var inflectionRequest = mock(InflectionsRequest.class);
-    var paradigm = mock(Paradigm.class);
+    var paradigm = ParadigmSpec.valid().id(UUID.randomUUID()).build();
 
     when(paradigmRepository.findByLemmaAndPartOfSpeechAndLanguageCode(any(), any(), any()))
         .thenReturn(Optional.empty());

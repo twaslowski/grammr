@@ -38,7 +38,7 @@ const GenericFlashcardExport: React.FC<GenericFlashcardExportProps> = ({
               <GenericFlashcardPreview
                 initialFront={front}
                 initialBack={back}
-                paradigm={paradigm === null ? undefined : paradigm}
+                paradigm={paradigm}
                 onClose={() => setShowPreviewDialog(false)}
               />
             </DialogContent>

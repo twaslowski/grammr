@@ -163,6 +163,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
                   initialDeckId={deck.id}
                   initialFront={''}
                   initialBack={''}
+                  paradigm={null}
                   onClose={() => setShowPreviewDialog(false)}
                   onCardAdded={fetchFlashcards}
                 />

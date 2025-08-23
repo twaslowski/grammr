@@ -83,9 +83,9 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
 
     assertThat(flashcardDto.question()).isEqualTo("Test Question");
     assertThat(flashcardDto.answer()).isEqualTo("Test Answer");
-    assertThat(flashcardDto.tokenPos()).isEqualTo(PartOfSpeechTag.NOUN);
     assertThat(flashcardDto.type()).isEqualTo(INFLECTION);
-    assertThat(flashcardDto.paradigmId()).isEqualTo(paradigm.getId().toString());
+    assertThat(flashcardDto.paradigm().paradigmId()).isEqualTo(paradigm.getId().toString());
+    assertThat(flashcardDto.paradigm().partOfSpeech()).isEqualTo(paradigm.getPartOfSpeech());
 
     var flashcards = flashcardRepository.findByDeckId(deck.getId());
 

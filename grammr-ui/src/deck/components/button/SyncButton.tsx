@@ -13,7 +13,7 @@ import {
   updateNotes,
   precheckAnkiConnect,
   precheckModels,
-} from '@/deck/components/button/anki-connect';
+} from '@/deck/anki-connect';
 import { Flashcard } from '@/flashcard/types/flashcard';
 import { fromFlashcard, Note } from '@/deck/types/note';
 

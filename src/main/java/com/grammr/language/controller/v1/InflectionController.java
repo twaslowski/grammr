@@ -32,7 +32,7 @@ public class InflectionController {
 
   @Operation(summary = "Inflect a word", description = """
       Retrieve inflected forms of a word. Stores all inflections in the database.
-      Unique paradigm identifier is returned in the API response as paradigmId.
+      Unique paradigm identifier is returned in the API response as paradigm.
       """)
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Word inflected successfully"),
@@ -77,6 +77,6 @@ public class InflectionController {
   @GetMapping(value = "/inflection/{paradigmId}", produces = "application/json")
   public ResponseEntity<ParadigmDto> retrieveParadigm(@PathVariable UUID paradigmId) {
     var paradigm = inflectionService.getParadigm(paradigmId);
-    return ResponseEntity.ok(paradigm.toDTO());
+    return ResponseEntity.ok(ParadigmDto.fromEntity(paradigm));
   }
 }
