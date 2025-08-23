@@ -1,4 +1,5 @@
 import { Flashcard } from '@/flashcard/types/flashcard';
+import { MODEL_NAMES, BasicModelName, InflectionModelName } from '@/constant/constants';
 
 export interface Note {
   id: string;
@@ -23,12 +24,12 @@ interface InflectionFields {
 
 export interface BasicNote extends Note {
   fields: BasicFields;
-  modelName: 'Basic';
+  modelName: BasicModelName;
 }
 
 export interface InflectionNote extends Note {
   fields: InflectionFields;
-  modelName: 'Inflection';
+  modelName: InflectionModelName;
 }
 
 export type AnyField = BasicFields | InflectionFields;
@@ -41,7 +42,7 @@ export const basicNote = (flashcard: Flashcard, deckName: string): BasicNote => 
       front: flashcard.question,
       back: flashcard.answer,
     },
-    modelName: 'Basic',
+    modelName: MODEL_NAMES.BASIC,
     deckName: deckName,
   };
 };
@@ -61,7 +62,7 @@ export const inflectionNote = (flashcard: Flashcard, deckName: string): Inflecti
       partOfSpeech: flashcard.paradigm.partOfSpeech,
       inflections: JSON.stringify(flashcard.paradigm.inflections),
     },
-    modelName: 'Inflection',
+    modelName: MODEL_NAMES.INFLECTION,
     deckName: deckName,
   };
 };
