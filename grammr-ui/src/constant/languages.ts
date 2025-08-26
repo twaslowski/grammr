@@ -1,26 +1,22 @@
 // Language data with ISO codes and display names
 export const languages = [
-  { code: 'en', name: 'English', flag: '🇬🇧' },
-  { code: 'de', name: 'German', flag: '🇩🇪' },
-  { code: 'ru', name: 'Russian', flag: '🇷🇺' },
-  { code: 'it', name: 'Italian', flag: '🇮🇹' },
-  { code: 'es', name: 'Spanish', flag: '🇪🇸' },
-  { code: 'pt', name: 'Portuguese', flag: '🇵🇹' },
-  { code: 'fr', name: 'French', flag: '🇫🇷' },
+  { code: 'de', name: 'German', flag: '🇩🇪', learnable: false },
+  { code: 'en', name: 'English', flag: '🇬🇧', learnable: false },
+  { code: 'ru', name: 'Russian', flag: '🇷🇺', learnable: true },
 ];
 
 export const languageFeatures = {
   German: {
     sentenceTranslation: true,
     literalWordTranslation: true,
-    morphologicalAnalysis: true,
+    morphologicalAnalysis: false,
     verbConjugation: false,
     nounDeclension: false,
   },
   English: {
     sentenceTranslation: true,
     literalWordTranslation: true,
-    morphologicalAnalysis: true,
+    morphologicalAnalysis: false,
     verbConjugation: false,
     nounDeclension: false,
   },
@@ -30,33 +26,5 @@ export const languageFeatures = {
     morphologicalAnalysis: true,
     verbConjugation: true,
     nounDeclension: true,
-  },
-  Spanish: {
-    sentenceTranslation: true,
-    literalWordTranslation: true,
-    morphologicalAnalysis: true,
-    verbConjugation: true,
-    nounDeclension: false,
-  },
-  French: {
-    sentenceTranslation: true,
-    literalWordTranslation: true,
-    morphologicalAnalysis: true,
-    verbConjugation: true,
-    nounDeclension: false,
-  },
-  Portuguese: {
-    sentenceTranslation: true,
-    literalWordTranslation: true,
-    morphologicalAnalysis: true,
-    verbConjugation: true,
-    nounDeclension: false,
-  },
-  Italian: {
-    sentenceTranslation: true,
-    literalWordTranslation: true,
-    morphologicalAnalysis: true,
-    verbConjugation: true,
-    nounDeclension: false,
   },
 };

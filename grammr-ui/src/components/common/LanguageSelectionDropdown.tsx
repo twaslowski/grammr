@@ -19,6 +19,11 @@ export const LanguageSelectionDropdown: React.FC = () => {
   }, [setLanguageSpoken, setLanguageLearned]);
 
   const updateLanguages = (spoken: string, learned: string) => {
+    // Prevent setting the same language for both speaking and learning
+    if (spoken === learned) {
+      return; // Early return if trying to set the same language
+    }
+
     setLanguageSpoken(spoken);
     setLanguageLearned(learned);
     localStorage.setItem('languageSpoken', spoken);
@@ -48,9 +53,16 @@ export const LanguageSelectionDropdown: React.FC = () => {
               <button
                 key={`speak-${lang.code}`}
                 className={`flex items-center px-2 py-2 text-sm rounded-lg ${
-                  languageSpoken === lang.code ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-100'
+                  languageSpoken === lang.code ? 'bg-blue-100 text-blue-700' : 
+                  lang.code === languageLearned ? 'bg-gray-200 text-gray-400 cursor-not-allowed' :
+                  'hover:bg-gray-100'
                 }`}
-                onClick={() => updateLanguages(lang.code, languageLearned)}
+                onClick={() => {
+                  if (lang.code !== languageLearned) {
+                    updateLanguages(lang.code, languageLearned);
+                  }
+                }}
+                disabled={lang.code === languageLearned}
               >
                 <span className='mr-2'>{lang.flag}</span>
                 <span>{lang.name}</span>
@@ -61,13 +73,20 @@ export const LanguageSelectionDropdown: React.FC = () => {
         <div>
           <p className='text-sm font-medium text-gray-700 mb-2'>I am learning:</p>
           <div className='grid grid-cols-2 gap-2'>
-            {languages.map((lang) => (
+            {languages.filter((l) => l.learnable).map((lang) => (
               <button
                 key={`learn-${lang.code}`}
                 className={`flex items-center px-2 py-2 text-sm rounded-lg ${
-                  languageLearned === lang.code ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-100'
+                  languageLearned === lang.code ? 'bg-blue-100 text-blue-700' : 
+                  lang.code === languageSpoken ? 'bg-gray-200 text-gray-400 cursor-not-allowed' :
+                  'hover:bg-gray-100'
                 }`}
-                onClick={() => updateLanguages(languageSpoken, lang.code)}
+                onClick={() => {
+                  if (lang.code !== languageSpoken) {
+                    updateLanguages(languageSpoken, lang.code);
+                  }
+                }}
+                disabled={lang.code === languageSpoken}
               >
                 <span className='mr-2'>{lang.flag}</span>
                 <span>{lang.name}</span>

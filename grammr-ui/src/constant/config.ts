@@ -3,7 +3,7 @@ import { BookOpen, Globe, HelpCircle, Home, PenToolIcon } from 'lucide-react';
 export const siteConfig = {
   title: 'grammr',
   description: 'Your go-to language learning reference!',
-  url: 'https://grmmr.vercel.app',
+  url: 'https://grammr.app',
 };
 
 export const headerLinks = [
