@@ -5,6 +5,7 @@ tasks:
     cmds:
       - docker compose -f local/docker-compose.yaml -p grammr up -d --remove-orphans --wait
       - task: setup-mockserver
+      - task: setup-db
 
   stop-env:
     desc: Stop the local environment
@@ -16,6 +17,12 @@ tasks:
     dir: local/expectations
     cmds:
       - python set_expectations.py
+
+  setup-db:
+    desc: Populate database with paradigms
+    dir: local/data
+    cmds:
+      - psql 'postgresql://user:password@localhost:5432/grammr' -f data.sql
 
   unit-test:
     desc: Run unit tests
@@ -56,4 +63,5 @@ tasks:
     cmds:
       - task: start-env
       - ./mvnw spring-boot:run &
+      - task: setup-db
       - task: start-frontend
