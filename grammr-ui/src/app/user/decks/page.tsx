@@ -28,10 +28,9 @@ export default function DecksPage() {
 
   if (error) {
     return (
-      <Error
-        title={'Failed to load decks :('}
-        message={'An unexpected error occurred when loading your decks. Please try again later.'}
-      />
+      <Error title='Failed to load decks'>
+        An unexpected error occurred when loading your decks. Please try again later.
+      </Error>
     );
   }
 
