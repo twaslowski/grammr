@@ -4,38 +4,25 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown } from 'lucide-react';
-import { languages } from '@/constant/languages';
-import React, { useEffect } from 'react';
+import { Language, languages } from '@/constant/languages';
+import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export const LanguageSelectionDropdown: React.FC = () => {
   const { languageSpoken, languageLearned, setLanguageSpoken, setLanguageLearned } = useLanguage();
 
-  useEffect(() => {
-    const savedSpoken = localStorage.getItem('languageSpoken');
-    const savedLearned = localStorage.getItem('languageLearned');
-    if (savedSpoken) setLanguageSpoken(savedSpoken);
-    if (savedLearned) setLanguageLearned(savedLearned);
-  }, [setLanguageSpoken, setLanguageLearned]);
-
-  const updateLanguages = (spoken: string, learned: string) => {
+  const updateLanguages = (spoken: Language, learned: Language) => {
     // Prevent setting the same language for both speaking and learning
-    if (spoken === learned) {
-      return; // Early return if trying to set the same language
+    if (spoken.code === learned.code) {
+      return;
     }
-
     setLanguageSpoken(spoken);
     setLanguageLearned(learned);
-    localStorage.setItem('languageSpoken', spoken);
-    localStorage.setItem('languageLearned', learned);
   };
 
-  const getLanguageByCode = (code: string) => {
-    return languages.find((lang) => lang.code === code) || languages[0];
-  };
-
-  const spokenLanguage = getLanguageByCode(languageSpoken);
-  const learnedLanguage = getLanguageByCode(languageLearned);
+  // spokenLanguage and learnedLanguage are already Language objects
+  const spokenLanguage = languageSpoken;
+  const learnedLanguage = languageLearned;
 
   return (
     <DropdownMenu>
@@ -53,18 +40,18 @@ export const LanguageSelectionDropdown: React.FC = () => {
               <button
                 key={`speak-${lang.code}`}
                 className={`flex items-center px-2 py-2 text-sm rounded-lg ${
-                  languageSpoken === lang.code
+                  languageSpoken.code === lang.code
                     ? 'bg-blue-100 text-blue-700'
-                    : lang.code === languageLearned
+                    : lang.code === languageLearned.code
                       ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
                       : 'hover:bg-gray-100'
                 }`}
                 onClick={() => {
-                  if (lang.code !== languageLearned) {
-                    updateLanguages(lang.code, languageLearned);
+                  if (lang.code !== languageLearned.code) {
+                    updateLanguages(lang, languageLearned);
                   }
                 }}
-                disabled={lang.code === languageLearned}
+                disabled={lang.code === languageLearned.code}
               >
                 <span className='mr-2'>{lang.flag}</span>
                 <span>{lang.name}</span>
@@ -81,18 +68,18 @@ export const LanguageSelectionDropdown: React.FC = () => {
                 <button
                   key={`learn-${lang.code}`}
                   className={`flex items-center px-2 py-2 text-sm rounded-lg ${
-                    languageLearned === lang.code
+                    languageLearned.code === lang.code
                       ? 'bg-blue-100 text-blue-700'
-                      : lang.code === languageSpoken
+                      : lang.code === languageSpoken.code
                         ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
                         : 'hover:bg-gray-100'
                   }`}
                   onClick={() => {
-                    if (lang.code !== languageSpoken) {
-                      updateLanguages(languageSpoken, lang.code);
+                    if (lang.code !== languageSpoken.code) {
+                      updateLanguages(languageSpoken, lang);
                     }
                   }}
-                  disabled={lang.code === languageSpoken}
+                  disabled={lang.code === languageSpoken.code}
                 >
                   <span className='mr-2'>{lang.flag}</span>
                   <span>{lang.name}</span>

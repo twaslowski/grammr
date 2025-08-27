@@ -3,6 +3,7 @@ package com.grammr.flashcards.controller.v2.dto;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
+import com.grammr.domain.entity.Flashcard;
 import com.grammr.domain.enums.PartOfSpeechTag;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -21,6 +22,12 @@ public record FlashcardCreationDto(
         requiredMode = REQUIRED
     )
     @NotNull String answer,
+    @Schema(
+        description = "Type of the flashcard, indicating its category or usage",
+        example = "BASIC | INFLECTION",
+        requiredMode = Schema.RequiredMode.REQUIRED
+    )
+    @NotNull Flashcard.Type type,
     @Schema(
         description = "In case the flashcard is a token, this field represents the part of speech tag.",
         example = "NOUN",

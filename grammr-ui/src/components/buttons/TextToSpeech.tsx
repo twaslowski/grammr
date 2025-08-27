@@ -45,7 +45,7 @@ export const TextToSpeech: React.FC<{ text: string; className?: string }> = ({
         },
         body: JSON.stringify({
           text: text,
-          language: languageLearned,
+          language: languageLearned.code, // send only the code
         }),
       });
 

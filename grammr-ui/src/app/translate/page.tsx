@@ -9,11 +9,13 @@ import { useApi } from '@/hooks/useApi';
 import Error from '@/components/common/Error';
 import { Translation } from '@/types/translation';
 import { AnalysisV2 } from '@/types/analysis';
+import { LucideArrowLeftRight, LucideArrowRight } from 'lucide-react';
 
 const TranslatePage = () => {
   const { languageSpoken, languageLearned } = useLanguage();
   const { request, isLoading, error } = useApi();
   const [translation, setTranslation] = useState<Translation | null>();
+
   // Default false represents translations; true represents analysis
   const [toggleDirection, setToggleDirection] = useState<boolean>(false);
 
@@ -33,8 +35,8 @@ const TranslatePage = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           phrase: inputText,
-          sourceLanguage: languageSpoken,
-          targetLanguage: languageLearned,
+          sourceLanguage: languageSpoken.code,
+          targetLanguage: languageLearned.code,
           performAnalysis: true,
         }),
       });
@@ -53,7 +55,7 @@ const TranslatePage = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             phrase: phrase,
-            language: languageLearned,
+            language: languageLearned.code,
           }),
         }),
         request<Translation>('/api/v2/translations/phrase', {
@@ -61,8 +63,8 @@ const TranslatePage = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             phrase: phrase,
-            sourceLanguage: languageLearned,
-            targetLanguage: languageSpoken,
+            sourceLanguage: languageLearned.code,
+            targetLanguage: languageSpoken.code,
             performAnalysis: false,
           }),
         }),
@@ -70,10 +72,10 @@ const TranslatePage = () => {
 
       // Set such that the flashcard export would show the foreign language phrase as front
       setTranslation({
-        translation: translationResult.source,
-        source: translationResult.translation,
-        sourceLanguage: languageLearned,
-        targetLanguage: languageSpoken,
+        translation: translationResult.translation,
+        source: translationResult.source,
+        sourceLanguage: languageLearned.code,
+        targetLanguage: languageSpoken.code,
         analysis: analysisResult,
       });
     } catch (err) {
@@ -84,37 +86,40 @@ const TranslatePage = () => {
   return (
     <main>
       <div className='px-4 py-8 max-w-3xl mx-auto'>
-        <InputArea onEnter={handleSubmit} clear={false} />
+        {/* Page Title & Description */}
+        <h1 className='text-3xl font-bold mb-2 text-center'>Phrase Translator</h1>
+        <p className='text-gray-600 mb-4 text-center'>
+          Enter a phrase to translate it and get detailed grammatical analysis.
+        </p>
 
-        {/* Translation Direction Button */}
-        <div className='mt-4 flex justify-center'>
+        {/* Target Language Indicator */}
+        <div className='flex items-center justify-center mb-6'>
           <button
             onClick={() => setToggleDirection(!toggleDirection)}
-            className='flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors'
+            className='focus:outline-none'
           >
-            <span>{toggleDirection ? languageLearned : languageSpoken}</span>
-            <span>→</span>
-            <span>{toggleDirection ? languageSpoken : languageLearned}</span>
-            <svg className='w-4 h-4 ml-2' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4'
-              />
-            </svg>
+            <div className='inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700'>
+              <span className='mx-2 font-semibold'>
+                {toggleDirection ? languageLearned.name : languageSpoken.name}
+              </span>
+              <LucideArrowRight size={18} />
+              <span className='mx-2 font-semibold'>
+                {toggleDirection ? languageSpoken.name : languageLearned.name}
+              </span>
+              <LucideArrowLeftRight className='ml-2' size={18} />
+            </div>
           </button>
         </div>
 
+        <InputArea onEnter={handleSubmit} clear={false} />
+
+        <div className='mt-8' />
+
         {isLoading && <LoadingSpinner size={24} />}
-        {error && (
-          <div className='mt-4 p-4'>
-            <Error title={'Something went wrong'}>{error.message}</Error>
-          </div>
-        )}
+        {error && <Error title={'Something went wrong'}>{error.message}</Error>}
 
         {translation && (
-          <div className='mt-8 space-y-6 max-w-3xl mx-auto'>
+          <div className='space-y-6 max-w-3xl mx-auto'>
             <TranslationCard translation={translation} />
           </div>
         )}

@@ -21,7 +21,7 @@ export const AnalysisButton: React.FC<{
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           phrase: message.content,
-          language: languageLearned,
+          language: languageLearned.code,
         }),
       });
       onAnalysis(response);

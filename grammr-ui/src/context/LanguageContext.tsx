@@ -1,39 +1,45 @@
 'use client';
 
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { ENGLISH, Language, RUSSIAN, languages } from '@/constant/languages';
 
 type LanguageContextProps = {
-  languageSpoken: string;
-  languageLearned: string;
-  setLanguageSpoken: (lang: string) => void;
-  setLanguageLearned: (lang: string) => void;
+  languageSpoken: Language;
+  languageLearned: Language;
+  setLanguageSpoken: (lang: Language) => void;
+  setLanguageLearned: (lang: Language) => void;
   isReady: boolean;
 };
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [languageSpoken, setLanguageSpokenState] = useState('');
-  const [languageLearned, setLanguageLearnedState] = useState('');
+  const [languageSpoken, setLanguageSpokenState] = useState<Language>(ENGLISH);
+  const [languageLearned, setLanguageLearnedState] = useState<Language>(RUSSIAN);
   const [isReady, setIsReady] = useState(false);
+
+  // Helper to find Language by code
+  const getLanguageByCode = (code: string): Language => {
+    return languages.find((lang) => lang.code === code) || ENGLISH;
+  };
 
   useEffect(() => {
     const savedSpoken = localStorage.getItem('languageSpoken');
     const savedLearned = localStorage.getItem('languageLearned');
 
-    if (savedSpoken) setLanguageSpokenState(savedSpoken);
-    if (savedLearned) setLanguageLearnedState(savedLearned);
+    if (savedSpoken) setLanguageSpokenState(getLanguageByCode(savedSpoken));
+    if (savedLearned) setLanguageLearnedState(getLanguageByCode(savedLearned));
 
     setIsReady(true);
   }, []);
 
-  const setLanguageSpoken = (lang: string) => {
-    localStorage.setItem('languageSpoken', lang);
+  const setLanguageSpoken = (lang: Language) => {
+    localStorage.setItem('languageSpoken', lang.code);
     setLanguageSpokenState(lang);
   };
 
-  const setLanguageLearned = (lang: string) => {
-    localStorage.setItem('languageLearned', lang);
+  const setLanguageLearned = (lang: Language) => {
+    localStorage.setItem('languageLearned', lang.code);
     setLanguageLearnedState(lang);
   };
 

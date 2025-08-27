@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { organizeInflectionTable } from '@/inflection/lib';
 import { Paradigm } from '@/flashcard/types/paradigm';
 import { ApiError } from '@/hooks/useApi';
+import { Error } from '@/components/common/Error';
 
 interface InflectionTableProps {
   inflections: Paradigm | null;
@@ -48,9 +49,7 @@ const InflectionTable: React.FC<InflectionTableProps> = ({
         </div>
       )}
 
-      {error && error.code !== 422 && (
-        <div className='text-red-500 text-sm p-3 bg-red-50 rounded py-4'>{error.message}</div>
-      )}
+      {error && error.code !== 422 && <Error title={'Error'}>{error.message}</Error>}
 
       {inflections && Object.keys(inflectionTable).length > 0 && (
         <div className='overflow-x-auto'>

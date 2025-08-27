@@ -63,5 +63,4 @@ tasks:
     cmds:
       - task: start-env
       - ./mvnw spring-boot:run &
-      - task: setup-db
       - task: start-frontend

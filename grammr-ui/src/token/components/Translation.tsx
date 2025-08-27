@@ -31,12 +31,12 @@ const Translation: React.FC<TranslationProps> = ({ context, token, onTranslation
       body: JSON.stringify({
         context: context,
         source: token.text,
-        targetLanguage: languageSpoken,
+        targetLanguage: languageSpoken.code,
       }),
     });
     setData(result);
     return result;
-  }, [context, token.text, languageSpoken, request]);
+  }, [context, token.text, languageSpoken.code, request]);
 
   useEffect(() => {
     if (!token.translation) {

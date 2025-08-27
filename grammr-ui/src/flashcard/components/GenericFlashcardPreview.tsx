@@ -63,6 +63,9 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
         deckId: deckId,
         question: front,
         answer: back,
+        type: paradigm ? 'INFLECTION' : 'BASIC',
+        paradigmId: paradigm ? paradigm.paradigmId : null,
+        partOfSpeech: paradigm ? paradigm.partOfSpeech : null,
       }),
     })
       .then(() => {

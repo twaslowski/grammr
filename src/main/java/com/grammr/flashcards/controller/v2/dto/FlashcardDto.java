@@ -46,7 +46,7 @@ public record FlashcardDto(
             Paradigm data, if available.
             Required if type == 'INFLECTION'.
             """,
-        example = "123e4567-e89b-12d3-a456-426614174000",
+        example = "{}",
         requiredMode = RequiredMode.NOT_REQUIRED
     )
     ParadigmDto paradigm,
