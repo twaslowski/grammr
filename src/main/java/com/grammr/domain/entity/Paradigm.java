@@ -3,7 +3,7 @@ package com.grammr.domain.entity;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.domain.value.language.Inflection;
-import com.grammr.domain.value.language.ParadigmDTO;
+import com.grammr.language.controller.v1.dto.ParadigmDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -58,16 +58,12 @@ public class Paradigm {
   @UpdateTimestamp
   private ZonedDateTime updatedAt;
 
-  public static Paradigm from(ParadigmDTO paradigmDTO) {
+  public static Paradigm from(ParadigmDto paradigmDTO) {
     return Paradigm.builder()
         .partOfSpeech(paradigmDTO.partOfSpeech())
         .lemma(paradigmDTO.lemma())
         .languageCode(paradigmDTO.language())
         .inflections(paradigmDTO.inflections())
         .build();
-  }
-
-  public ParadigmDTO toDTO() {
-    return new ParadigmDTO(id.toString(), partOfSpeech, lemma, languageCode, inflections);
   }
 }

@@ -1,5 +1,5 @@
 import { RotateCw } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import DeckSelection from '@/deck/components/DeckSelection';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
 import { Flashcard } from '@/flashcard/types/flashcard';
 import { useApi } from '@/hooks/useApi';
+import { Paradigm } from '@/flashcard/types/paradigm';
+import RichFlashcardContent from '@/flashcard/components/RichFlashcardContent';
+import { useInflections } from '@/inflection/hooks/use-inflections';
 
 interface FlashcardPreviewProps {
   initialDeckId?: string;
@@ -16,6 +19,7 @@ interface FlashcardPreviewProps {
   onClose: () => void;
   onCardAdded?: () => void;
   flashcardId?: string;
+  paradigm: Paradigm | null;
   submitAction?: 'create' | 'update';
 }
 
@@ -25,6 +29,7 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
   initialFront,
   initialBack,
   onClose,
+  paradigm,
   flashcardId = '',
   submitAction = 'create',
 }) => {
@@ -134,7 +139,15 @@ const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
         <Card className='w-full h-32 cursor-pointer relative' onClick={handleToggle}>
           <RotateCw className='h-4 w-4 absolute top-4 right-4' />
           <CardContent className='flex items-center justify-center h-full p-0'>
-            <div className='text-xl'>{activeCard === 'front' ? front : back}</div>
+            <div className='text-xl'>
+              {activeCard === 'front' ? (
+                front
+              ) : paradigm ? (
+                <RichFlashcardContent front={front} back={back} paradigm={paradigm} />
+              ) : (
+                back
+              )}
+            </div>
           </CardContent>
         </Card>
       </div>

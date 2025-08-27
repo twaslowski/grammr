@@ -7,8 +7,8 @@ spring:
     password: password
 
 openai:
-  base-url: http://localhost:1080/v1
-  # base-url: https://api.openai.com/v1
+  #  base-url: http://localhost:1080/v1
+  base-url: https://api.openai.com/v1
 
 grammr:
   languages:

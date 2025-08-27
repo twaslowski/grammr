@@ -7,9 +7,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.grammr.annotation.IntegrationTest;
+import com.grammr.domain.entity.Paradigm;
 import com.grammr.domain.enums.LanguageCode;
+import com.grammr.domain.enums.PartOfSpeechTag;
+import com.grammr.domain.value.language.Inflection;
 import com.grammr.language.controller.v1.dto.InflectionsRequest;
 import com.grammr.repository.ParadigmRepository;
+import java.util.List;
+import java.util.Set;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +43,24 @@ class InflectionIntegrationTest extends IntegrationTestBase {
 
     assertThat(paradigmRepository.findByLemmaAndPartOfSpeechAndLanguageCode("дело", NOUN, LanguageCode.RU))
         .isPresent();
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldRetrieveParadigm() {
+    var paradigm = paradigmRepository.save(Paradigm.builder()
+        .partOfSpeech(PartOfSpeechTag.NOUN)
+        .languageCode(LanguageCode.DE)
+        .inflections(List.of(
+            new Inflection("nominative", "singular", Set.of()),
+            new Inflection("genitive", "singular", Set.of())
+        ))
+        .lemma("test")
+        .build());
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/inflection/%s".formatted(paradigm.getId())))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.paradigmId").value(paradigm.getId().toString()));
   }
 
   @Test

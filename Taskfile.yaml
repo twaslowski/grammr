@@ -3,13 +3,14 @@ tasks:
   start-env:
     desc: Start the local environment
     cmds:
-      - docker compose -f local/docker-compose.yaml up -d --remove-orphans --wait
+      - docker compose -f local/docker-compose.yaml -p grammr up -d --remove-orphans --wait
       - task: setup-mockserver
+      - task: setup-db
 
   stop-env:
     desc: Stop the local environment
     cmds:
-      - docker compose -f local/docker-compose.yaml down
+      - docker compose -f local/docker-compose.yaml -p grammr down
 
   setup-mockserver:
     desc: Create mockserver expectations to mock OpenAI Responses API
@@ -17,16 +18,22 @@ tasks:
     cmds:
       - python set_expectations.py
 
+  setup-db:
+    desc: Populate database with paradigms
+    dir: local/data
+    cmds:
+      - psql 'postgresql://user:password@localhost:5432/grammr' -f data.sql
+
   unit-test:
     desc: Run unit tests
     cmds:
-      - ./mvnw package test
+      - ./mvnw clean package test
 
   integration-test:
     desc: Run integration tests
     cmds:
       - task: start-env
-      - ./mvnw package test -P integration
+      - ./mvnw clean package test -P integration
 
   test:
     desc: Run unit tests, start environment, and run integration tests
@@ -56,4 +63,5 @@ tasks:
     cmds:
       - task: start-env
       - ./mvnw spring-boot:run &
+      - task: setup-db
       - task: start-frontend

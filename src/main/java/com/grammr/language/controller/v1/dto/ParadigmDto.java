@@ -1,12 +1,14 @@
-package com.grammr.domain.value.language;
+package com.grammr.language.controller.v1.dto;
 
+import com.grammr.domain.entity.Paradigm;
 import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.enums.PartOfSpeechTag;
+import com.grammr.domain.value.language.Inflection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
-public record ParadigmDTO(
+public record ParadigmDto(
     @NotNull
     @Schema(
         description = "Unique paradigm identifier for later retrieval",
@@ -37,4 +39,13 @@ public record ParadigmDTO(
     )
     List<Inflection> inflections) {
 
+  public static ParadigmDto fromEntity(Paradigm paradigm) {
+    return new ParadigmDto(
+        paradigm.getId().toString(),
+        paradigm.getPartOfSpeech(),
+        paradigm.getLemma(),
+        paradigm.getLanguageCode(),
+        paradigm.getInflections()
+    );
+  }
 }

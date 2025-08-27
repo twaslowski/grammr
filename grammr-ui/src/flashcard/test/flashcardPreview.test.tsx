@@ -15,6 +15,7 @@ describe.skip('GenericFlashcardPreview', () => {
   const defaultProps = {
     initialFront: 'front',
     initialBack: 'back',
+    paradigm: null,
     onClose: jest.fn(),
   };
 

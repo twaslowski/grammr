@@ -1,28 +1,26 @@
 import React from 'react';
 import InflectionTable from '@/inflection/components/InflectionTable';
-import TokenType from '@/token/types/tokenType';
-import { Inflections } from '@/inflection/types/inflections';
 import { capitalize } from '@/lib/utils';
+import { Paradigm } from '@/flashcard/types/paradigm';
 
 interface FlashcardContentProps {
-  inflections: Inflections | null;
-  token: TokenType;
+  front: string;
+  back: string;
+  paradigm: Paradigm;
 }
 
-const RichFlashcardContent: React.FC<FlashcardContentProps> = ({ inflections, token }) => {
+const RichFlashcardContent: React.FC<FlashcardContentProps> = ({ back, paradigm }) => {
   return (
     <div className='text-center'>
-      <p className='text-sm font-medium'>{token.translation.translation}</p>
-      <p className='text-sm font-light pb-3'>{capitalize(token.morphology.pos)}</p>
-      {inflections && (
-        <InflectionTable
-          textSize='text-sm'
-          showHeader={false}
-          inflections={inflections}
-          error={null}
-          notAvailableInfo={null}
-        />
-      )}
+      <p className='text-sm font-medium'>{back}</p>
+      <p className='text-sm font-light pb-3'>{capitalize(paradigm.partOfSpeech)}</p>
+      <InflectionTable
+        textSize='text-sm'
+        showHeader={false}
+        isLoading={false}
+        inflections={paradigm}
+        error={null}
+      />
     </div>
   );
 };

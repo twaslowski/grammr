@@ -17,6 +17,7 @@ const TranslationCard: React.FC<{ translation: Translation }> = ({ translation }
             layout='p-4 text-sm h-6'
             front={translation.translation}
             back={translation.source}
+            paradigm={null} // Whole phrase, not an individual word
           />
         </CardTitle>
       </CardHeader>

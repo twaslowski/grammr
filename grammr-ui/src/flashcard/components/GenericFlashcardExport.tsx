@@ -5,14 +5,21 @@ import GenericFlashcardPreview from '@/flashcard/components/GenericFlashcardPrev
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { SignedIn, SignedOut } from '@clerk/nextjs';
+import { Paradigm } from '@/flashcard/types/paradigm';
 
 interface GenericFlashcardExportProps {
   front: string;
   back: string;
-  layout: string;
+  paradigm: Paradigm | null;
+  layout?: string;
 }
 
-const GenericFlashcardExport: React.FC<GenericFlashcardExportProps> = ({ front, back, layout }) => {
+const GenericFlashcardExport: React.FC<GenericFlashcardExportProps> = ({
+  front,
+  back,
+  layout,
+  paradigm,
+}) => {
   const [showPreviewDialog, setShowPreviewDialog] = useState(false);
 
   return (
@@ -31,6 +38,7 @@ const GenericFlashcardExport: React.FC<GenericFlashcardExportProps> = ({ front, 
               <GenericFlashcardPreview
                 initialFront={front}
                 initialBack={back}
+                paradigm={paradigm}
                 onClose={() => setShowPreviewDialog(false)}
               />
             </DialogContent>

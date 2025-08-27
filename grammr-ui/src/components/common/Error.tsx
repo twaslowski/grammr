@@ -1,26 +1,30 @@
 import React from 'react';
-import Image from 'next/image';
+import { AlertCircle, LucideIcon } from 'lucide-react';
 
-interface ErrorProps {
-  title?: string;
-  message: string;
+interface ErrorBoxProps {
+  title: string;
+  children: React.ReactNode;
+  icon?: LucideIcon;
+  className?: string;
 }
 
-const Error: React.FC<ErrorProps> = ({ title = 'Oops!', message }) => {
+export function Error({
+  title,
+  children,
+  icon: Icon = AlertCircle,
+  className = '',
+}: ErrorBoxProps) {
   return (
-    <div className='flex flex-col items-center justify-center px-4'>
-      <Image
-        src='/images/mascot_sad.png'
-        alt='Error Mascot'
-        height={96}
-        width={96}
-        className='pb-3'
-      />
-      <h1 className='text-2xl font-bold text-gray-900 mb-2'>{title}</h1>
-      <div className='w-16 h-1 bg-red-500 mx-auto mb-4'></div>
-      <p className='text-gray-600'>{message}</p>
+    <div
+      className={`mb-6 p-5 bg-red-100 text-red-600 rounded-lg border border-red-200 ${className}`}
+    >
+      <div className='flex items-center mb-3 gap-x-2'>
+        <Icon />
+        <span className='font-medium'>{title}</span>
+      </div>
+      <div className='mt-2 text-red-600 text-sm'>{children}</div>
     </div>
   );
-};
+}
 
 export default Error;
