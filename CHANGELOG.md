@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.12.0](https://github.com/twaslowski/grammr/compare/v3.11.0...v3.12.0) (2025-08-27)
+
+
+### Features
+
+* **anki:** improve flashcard lifecycle workflow and sync process ([76c43e7](https://github.com/twaslowski/grammr/commit/76c43e733e7193a1cf657f3efd79f0c90e1ae424))
+* **anki:** improve syncing via ankiConnect, visualize inflection tables ([#52](https://github.com/twaslowski/grammr/issues/52)) ([c6ba190](https://github.com/twaslowski/grammr/commit/c6ba190fb5fb27a918fd09d8083f55416212477a))
+* **anki:** introduce MARKED_FOR_DELETION status to propagate flashcard deletion to anki ([170ae96](https://github.com/twaslowski/grammr/commit/170ae96e12dad0b7cb5aceb027f7aa343a52dee6))
+* **tools:** add cyrillic transliteration ([b14b86d](https://github.com/twaslowski/grammr/commit/b14b86deb6eb8978d13d38692ea89de2036d24fc))
+* **translations:** refine translation direction indicator ([2317a5a](https://github.com/twaslowski/grammr/commit/2317a5aae8ceafd3f7fb260049fe561520773c9b))
+
+
+### Bug Fixes
+
+* **anki:** ensure the correct flashcards are edited ([024a017](https://github.com/twaslowski/grammr/commit/024a0172687a0723ce6d47f8dad7b624d831ed4a))
+* flashcard creation tests ([be4e875](https://github.com/twaslowski/grammr/commit/be4e875c3ee97d3b53e5bebc0ec65b3939a5fc40))
+* **sonar:** remove from workflow temporarily ([6885e9d](https://github.com/twaslowski/grammr/commit/6885e9d4b40907ec4faf17948547465c0e832765))
+* **tools:** install missing cyrillic transliteration library ([0088e66](https://github.com/twaslowski/grammr/commit/0088e6674724aa55d7d1ec1655e00091deb74a4b))
+* **tools:** prettier formatting ([a6b21fc](https://github.com/twaslowski/grammr/commit/a6b21fc0a82866196e5e83cf9c2e3ac80bb8dd5e))
+
 ## [3.11.0](https://github.com/twaslowski/grammr/compare/v3.10.0...v3.11.0) (2025-08-02)
 
 
