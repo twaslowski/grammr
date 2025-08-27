@@ -1,5 +1,6 @@
 package com.grammr.integration;
 
+import static com.grammr.domain.entity.Flashcard.Type.BASIC;
 import static com.grammr.domain.entity.Flashcard.Type.INFLECTION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
@@ -15,10 +16,10 @@ import com.grammr.domain.enums.LanguageCode;
 import com.grammr.domain.enums.PartOfSpeechTag;
 import com.grammr.domain.value.language.Inflection;
 import com.grammr.flashcards.controller.v2.dto.FlashcardCreationDto;
+import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -34,7 +35,7 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
     var deck = deckRepository.save(DeckSpec.withUser(user).build());
     var authentication = createUserAuthentication(user);
 
-    var creationDto = new FlashcardCreationDto("Test Question", "Test Answer", null, null);
+    var creationDto = new FlashcardCreationDto("Test Question", "Test Answer", BASIC, null, null);
 
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/deck/%s/flashcard".formatted(deck.getDeckId()))
             .with(authentication(authentication))
@@ -70,7 +71,7 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
         .lemma("test")
         .build());
 
-    var creationDto = new FlashcardCreationDto("Test Question", "Test Answer", PartOfSpeechTag.NOUN, paradigm.getId());
+    var creationDto = new FlashcardCreationDto("Test Question", "Test Answer", INFLECTION, PartOfSpeechTag.NOUN, paradigm.getId());
 
     var result = mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/deck/%s/flashcard".formatted(deck.getDeckId()))
             .with(authentication(authentication))
@@ -114,6 +115,7 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
     var flashcardCreationDto = new FlashcardCreationDto(
         existingFlashcard.getFront(),
         existingFlashcard.getBack(),
+        BASIC,
         null,
         null
     );
@@ -140,7 +142,7 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
     var deck = deckRepository.save(DeckSpec.withUser(user).build());
     var authentication = createUserAuthentication(user);
     var nonExistentFlashcardId = UUID.randomUUID();
-    var updatePayload = new FlashcardCreationDto("Updated Front", "Updated Back", null, null);
+    var updatePayload = new FlashcardCreationDto("Updated Front", "Updated Back", BASIC, null, null);
 
     // When & Then
     mockMvc.perform(MockMvcRequestBuilders.put("/api/v2/deck/%s/flashcard/%s".formatted(deck.getDeckId(), nonExistentFlashcardId))
@@ -158,7 +160,7 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
     var deck = deckRepository.save(DeckSpec.withUser(user).build());
     var flashcard = flashcardRepository.save(FlashcardSpec.withDeck(deck).build());
     var authentication = createUserAuthentication(user);
-    var updatePayload = new FlashcardCreationDto("Updated Front", "Updated Back", null, null);
+    var updatePayload = new FlashcardCreationDto("Updated Front", "Updated Back", BASIC, null, null);
 
     // When & Then
     mockMvc.perform(MockMvcRequestBuilders.put("/api/v2/deck/%s/flashcard/%s".formatted(deck.getDeckId(), flashcard.getFlashcardId()))
