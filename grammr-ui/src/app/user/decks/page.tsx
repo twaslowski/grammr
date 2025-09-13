@@ -28,9 +28,11 @@ export default function DecksPage() {
 
   if (error) {
     return (
-      <Error title='Failed to load decks'>
-        An unexpected error occurred when loading your decks. Please try again later.
-      </Error>
+      <div className='flex flex-col items-center justify-center min-h-screen p-4'>
+        <Error title='Failed to load decks'>
+          An unexpected error occurred when loading your decks. Please try again later.
+        </Error>
+      </div>
     );
   }
 

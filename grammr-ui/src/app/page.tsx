@@ -1,13 +1,13 @@
 'use client';
 
 import ToolCard from '@/components/tools/ToolCard';
-import { Languages, MessageSquareIcon } from 'lucide-react';
+import { Book, Languages, LucideUser, MessageSquareIcon } from 'lucide-react';
 import Image from 'next/image';
 
 const tools = [
   {
     href: '/translate',
-    icon: MessageSquareIcon,
+    icon: Languages,
     title: 'Translations',
     description: 'Translate sentences and get grammatical analysis',
   },
@@ -16,6 +16,18 @@ const tools = [
     icon: MessageSquareIcon,
     title: 'Chat',
     description: 'Learn by chatting with an AI tutor; translate and analyze phrases as needed!',
+  },
+  {
+    href: '/user/decks',
+    icon: Book,
+    title: 'Your Flashcards',
+    description: 'Study previously saved flashcards',
+  },
+  {
+    href: '/user/profile',
+    icon: LucideUser,
+    title: 'Profile',
+    description: 'Manage your account',
   },
   {
     href: '/tools/cyrtrans',
