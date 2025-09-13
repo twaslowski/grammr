@@ -4,18 +4,26 @@ import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { RotateCcw } from 'lucide-react';
 import React from 'react';
+import { toast } from '@/hooks/use-toast';
 
 export default function ResetSyncButton({ deck }: { deck: Deck }) {
-  const { isLoading, request } = useApi();
+  const { isLoading, request, error } = useApi();
 
   const resetSync = async (deckId: string): Promise<void> => {
-    return await request<void>(`/api/v2/deck/${deckId}/reset-sync`, {
+    await request<void>(`/api/v2/deck/${deckId}/reset-sync`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
     });
+    if (error) {
+      toast({
+        title: 'Failed to reset sync status',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
   };
 
   return (

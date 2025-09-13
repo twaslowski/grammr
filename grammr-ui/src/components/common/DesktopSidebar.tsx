@@ -1,17 +1,10 @@
 import React from 'react';
 import Image from 'next/image';
-import { ChevronDown, Menu, X } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { ClerkLoading, SignedIn, SignedOut, SignInButton } from '@clerk/nextjs';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import UserMenu from '@/components/common/UserMenu';
-import { languages } from '@/constant/languages';
-import { useLanguage } from '@/context/LanguageContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { clsx } from 'clsx';
 import { headerLinks } from '@/constant/config';
 import { SidebarLeftIcon } from '@/components/ui/icons';
@@ -23,6 +16,7 @@ export const DesktopSidebar: React.FC<{
   setMenuOpen: (open: boolean) => void;
 }> = ({ menuOpen, setMenuOpen }) => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const navigateTo = (path: string) => {
     router.push(path);
@@ -101,9 +95,11 @@ export const DesktopSidebar: React.FC<{
           <LanguageSelectionDropdown />
         </div>
         <div className='border border-gray-200 m-4 ' />
-        <div className='px-3 py-2'>
-          <ChatHistory />
-        </div>
+        {pathname === '/chat' && (
+          <div className='px-3 py-2'>
+            <ChatHistory />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -4,12 +4,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Globe, BookOpenCheck, Code2, Lightbulb, LightbulbIcon, DownloadIcon } from 'lucide-react';
-import Image from 'next/image';
+import { Globe, BookOpenCheck, Code2, LightbulbIcon, DownloadIcon } from 'lucide-react';
 import React from 'react';
-import Link from 'next/link';
 import SyncIcon from '@/components/common/SyncIcon';
 import Footer from '@/components/common/Footer';
+import StyledLink from '@/components/ui/styled-link';
 
 type FAQItem = {
   question: string;
@@ -34,12 +33,9 @@ const generalFaqs: FAQItem[] = [
           vocabulary and grammar rules.
         </p>
         <p>
-          It integrates with{' '}
-          <Link className='text-blue-800 underline' href='https://apps.ankiweb.net/'>
-            Anki
-          </Link>
-          , a flashcard app, to help you create personalized study decks so you can memorize
-          vocabulary and grammar rules effectively.
+          It integrates with <StyledLink href='https://apps.ankiweb.net/'>Anki</StyledLink>, a
+          flashcard app, to help you create personalized study decks so you can memorize vocabulary
+          and grammar rules effectively.
         </p>
       </>
     ),
@@ -80,18 +76,15 @@ const generalFaqs: FAQItem[] = [
         </p>
         <ul className='list-disc list-inside'>
           <li>
-            <a className='text-blue-800 underline' href='https://apps.ankiweb.net/'>
+            <StyledLink href='https://apps.ankiweb.net/'>
               Install Anki from the official website
-            </a>
+            </StyledLink>
           </li>
           <li>
             Install the AnkiConnect add-on from{' '}
-            <a
-              className='text-blue-800 underline'
-              href='https://git.sr.ht/~foosoft/anki-connect#installation'
-            >
+            <StyledLink href='https://git.sr.ht/~foosoft/anki-connect#installation'>
               AnkiWeb
-            </a>
+            </StyledLink>
             .
           </li>
         </ul>
@@ -111,7 +104,13 @@ const languageFaqs: FAQItem[] = [
   {
     question: 'Which languages are supported?',
     answer: (
-      <p>Grammr currently supports German, French, Italian, Spanish, Portuguese, and Russian.</p>
+      <p>
+        This site currently only supports Russian, mainly for the sake of simplicity. I am hosting
+        this mostly for my own personal use, although a wide variety of languages is supprted
+        generally. Inflections are additionally supported for Spanish, French, Portuguese, Italian
+        and Romanian. Analysis can be performed for any language that is supported by the{' '}
+        <StyledLink href='https://spacy.io/models'>spaCy project</StyledLink>.
+      </p>
     ),
   },
   {
@@ -119,14 +118,8 @@ const languageFaqs: FAQItem[] = [
     answer: (
       <p>
         Yes! Open a request on{' '}
-        <a
-          href='https://github.com/twaslowski/grammr/issues'
-          className='underline text-blue-600'
-          target='_blank'
-        >
-          GitHub Issues
-        </a>{' '}
-        or reach out directly.
+        <StyledLink href='https://github.com/twaslowski/grammr/issues'>GitHub Issues</StyledLink> or
+        reach out directly.
       </p>
     ),
   },
@@ -137,15 +130,8 @@ const openSourceFaqs: FAQItem[] = [
     question: 'Is Grammr open source?',
     answer: (
       <p>
-        Yes, it’s licensed under MIT. You can find the source on{' '}
-        <a
-          href='https://github.com/your-org/grammr'
-          target='_blank'
-          className='underline text-blue-600'
-        >
-          GitHub
-        </a>
-        .
+        Yes, it's licensed under MIT. You can find the source on{' '}
+        <StyledLink href='https://github.com/your-org/grammr'>GitHub</StyledLink>.
       </p>
     ),
   },
