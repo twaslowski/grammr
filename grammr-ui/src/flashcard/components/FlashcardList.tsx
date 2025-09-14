@@ -103,6 +103,7 @@ export const FlashcardList: React.FC<FlashcardListProps> = ({ cards, deckId }) =
                       <DialogTitle>Preview Flashcard</DialogTitle>
                     </DialogHeader>
                     <GenericFlashcardPreview
+                      flashcardId={card.id}
                       initialFront={card.question}
                       initialBack={card.answer}
                       initialDeckId={deckId}
