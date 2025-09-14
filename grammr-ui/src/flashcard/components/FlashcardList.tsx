@@ -108,7 +108,7 @@ export const FlashcardList: React.FC<FlashcardListProps> = ({ cards, deckId }) =
                       initialDeckId={deckId}
                       paradigm={card.paradigm}
                       onClose={() => setPreviewDialogCardId(null)}
-                      onCardAdded={() => window.location.reload()}
+                      onCardAdded={() => {}}
                       submitAction='update'
                     />
                   </DialogContent>
