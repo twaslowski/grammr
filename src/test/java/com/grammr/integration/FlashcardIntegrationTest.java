@@ -174,4 +174,243 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
     assertThat(updated.getFront()).isEqualTo(updatePayload.question());
     assertThat(updated.getBack()).isEqualTo(updatePayload.answer());
   }
+
+  @Test
+  @SneakyThrows
+  void shouldRetrieveFlashcardsWithoutPagination() {
+    // Given
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
+    var authentication = createUserAuthentication(user);
+
+    // Create 5 flashcards
+    for (int i = 1; i <= 5; i++) {
+      flashcardRepository.save(FlashcardSpec.withDeck(deck)
+          .front("Question " + i)
+          .back("Answer " + i)
+          .build());
+    }
+
+    // When & Then
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v2/deck/%s/flashcard".formatted(deck.getDeckId()))
+            .with(authentication(authentication)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$").isArray())
+        .andExpect(jsonPath("$.length()").value(5))
+        .andExpect(jsonPath("$[0].question").exists())
+        .andExpect(jsonPath("$[0].answer").exists());
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldRetrieveFlashcardsWithPaginationEnabled() {
+    // Given
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
+    var authentication = createUserAuthentication(user);
+
+    // Create 10 flashcards
+    for (int i = 1; i <= 10; i++) {
+      flashcardRepository.save(FlashcardSpec.withDeck(deck)
+          .front("Question " + i)
+          .back("Answer " + i)
+          .build());
+    }
+
+    // When & Then
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v2/deck/%s/flashcard".formatted(deck.getDeckId()))
+            .param("paginated", "true")
+            .param("page", "0")
+            .param("size", "5")
+            .with(authentication(authentication)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.content").isArray())
+        .andExpect(jsonPath("$.content.length()").value(5))
+        .andExpect(jsonPath("$.page").value(0))
+        .andExpect(jsonPath("$.size").value(5))
+        .andExpect(jsonPath("$.totalElements").value(10))
+        .andExpect(jsonPath("$.totalPages").value(2))
+        .andExpect(jsonPath("$.first").value(true))
+        .andExpect(jsonPath("$.last").value(false))
+        .andExpect(jsonPath("$.hasNext").value(true))
+        .andExpect(jsonPath("$.hasPrevious").value(false));
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldRetrieveSecondPageOfFlashcards() {
+    // Given
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
+    var authentication = createUserAuthentication(user);
+
+    // Create 10 flashcards
+    for (int i = 1; i <= 10; i++) {
+      flashcardRepository.save(FlashcardSpec.withDeck(deck)
+          .front("Question " + i)
+          .back("Answer " + i)
+          .build());
+    }
+
+    // When & Then
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v2/deck/%s/flashcard".formatted(deck.getDeckId()))
+            .param("paginated", "true")
+            .param("page", "1")
+            .param("size", "5")
+            .with(authentication(authentication)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.content").isArray())
+        .andExpect(jsonPath("$.content.length()").value(5))
+        .andExpect(jsonPath("$.page").value(1))
+        .andExpect(jsonPath("$.size").value(5))
+        .andExpect(jsonPath("$.totalElements").value(10))
+        .andExpect(jsonPath("$.totalPages").value(2))
+        .andExpect(jsonPath("$.first").value(false))
+        .andExpect(jsonPath("$.last").value(true))
+        .andExpect(jsonPath("$.hasNext").value(false))
+        .andExpect(jsonPath("$.hasPrevious").value(true));
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldSortFlashcardsAscending() {
+    // Given
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
+    var authentication = createUserAuthentication(user);
+
+    // Create flashcards with different front text for sorting
+    flashcardRepository.save(FlashcardSpec.withDeck(deck)
+        .front("Charlie")
+        .back("Answer C")
+        .build());
+    flashcardRepository.save(FlashcardSpec.withDeck(deck)
+        .front("Alpha")
+        .back("Answer A")
+        .build());
+    flashcardRepository.save(FlashcardSpec.withDeck(deck)
+        .front("Beta")
+        .back("Answer B")
+        .build());
+
+    // When & Then
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v2/deck/%s/flashcard".formatted(deck.getDeckId()))
+            .param("paginated", "true")
+            .param("sortBy", "front")
+            .param("sortDirection", "asc")
+            .with(authentication(authentication)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.content[0].question").value("Alpha"))
+        .andExpect(jsonPath("$.content[1].question").value("Beta"))
+        .andExpect(jsonPath("$.content[2].question").value("Charlie"));
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldSortFlashcardsDescending() {
+    // Given
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
+    var authentication = createUserAuthentication(user);
+
+    // Create flashcards with different front text for sorting
+    flashcardRepository.save(FlashcardSpec.withDeck(deck)
+        .front("Charlie")
+        .back("Answer C")
+        .build());
+    flashcardRepository.save(FlashcardSpec.withDeck(deck)
+        .front("Alpha")
+        .back("Answer A")
+        .build());
+    flashcardRepository.save(FlashcardSpec.withDeck(deck)
+        .front("Beta")
+        .back("Answer B")
+        .build());
+
+    // When & Then
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v2/deck/%s/flashcard".formatted(deck.getDeckId()))
+            .param("paginated", "true")
+            .param("sortBy", "front")
+            .param("sortDirection", "desc")
+            .with(authentication(authentication)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.content[0].question").value("Charlie"))
+        .andExpect(jsonPath("$.content[1].question").value("Beta"))
+        .andExpect(jsonPath("$.content[2].question").value("Alpha"));
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldReturnEmptyPageWhenNoFlashcardsExist() {
+    // Given
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
+    var authentication = createUserAuthentication(user);
+
+    // When & Then
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v2/deck/%s/flashcard".formatted(deck.getDeckId()))
+            .param("paginated", "true")
+            .param("page", "0")
+            .param("size", "10")
+            .with(authentication(authentication)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.content").isArray())
+        .andExpect(jsonPath("$.content.length()").value(0))
+        .andExpect(jsonPath("$.page").value(0))
+        .andExpect(jsonPath("$.size").value(10))
+        .andExpect(jsonPath("$.totalElements").value(0))
+        .andExpect(jsonPath("$.totalPages").value(0))
+        .andExpect(jsonPath("$.first").value(true))
+        .andExpect(jsonPath("$.last").value(true))
+        .andExpect(jsonPath("$.hasNext").value(false))
+        .andExpect(jsonPath("$.hasPrevious").value(false));
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldHandlePageSizeGreaterThanTotalElements() {
+    // Given
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).build());
+    var authentication = createUserAuthentication(user);
+
+    // Create 3 flashcards
+    for (int i = 1; i <= 3; i++) {
+      flashcardRepository.save(FlashcardSpec.withDeck(deck)
+          .front("Question " + i)
+          .back("Answer " + i)
+          .build());
+    }
+
+    // When & Then - request page size of 10 when only 3 elements exist
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v2/deck/%s/flashcard".formatted(deck.getDeckId()))
+            .param("paginated", "true")
+            .param("page", "0")
+            .param("size", "10")
+            .with(authentication(authentication)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.content").isArray())
+        .andExpect(jsonPath("$.content.length()").value(3))
+        .andExpect(jsonPath("$.page").value(0))
+        .andExpect(jsonPath("$.size").value(10))
+        .andExpect(jsonPath("$.totalElements").value(3))
+        .andExpect(jsonPath("$.totalPages").value(1))
+        .andExpect(jsonPath("$.first").value(true))
+        .andExpect(jsonPath("$.last").value(true));
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldReturnNotFoundForNonExistentDeck() {
+    // Given
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var authentication = createUserAuthentication(user);
+    var nonExistentDeckId = UUID.randomUUID();
+
+    // When & Then
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v2/deck/%s/flashcard".formatted(nonExistentDeckId))
+            .param("paginated", "true")
+            .with(authentication(authentication)))
+        .andExpect(status().isNotFound());
+  }
 }

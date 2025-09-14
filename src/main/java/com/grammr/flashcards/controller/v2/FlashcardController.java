@@ -5,6 +5,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import com.grammr.domain.entity.User;
 import com.grammr.flashcards.controller.v2.dto.FlashcardCreationDto;
 import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
+import com.grammr.flashcards.controller.v2.dto.PagedFlashcardResponseDto;
 import com.grammr.flashcards.service.DeckService;
 import com.grammr.flashcards.service.FlashcardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,10 +14,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -39,18 +43,33 @@ public class FlashcardController {
   private final DeckService deckService;
 
   @GetMapping
-  @Operation(summary = "Get flashcards in a deck", description = "Retrieves all flashcards in the specified deck.")
+  @Operation(summary = "Get flashcards in a deck", description = "Retrieves flashcards in the specified deck with optional pagination.")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Flashcards retrieved successfully"),
       @ApiResponse(responseCode = "404", description = "Deck not found")
   })
-  public ResponseEntity<List<FlashcardDto>> getFlashcards(
+  public ResponseEntity<?> getFlashcards(
       @PathVariable UUID deckId,
+      @Parameter(description = "Page number (0-based)") @RequestParam(defaultValue = "0") int page,
+      @Parameter(description = "Page size") @RequestParam(defaultValue = "20") int size,
+      @Parameter(description = "Sort by field") @RequestParam(defaultValue = "front") String sortBy,
+      @Parameter(description = "Sort direction") @RequestParam(defaultValue = "asc") String sortDirection,
+      @Parameter(description = "Enable pagination") @RequestParam(defaultValue = "false") boolean paginated,
       @Parameter(description = "Authenticated user") @AuthenticationPrincipal User user) {
     log.info("Retrieving flashcards for user {} in deck {}", user.getId(), deckId);
     var deck = deckService.getDeck(deckId, user);
-    var flashcards = flashcardService.getFlashcards(deck);
-    return ResponseEntity.ok(flashcards.stream().map(FlashcardDto::fromEntity).toList());
+
+    if (paginated) {
+      Sort sort = sortDirection.equalsIgnoreCase("desc")
+          ? Sort.by(sortBy).descending()
+          : Sort.by(sortBy).ascending();
+      Pageable pageable = PageRequest.of(page, size, sort);
+      var flashcardsPage = flashcardService.getFlashcards(deck, pageable);
+      return ResponseEntity.ok(PagedFlashcardResponseDto.fromPage(flashcardsPage));
+    } else {
+      var flashcards = flashcardService.getFlashcards(deck);
+      return ResponseEntity.ok(flashcards.stream().map(FlashcardDto::fromEntity).toList());
+    }
   }
 
   @Operation(summary = "Create a new flashcard", description = "Creates a new flashcard in the specified deck.")

@@ -18,6 +18,8 @@ import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,12 @@ public class FlashcardService {
   public List<Flashcard> getFlashcards(Deck deck) {
     log.info("Retrieving flashcards for deck {}", deck.getDeckId());
     return flashcardRepository.findByDeckId(deck.getId());
+  }
+
+  public Page<Flashcard> getFlashcards(Deck deck, Pageable pageable) {
+    log.info("Retrieving flashcards for deck {} with pagination (page: {}, size: {})",
+        deck.getDeckId(), pageable.getPageNumber(), pageable.getPageSize());
+    return flashcardRepository.findByDeckId(deck.getId(), pageable);
   }
 
   public List<FlashcardDto> retrieveSyncableCards(Deck deck) {
