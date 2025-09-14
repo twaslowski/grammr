@@ -24,13 +24,13 @@ interface FlashcardPreviewProps {
 }
 
 const GenericFlashcardPreview: React.FC<FlashcardPreviewProps> = ({
-  initialDeckId = '-1',
-  onCardAdded = () => {},
   initialFront,
   initialBack,
-  onClose,
   paradigm,
+  onClose,
+  onCardAdded = () => {},
   flashcardId = '',
+  initialDeckId = '-1',
   submitAction = 'create',
 }) => {
   const { isLoading, request } = useApi();

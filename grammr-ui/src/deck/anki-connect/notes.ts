@@ -66,9 +66,21 @@ export async function createNotes(notes: Note[]): Promise<SyncResult> {
 }
 
 export async function updateNotes(notes: Note[]): Promise<SyncResult> {
+  const successfulSyncs: string[] = [];
+  const failedSyncs: string[] = [];
+
+  for (const note of notes) {
+    try {
+      const noteId = await findNoteByFront(note.deckName, note.fields.front);
+      await updateNote(noteId, note);
+      successfulSyncs.push(note.id);
+    } catch (err) {
+      failedSyncs.push(note.id);
+    }
+  }
   return {
-    successfulSyncs: [],
-    failedSyncs: [],
+    successfulSyncs,
+    failedSyncs,
   };
 }
 

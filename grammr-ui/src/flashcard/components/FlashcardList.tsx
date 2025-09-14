@@ -60,8 +60,6 @@ export const FlashcardList: React.FC<FlashcardListProps> = ({ cards, deckId }) =
         return 'bg-green-100 text-green-700';
       case 'UPDATED':
         return 'bg-blue-100 text-blue-700';
-      default:
-        return 'bg-gray-100 text-gray-700';
     }
   }
 
@@ -88,9 +86,11 @@ export const FlashcardList: React.FC<FlashcardListProps> = ({ cards, deckId }) =
               </div>
 
               <div className='flex space-x-2'>
-                <span className={`text-sm px-2 py-0.5 rounded ${getStatusBgClass(card.status)}`}>
-                  {card.status}
-                </span>
+                {['CREATED', 'UPDATED'].includes(card.status) && (
+                  <span className={`text-sm px-2 py-0.5 rounded ${getStatusBgClass(card.status)}`}>
+                    {card.status}
+                  </span>
+                )}
                 <button onClick={() => setPreviewDialogCardId(card.id)} title='Edit Card'>
                   <Edit size={16} />
                 </button>
