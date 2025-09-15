@@ -14,7 +14,7 @@ export default function NotFound({ message = 'Page not found', backHref = '/' })
       </p>
       <Link
         href={backHref}
-        className='flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors'
+        className='flex items-center px-4 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 transition-colors'
       >
         <ArrowLeft size={16} className='mr-2' />
         Go Back
