@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, Trash2 } from 'lucide-react';
+import { ArrowLeft, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { use, useCallback, useEffect, useState } from 'react';
 
@@ -14,9 +14,17 @@ import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import { useApi } from '@/hooks/useApi';
 import { Flashcard } from '@/flashcard/types/flashcard';
+import { PagedFlashcardResponse } from '@/flashcard/types/pagedFlashcardResponse';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import GenericFlashcardPreview from '@/flashcard/components/GenericFlashcardPreview';
 import ResetSyncButton from '@/deck/components/button/ResetSyncButton';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 export default function DeckPage(props: { params: Promise<{ deckId: string }> }) {
   const { deckId } = use(props.params);
@@ -24,6 +32,11 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
   const [deck, setDeck] = useState<Deck | null>(null);
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [showPreviewDialog, setShowPreviewDialog] = useState(false);
+  const [totalCards, setTotalCards] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(20);
+  const [totalPages, setTotalPages] = useState(0);
+  const [usePagination, setUsePagination] = useState(false);
   const router = useRouter();
 
   const handleDeleteDeck = async () => {
@@ -46,13 +59,58 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
       });
   };
 
-  // Move fetchFlashcards outside useEffect so it can be called from anywhere
-  const fetchFlashcards = useCallback(async () => {
-    const flashcards = await request<Flashcard[]>(`/api/v2/deck/${deckId}/flashcard`, {
-      method: 'GET',
-    });
-    setFlashcards(flashcards);
-  }, [deckId, request]);
+  // Updated fetchFlashcards to support pagination
+  const fetchFlashcards = useCallback(
+    async (page: number = currentPage, size: number = pageSize) => {
+      if (usePagination) {
+        const params = new URLSearchParams({
+          paginated: 'true',
+          page: page.toString(),
+          size: size.toString(),
+          sortBy: 'front',
+          sortDirection: 'asc',
+        });
+
+        const response = await request<PagedFlashcardResponse>(
+          `/api/v2/deck/${deckId}/flashcard?${params}`,
+          {
+            method: 'GET',
+          },
+        );
+
+        setFlashcards(response.content);
+        setTotalCards(response.totalElements);
+        setTotalPages(response.totalPages);
+        setCurrentPage(response.page);
+      } else {
+        const flashcards = await request<Flashcard[]>(`/api/v2/deck/${deckId}/flashcard`, {
+          method: 'GET',
+        });
+        setFlashcards(flashcards);
+        setTotalCards(flashcards.length);
+        setTotalPages(1);
+        setCurrentPage(0);
+      }
+    },
+    [deckId, request, currentPage, pageSize, usePagination],
+  );
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    void fetchFlashcards(newPage, pageSize);
+  };
+
+  const handlePageSizeChange = (newSize: string) => {
+    const size = parseInt(newSize);
+    setPageSize(size);
+    setCurrentPage(0);
+    void fetchFlashcards(0, size);
+  };
+
+  const togglePagination = () => {
+    setUsePagination(!usePagination);
+    setCurrentPage(0);
+  };
 
   useEffect(() => {
     const fetchDeck = async () => {
@@ -64,7 +122,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
 
     void fetchDeck();
     void fetchFlashcards();
-  }, [deckId, request, fetchFlashcards]);
+  }, [deckId, request, usePagination, fetchFlashcards]);
 
   if (isLoading) {
     return <LoadingSpinner message='Loading deck...' />;
@@ -108,7 +166,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
 
             <div className='flex space-x-2 mt-4 md:mt-0'>
               <ExportButton deck={deck} />
-              <SyncButton deck={deck} onSync={fetchFlashcards} />
+              <SyncButton deck={deck} onSync={() => fetchFlashcards(currentPage, pageSize)} />
               <ResetSyncButton deck={deck} />
 
               <Button
@@ -125,7 +183,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4 text-sm'>
             <div className='bg-gray-50 p-3 rounded'>
               <div className='text-gray-500 mb-1'>Total Cards</div>
-              <div className='font-semibold'>{flashcards.length || 0}</div>
+              <div className='font-semibold'>{totalCards || 0}</div>
             </div>
 
             <div className='bg-gray-50 p-3 rounded'>
@@ -155,7 +213,12 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
         <div className='bg-white rounded-lg shadow-md p-6'>
           <div className='flex justify-between items-center mb-6'>
             <h2 className='text-xl font-semibold'>Flashcards</h2>
-            <Button onClick={() => setShowPreviewDialog(true)}>Add card</Button>
+            <div className='flex items-center space-x-2'>
+              <Button onClick={togglePagination} variant='outline' size='sm'>
+                {usePagination ? 'Show All' : 'Use Pagination'}
+              </Button>
+              <Button onClick={() => setShowPreviewDialog(true)}>Add card</Button>
+            </div>
             <Dialog open={showPreviewDialog} onOpenChange={setShowPreviewDialog}>
               <DialogContent className='max-w-3xl'>
                 <DialogHeader>
@@ -167,11 +230,60 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
                   initialBack={''}
                   paradigm={null}
                   onClose={() => setShowPreviewDialog(false)}
-                  onCardAdded={fetchFlashcards}
+                  onCardAdded={() => fetchFlashcards(currentPage, pageSize)}
                 />
               </DialogContent>
             </Dialog>
           </div>
+
+          {usePagination && totalCards > 0 && (
+            <div className='flex items-center justify-between mb-4 p-4 bg-gray-50 rounded-lg'>
+              <div className='flex items-center space-x-4'>
+                <span className='text-sm text-gray-600'>
+                  Showing {currentPage * pageSize + 1} to{' '}
+                  {Math.min((currentPage + 1) * pageSize, totalCards)} of {totalCards} cards
+                </span>
+                <Select value={pageSize.toString()} onValueChange={handlePageSizeChange}>
+                  <SelectTrigger className='w-20'>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value='10'>10</SelectItem>
+                    <SelectItem value='20'>20</SelectItem>
+                    <SelectItem value='50'>50</SelectItem>
+                    <SelectItem value='100'>100</SelectItem>
+                  </SelectContent>
+                </Select>
+                <span className='text-sm text-gray-600'>per page</span>
+              </div>
+
+              <div className='flex items-center space-x-2'>
+                <Button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 0}
+                  variant='outline'
+                  size='sm'
+                >
+                  <ChevronLeft size={16} />
+                  Previous
+                </Button>
+
+                <span className='text-sm text-gray-600'>
+                  Page {currentPage + 1} of {totalPages}
+                </span>
+
+                <Button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage >= totalPages - 1}
+                  variant='outline'
+                  size='sm'
+                >
+                  Next
+                  <ChevronRight size={16} />
+                </Button>
+              </div>
+            </div>
+          )}
 
           {flashcards.length > 0 ? (
             <FlashcardList cards={flashcards} deckId={deck.id} />
