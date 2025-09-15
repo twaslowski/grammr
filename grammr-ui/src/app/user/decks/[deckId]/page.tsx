@@ -36,7 +36,6 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [totalPages, setTotalPages] = useState(0);
-  const [usePagination, setUsePagination] = useState(false);
   const router = useRouter();
 
   const handleDeleteDeck = async () => {
@@ -59,40 +58,29 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
       });
   };
 
-  // Updated fetchFlashcards to support pagination
   const fetchFlashcards = useCallback(
     async (page: number = currentPage, size: number = pageSize) => {
-      if (usePagination) {
-        const params = new URLSearchParams({
-          paginated: 'true',
-          page: page.toString(),
-          size: size.toString(),
-          sortBy: 'front',
-          sortDirection: 'asc',
-        });
+      const params = new URLSearchParams({
+        paginated: 'true',
+        page: page.toString(),
+        size: size.toString(),
+        sortBy: 'front',
+        sortDirection: 'asc',
+      });
 
-        const response = await request<PagedFlashcardResponse>(
-          `/api/v2/deck/${deckId}/flashcard?${params}`,
-          {
-            method: 'GET',
-          },
-        );
-
-        setFlashcards(response.content);
-        setTotalCards(response.totalElements);
-        setTotalPages(response.totalPages);
-        setCurrentPage(response.page);
-      } else {
-        const flashcards = await request<Flashcard[]>(`/api/v2/deck/${deckId}/flashcard`, {
+      const response = await request<PagedFlashcardResponse>(
+        `/api/v2/deck/${deckId}/flashcard?${params}`,
+        {
           method: 'GET',
-        });
-        setFlashcards(flashcards);
-        setTotalCards(flashcards.length);
-        setTotalPages(1);
-        setCurrentPage(0);
-      }
+        },
+      );
+
+      setFlashcards(response.content);
+      setTotalCards(response.totalElements);
+      setTotalPages(response.totalPages);
+      setCurrentPage(response.page);
     },
-    [deckId, request, currentPage, pageSize, usePagination],
+    [deckId, request, currentPage, pageSize],
   );
 
   const handlePageChange = (newPage: number) => {
@@ -107,11 +95,6 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
     void fetchFlashcards(0, size);
   };
 
-  const togglePagination = () => {
-    setUsePagination(!usePagination);
-    setCurrentPage(0);
-  };
-
   useEffect(() => {
     const fetchDeck = async () => {
       const fetchedDeck = await request<Deck>(`/api/v2/deck/${deckId}`, {
@@ -122,7 +105,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
 
     void fetchDeck();
     void fetchFlashcards();
-  }, [deckId, request, usePagination, fetchFlashcards]);
+  }, [deckId, request, fetchFlashcards]);
 
   if (isLoading) {
     return <LoadingSpinner message='Loading deck...' />;
@@ -214,9 +197,6 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
           <div className='flex justify-between items-center mb-6'>
             <h2 className='text-xl font-semibold'>Flashcards</h2>
             <div className='flex items-center space-x-2'>
-              <Button onClick={togglePagination} variant='outline' size='sm'>
-                {usePagination ? 'Show All' : 'Use Pagination'}
-              </Button>
               <Button onClick={() => setShowPreviewDialog(true)}>Add card</Button>
             </div>
             <Dialog open={showPreviewDialog} onOpenChange={setShowPreviewDialog}>
@@ -236,7 +216,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
             </Dialog>
           </div>
 
-          {usePagination && totalCards > 0 && (
+          {totalCards > 0 && (
             <div className='flex items-center justify-between mb-4 p-4 bg-gray-50 rounded-lg'>
               <div className='flex items-center space-x-4'>
                 <span className='text-sm text-gray-600'>
