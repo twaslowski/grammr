@@ -83,7 +83,7 @@ public class DeckController {
   public ResponseEntity<DeckDto> createDeck(
       @AuthenticationPrincipal User user,
       @Parameter(description = "Deck creation data") @RequestBody @Valid DeckCreationDto data) {
-    var deck = deckService.createDeck(user, data.name());
+    var deck = deckService.createDeck(user, data.name(), data.description());
     var deckDto = DeckDto.from(deck);
     return ResponseEntity.status(201).body(deckDto);
   }

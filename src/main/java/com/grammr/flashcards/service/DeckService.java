@@ -22,9 +22,10 @@ public class DeckService {
   private final DeckRepository deckRepository;
   private final AnkiPort ankiPort;
 
-  public Deck createDeck(User user, String name) {
+  public Deck createDeck(User user, String name, String description) {
     var deck = Deck.builder()
         .name(name)
+        .description(description)
         .deckId(UUID.randomUUID())
         .owner(user)
         .build();
