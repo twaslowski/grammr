@@ -25,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import Error from "@/components/common/Error";
 
 export default function DeckPage(props: { params: Promise<{ deckId: string }> }) {
   const { deckId } = use(props.params);
@@ -121,15 +122,11 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
 
   if (error) {
     return (
-      <div className='flex flex-col items-center justify-center min-h-screen p-4'>
-        <div className='text-red-500 mb-4'>Error: {error.message}</div>
-        <button
-          onClick={() => window.location.reload()}
-          className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'
-        >
-          Try Again
-        </button>
-      </div>
+        <div className='flex flex-col items-center justify-center min-h-screen p-4'>
+          <Error title='Failed to load deck'>
+            An unexpected error occurred when loading this deck. Please try again later.
+          </Error>
+        </div>
     );
   }
 
@@ -138,7 +135,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
       <div className='container mx-auto px-4 py-8'>
         <button
           onClick={() => router.push('/user/decks')}
-          className='flex items-center text-blue-600 hover:text-blue-800 mb-6'
+          className='flex items-center text-primary-600 hover:text-primary-800 mb-6'
         >
           <ArrowLeft size={16} className='mr-1' />
           Back to Decks
