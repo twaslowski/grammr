@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.13.0](https://github.com/twaslowski/grammr/compare/v3.12.0...v3.13.0) (2025-09-14)
+
+
+### Features
+
+* **anki:** implement updates to anki-connect ([feea992](https://github.com/twaslowski/grammr/commit/feea992012d5b8b07b6b4042aee635748cb96008))
+* **flashcards:** paginate flashcard retrieval ([ae994a2](https://github.com/twaslowski/grammr/commit/ae994a2d78164b5e3687b4a8ead29b7ba348646c))
+* **ui:** remove chat as landing page; add to help page ([f70cd3e](https://github.com/twaslowski/grammr/commit/f70cd3e5b3c1a5c17ec561132ae28b78255c5d3d))
+
+
+### Bug Fixes
+
+* **ui:** add missing flashcardId so cards can be edited ([1da408d](https://github.com/twaslowski/grammr/commit/1da408d10fdf5b374c3e980f7c0988f571e7e798))
+* **ui:** improve error handling around authorization ([ee79c7f](https://github.com/twaslowski/grammr/commit/ee79c7f77d3fcfb6ded240d4629fc735b6ec6eff))
+* **ui:** send valid payload when editing ([c639a63](https://github.com/twaslowski/grammr/commit/c639a63127756ea54ab3e82bd519cd719d045c18))
+* **ui:** stop hard-refreshing after flashcard update ([dab7439](https://github.com/twaslowski/grammr/commit/dab7439871fda53ed671bce7d43d274f82ab5496))
+
 ## [3.12.0](https://github.com/twaslowski/grammr/compare/v3.11.0...v3.12.0) (2025-08-27)
 
 
