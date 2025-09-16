@@ -42,7 +42,7 @@ jobs:
           file: ${{ inputs.directory }}/docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ inputs.image_name }}:${{ steps.version.outputs.version }}
+          tags: grammrapp/morphology:${{ steps.version.outputs.version }}
           labels: ${{ steps.docker-metadata.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -54,7 +54,7 @@ jobs:
           file: ${{ inputs.directory }}/docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ inputs.image_name }}:${{ steps.version.outputs.version }}-prebuilt_ru_core_news_lg
+          tags: grammrapp/morphology:${{ steps.version.outputs.version }}-prebuilt_ru_core_news_lg
           labels: ${{ steps.docker-metadata.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
