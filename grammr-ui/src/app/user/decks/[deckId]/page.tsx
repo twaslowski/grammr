@@ -109,7 +109,11 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
   }, [deckId, request, fetchFlashcards]);
 
   if (isLoading) {
-    return <LoadingSpinner message='Loading deck...' />;
+    return (
+      <div className='flex flex-col items-center justify-center min-h-screen p-4'>
+        <LoadingSpinner message='Loading deck...' />;
+      </div>
+    )
   }
 
   if (error && error.code === 404) {
