@@ -5,7 +5,7 @@
  */
 
 import { precheckAnkiConnect } from './util';
-import { precheckModels } from './models';
+import { precheckModels } from './model/models';
 import { createDeck } from './deck';
 import { createNotes, findNoteByFront, updateNote, deleteNotes } from './notes';
 import { Note } from '@/deck/types/note';

@@ -57,7 +57,7 @@ anki-connect/
 ### Basic Setup
 
 ```typescript
-import { precheckAnkiConnect, precheckModels, createDeck } from '@/anki-connect';
+import {precheckAnkiConnect, precheckModels, createDeck} from '@/anki-connect';
 
 // Verify connection and setup
 await precheckAnkiConnect();
@@ -68,8 +68,8 @@ await createDeck('My Learning Deck');
 ### Creating Notes
 
 ```typescript
-import { createNotes } from '@/anki-connect';
-import { Note } from '@/deck/types/note';
+import {createNotes} from '@/anki-connect';
+import {Note} from '@/deck/types/note';
 
 const notes: Note[] = [
   {
@@ -92,7 +92,7 @@ console.log('Failed notes:', result.failedSyncs);
 ### Finding and Updating Notes
 
 ```typescript
-import { findNoteByFront, updateNote } from '@/anki-connect';
+import {findNoteByFront, updateNote} from '@/anki-connect';
 
 // Find a note by its front field
 const noteId = await findNoteByFront('German Vocabulary', 'Hallo');
@@ -129,7 +129,7 @@ npx tsx src/anki-connect/test-runner.ts full-test
 ### Available Test Commands
 
 | Command            | Description                         |
-| ------------------ | ----------------------------------- |
+|--------------------|-------------------------------------|
 | `check-connection` | Verify AnkiConnect is accessible    |
 | `check-models`     | Validate and create required models |
 | `create-test-deck` | Create a temporary test deck        |
@@ -223,7 +223,7 @@ Models are versioned to support migrations:
 ### Model Status Check
 
 ```typescript
-import { checkModelStatus } from '@/anki-connect';
+import {checkModelStatus} from '@/anki-connect';
 
 const status = await checkModelStatus('conjugation');
 console.log('Model exists:', status.exists);
@@ -236,7 +236,7 @@ console.log('Migration status:', status.migrationStatus);
 This package uses AnkiConnect version 6. Key actions used:
 
 | Action        | Purpose                   |
-| ------------- | ------------------------- |
+|---------------|---------------------------|
 | `version`     | Check AnkiConnect version |
 | `createDeck`  | Create new deck           |
 | `addNotes`    | Add multiple notes        |
