@@ -19,12 +19,17 @@ export const InputArea: React.FC<{
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (onChange) {
-      onChange(input);
-    }
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       void handleSubmit();
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = e.target.value;
+    setInput(newValue);
+    if (onChange) {
+      onChange(newValue);
     }
   };
 
@@ -41,7 +46,7 @@ export const InputArea: React.FC<{
           placeholder={placeholder}
           rows={1}
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={handleInputChange}
           onKeyDown={handleKeyPress}
         />
       </form>
