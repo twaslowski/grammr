@@ -38,8 +38,8 @@ jobs:
       - name: Build and push generic image
         uses: docker/build-push-action@v5
         with:
-          context: ${{ inputs.directory }}
-          file: ${{ inputs.directory }}/docker/Dockerfile
+          context: sidecars/morphology
+          file: sidecars/morphology/docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: grammrapp/morphology:${{ steps.version.outputs.version }}
@@ -50,8 +50,8 @@ jobs:
       - name: Build and push prebuilt image
         uses: docker/build-push-action@v5
         with:
-          context: ${{ inputs.directory }}
-          file: ${{ inputs.directory }}/docker/Dockerfile
+          context: sidecars/morphology
+          file: sidecars/morphology/docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: grammrapp/morphology:${{ steps.version.outputs.version }}-prebuilt_ru_core_news_lg
