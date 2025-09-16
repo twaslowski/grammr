@@ -15,7 +15,11 @@ export default function DecksPage() {
   const [showNewDeckDialog, setShowNewDeckDialog] = useState(false);
 
   if (isLoading) {
-    return <LoadingSpinner size={98} />;
+    return (
+      <div className='flex flex-col items-center justify-center min-h-screen p-4'>
+        <LoadingSpinner size={98} />
+      </div>
+    );
   }
 
   if (error && error.code === 401) {

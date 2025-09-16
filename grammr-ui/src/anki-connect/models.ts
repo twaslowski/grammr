@@ -1,5 +1,12 @@
-import { VERSIONED_MODEL_NAMES, MODEL_VERSIONS, MODEL_MIGRATION_STATUS } from '@/constant/constants';
-import { CONJUGATION_MODEL_TEMPLATE, CONJUGATION_CLOZE_MODEL_TEMPLATE } from './conjugation-templates';
+import {
+  VERSIONED_MODEL_NAMES,
+  MODEL_VERSIONS,
+  MODEL_MIGRATION_STATUS,
+} from '@/constant/constants';
+import {
+  CONJUGATION_MODEL_TEMPLATE,
+  CONJUGATION_CLOZE_MODEL_TEMPLATE,
+} from './conjugation-templates';
 
 // Model status tracking
 interface ModelStatus {
@@ -36,7 +43,8 @@ export const checkModelStatus = async (modelName: string): Promise<ModelStatus> 
     }
 
     const models = data.result as string[];
-    const versionedModelName = VERSIONED_MODEL_NAMES[modelName as keyof typeof VERSIONED_MODEL_NAMES];
+    const versionedModelName =
+      VERSIONED_MODEL_NAMES[modelName as keyof typeof VERSIONED_MODEL_NAMES];
 
     // Check if the current versioned model exists
     if (models.includes(versionedModelName)) {
@@ -49,7 +57,9 @@ export const checkModelStatus = async (modelName: string): Promise<ModelStatus> 
 
     // Check if any older version exists
     const baseModelName = modelName.replace(/_(v\d+\.\d+\.\d+)$/, '');
-    const olderVersions = models.filter(m => m.startsWith(baseModelName) && m !== versionedModelName);
+    const olderVersions = models.filter(
+      (m) => m.startsWith(baseModelName) && m !== versionedModelName,
+    );
 
     if (olderVersions.length > 0) {
       return {

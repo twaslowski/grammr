@@ -12,6 +12,7 @@ export interface Note {
   modelName: string;
   deckName: string;
   fields: AnyField;
+  tags?: string[];
 }
 
 interface BasicFields {

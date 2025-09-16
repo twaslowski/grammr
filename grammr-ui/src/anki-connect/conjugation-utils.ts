@@ -12,12 +12,12 @@ import { VERSIONED_MODEL_NAMES } from '@/constant/constants';
 export function createConjugationData(
   persons: string[],
   numbers: string[],
-  conjugations: Record<string, Record<string, string>>
+  conjugations: Record<string, Record<string, string>>,
 ): ConjugationData {
   return {
     persons,
     numbers,
-    forms: conjugations
+    forms: conjugations,
   };
 }
 
@@ -37,22 +37,18 @@ export function createStandardConjugation(conjugations: {
     third: string;
   };
 }): ConjugationData {
-  return createConjugationData(
-    ['1st', '2nd', '3rd'],
-    ['singular', 'plural'],
-    {
-      singular: {
-        '1st': conjugations.singular.first,
-        '2nd': conjugations.singular.second,
-        '3rd': conjugations.singular.third,
-      },
-      plural: {
-        '1st': conjugations.plural.first,
-        '2nd': conjugations.plural.second,
-        '3rd': conjugations.plural.third,
-      }
-    }
-  );
+  return createConjugationData(['1st', '2nd', '3rd'], ['singular', 'plural'], {
+    singular: {
+      '1st': conjugations.singular.first,
+      '2nd': conjugations.singular.second,
+      '3rd': conjugations.singular.third,
+    },
+    plural: {
+      '1st': conjugations.plural.first,
+      '2nd': conjugations.plural.second,
+      '3rd': conjugations.plural.third,
+    },
+  });
 }
 
 /**
@@ -67,20 +63,16 @@ export function createGermanConjugation(conjugations: {
   ihr: string;
   sie_Sie: string;
 }): ConjugationData {
-  return createConjugationData(
-    ['ich', 'du', 'er/sie/es', 'wir', 'ihr', 'sie/Sie'],
-    [''],
-    {
-      '': {
-        'ich': conjugations.ich,
-        'du': conjugations.du,
-        'er/sie/es': conjugations.er_sie_es,
-        'wir': conjugations.wir,
-        'ihr': conjugations.ihr,
-        'sie/Sie': conjugations.sie_Sie,
-      }
-    }
-  );
+  return createConjugationData(['ich', 'du', 'er/sie/es', 'wir', 'ihr', 'sie/Sie'], [''], {
+    '': {
+      ich: conjugations.ich,
+      du: conjugations.du,
+      'er/sie/es': conjugations.er_sie_es,
+      wir: conjugations.wir,
+      ihr: conjugations.ihr,
+      'sie/Sie': conjugations.sie_Sie,
+    },
+  });
 }
 
 /**
@@ -88,27 +80,23 @@ export function createGermanConjugation(conjugations: {
  * Using Cyrillic pronouns
  */
 export function createRussianConjugation(conjugations: {
-  ya: string;      // я
-  ty: string;      // ты
+  ya: string; // я
+  ty: string; // ты
   on_ona_ono: string; // он/она/оно
-  my: string;      // мы
-  vy: string;      // вы
-  oni: string;     // они
+  my: string; // мы
+  vy: string; // вы
+  oni: string; // они
 }): ConjugationData {
-  return createConjugationData(
-    ['я', 'ты', 'он/она/оно', 'мы', 'вы', 'они'],
-    [''],
-    {
-      '': {
-        'я': conjugations.ya,
-        'ты': conjugations.ty,
-        'он/она/оно': conjugations.on_ona_ono,
-        'мы': conjugations.my,
-        'вы': conjugations.vy,
-        'они': conjugations.oni,
-      }
-    }
-  );
+  return createConjugationData(['я', 'ты', 'он/она/оно', 'мы', 'вы', 'они'], [''], {
+    '': {
+      я: conjugations.ya,
+      ты: conjugations.ty,
+      'он/она/оно': conjugations.on_ona_ono,
+      мы: conjugations.my,
+      вы: conjugations.vy,
+      они: conjugations.oni,
+    },
+  });
 }
 
 /**
@@ -122,7 +110,7 @@ export async function createConjugationNote(
   mood: string,
   conjugationData: ConjugationData,
   language: string,
-  notes?: string
+  notes?: string,
 ): Promise<void> {
   const noteData = {
     deckName,
@@ -134,9 +122,9 @@ export async function createConjugationNote(
       mood,
       conjugations: JSON.stringify(conjugationData),
       language,
-      notes: notes || ''
+      notes: notes || '',
     },
-    tags: [`conjugation`, `${language}`, `${tense}`, `${mood}`]
+    tags: [`conjugation`, `${language}`, `${tense}`, `${mood}`],
   };
 
   const response = await fetch('http://localhost:8765', {
@@ -146,9 +134,9 @@ export async function createConjugationNote(
       action: 'addNote',
       version: 6,
       params: {
-        note: noteData
-      }
-    })
+        note: noteData,
+      },
+    }),
   });
 
   if (!response.ok) {
@@ -172,7 +160,7 @@ export async function createConjugationClozeNote(
   mood: string,
   conjugationData: ConjugationData,
   language: string,
-  notes?: string
+  notes?: string,
 ): Promise<void> {
   const noteData = {
     deckName,
@@ -184,9 +172,9 @@ export async function createConjugationClozeNote(
       mood,
       conjugations: JSON.stringify(conjugationData),
       language,
-      notes: notes || ''
+      notes: notes || '',
     },
-    tags: [`conjugation-cloze`, `${language}`, `${tense}`, `${mood}`]
+    tags: [`conjugation-cloze`, `${language}`, `${tense}`, `${mood}`],
   };
 
   const response = await fetch('http://localhost:8765', {
@@ -196,9 +184,9 @@ export async function createConjugationClozeNote(
       action: 'addNote',
       version: 6,
       params: {
-        note: noteData
-      }
-    })
+        note: noteData,
+      },
+    }),
   });
 
   if (!response.ok) {
@@ -223,7 +211,7 @@ export async function createSpanishPresentConjugation(
   conjugations: {
     singular: { first: string; second: string; third: string };
     plural: { first: string; second: string; third: string };
-  }
+  },
 ): Promise<void> {
   const conjugationData = createStandardConjugation(conjugations);
   await createConjugationNote(
@@ -233,7 +221,7 @@ export async function createSpanishPresentConjugation(
     'Present',
     'Indicative',
     conjugationData,
-    'Spanish'
+    'Spanish',
   );
 }
 
@@ -251,7 +239,7 @@ export async function createGermanPresentConjugation(
     wir: string;
     ihr: string;
     sie_Sie: string;
-  }
+  },
 ): Promise<void> {
   const conjugationData = createGermanConjugation(conjugations);
   await createConjugationNote(
@@ -261,6 +249,6 @@ export async function createGermanPresentConjugation(
     'Präsens',
     'Indikativ',
     conjugationData,
-    'German'
+    'German',
   );
 }

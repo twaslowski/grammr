@@ -1,4 +1,8 @@
-import { VERSIONED_MODEL_NAMES, MODEL_VERSIONS, MODEL_MIGRATION_STATUS } from '@/constant/constants';
+import {
+  VERSIONED_MODEL_NAMES,
+  MODEL_VERSIONS,
+  MODEL_MIGRATION_STATUS,
+} from '@/constant/constants';
 
 // Type definitions for conjugation data structure
 export interface ConjugationData {
@@ -11,13 +15,13 @@ export interface ConjugationData {
 export const CONJUGATION_MODEL_TEMPLATE = {
   modelName: VERSIONED_MODEL_NAMES.CONJUGATION,
   inOrderFields: [
-    'lemma',           // The base form of the verb
-    'translation',     // Translation in target language
-    'tense',          // Present, Past, Future, etc.
-    'mood',           // Indicative, Subjunctive, etc.
-    'conjugations',   // JSON data for the conjugation table
-    'language',       // Source language code
-    'notes'           // Additional notes
+    'lemma', // The base form of the verb
+    'translation', // Translation in target language
+    'tense', // Present, Past, Future, etc.
+    'mood', // Indicative, Subjunctive, etc.
+    'conjugations', // JSON data for the conjugation table
+    'language', // Source language code
+    'notes', // Additional notes
   ],
   css: `
     .conjugation-card {
@@ -185,9 +189,9 @@ export const CONJUGATION_MODEL_TEMPLATE = {
             })();
           </script>
         </div>
-      `
-    }
-  ]
+      `,
+    },
+  ],
 };
 
 export const CONJUGATION_CLOZE_MODEL_TEMPLATE = {
@@ -306,7 +310,7 @@ export const CONJUGATION_CLOZE_MODEL_TEMPLATE = {
             })();
           </script>
         </div>
-      `
-    }
-  ]
+      `,
+    },
+  ],
 };

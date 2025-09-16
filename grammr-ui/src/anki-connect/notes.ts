@@ -1,5 +1,15 @@
 import { Note } from '@/deck/types/note';
 
+interface AnkiConnectResult {
+  result: number[];
+  error: string | null;
+}
+
+interface SyncResult {
+  successfulSyncs: string[];
+  failedSyncs: string[];
+}
+
 /**
  * Finds a note by its front field in a specific deck.
  * This way we can avoid having to track note IDs, since front fields are unique per deck.
