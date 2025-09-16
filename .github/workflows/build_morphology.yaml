@@ -17,3 +17,13 @@ jobs:
     with:
       directory: "./sidecars/morphology"
       image_name: "grammrapp/morphology"
+
+  build-prebuilt-morphology-sidecar:
+    uses: ./.github/workflows/build_sidecar.yml
+    secrets:
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+    with:
+      directory: "./sidecars/morphology"
+      image_name: "grammrapp/morphology"
+      build_args: '{"PREBUILD_MODEL_NAME": "ru_core_news_lg"}'

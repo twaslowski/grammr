@@ -10,6 +10,10 @@ on:
       directory:
         required: true
         type: string
+      build_args:
+        required: false
+        type: string
+        description: "Additional build arguments in JSON format, e.g. '{\"ARG1\": \"value1\", \"ARG2\": \"value2\"}'"
     secrets:
       DOCKERHUB_USERNAME:
           required: true
@@ -95,6 +99,17 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Parse build args
+        id: build-args
+        shell: bash
+        run: |
+          BUILD_ARGS=""
+          if [ -n "${{ inputs.build_args }}" ]; then
+            # Parse JSON and convert to build-args format
+            BUILD_ARGS=$(echo '${{ inputs.build_args }}' | jq -r 'to_entries | map("--build-arg " + .key + "=" + .value) | join(" ")')
+          fi
+          echo "args=$BUILD_ARGS" >> $GITHUB_OUTPUT
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -106,3 +121,5 @@ jobs:
           labels: ${{ steps.docker-metadata.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            ${{ steps.build-args.outputs.args }}
