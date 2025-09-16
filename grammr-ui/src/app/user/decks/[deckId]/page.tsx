@@ -25,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import Error from "@/components/common/Error";
+import Error from '@/components/common/Error';
 
 export default function DeckPage(props: { params: Promise<{ deckId: string }> }) {
   const { deckId } = use(props.params);
@@ -113,7 +113,7 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
       <div className='flex flex-col items-center justify-center min-h-screen p-4'>
         <LoadingSpinner message='Loading deck...' />;
       </div>
-    )
+    );
   }
 
   if (error && error.code === 404) {
@@ -122,11 +122,11 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
 
   if (error) {
     return (
-        <div className='flex flex-col items-center justify-center min-h-screen p-4'>
-          <Error title='Failed to load deck'>
-            An unexpected error occurred when loading this deck. Please try again later.
-          </Error>
-        </div>
+      <div className='flex flex-col items-center justify-center min-h-screen p-4'>
+        <Error title='Failed to load deck'>
+          An unexpected error occurred when loading this deck. Please try again later.
+        </Error>
+      </div>
     );
   }
 

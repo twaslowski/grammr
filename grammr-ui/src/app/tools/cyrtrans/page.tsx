@@ -33,7 +33,7 @@ const TransliterationPage = () => {
           <textarea
             className='border-none w-full resize-none focus:outline-none focus:ring-0'
             rows={1}
-            placeholder={"Начни печатать!"}
+            placeholder={'Начни печатать!'}
             value={transliteration}
             readOnly={true}
           />
