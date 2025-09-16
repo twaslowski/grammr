@@ -25,7 +25,7 @@ jobs:
 
       - name: Derive poetry version
         id: version
-        working-directory: ${{ inputs.directory }}
+        working-directory: ./sidecars/morphology
         run: |
           echo "version=$(poetry version -s)" >> $GITHUB_OUTPUT
 
@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push generic image
         uses: docker/build-push-action@v5
         with:
           context: ${{ inputs.directory }}
@@ -47,7 +47,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Build and push
+      - name: Build and push prebuilt image
         uses: docker/build-push-action@v5
         with:
           context: ${{ inputs.directory }}
