@@ -1,6 +1,7 @@
 import { MODEL_NAMES } from './model-names';
 import { CONJUGATION_MODEL_TEMPLATE } from './conjugation-template';
 import { INFLECTION_MODEL_TEMPLATE } from '@/anki-connect/model/inflection-template';
+import {BASIC_MODEL_TEMPLATE} from "@/anki-connect/model/basic-template";
 
 export const precheckModels = async () => {
   const response = await fetch('http://localhost:8765', {
@@ -28,7 +29,10 @@ export const precheckModels = async () => {
     await createConjugationModel();
   }
 
-  // Keep the existing inflection model check for backward compatibility
+  if (!basicModelExists(models)) {
+    await createBasicModel();
+  }
+
   if (!inflectionsModelExists(models)) {
     await createInflectionModel();
   }
@@ -66,6 +70,15 @@ export const createConjugationModel = async (): Promise<void> => {
 function conjugationModelExists(models: string[]): boolean {
   return models.includes(MODEL_NAMES.CONJUGATION);
 }
+
+export const createBasicModel = async (): Promise<void> => {
+  await createModelFromTemplate(BASIC_MODEL_TEMPLATE);
+};
+
+function basicModelExists(models: string[]): boolean {
+  return models.includes(MODEL_NAMES.BASIC);
+}
+
 
 function inflectionsModelExists(models: string[]): boolean {
   return models.includes(MODEL_NAMES.INFLECTION);

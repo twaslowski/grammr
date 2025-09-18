@@ -79,7 +79,7 @@ export const CONJUGATION_MODEL_TEMPLATE = {
       Front: `
         <div class="conjugation-card">
           <div class="verb-header">
-            <div>{{front}}</div>
+            <div class="lemma">{{front}}</div>
           </div>
         </div>
       `,
