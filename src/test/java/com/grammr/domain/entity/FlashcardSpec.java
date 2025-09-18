@@ -11,7 +11,6 @@ public class FlashcardSpec {
         .flashcardId(UUID.randomUUID())
         .front("What is the capital of France?")
         .back("Paris")
-        .type(Type.BASIC)
         .deck(deck)
         .status(Status.CREATED);
   }

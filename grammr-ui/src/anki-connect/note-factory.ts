@@ -11,11 +11,7 @@ import { extractVerbForms } from '@/anki-connect/model/conjugation-utils';
 
 export class NoteFactory {
   static createFromFlashcard(flashcard: Flashcard, deckName: string): AnyNote {
-    if (flashcard.type === 'INFLECTION') {
-      if (!flashcard.paradigm) {
-        throw new Error('Inflection flashcard requires paradigm data');
-      }
-
+    if (flashcard.paradigm) {
       const noteType = this.getInflectionNoteType(flashcard.paradigm.partOfSpeech);
 
       switch (noteType) {

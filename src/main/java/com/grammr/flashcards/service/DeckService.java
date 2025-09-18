@@ -65,13 +65,12 @@ public class DeckService {
   public DeckDumpDto dumpDeck(Deck deck) {
     var flashcards = flashcardRepository.findByDeckId(deck.getId());
     var cardDtos = flashcards.stream()
-        .map(fc -> new DeckDumpDto.FlashcardDumpDto(
-            fc.getFlashcardId(),
-            fc.getFront(),
-            fc.getBack(),
-            fc.getTokenPos() != null ? fc.getTokenPos().name() : null,
-            fc.getParadigmId() != null ? UUID.fromString(fc.getParadigmId()) : null,
-            fc.getType() != null ? fc.getType().name() : null
+        .map(card -> new DeckDumpDto.FlashcardDumpDto(
+            card.getFlashcardId(),
+            card.getFront(),
+            card.getBack(),
+            card.getTokenPos() != null ? card.getTokenPos().name() : null,
+            card.getParadigmId() != null ? UUID.fromString(card.getParadigmId()) : null
         ))
         .toList();
 
@@ -92,27 +91,26 @@ public class DeckService {
 
     var savedDeck = deckRepository.save(newDeck);
 
-    dump.flashcards().forEach(fc -> {
-      var paradigm = Optional.ofNullable(fc.paradigmId()).flatMap(paradigmRepository::findById).orElse(null);
+    dump.flashcards().forEach(card -> {
+      var paradigm = Optional.ofNullable(card.paradigmId())
+          .flatMap(paradigmRepository::findById)
+          .orElse(null);
 
       PartOfSpeechTag tokenPos = null;
-      if (fc.tokenPos() != null) {
+      if (card.tokenPos() != null) {
         try {
-          tokenPos = PartOfSpeechTag.valueOf(fc.tokenPos());
+          tokenPos = PartOfSpeechTag.valueOf(card.tokenPos());
         } catch (IllegalArgumentException e) {
           // ignore unknown token pos
         }
       }
 
-      var type = fc.type() == null ? Flashcard.Type.BASIC : Flashcard.Type.valueOf(fc.type());
-
       var flashcard = Flashcard.builder()
-          .front(fc.front())
-          .back(fc.back())
+          .front(card.front())
+          .back(card.back())
           .flashcardId(UUID.randomUUID())
           .tokenPos(tokenPos)
           .paradigm(paradigm)
-          .type(type)
           .status(Flashcard.Status.CREATED)
           .deck(savedDeck)
           .build();

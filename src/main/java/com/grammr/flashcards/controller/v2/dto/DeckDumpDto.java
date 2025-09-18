@@ -19,13 +19,12 @@ public record DeckDumpDto(
     List<FlashcardDumpDto> flashcards
 ) {
 
-  public static record FlashcardDumpDto(
+  public record FlashcardDumpDto(
       UUID flashcardId,
       String front,
       String back,
       String tokenPos,
-      UUID paradigmId,
-      String type
+      UUID paradigmId
   ) {
 
   }

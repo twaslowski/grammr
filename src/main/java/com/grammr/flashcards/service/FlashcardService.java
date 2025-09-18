@@ -107,7 +107,6 @@ public class FlashcardService {
         .flashcardId(UUID.randomUUID())
         .tokenPos(tokenPos)
         .paradigm(paradigm)
-        .type(type)
         .status(Status.CREATED)
         .deck(deck)
         .build();

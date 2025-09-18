@@ -36,12 +36,6 @@ public record FlashcardDto(
     )
     Status status,
     @Schema(
-        description = "Type of the flashcard, indicating its category or usage",
-        example = "BASIC | INFLECTION",
-        requiredMode = Schema.RequiredMode.REQUIRED
-    )
-    Type type,
-    @Schema(
         description = """
             Paradigm data, if available.
             Required if type == 'INFLECTION'.
@@ -74,7 +68,6 @@ public record FlashcardDto(
         flashcard.getFront(),
         flashcard.getBack(),
         flashcard.getStatus(),
-        flashcard.getType(),
         paradigmDto,
         flashcard.getCreatedTimestamp(),
         flashcard.getUpdatedTimestamp()

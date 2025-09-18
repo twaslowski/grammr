@@ -84,7 +84,6 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
 
     assertThat(flashcardDto.question()).isEqualTo("Test Question");
     assertThat(flashcardDto.answer()).isEqualTo("Test Answer");
-    assertThat(flashcardDto.type()).isEqualTo(INFLECTION);
     assertThat(flashcardDto.paradigm().paradigmId()).isEqualTo(paradigm.getId().toString());
     assertThat(flashcardDto.paradigm().partOfSpeech()).isEqualTo(paradigm.getPartOfSpeech());
 
@@ -96,7 +95,6 @@ class FlashcardIntegrationTest extends IntegrationTestBase {
     assertThat(flashcard.getBack()).isEqualTo("Test Answer");
     assertThat(flashcard.getParadigm()).isNotNull();
     assertThat(flashcard.getParadigm().getId()).isEqualTo(paradigm.getId());
-    assertThat(flashcard.getType()).isEqualTo(INFLECTION);
   }
 
   @Test

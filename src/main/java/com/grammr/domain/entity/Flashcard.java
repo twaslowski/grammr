@@ -79,10 +79,6 @@ public class Flashcard {
   @UpdateTimestamp
   private ZonedDateTime updatedTimestamp;
 
-  @NotNull
-  @Enumerated(EnumType.STRING)
-  private Type type;
-
   public void confirmSync() {
     this.status = Status.SYNCED;
   }
