@@ -13,7 +13,7 @@ import {
   precheckModels,
 } from '@/anki-connect';
 import { Flashcard } from '@/flashcard/types/flashcard';
-import { fromFlashcard, Note } from '@/deck/types/note';
+import { fromFlashcard, Note } from '@/anki-connect/types/note';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 export default function SyncButton({ deck, onSync }: { deck: Deck; onSync: () => void }) {
