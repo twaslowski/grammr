@@ -8,6 +8,7 @@ import com.grammr.domain.entity.User;
 import com.grammr.domain.enums.ExportDataType;
 import com.grammr.flashcards.controller.v2.dto.DeckCreationDto;
 import com.grammr.flashcards.controller.v2.dto.DeckDto;
+import com.grammr.flashcards.controller.v2.dto.DeckDumpDto;
 import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
 import com.grammr.flashcards.controller.v2.dto.SyncResultDto;
 import com.grammr.flashcards.service.DeckService;
@@ -107,12 +108,36 @@ public class DeckController {
     return ResponseEntity.ok().headers(headers).body(exportedDeck);
   }
 
+  @Operation(summary = "Dump a deck", description = "Dump a deck and its flashcards as JSON for import elsewhere")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "Deck dump retrieved"),
+      @ApiResponse(responseCode = "400", description = "deckId is not a valid UUID"),
+      @ApiResponse(responseCode = "404", description = "Deck not found")
+  })
+  @GetMapping(value = "/{deckId}/dump", produces = APPLICATION_JSON_VALUE)
+  public ResponseEntity<DeckDumpDto> dumpDeck(@AuthenticationPrincipal User user, @PathVariable UUID deckId) {
+    var deck = deckService.getDeck(deckId, user);
+    var dump = deckService.dumpDeck(deck);
+    return ResponseEntity.ok(dump);
+  }
+
+  @Operation(summary = "Import a deck", description = "Import a deck dump created by the dump endpoint into the authenticated user's account")
+  @ApiResponses({
+      @ApiResponse(responseCode = "201", description = "Deck imported successfully"),
+      @ApiResponse(responseCode = "400", description = "Invalid input or malformed dump"),
+      @ApiResponse(responseCode = "401", description = "Unauthenticated")
+  })
+  @PostMapping(value = "/import", produces = APPLICATION_JSON_VALUE)
+  public ResponseEntity<DeckDto> importDeck(@AuthenticationPrincipal User user, @RequestBody DeckDumpDto dump) {
+    var created = deckService.importDeck(user, dump);
+    return ResponseEntity.status(201).body(DeckDto.from(created));
+  }
+
   @Operation(summary = "Sync deck to AnkiConnect", description = """
       Returns a list of flashcards to sync to AnkiConnect.
       The sync status of flashcards is internally maintained, and a sync operation
       has to be confirmed afterwards.
-      """
-  )
+      """)
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "Flashcard retrieval successful"),
       @ApiResponse(responseCode = "400", description = "deckId is not a valid UUID"),

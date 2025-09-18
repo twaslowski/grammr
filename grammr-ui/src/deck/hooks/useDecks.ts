@@ -29,5 +29,14 @@ export const useDecks = () => {
     return newDeck;
   };
 
-  return { decks, addDeck, isLoading, error };
+  const refreshDecks = async () => {
+    try {
+      const result = await request<Deck[]>('/api/v2/deck', { method: 'GET' });
+      if (result) setDecks(result);
+    } catch (err) {
+      // ignore refresh errors
+    }
+  };
+
+  return { decks, addDeck, isLoading, error, refreshDecks };
 };

@@ -18,6 +18,7 @@ import { PagedFlashcardResponse } from '@/flashcard/types/pagedFlashcardResponse
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import GenericFlashcardPreview from '@/flashcard/components/GenericFlashcardPreview';
 import ResetSyncButton from '@/deck/components/button/ResetSyncButton';
+import DumpButton from '@/deck/components/button/DumpButton';
 import {
   Select,
   SelectContent,
@@ -149,9 +150,8 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
             </div>
 
             <div className='flex space-x-2 mt-4 md:mt-0'>
-              <ExportButton deck={deck} />
+              <DumpButton deck={deck} />
               <SyncButton deck={deck} onSync={() => fetchFlashcards(currentPage, pageSize)} />
-              <ResetSyncButton deck={deck} />
 
               <Button
                 onClick={handleDeleteDeck}

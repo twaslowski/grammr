@@ -11,7 +11,7 @@ import { useDecks } from '@/deck/hooks/useDecks';
 import CreateDeckCard from '@/deck/components/CreateDeckCard';
 
 export default function DecksPage() {
-  const { decks, addDeck, isLoading, error } = useDecks();
+  const { decks, addDeck, isLoading, error, refreshDecks } = useDecks();
   const [showNewDeckDialog, setShowNewDeckDialog] = useState(false);
 
   if (isLoading) {
@@ -54,6 +54,7 @@ export default function DecksPage() {
           isOpen={showNewDeckDialog}
           onClose={() => setShowNewDeckDialog(false)}
           onCreate={addDeck}
+          onImport={refreshDecks}
         />
       </div>
     </main>

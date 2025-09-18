@@ -19,7 +19,7 @@ interface DeckSelectionProps {
 const NEW_DECK_CREATION = '_createNewDeck';
 
 const DeckSelection: React.FC<DeckSelectionProps> = ({ initialDeckId, onDeckSelect }) => {
-  const { decks, addDeck, isLoading } = useDecks();
+  const { decks, addDeck, isLoading, refreshDecks } = useDecks();
   const [selectedDeckId, setSelectedDeckId] = useState<string | undefined>(initialDeckId);
   const [showNewDeckDialog, setShowNewDeckDialog] = useState(false);
 
@@ -83,6 +83,7 @@ const DeckSelection: React.FC<DeckSelectionProps> = ({ initialDeckId, onDeckSele
         isOpen={showNewDeckDialog}
         onClose={() => setShowNewDeckDialog(false)}
         onCreate={createNewDeck}
+        onImport={refreshDecks}
       />
     </div>
   );
