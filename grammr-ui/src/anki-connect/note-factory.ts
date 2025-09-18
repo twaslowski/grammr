@@ -7,6 +7,7 @@ import {
   DeclensionNote,
   InflectionNote,
 } from '@/anki-connect/types/note';
+import {extractVerbForms} from "@/anki-connect/model/conjugation-utils";
 
 export class NoteFactory {
   static createFromFlashcard(flashcard: Flashcard, deckName: string): AnyNote {
@@ -46,19 +47,26 @@ export class NoteFactory {
     if (!flashcard.paradigm) {
       throw new Error('Conjugation note requires paradigm data');
     }
+    const paradigm = flashcard.paradigm;
+    const flattened = extractVerbForms(paradigm);
 
     return {
       id: flashcard.id,
+      deckName: deckName,
+      modelName: MODEL_NAMES.CONJUGATION,
       fields: {
         front: flashcard.question,
         back: flashcard.answer,
-        lemma: flashcard.paradigm.lemma,
         translation: flashcard.answer,
-        partOfSpeech: flashcard.paradigm.partOfSpeech,
-        inflections: JSON.stringify(flashcard.paradigm.inflections),
+        lemma: paradigm.lemma,
+        firstPersonSingular: flattened.firstPersonSingular,
+        secondPersonSingular: flattened.secondPersonSingular,
+        thirdPersonSingular: flattened.thirdPersonSingular,
+        firstPersonPlural: flattened.firstPersonPlural,
+        secondPersonPlural: flattened.secondPersonPlural,
+        thirdPersonPlural: flattened.thirdPersonPlural,
       },
-      modelName: MODEL_NAMES.CONJUGATION,
-      deckName: deckName,
+      tags: [`conjugation`, `${paradigm.languageCode}`],
     };
   }
 

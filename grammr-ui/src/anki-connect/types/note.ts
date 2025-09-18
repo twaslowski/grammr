@@ -29,6 +29,19 @@ interface InflectionFields {
   inflections: string;
 }
 
+interface ConjugationFields {
+  front: string;
+  back: string;
+  lemma: string;
+  translation: string;
+  firstPersonSingular: string;
+  secondPersonSingular: string;
+  thirdPersonSingular: string;
+  firstPersonPlural: string;
+  secondPersonPlural: string;
+  thirdPersonPlural: string;
+}
+
 export interface BasicNote extends Note {
   fields: BasicFields;
   modelName: BasicModelName;
@@ -40,7 +53,7 @@ export interface InflectionNote extends Note {
 }
 
 export interface ConjugationNote extends Note {
-  fields: InflectionFields;
+  fields: ConjugationFields;
   modelName: ConjugationModelName;
 }
 

@@ -13,7 +13,6 @@ export const CONJUGATION_MODEL_TEMPLATE = {
     'firstPersonPlural',
     'secondPersonPlural',
     'thirdPersonPlural',
-    'language',
     'notes',
   ],
   css: `
@@ -63,7 +62,7 @@ export const CONJUGATION_MODEL_TEMPLATE = {
     .notes {
       margin-top: 10px;
       padding: 8px;
-      background-color: #fbfbfb;
+      background-color: #ffffff;
       border-left: 4px solid #3498db;
       font-style: italic;
     }
