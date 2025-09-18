@@ -1,5 +1,31 @@
 # Changelog
 
+## [3.14.0](https://github.com/twaslowski/grammr/compare/v3.13.0...v3.14.0) (2025-09-18)
+
+
+### Features
+
+* **anki:** always use pagination ([3fb5e6c](https://github.com/twaslowski/grammr/commit/3fb5e6cc20b0c5ca650996a66de336ebcf2ff0e4))
+* **anki:** improve conjugation flashcards ([#57](https://github.com/twaslowski/grammr/issues/57)) ([59b685a](https://github.com/twaslowski/grammr/commit/59b685aa1acafbc99ee78f92296846840d4a7319))
+* **anki:** support pagination on deck page ([a534dfb](https://github.com/twaslowski/grammr/commit/a534dfbf01ff543597191d67f6c2c8f65c29026f))
+* center loading spinner on deck page ([984f754](https://github.com/twaslowski/grammr/commit/984f754bb018f758e0ec77a9cee5152c9e8210d8))
+* **ci:** revert changes to sidecar build workflow; create custom workflow for morphology service ([5623d02](https://github.com/twaslowski/grammr/commit/5623d021281d89db929c0f3d7e836e05575c78d5))
+* enable deck export and import ([d5d25ca](https://github.com/twaslowski/grammr/commit/d5d25ca457b2378d9771b3100e0e897bed880d69))
+* improve error handling ([b4c2084](https://github.com/twaslowski/grammr/commit/b4c2084a9000abe1638085d22d3c4faebf9a61cf))
+* make cyrillic transliteration page more responsive ([fbcc511](https://github.com/twaslowski/grammr/commit/fbcc5111e2f4c3dbecca21e0f26397c4e71f7b3e))
+* **ops:** create pre-built image with ru_core_news_lg model ([1dbfdfa](https://github.com/twaslowski/grammr/commit/1dbfdfaebe752f182d173cde1ba811c32e71c359))
+* streamline visuals, improve deck creation page ([6543309](https://github.com/twaslowski/grammr/commit/6543309e0433fde262dc706b0434f9c969499a03))
+
+
+### Bug Fixes
+
+* **ci:** dockerfile directory and context ([f13ebe9](https://github.com/twaslowski/grammr/commit/f13ebe98cbb77ccacfb7507143eddba85429071b))
+* **ci:** image repository ([204a9ee](https://github.com/twaslowski/grammr/commit/204a9eef37d005bdb23018e459d673c4ab84f970))
+* **ci:** working directory when deriving poetry version ([21923e0](https://github.com/twaslowski/grammr/commit/21923e07b18433703c4c35e71d0df751e360294f))
+* ResetSyncButton and SyncButton to use responseAs=void ([597fe73](https://github.com/twaslowski/grammr/commit/597fe73ee62261d1217a73a9bb3fc498b5362a60))
+* store deck description when provided ([6543309](https://github.com/twaslowski/grammr/commit/6543309e0433fde262dc706b0434f9c969499a03))
+* typescript formatting ([f548e93](https://github.com/twaslowski/grammr/commit/f548e938285de6fc8ece28691b663a6e5ba11fc4))
+
 ## [3.13.0](https://github.com/twaslowski/grammr/compare/v3.12.0...v3.13.0) (2025-09-14)
 
 
