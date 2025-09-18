@@ -90,8 +90,10 @@ public class Flashcard {
   public Flashcard updateWith(FlashcardCreationDto data) {
     this.front = data.question();
     this.back = data.answer();
-    // Leaving updating Paradigm and tokenPos for the future
-    this.status = Status.UPDATED;
+    // If status is already CREATED, leave it as is for initial sync
+    if (this.status != Status.CREATED) {
+      this.status = Status.UPDATED;
+    }
     return this;
   }
 

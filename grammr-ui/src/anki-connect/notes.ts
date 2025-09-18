@@ -1,4 +1,14 @@
-import { Note } from '@/deck/types/note';
+import { Note } from '@/anki-connect/types/note';
+
+interface AnkiConnectResult {
+  result: number[];
+  error: string | null;
+}
+
+interface SyncResult {
+  successfulSyncs: string[];
+  failedSyncs: string[];
+}
 
 /**
  * Finds a note by its front field in a specific deck.

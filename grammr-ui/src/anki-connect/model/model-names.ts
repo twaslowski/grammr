@@ -1,7 +1,7 @@
 // Model names for Anki cards
 export const MODEL_NAMES = {
-  BASIC: 'Basic',
-  INFLECTION: 'Inflection',
+  BASIC: 'GrammrBasic',
+  INFLECTION: 'GenericInflection',
   CONJUGATION: 'ConjugationTable',
   DECLENSION: 'DeclensionTable',
 } as const;
