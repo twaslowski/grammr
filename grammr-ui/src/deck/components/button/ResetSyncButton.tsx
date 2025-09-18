@@ -6,21 +6,34 @@ import { RotateCcw } from 'lucide-react';
 import React from 'react';
 import { toast } from '@/hooks/use-toast';
 
-export default function ResetSyncButton({ deck }: { deck: Deck }) {
-  const { isLoading, request, error } = useApi();
+export default function ResetSyncButton({
+  deck,
+  onSuccess,
+}: {
+  deck: Deck;
+  onSuccess: () => void;
+}) {
+  const { isLoading, request } = useApi();
 
   const resetSync = async (deckId: string): Promise<void> => {
-    await request<void>(`/api/v2/deck/${deckId}/reset-sync`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    });
-    if (error) {
+    try {
+      await request<void>(
+        `/api/v2/deck/${deckId}/reset-sync`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        },
+        'void',
+      );
+
+      onSuccess();
+    } catch (err: any) {
       toast({
         title: 'Failed to reset sync status',
-        description: error.message,
+        description: err?.message ?? 'An unexpected error occurred',
         variant: 'destructive',
       });
     }
@@ -43,7 +56,7 @@ export default function ResetSyncButton({ deck }: { deck: Deck }) {
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Resets the sync status of all your flashcards to entirely recreate the deck in Anki</p>
+          <p>Resets the sync status of all your flashcards. Consult the help page for details.</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

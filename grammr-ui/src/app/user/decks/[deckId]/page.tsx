@@ -4,7 +4,6 @@ import { ArrowLeft, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { use, useCallback, useEffect, useState } from 'react';
 
-import ExportButton from '@/deck/components/button/ExportButton';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import NotFound from '@/components/common/NotFound';
 import { FlashcardList } from '@/flashcard/components/FlashcardList';
@@ -152,6 +151,10 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
             <div className='flex space-x-2 mt-4 md:mt-0'>
               <DumpButton deck={deck} />
               <SyncButton deck={deck} onSync={() => fetchFlashcards(currentPage, pageSize)} />
+              <ResetSyncButton
+                deck={deck}
+                onSuccess={() => fetchFlashcards(currentPage, pageSize)}
+              />
 
               <Button
                 onClick={handleDeleteDeck}

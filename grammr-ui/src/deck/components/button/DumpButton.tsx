@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import Deck from '@/deck/types/deck';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const DumpButton = ({ deck }: { deck: Deck }) => {
   const [isDumping, setIsDumping] = useState(false);
@@ -62,20 +63,29 @@ const DumpButton = ({ deck }: { deck: Deck }) => {
   };
 
   return (
-    <Button
-      onClick={handleDump}
-      disabled={isDumping || !deck?.id}
-      className='flex items-center px-3 py-2 hover:bg-gray-50 bg-gray-100 text-gray-800'
-      variant='outline'
-    >
-      {isDumping ? (
-        <LoadingSpinner size={12} />
-      ) : (
-        <>
-          <FileText size={16} /> Dump
-        </>
-      )}
-    </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            onClick={handleDump}
+            disabled={isDumping || !deck?.id}
+            className='flex items-center px-3 py-2 hover:bg-gray-50 bg-gray-100 text-gray-800'
+            variant='outline'
+          >
+            {isDumping ? (
+              <LoadingSpinner size={12} />
+            ) : (
+              <>
+                <FileText size={16} /> Dump
+              </>
+            )}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Dump your deck data to a JSON file for backup or transfer.</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 

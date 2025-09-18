@@ -1,5 +1,3 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
 import React from 'react';
 import Deck from '@/deck/types/deck';
@@ -16,8 +14,9 @@ import {
 } from '@/deck/anki-connect';
 import { Flashcard } from '@/flashcard/types/flashcard';
 import { fromFlashcard, Note } from '@/deck/types/note';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-export default function SyncButton({ deck }: { deck: Deck; onSync: () => void }) {
+export default function SyncButton({ deck, onSync }: { deck: Deck; onSync: () => void }) {
   const { isLoading, request } = useApi();
 
   const triggerSync = async (deckId: string): Promise<Flashcard[]> => {
@@ -35,17 +34,22 @@ export default function SyncButton({ deck }: { deck: Deck; onSync: () => void })
     successfulSyncs: string[],
     failedSyncs: string[],
   ): Promise<void> => {
-    return await request<void>(`/api/v2/deck/${deckId}/sync/confirm`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    await request<void>(
+      `/api/v2/deck/${deckId}/sync/confirm`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          successfulSyncs,
+          failedSyncs,
+        }),
+        credentials: 'include',
       },
-      body: JSON.stringify({
-        successfulSyncs,
-        failedSyncs,
-      }),
-      credentials: 'include',
-    });
+      'void',
+    );
+    onSync();
   };
 
   const syncFlashcards = async (deck: Deck) => {
@@ -114,16 +118,25 @@ export default function SyncButton({ deck }: { deck: Deck; onSync: () => void })
   };
 
   return (
-    <Button
-      onClick={() => syncFlashcards(deck)}
-      disabled={isLoading || !deck?.id}
-      className='flex items-center px-3 py-2 rounded hover:bg-blue-50 bg-blue-100 text-blue-800'
-      variant='outline'
-    >
-      <span className={isLoading ? 'animate-spin' : ''}>
-        <SyncIcon className='text-blue-800' />
-      </span>
-      {isLoading ? 'Syncing ...' : 'Sync'}
-    </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            onClick={() => syncFlashcards(deck)}
+            disabled={isLoading || !deck?.id}
+            className='flex items-center px-3 py-2 rounded hover:bg-blue-50 bg-blue-100 text-blue-800'
+            variant='outline'
+          >
+            <span className={isLoading ? 'animate-spin' : ''}>
+              <SyncIcon className='text-blue-800' />
+            </span>
+            {isLoading ? 'Syncing ...' : 'Sync'}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Sync your deck to Anki via AnkiConnect</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
