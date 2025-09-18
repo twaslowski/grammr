@@ -35,7 +35,6 @@ export function extractVerbForms(data: Paradigm) {
   };
 }
 
-
 export function getFormFromInflections(
   inflections: Inflection[],
   features: FeatureIdentifier[],

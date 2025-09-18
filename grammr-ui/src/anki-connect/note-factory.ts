@@ -7,7 +7,7 @@ import {
   DeclensionNote,
   InflectionNote,
 } from '@/anki-connect/types/note';
-import {extractVerbForms} from "@/anki-connect/model/conjugation-utils";
+import { extractVerbForms } from '@/anki-connect/model/conjugation-utils';
 
 export class NoteFactory {
   static createFromFlashcard(flashcard: Flashcard, deckName: string): AnyNote {
