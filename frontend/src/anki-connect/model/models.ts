@@ -1,7 +1,7 @@
 import { MODEL_NAMES } from './model-names';
-import { CONJUGATION_MODEL_TEMPLATE } from './conjugation-template';
-import { INFLECTION_MODEL_TEMPLATE } from '@/anki-connect/model/inflection-template';
-import { BASIC_MODEL_TEMPLATE } from '@/anki-connect/model/basic-template';
+import { CONJUGATION_MODEL_TEMPLATE } from './template/conjugation-template';
+import { INFLECTION_MODEL_TEMPLATE } from '@/anki-connect/model/template/inflection-template';
+import { BASIC_MODEL_TEMPLATE } from '@/anki-connect/model/template/basic-template';
 
 export const precheckModels = async () => {
   const response = await fetch('http://localhost:8765', {

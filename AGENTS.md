@@ -12,7 +12,7 @@ and several Python-based microservices.
 ### Core Components
 
 - **Backend**: Java 21 Spring Boot application (`grammr-core`)
-- **Frontend**: Next.js 15 with TypeScript, Tailwind CSS, and Radix UI (`grammr-ui/`)
+- **Frontend**: Next.js 15 with TypeScript, Tailwind CSS, and Radix UI (`frontend/`)
 - **Database**: PostgreSQL with Flyway migrations
 - **Authentication**: Clerk.js for user authentication
 - **Microservices**: Python-based services for specialized language processing
@@ -32,7 +32,7 @@ and several Python-based microservices.
 │   └── main/resources/           # Configuration and migration files
 │       ├── db/migration/         # Flyway database migrations
 │       └── application.yml       # Main configuration
-├── grammr-ui/                    # Next.js frontend application
+├── frontend/                    # Next.js frontend application
 │   └── src/                      # Frontend source code
 │       ├── app/                  # Next.js app router pages
 │       ├── components/           # Reusable React components

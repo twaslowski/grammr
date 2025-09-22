@@ -15,7 +15,7 @@ includes the ECR repository for all application images.
   - Handles IAM roles, permissions, and any supporting infrastructure required by the application services.
 
 ### 3. `vercel/`
-**Purpose:** Manages deployment and configuration of the Vercel project found at `grammr-ui`:
+**Purpose:** Manages deployment and configuration of the Vercel project found at `frontend/`:
   - Configures the Vercel project itself, along with its DNS records
   - Configures environment variables for the Vercel project
 

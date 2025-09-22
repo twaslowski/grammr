@@ -1,4 +1,4 @@
-import { getFormFromInflections, FeatureIdentifier } from '../model/conjugation-utils';
+import { getFormFromInflections, FeatureIdentifier } from '../note/conjugation-utils';
 import { Feature, FeatureType, Person, Number as Num } from '@/types/feature';
 import { Inflection } from '@/inflection/types/inflections';
 

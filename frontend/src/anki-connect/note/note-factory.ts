@@ -1,13 +1,7 @@
 import { Flashcard } from '@/flashcard/types/flashcard';
 import { MODEL_NAMES } from '@/anki-connect/model/model-names';
-import {
-  AnyNote,
-  BasicNote,
-  ConjugationNote,
-  DeclensionNote,
-  InflectionNote,
-} from '@/anki-connect/types/note';
-import { extractVerbForms } from '@/anki-connect/model/conjugation-utils';
+import { AnyNote, BasicNote, ConjugationNote, DeclensionNote, InflectionNote } from './type';
+import { extractVerbForms } from './conjugation-utils';
 
 export class NoteFactory {
   static createFromFlashcard(flashcard: Flashcard, deckName: string): AnyNote {
@@ -114,7 +108,7 @@ export class NoteFactory {
     if (pos === 'verb' || pos === 'aux') {
       return 'conjugation';
     } else if (pos === 'noun' || pos === 'adj') {
-      return 'general';
+      return 'declension';
     } else {
       return 'general';
     }

@@ -5,7 +5,7 @@ import {
   ConjugationModelName,
   DeclensionModelName,
 } from '../model/model-names';
-import { NoteFactory } from '@/anki-connect/note-factory';
+import { NoteFactory } from './note-factory';
 
 export interface Note {
   id: string;

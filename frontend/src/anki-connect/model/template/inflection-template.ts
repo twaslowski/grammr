@@ -1,4 +1,4 @@
-import { MODEL_NAMES } from '@/anki-connect/model/model-names';
+import { MODEL_NAMES } from '../model-names';
 
 export const INFLECTION_MODEL_TEMPLATE = {
   modelName: MODEL_NAMES.INFLECTION,

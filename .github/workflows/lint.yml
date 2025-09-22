@@ -5,7 +5,7 @@ on:
       - main
       - develop
     paths:
-      - 'grammr-ui/**'
+      - 'frontend/**'
   pull_request:
     branches-ignore:
       - 'release-please-**'
@@ -33,24 +33,24 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
-          cache-dependency-path: grammr-ui/pnpm-lock.yaml
+          cache-dependency-path: frontend/pnpm-lock.yaml
 
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
-        working-directory: grammr-ui
+        working-directory: frontend
 
       - name: 🔬 Lint
         run: pnpm run lint:strict
-        working-directory: grammr-ui
+        working-directory: frontend
 
       - name: 🔎 Type check
         run: pnpm run typecheck
-        working-directory: grammr-ui
+        working-directory: frontend
 
       - name: 💅 Prettier check
         run: pnpm run format:check
-        working-directory: grammr-ui
+        working-directory: frontend
 
       - name: 🃏 Run jest
         run: pnpm run test
-        working-directory: grammr-ui
+        working-directory: frontend

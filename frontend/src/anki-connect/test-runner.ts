@@ -7,8 +7,8 @@
 import { precheckAnkiConnect } from './util';
 import { precheckModels } from './model/models';
 import { createDeck } from './deck';
-import { createNotes, findNoteByFront, updateNote, deleteNotes } from './notes';
-import { Note } from '@/anki-connect/types/note';
+import { createNotes, findNoteByFront, updateNote, deleteNotes } from './note/notes';
+import { Note } from './note/type';
 
 // Test data
 const TEST_DECK_NAME = 'test-deck';

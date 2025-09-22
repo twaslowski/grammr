@@ -1,4 +1,4 @@
-import { MODEL_NAMES } from './model-names';
+import { MODEL_NAMES } from '../model-names';
 
 // Model template definitions with dumb fields (no JS)
 export const CONJUGATION_MODEL_TEMPLATE = {

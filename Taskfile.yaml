@@ -43,13 +43,13 @@ tasks:
 
   start-frontend:
     desc: Run the Next.js frontend
-    dir: grammr-ui
+    dir: frontend
     cmds:
       - pnpm run dev
 
   lint:
     desc: Run linter
-    dir: grammr-ui
+    dir: frontend
     cmds:
       - pnpm lint:fix
       - pnpm lint:strict

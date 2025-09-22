@@ -1,4 +1,4 @@
-import { Note } from '@/anki-connect/types/note';
+import { Note } from './type';
 
 interface AnkiConnectResult {
   result: number[];

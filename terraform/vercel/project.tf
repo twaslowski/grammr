@@ -4,7 +4,7 @@ resource "vercel_project" "project" {
   public_source = false
   ignore_command = "bash deploy.sh"
 
-  root_directory = "grammr-ui"
+  root_directory = "frontend"
 
   git_repository = {
     type = "github"

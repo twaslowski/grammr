@@ -1,4 +1,4 @@
-# grammr-ui
+# grammr frontend
 
 This project provides the Next.js-based frontend for [Grammr](https://github.com/twaslowski/grammr),
 a flashcard-based language learning toolkit.
