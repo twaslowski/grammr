@@ -78,7 +78,7 @@ or may not have equivalents in different languages)
 
 With the core being situated in the `src` folder, all other components listed here are Python-based
 microservices that can be run independently to support different languages and functionalities.
-They are maintained in the `sidecars` directory.
+They are maintained in the `microservice` directory.
 
 ### core
 

@@ -1,14 +1,13 @@
 # Serverless Morphology
 
 The Serverless Morphology service is a AWS Lambda Function behind an API Gateway that provides a
-REST API for morphological analysis of text. It re-uses the code of the `morphology` sidecar,
+REST API for morphological analysis of text. It re-uses the code of the `morphology` image,
 with a few key differences:
 
-| Feature     | Pod Sidecar                       | Serverless       |
+| Feature     | WebServer                         | Serverless       |
 |-------------|-----------------------------------|------------------|
 | Entrypoint  | FastAPI Server                    | Lambda Handler   |
 | spaCy Model | Downloaded on application startup | Built into image |
-
 
 ### Differences
 

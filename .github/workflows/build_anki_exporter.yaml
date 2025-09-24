@@ -1,20 +1,20 @@
-name: Build anki-exporter sidecar
+name: Build anki-exporter image
 on:
   workflow_dispatch:
   push:
     branches:
       - main
     paths:
-      - 'sidecars/anki-exporter/**'
-      - '.github/workflows/build_sidecar.yml'
+      - 'microservice/anki-exporter/**'
+      - '.github/workflows/build_service.yml'
       - '.github/workflows/build_anki_exporter.yaml'
 
 jobs:
-  build-anki-exporter-sidecar:
-    uses: ./.github/workflows/build_sidecar.yml
+  build:
+    uses: ./.github/workflows/build_service.yml
     secrets:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     with:
-      directory: "./sidecars/anki-exporter"
+      directory: "./microservice/anki-exporter"
       image_name: "grammrapp/anki-exporter"

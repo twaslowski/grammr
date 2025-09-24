@@ -1,5 +1,4 @@
-# Note: This is just a utility workflow to build sidecar images; it is not meant to be run directly.
-name: Build sidecar image
+name: Build microservice image
 
 on:
   workflow_call:
@@ -72,7 +71,7 @@ jobs:
             echo "exists=false" >> $GITHUB_OUTPUT
           fi
 
-  build_sidecar:
+  build:
     needs: [ prepare, test ]
     runs-on: ubuntu-latest
     if: ${{ needs.prepare.outputs.exists != 'true' }}

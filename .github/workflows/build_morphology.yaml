@@ -1,14 +1,14 @@
-name: Build morphology sidecar
+name: Build morphology image
 
 on:
   push:
     branches: [ main ]
     paths:
-      - 'sidecars/morphology/**'
+      - 'microservice/morphology/**'
       - '.github/workflows/build_morphology.yaml'
 
 jobs:
-  build_sidecar:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,7 +25,7 @@ jobs:
 
       - name: Derive poetry version
         id: version
-        working-directory: ./sidecars/morphology
+        working-directory: ./microservice/morphology
         run: |
           echo "version=$(poetry version -s)" >> $GITHUB_OUTPUT
 
@@ -38,8 +38,8 @@ jobs:
       - name: Build and push generic image
         uses: docker/build-push-action@v5
         with:
-          context: sidecars/morphology
-          file: sidecars/morphology/docker/Dockerfile
+          context: microservice/morphology
+          file: microservice/morphology/docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: grammrapp/morphology:${{ steps.version.outputs.version }}
@@ -50,8 +50,8 @@ jobs:
       - name: Build and push prebuilt image
         uses: docker/build-push-action@v5
         with:
-          context: sidecars/morphology
-          file: sidecars/morphology/docker/Dockerfile
+          context: microservice/morphology
+          file: microservice/morphology/docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: grammrapp/morphology:${{ steps.version.outputs.version }}-prebuilt_ru_core_news_lg

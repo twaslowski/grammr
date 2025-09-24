@@ -40,7 +40,7 @@ and several Python-based microservices.
 │       ├── hooks/                # Custom React hooks
 │       ├── lib/                  # Utility functions
 │       └── types/                # TypeScript type definitions
-├── sidecars/                     # Python microservices
+├── microservice/                     # Python microservices
 │   ├── anki-exporter/            # Anki flashcard export service
 │   ├── morphology/               # Grammatical analysis service
 │   ├── inflection-ru/            # Russian inflection service

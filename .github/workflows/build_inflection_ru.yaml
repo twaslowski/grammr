@@ -1,19 +1,19 @@
-name: Build russian inflections sidecar
+name: Build russian inflections image
 
 on:
   push:
     branches: [ main ]
     paths:
-      - 'sidecars/inflection-ru/**'
-      - '.github/workflows/build_sidecar.yml'
+      - 'microservice/inflection-ru/**'
+      - '.github/workflows/build_service.yml'
       - '.github/workflows/build_inflection_ru.yaml'
 
 jobs:
-  build-ru-inflection-sidecar:
-    uses: ./.github/workflows/build_sidecar.yml
+  build:
+    uses: ./.github/workflows/build_service.yml
     secrets:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     with:
-      directory: "./sidecars/inflection-ru"
+      directory: "./microservice/inflection-ru"
       image_name: "grammrapp/inflections-ru"

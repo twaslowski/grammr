@@ -2,7 +2,7 @@ services:
   analysis-ru:
     image: tobiaswaslowski/grammr-morphology:0.5.0
 #    build:
-#      context: ../sidecars/morphology
+#      context: ../microservice/morphology
 #      dockerfile: docker/Dockerfile
     healthcheck:
       test: [ "CMD", "curl", "--fail", "http://localhost:8000/health" ]
@@ -17,7 +17,7 @@ services:
   analysis-de:
     image: tobiaswaslowski/grammr-morphology:0.5.0
 #    build:
-#      context: ../sidecars/morphology
+#      context: ../microservice/morphology
 #      dockerfile: docker/Dockerfile
     healthcheck:
       test: [ "CMD", "curl", "--fail", "http://localhost:8000/health" ]
@@ -32,7 +32,7 @@ services:
   inflection-ru:
     image: tobiaswaslowski/grammr-inflection-ru:0.2.1
 #    build:
-#      context: ../sidecars/inflection-ru
+#      context: ../microservice/inflection-ru
 #      dockerfile: docker/Dockerfile
     healthcheck:
       test: [ "CMD", "curl", "--fail", "http://localhost:8000/health" ]
@@ -45,7 +45,7 @@ services:
   anki:
     image: tobiaswaslowski/grammr-anki-exporter:0.3.1
 #    build:
-#      context: ../sidecars/anki-exporter
+#      context: ../microservice/anki-exporter
 #      dockerfile: docker/Dockerfile
     healthcheck:
       test: [ "CMD", "curl", "--fail", "http://localhost:8000/health" ]

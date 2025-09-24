@@ -1,19 +1,19 @@
-name: Build multi-languge inflections sidecar
+name: Build multi-languge inflections image
 
 on:
   push:
     branches: [ main ]
     paths:
-      - 'sidecars/multi-inflection/**'
-      - '.github/workflows/build_sidecar.yml'
+      - 'microservice/multi-inflection/**'
+      - '.github/workflows/build_service.yml'
       - '.github/workflows/build_multi_inflection.yaml'
 
 jobs:
-  build-multi-inflection-sidecar:
-    uses: ./.github/workflows/build_sidecar.yml
+  build:
+    uses: ./.github/workflows/build_service.yml
     secrets:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     with:
-      directory: "./sidecars/multi-inflection"
+      directory: "./microservice/multi-inflection"
       image_name: "grammrapp/inflections-romanic"
