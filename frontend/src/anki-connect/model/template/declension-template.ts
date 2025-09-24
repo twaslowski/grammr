@@ -15,7 +15,6 @@ export const DECLENSION_MODEL_TEMPLATE = {
     'genitivePlural',
     'dativePlural',
     'accusativePlural',
-    'declensionTableHtml', // optional raw HTML table for flexible declensions
     'notes',
   ],
   css: `
@@ -44,20 +43,20 @@ export const DECLENSION_MODEL_TEMPLATE = {
       margin-bottom: 4px;
     }
 
-    .declension-table {
+    .table {
       border-collapse: collapse;
       width: 100%;
       margin: 12px 0;
     }
 
-    .declension-table th,
-    .declension-table td {
+    .table th,
+    .table td {
       border: 1px solid #ddd;
       padding: 8px 6px;
       text-align: center;
     }
 
-    .declension-table th {
+    .table th {
       background-color: #f6f8fa;
       font-weight: 700;
     }
@@ -72,7 +71,7 @@ export const DECLENSION_MODEL_TEMPLATE = {
 
     @media (max-width: 480px) {
       .lemma { font-size: 1.2em; }
-      .declension-table th, .declension-table td { padding: 6px 4px; font-size: 0.9em; }
+      .table th, .table td { padding: 6px 4px; font-size: 0.9em; }
     }
   `,
   isCloze: false,
@@ -80,7 +79,7 @@ export const DECLENSION_MODEL_TEMPLATE = {
     {
       Name: 'Declension Front',
       Front: `
-        <div class="declension-card">
+        <div class="card">
           <div class="verb-header">
             <div class="lemma">{{front}}</div>
           </div>
@@ -93,12 +92,7 @@ export const DECLENSION_MODEL_TEMPLATE = {
             <div class="translation">{{back}}</div>
           </div>
 
-          {{#declensionTableHtml}}
-            {{{declensionTableHtml}}}
-          {{/declensionTableHtml}}
-
-          {{^declensionTableHtml}}
-          <table class="declension-table">
+          <table class="table">
             <tr>
               <th>Case</th>
               <th>Singular</th>
@@ -125,7 +119,6 @@ export const DECLENSION_MODEL_TEMPLATE = {
               <td>{{accusativePlural}}</td>
             </tr>
           </table>
-          {{/declensionTableHtml}}
 
           {{#notes}}
           <div class="notes"><strong>Notes:</strong> {{notes}}</div>

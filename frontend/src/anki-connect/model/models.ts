@@ -80,5 +80,5 @@ function basicModelExists(models: string[]): boolean {
 }
 
 function inflectionsModelExists(models: string[]): boolean {
-  return models.includes(MODEL_NAMES.INFLECTION);
+  return models.includes(MODEL_NAMES.INFLECTION_GENERIC);
 }

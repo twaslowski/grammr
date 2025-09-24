@@ -95,7 +95,7 @@ export class NoteFactory {
         partOfSpeech: flashcard.paradigm.partOfSpeech,
         inflections: JSON.stringify(flashcard.paradigm.inflections),
       },
-      modelName: MODEL_NAMES.INFLECTION,
+      modelName: MODEL_NAMES.INFLECTION_GENERIC,
       deckName: deckName,
     };
   }

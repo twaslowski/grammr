@@ -1,63 +1,97 @@
 import { MODEL_NAMES } from '../model-names';
 
+// Model template definitions with dumb fields (no JS)
 export const INFLECTION_MODEL_TEMPLATE = {
-  modelName: MODEL_NAMES.INFLECTION,
-  inOrderFields: ['front', 'back', 'lemma', 'translation', 'partOfSpeech', 'inflections'],
+  modelName: MODEL_NAMES.INFLECTION_GENERIC,
+  inOrderFields: [
+    'front',
+    'back', // translation
+    'lemma',
+    'table',
+    'notes',
+  ],
   css: `
-    table {
+    .card {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .lemma {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 4px;
+    }
+
+    .translation {
+      font-size: 1.05em;
+      color: #7f8c8d;
+      margin-bottom: 4px;
+    }
+
+    .table {
       border-collapse: collapse;
       width: 100%;
-      max-width: 400px;
-      margin-top: 10px;
+      margin: 12px 0;
     }
-    th, td { border: 1px solid #aaa; padding: 4px 6px; text-align: center; font-size: 0.9em; }
-    th { background-color: #f0f0f0; }
-    .lemma { font-size: 1.5em; font-weight: bold; margin-bottom: 10px; }
-    .meta { margin-bottom: 10px; font-style: italic; }
-    @media (max-width: 480px) { table { font-size: 0.8em; } th, td { padding: 3px; } }
+
+    .table th,
+    .table td {
+      border: 1px solid #ddd;
+      padding: 8px 6px;
+      text-align: center;
+    }
+
+    .table th {
+      background-color: #f6f8fa;
+      font-weight: 700;
+    }
+
+    .notes {
+      margin-top: 10px;
+      padding: 8px;
+      background-color: #ffffff;
+      border-left: 4px solid #3498db;
+      font-style: italic;
+    }
+
+    @media (max-width: 480px) {
+      .lemma { font-size: 1.2em; }
+      .table th, .table td { padding: 6px 4px; font-size: 0.9em; }
+    }
   `,
   isCloze: false,
   cardTemplates: [
     {
-      Name: 'Inflection Table Card',
-      Front: '<div class="lemma">{{front}}</div>',
+      Name: 'Declension Front',
+      Front: `
+        <div class="card">
+          <div class="header">
+            <div class="lemma">{{front}}</div>
+          </div>
+        </div>
+      `,
       Back: `
-        <div class="lemma">{{front}}</div>
-        <div class="meta">{{partOfSpeech}}</div>
-        <div><strong>Translation:</strong> {{back}}</div>
-        <div id="table-container"></div>
-        <script>
-          const dataField = '{{inflections}}'.trim();
-          try {
-            const data = JSON.parse(dataField);
-            const numbers = Object.keys(data);
-            const cases = Object.keys(data[numbers[0]] || {});
-            let table = '<table>';
-            table += '<tr><th>Case</th>';
-            for (let i = 0; i < numbers.length; i++) {
-              const num = numbers[i];
-              table += '<th>' + num + '</th>';
-            }
-            table += '</tr>';
-            for (let ci = 0; ci < cases.length; ci++) {
-              const caseName = cases[ci];
-              table += '<tr><th>' + caseName + '</th>';
-              for (let ni = 0; ni < numbers.length; ni++) {
-                const num = numbers[ni];
-                table += '<td>' + (data[num] && data[num][caseName] ? data[num][caseName] : '') + '</td>';
-              }
-              table += '</tr>';
-            }
-            table += '</table>';
-            const container = document.getElementById('table-container');
-            if (container) { container.innerHTML = table; }
-          } catch (e) {
-            const container = document.getElementById('table-container');
-            if (container) { container.innerHTML = '<em>Invalid inflection data</em>'; }
-          }
-        </script>
-        <hr>
-        `,
+        <div class="card">
+          <div class="header">
+            <div class="lemma">{{lemma}}</div>
+            <div class="translation">{{back}}</div>
+          </div>
+          
+          {{table}}
+
+          {{#notes}}
+          <div class="notes"><strong>Notes:</strong> {{notes}}</div>
+          {{/notes}}
+        </div>
+      `,
     },
   ],
 };

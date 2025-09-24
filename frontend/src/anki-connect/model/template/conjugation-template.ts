@@ -13,10 +13,13 @@ export const CONJUGATION_MODEL_TEMPLATE = {
     'firstPersonPlural',
     'secondPersonPlural',
     'thirdPersonPlural',
+    'tense',
+    'mood', // e.g., Indicative, Subjunctive
+    'voice', // e.g., Active, Passive
     'notes',
   ],
   css: `
-    .conjugation-card {
+    .card {
       font-family: Arial, sans-serif;
       max-width: 600px;
       margin: 0 auto;
@@ -41,20 +44,20 @@ export const CONJUGATION_MODEL_TEMPLATE = {
       margin-bottom: 4px;
     }
 
-    .conjugation-table {
+    .table {
       border-collapse: collapse;
       width: 100%;
       margin: 12px 0;
     }
 
-    .conjugation-table th,
-    .conjugation-table td {
+    .table th,
+    .table td {
       border: 1px solid #ddd;
       padding: 8px 6px;
       text-align: center;
     }
 
-    .conjugation-table th {
+    .table th {
       background-color: #f6f8fa;
       font-weight: 700;
     }
@@ -69,7 +72,7 @@ export const CONJUGATION_MODEL_TEMPLATE = {
 
     @media (max-width: 480px) {
       .lemma { font-size: 1.2em; }
-      .conjugation-table th, .conjugation-table td { padding: 6px 4px; font-size: 0.9em; }
+      .table th, .table td { padding: 6px 4px; font-size: 0.9em; }
     }
   `,
   isCloze: false,
@@ -77,20 +80,20 @@ export const CONJUGATION_MODEL_TEMPLATE = {
     {
       Name: 'Conjugation Front',
       Front: `
-        <div class="conjugation-card">
+        <div class="card">
           <div class="verb-header">
             <div class="lemma">{{front}}</div>
           </div>
         </div>
       `,
       Back: `
-        <div class="conjugation-card">
+        <div class="card">
           <div class="verb-header">
             <div class="lemma">{{lemma}}</div>
             <div class="translation">{{back}}</div>
           </div>
 
-          <table class="conjugation-table">
+          <table class="table">
             <tr>
               <th>Person</th>
               <th>Singular</th>
