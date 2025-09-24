@@ -95,7 +95,7 @@ jobs:
             latest=true
           tags: |
             type=semver,pattern={{version}}
-            type=raw,value=dev-{{date 'YYYYMMDDHHmmss' tz='UTC'}}-{{sha}}
+            type=raw,value={{branch}}-{{date 'YYYYMMDDHHmmss' tz='UTC'}}-{{sha}}
             type=sha
 
       - name: Build and push
