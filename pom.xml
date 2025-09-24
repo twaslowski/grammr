@@ -18,11 +18,11 @@
     </parent>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>25</java.version>
 
-        <lombok.version>1.18.34</lombok.version>
+        <lombok.version>1.18.40</lombok.version>
         <version.surefire>3.5.0</version.surefire>
-        <jacoco.version>0.8.12</jacoco.version>
+        <jacoco.version>0.8.13</jacoco.version>
         <jackson.version>2.17.2</jackson.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -275,6 +275,13 @@
                     <release>${java.version}</release>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.42</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
 

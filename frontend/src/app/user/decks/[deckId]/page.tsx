@@ -6,6 +6,7 @@ import React, { use, useCallback, useEffect, useState } from 'react';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import NotFound from '@/components/common/NotFound';
+import EditableText from '@/components/common/EditableText';
 import { FlashcardList } from '@/flashcard/components/FlashcardList';
 import Deck from '@/deck/types/deck';
 import SyncButton from '@/deck/components/button/SyncButton';
@@ -95,6 +96,31 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
     setCurrentPage(0);
     void fetchFlashcards(0, size);
   };
+  const handleUpdateDeck = async (field: 'name' | 'description', value: string) => {
+    try {
+      const updatedDeck = await request<Deck>(`/api/v2/deck/${deckId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ [field]: value }),
+      });
+
+      setDeck(updatedDeck);
+
+      toast({
+        title: 'Success',
+        description: `Deck ${field} updated successfully.`,
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: `Failed to update deck ${field}. Please try again.`,
+        variant: 'destructive',
+      });
+      throw error;
+    }
+  };
 
   useEffect(() => {
     const fetchDeck = async () => {
@@ -144,8 +170,19 @@ export default function DeckPage(props: { params: Promise<{ deckId: string }> })
         <div className='bg-white rounded-lg shadow-md p-6 mb-8'>
           <div className='flex flex-col md:flex-row md:justify-between md:items-center mb-4'>
             <div>
-              <h1 className='text-2xl font-bold mb-2'>{deck.name}</h1>
-              <p className='text-gray-600 mb-4'>{deck.description}</p>
+              <EditableText
+                value={deck.name}
+                onSaveAction={(name) => handleUpdateDeck('name', name)}
+                placeholder='Deck Name'
+                className='text-2xl font-bold mb-2'
+              />
+              <EditableText
+                value={deck.description}
+                onSaveAction={(description) => handleUpdateDeck('description', description)}
+                placeholder='Deck Description'
+                className='text-gray-600'
+                multiline={true}
+              />
             </div>
 
             <div className='flex space-x-2 mt-4 md:mt-0'>

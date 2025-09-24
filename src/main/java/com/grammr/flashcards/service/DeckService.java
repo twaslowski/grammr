@@ -48,6 +48,18 @@ public class DeckService {
     deckRepository.delete(foundDeck);
   }
 
+  public Deck updateDeck(Deck deck, String name, String description) {
+    if (name != null) {
+      deck.setName(name);
+    }
+
+    if (description != null) {
+      deck.setDescription(description);
+    }
+
+    return deckRepository.save(deck);
+  }
+
   public byte[] exportDeck(Deck deck, ExportDataType exportDataType) {
     var flashcards = flashcardRepository.findByDeckId(deck.getId());
     return switch (exportDataType) {

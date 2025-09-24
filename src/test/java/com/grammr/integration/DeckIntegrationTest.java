@@ -13,6 +13,7 @@ import com.grammr.domain.entity.Flashcard.Status;
 import com.grammr.domain.entity.FlashcardSpec;
 import com.grammr.domain.entity.UserSpec;
 import java.util.UUID;
+import com.grammr.flashcards.controller.v2.dto.DeckUpdateDto;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -114,6 +115,60 @@ class DeckIntegrationTest extends IntegrationTestBase {
 
     assertThat(deckRepository.findAll()).isEmpty();
     assertThat(flashcardRepository.findAll()).isEmpty();
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldUpdateDeckProperties() {
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).name("Original Name").description("Original Description").build());
+    var authentication = createUserAuthentication(user);
+    var updateDto = new DeckUpdateDto("Updated Name", "Updated Description");
+
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v2/deck/" + deck.getDeckId())
+            .with(authentication(authentication))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(updateDto)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value(deck.getDeckId().toString()))
+        .andExpect(jsonPath("$.name").value("Updated Name"))
+        .andExpect(jsonPath("$.description").value("Updated Description"))
+        .andReturn();
+
+    // Verify the deck was actually updated in the database
+    var updatedDeck = deckRepository.findById(deck.getId()).orElseThrow();
+    assertThat(updatedDeck.getName()).isEqualTo("Updated Name");
+    assertThat(updatedDeck.getDescription()).isEqualTo("Updated Description");
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldPartiallyUpdateDeck() {
+    var user = userRepository.save(UserSpec.validWithoutId().build());
+    var deck = deckRepository.save(DeckSpec.withUser(user).name("Original Name").description("Original Description").build());
+    var authentication = createUserAuthentication(user);
+
+    // Update only the name
+    var nameUpdateDto = new DeckUpdateDto("Updated Name", null);
+
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v2/deck/" + deck.getDeckId())
+            .with(authentication(authentication))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(nameUpdateDto)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.name").value("Updated Name"))
+        .andExpect(jsonPath("$.description").value("Original Description"));
+
+    // Update only the description
+    var descriptionUpdateDto = new DeckUpdateDto(null, "Updated Description");
+
+    mockMvc.perform(MockMvcRequestBuilders.put("/api/v2/deck/" + deck.getDeckId())
+            .with(authentication(authentication))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(descriptionUpdateDto)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.name").value("Updated Name"))
+        .andExpect(jsonPath("$.description").value("Updated Description"));
   }
 
   @Test

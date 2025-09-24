@@ -9,6 +9,7 @@ import com.grammr.domain.enums.ExportDataType;
 import com.grammr.flashcards.controller.v2.dto.DeckCreationDto;
 import com.grammr.flashcards.controller.v2.dto.DeckDto;
 import com.grammr.flashcards.controller.v2.dto.DeckDumpDto;
+import com.grammr.flashcards.controller.v2.dto.DeckUpdateDto;
 import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
 import com.grammr.flashcards.controller.v2.dto.SyncResultDto;
 import com.grammr.flashcards.service.DeckService;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -184,6 +186,24 @@ public class DeckController {
   public ResponseEntity<Void> deleteDeck(@AuthenticationPrincipal User user, @PathVariable UUID deckId) {
     deckService.deleteDeck(deckId, user);
     return ResponseEntity.status(204).build();
+  }
+
+  @Operation(summary = "Update deck properties", description = "Updates a deck's name and/or description")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "Deck updated successfully"),
+      @ApiResponse(responseCode = "400", description = "Invalid input or malformed request"),
+      @ApiResponse(responseCode = "401", description = "Unauthenticated"),
+      @ApiResponse(responseCode = "404", description = "Deck not found")
+  })
+  @PutMapping(path = "/{deckId}", produces = APPLICATION_JSON_VALUE)
+  public ResponseEntity<DeckDto> updateDeck(
+      @AuthenticationPrincipal User user,
+      @PathVariable UUID deckId,
+      @RequestBody DeckUpdateDto updateData
+  ) {
+    var deck = deckService.getDeck(deckId, user);
+    var updatedDeck = deckService.updateDeck(deck, updateData.name(), updateData.description());
+    return ResponseEntity.ok(DeckDto.from(updatedDeck));
   }
 
   @PostMapping(value = "/{deckId}/reset-sync")

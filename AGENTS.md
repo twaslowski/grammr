@@ -164,7 +164,7 @@ Key environment variables (see `application.yml`):
 
 ### Backend Stack
 - **Framework**: Spring Boot 3.5.0
-- **Java Version**: 21
+- **Java Version**: 25
 - **Database**: PostgreSQL with Flyway migrations
 - **Authentication**: JWT via Clerk
 - **Documentation**: OpenAPI/Swagger
