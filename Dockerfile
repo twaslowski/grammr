@@ -1,15 +1,14 @@
-FROM eclipse-temurin:25-alpine
+FROM amazoncorretto:25-alpine
 
-HEALTHCHECK --interval=30s --timeout=3s \
-  CMD wget --no-verbose -q --tries=1 --no-check-certificate https://localhost:8443/actuator/health || exit 1
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-ENV SPRING_PROFILES_ACTIVE=prod
 ENV APP_DIR=/var/opt
+WORKDIR $APP_DIR
 
-RUN mkdir -p $APP_DIR
+COPY --chown=appuser:appgroup target/grammr-core-1.0-SNAPSHOT.jar ${APP_DIR}/grammr-core.jar
 
-COPY target/grammr-core-1.0-SNAPSHOT.jar ${APP_DIR}/grammr-core.jar
+USER appuser
 
 EXPOSE 8443
 
-CMD ["java", "-jar", "/var/opt/grammr-core.jar", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}"]
+CMD ["java", "-jar", "${APP_DIR}/grammr-core.jar"]
