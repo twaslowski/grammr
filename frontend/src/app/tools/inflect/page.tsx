@@ -33,18 +33,8 @@ const InflectionPage = () => {
         <InputArea onEnter={inflect} clear={false} />
 
         <div>
-          {/*{error && (*/}
-          {/*  <Error title='Failed to load inflections'>*/}
-          {/*    {error.message}*/}
-          {/*  </Error>*/}
-          {/*)}*/}
           {paradigm && (
-            <InflectionTable
-              showHeader={false}
-              inflections={paradigm}
-              error={error}
-              isLoading={isLoading}
-            />
+            <InflectionTable inflections={paradigm} error={error} isLoading={isLoading} />
           )}
         </div>
       </div>

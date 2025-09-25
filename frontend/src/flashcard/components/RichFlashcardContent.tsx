@@ -14,13 +14,7 @@ const RichFlashcardContent: React.FC<FlashcardContentProps> = ({ back, paradigm 
     <div className='text-center'>
       <p className='text-sm font-medium'>{back}</p>
       <p className='text-sm font-light pb-3'>{capitalize(paradigm.partOfSpeech)}</p>
-      <InflectionTable
-        textSize='text-sm'
-        showHeader={false}
-        isLoading={false}
-        inflections={paradigm}
-        error={null}
-      />
+      <InflectionTable textSize='text-sm' isLoading={false} inflections={paradigm} error={null} />
     </div>
   );
 };

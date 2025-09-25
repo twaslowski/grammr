@@ -4,6 +4,7 @@ import { MODEL_NAMES } from '../model-names';
 export const INFLECTION_MODEL_TEMPLATE = {
   modelName: MODEL_NAMES.INFLECTION_GENERIC,
   inOrderFields: [
+    'id',
     'front',
     'back', // translation
     'lemma',

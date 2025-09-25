@@ -17,8 +17,10 @@ const TEST_NOTE: Note = {
   deckName: TEST_DECK_NAME,
   modelName: 'Basic',
   fields: {
+    id: 'test-note-1',
     front: 'Test Front',
     back: 'Test Back',
+    notes: 'These are test notes',
   },
   tags: ['test'],
 };

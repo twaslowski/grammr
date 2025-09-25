@@ -26,8 +26,10 @@ export class NoteFactory {
     return {
       id: flashcard.id,
       fields: {
+        id: flashcard.id,
         front: flashcard.question,
         back: flashcard.answer,
+        notes: '',
       },
       modelName: MODEL_NAMES.BASIC,
       deckName: deckName,
@@ -46,6 +48,7 @@ export class NoteFactory {
       deckName: deckName,
       modelName: MODEL_NAMES.CONJUGATION,
       fields: {
+        id: flashcard.id,
         front: flashcard.question,
         back: flashcard.answer,
         translation: flashcard.answer,
@@ -60,6 +63,7 @@ export class NoteFactory {
         mood: 'indicative',
         tense: 'present',
         voice: 'active',
+        notes: '',
       },
       tags: [`conjugation`, `${paradigm.languageCode}`],
     };
@@ -74,6 +78,7 @@ export class NoteFactory {
     return {
       id: flashcard.id,
       fields: {
+        id: flashcard.id,
         front: flashcard.question,
         back: flashcard.answer,
         lemma: flashcard.paradigm.lemma,
@@ -86,6 +91,7 @@ export class NoteFactory {
         genitivePlural: cases.genitivePlural,
         dativePlural: cases.dativePlural,
         accusativePlural: cases.accusativePlural,
+        notes: '',
       },
       modelName: MODEL_NAMES.DECLENSION,
       deckName: deckName,
@@ -101,11 +107,13 @@ export class NoteFactory {
     return {
       id: flashcard.id,
       fields: {
+        id: flashcard.id,
         front: flashcard.question,
         back: flashcard.answer,
         lemma: flashcard.paradigm.lemma,
         translation: flashcard.answer,
         table: '',
+        notes: '',
       },
       modelName: MODEL_NAMES.INFLECTION_GENERIC,
       deckName: deckName,

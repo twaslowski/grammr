@@ -4,6 +4,7 @@ import { MODEL_NAMES } from '../model-names';
 export const DECLENSION_MODEL_TEMPLATE = {
   modelName: MODEL_NAMES.DECLENSION,
   inOrderFields: [
+    'id',
     'front',
     'back', // translation
     'lemma',

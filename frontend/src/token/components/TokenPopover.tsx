@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { TextToSpeech } from '@/components/buttons/TextToSpeech';
 import { Pos } from '@/components/language/Pos';
@@ -77,6 +77,7 @@ const TokenPopover: React.FC<TokenPopoverProps> = ({ onClose, context, token, la
             </div>
 
             <div className='py-2'>
+              <h3 className='text-lg font-semibold'>Inflections</h3>
               <GenericFlashcardExport
                 paradigm={inflections}
                 front={token.text}

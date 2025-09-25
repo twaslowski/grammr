@@ -16,19 +16,24 @@ export interface Note {
 }
 
 interface BasicFields {
+  id: string;
   front: string;
   back: string;
+  notes: string;
 }
 
 interface InflectionFields {
+  id: string;
   front: string;
   back: string;
   lemma: string;
   translation: string;
   table: string;
+  notes: string;
 }
 
 interface DeclensionFields {
+  id: string;
   front: string;
   back: string;
   lemma: string;
@@ -41,9 +46,11 @@ interface DeclensionFields {
   genitivePlural: string;
   dativePlural: string;
   accusativePlural: string;
+  notes: string;
 }
 
 interface ConjugationFields {
+  id: string;
   front: string;
   back: string;
   lemma: string;
@@ -57,6 +64,7 @@ interface ConjugationFields {
   mood: string;
   tense: string;
   voice: string;
+  notes: string;
 }
 
 export interface BasicNote extends Note {
@@ -79,7 +87,7 @@ export interface DeclensionNote extends Note {
   modelName: DeclensionModelName;
 }
 
-export type AnyField = BasicFields | DeclensionFields;
+export type AnyField = BasicFields | DeclensionFields | InflectionFields | ConjugationFields;
 export type AnyNote = BasicNote | InflectionNote | ConjugationNote | DeclensionNote;
 
 export const fromFlashcard = (flashcard: Flashcard, deckName: string): AnyNote => {

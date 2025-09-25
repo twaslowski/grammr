@@ -2,6 +2,7 @@ import { MODEL_NAMES } from './model-names';
 import { CONJUGATION_MODEL_TEMPLATE } from './template/conjugation-template';
 import { INFLECTION_MODEL_TEMPLATE } from '@/anki-connect/model/template/inflection-template';
 import { BASIC_MODEL_TEMPLATE } from '@/anki-connect/model/template/basic-template';
+import { DECLENSION_MODEL_TEMPLATE } from '@/anki-connect/model/template/declension-template';
 
 export const precheckModels = async () => {
   const response = await fetch('http://localhost:8765', {
@@ -24,17 +25,17 @@ export const precheckModels = async () => {
 
   const models = data.result as string[];
 
-  // Check conjugation models
-  if (!conjugationModelExists(models)) {
-    await createConjugationModel();
-  }
+  const modelsToCheck = [
+    { name: MODEL_NAMES.CONJUGATION, template: CONJUGATION_MODEL_TEMPLATE },
+    { name: MODEL_NAMES.BASIC, template: BASIC_MODEL_TEMPLATE },
+    { name: MODEL_NAMES.INFLECTION_GENERIC, template: INFLECTION_MODEL_TEMPLATE },
+    { name: MODEL_NAMES.DECLENSION, template: DECLENSION_MODEL_TEMPLATE },
+  ];
 
-  if (!basicModelExists(models)) {
-    await createBasicModel();
-  }
-
-  if (!inflectionsModelExists(models)) {
-    await createInflectionModel();
+  for (const model of modelsToCheck) {
+    if (!models.includes(model.name)) {
+      await createModelFromTemplate(model.template);
+    }
   }
 };
 
@@ -58,27 +59,3 @@ export const createModelFromTemplate = async (template: any): Promise<void> => {
     throw new Error(data.error);
   }
 };
-
-export const createInflectionModel = async (): Promise<void> => {
-  await createModelFromTemplate(INFLECTION_MODEL_TEMPLATE);
-};
-
-export const createConjugationModel = async (): Promise<void> => {
-  await createModelFromTemplate(CONJUGATION_MODEL_TEMPLATE);
-};
-
-function conjugationModelExists(models: string[]): boolean {
-  return models.includes(MODEL_NAMES.CONJUGATION);
-}
-
-export const createBasicModel = async (): Promise<void> => {
-  await createModelFromTemplate(BASIC_MODEL_TEMPLATE);
-};
-
-function basicModelExists(models: string[]): boolean {
-  return models.includes(MODEL_NAMES.BASIC);
-}
-
-function inflectionsModelExists(models: string[]): boolean {
-  return models.includes(MODEL_NAMES.INFLECTION_GENERIC);
-}

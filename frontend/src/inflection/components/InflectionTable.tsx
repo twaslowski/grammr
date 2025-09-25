@@ -12,12 +12,10 @@ interface InflectionTableProps {
   inflections: Paradigm | null;
   error: ApiError | null;
   textSize?: string;
-  showHeader?: boolean;
   isLoading: boolean;
 }
 
 const InflectionTable: React.FC<InflectionTableProps> = ({
-  showHeader = true,
   textSize = 'text-md',
   inflections,
   error,
@@ -34,8 +32,6 @@ const InflectionTable: React.FC<InflectionTableProps> = ({
 
   return (
     <>
-      {showHeader && <h3 className='text-lg font-semibold'>Inflections</h3>}
-
       {isLoading && (
         <div className='flex items-center justify-center py-4' role='status' aria-live='polite'>
           <Loader2 className='h-6 w-6 animate-spin text-gray-500' />

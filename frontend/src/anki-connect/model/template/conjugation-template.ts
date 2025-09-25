@@ -4,6 +4,7 @@ import { MODEL_NAMES } from '../model-names';
 export const CONJUGATION_MODEL_TEMPLATE = {
   modelName: MODEL_NAMES.CONJUGATION,
   inOrderFields: [
+    'id',
     'front',
     'back', // translation
     'lemma',

@@ -3,7 +3,7 @@ import { MODEL_NAMES } from '../model-names';
 // Model template definitions with dumb fields (no JS)
 export const BASIC_MODEL_TEMPLATE = {
   modelName: MODEL_NAMES.BASIC,
-  inOrderFields: ['front', 'back', 'notes'],
+  inOrderFields: ['id', 'front', 'back', 'notes'],
   css: `
     .card {
       font-family: Arial, sans-serif;
