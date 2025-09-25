@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clerk-jwt-public-key
+data:
+  jwt-key.pub: |
+    -----BEGIN PUBLIC KEY-----
+    <!-- Replace with your actual public key -->
+    -----END PUBLIC KEY-----

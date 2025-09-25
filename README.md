@@ -166,11 +166,11 @@ Installation:
 ```shell
 helm repo add grammr https://twaslowski.github.io/grammr-charts
 
-# create the database first
+# Using the Bitnami Postgres chart for simplicity
 helm install --namespace grammr --create-namespace \
   postgres oci://registry-1.docker.io/bitnamicharts/postgresql
-  
-# core
+
+# Replace with your actual OpenAI API key
 helm install --namespace grammr \
     --set openai_api_key="$OPENAI_API_KEY" \
     grammr-core grammr/grammr-core
@@ -237,7 +237,7 @@ by encapsulating a variety of usually Python-based libraries into a single API.
 You will note that a single `Inflection` consists of the root form of the word, its features,
 and the inflected form of the word. Multiple inflections form a `Paradigm`, which is
 "_the complete set of related word forms associated with a given lexeme_"
-[[source](https://en.wikipedia.org/wiki/Morphology_(linguistics)#Paradigms_and_morphosyntax)].
+[[source](<https://en.wikipedia.org/wiki/Morphology_(linguistics)#Paradigms_and_morphosyntax>)].
 
 Unfortunately, I mixed up the terms `lexeme` and `lemma` a fair bit. To be precise: A `lemma`
 is a base concept in spaCy and refers to the canonical form of a word, while a `lexeme`
@@ -251,9 +251,9 @@ This is something I got wrong and may have to fix in the future.
   - a `lemma`
   - a `pos` (part of speech, such as
     `NOUN`). [Reference](https://universaldependencies.org/u/pos/index.html).
-    _- a `feature_set` (a set of features, such as `NUMBER=PLURAL` and
+  - a `feature_set` (a set of features, such as `NUMBER=PLURAL` and
     `CASE=GEN`). [Reference](https://universaldependencies.org/u/feat/index.html).
-  - an optional `ancestor` (a reference to another `Token` in the phrase that it relates to)._
+  - an optional `ancestor` (a reference to another `Token` in the phrase that it relates to).\_
 
 - `Phrase` refers to a collection of `Tokens` that form a sentence.
 

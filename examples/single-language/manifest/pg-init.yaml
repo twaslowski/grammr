@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-initdb
+data:
+  init-user.sql: |
+    CREATE USER grammr WITH PASSWORD 'password';

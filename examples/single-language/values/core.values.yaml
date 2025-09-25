@@ -1,0 +1,25 @@
+image:
+  repository: docker.io/grammrapp/grammr-core
+  tag: latest
+
+languages:
+  - code: ru
+    morphology:
+      enabled: true
+      uri: http://morphology-ru:8000/morphological-analysis
+    inflection:
+      enabled: true
+      uri: http://inflection-ru:8000/inflect
+
+environmentVariables:
+  - name: DATASOURCE_URL
+    value: postgresql://grammr:password@postgresql:5432/grammr?sslmode=disable&currentSchema=grammr
+  - name: ANKI_EXPORTER_URL
+    value: http://anki-exporter:8000
+  - name: JWT_PUBLIC_KEY
+    valueFrom:
+      configMapKeyRef:
+        name: clerk-jwt-public-key
+        key: jwt-key.pub
+
+openai_api_key: "your-openai-api-key"
