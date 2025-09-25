@@ -25,8 +25,22 @@ interface InflectionFields {
   back: string;
   lemma: string;
   translation: string;
-  partOfSpeech: string;
-  inflections: string;
+  table: string;
+}
+
+interface DeclensionFields {
+  front: string;
+  back: string;
+  lemma: string;
+  translation: string;
+  nominativeSingular: string;
+  genitiveSingular: string;
+  dativeSingular: string;
+  accusativeSingular: string;
+  nominativePlural: string;
+  genitivePlural: string;
+  dativePlural: string;
+  accusativePlural: string;
 }
 
 interface ConjugationFields {
@@ -40,6 +54,9 @@ interface ConjugationFields {
   firstPersonPlural: string;
   secondPersonPlural: string;
   thirdPersonPlural: string;
+  mood: string;
+  tense: string;
+  voice: string;
 }
 
 export interface BasicNote extends Note {
@@ -58,11 +75,11 @@ export interface ConjugationNote extends Note {
 }
 
 export interface DeclensionNote extends Note {
-  fields: InflectionFields;
+  fields: DeclensionFields;
   modelName: DeclensionModelName;
 }
 
-export type AnyField = BasicFields | InflectionFields;
+export type AnyField = BasicFields | DeclensionFields;
 export type AnyNote = BasicNote | InflectionNote | ConjugationNote | DeclensionNote;
 
 export const fromFlashcard = (flashcard: Flashcard, deckName: string): AnyNote => {

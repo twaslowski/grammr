@@ -1,16 +1,10 @@
 import { Paradigm } from '@/flashcard/types/paradigm';
-import { Inflection } from '@/inflection/types/inflections';
-import { Case, Feature, Number as Num, Person } from '@/types/feature';
+import { Case, Number as Num } from '@/types/feature';
+import { getFormFromInflections } from '@/anki-connect/note/util';
 
-export type FeatureIdentifier = Feature | Case | Num;
-
-export function extractVerbForms(data: Paradigm) {
-  if (data.partOfSpeech !== 'VERB') {
-    throw new Error('extractVerbForms: Provided paradigm is not a verb');
-  }
+export function extractCases(data: Paradigm) {
   const empty = '';
 
-  // Extract canonical person/number combinations using the convenience wrapper
   const nominativeSingular =
     getFormFromInflections(data.inflections, [Case.NOM, Num.SINGULAR]) || empty;
   const genitiveSingular =
@@ -37,23 +31,4 @@ export function extractVerbForms(data: Paradigm) {
     dativePlural,
     accusativePlural,
   };
-}
-
-export function getFormFromInflections(
-  inflections: Inflection[],
-  features: FeatureIdentifier[],
-): string | undefined {
-  const match = inflections.find((inf) =>
-    features.every((desired) =>
-      inf.features.some((f) => {
-        if (typeof desired === 'object') {
-          return f.value === desired.value || f.type === desired.type;
-        }
-
-        return f.value === desired || f.fullIdentifier === desired || f.type === desired;
-      }),
-    ),
-  );
-
-  return match?.inflected;
 }

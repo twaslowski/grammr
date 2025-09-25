@@ -1,8 +1,6 @@
 import { Paradigm } from '@/flashcard/types/paradigm';
-import { Inflection } from '@/inflection/types/inflections';
-import { Feature, Number as Num, Person } from '@/types/feature';
-
-export type FeatureIdentifier = Feature | Person | Num;
+import { Number as Num, Person } from '@/types/feature';
+import { getFormFromInflections } from '@/anki-connect/note/util';
 
 export function extractVerbForms(data: Paradigm) {
   if (data.partOfSpeech !== 'VERB') {
@@ -33,23 +31,4 @@ export function extractVerbForms(data: Paradigm) {
     secondPersonPlural,
     thirdPersonPlural,
   };
-}
-
-export function getFormFromInflections(
-  inflections: Inflection[],
-  features: FeatureIdentifier[],
-): string | undefined {
-  const match = inflections.find((inf) =>
-    features.every((desired) =>
-      inf.features.some((f) => {
-        if (typeof desired === 'object') {
-          return f.value === desired.value || f.type === desired.type;
-        }
-
-        return f.value === desired || f.fullIdentifier === desired || f.type === desired;
-      }),
-    ),
-  );
-
-  return match?.inflected;
 }

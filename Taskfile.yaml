@@ -22,7 +22,7 @@ tasks:
     desc: Populate database with paradigms
     dir: local/data
     cmds:
-      - psql 'postgresql://user:password@localhost:5432/grammr' -f data.sql
+      - psql 'postgresql://user:password@localhost:5432/grammr' -f paradigms.sql
 
   unit-test:
     desc: Run unit tests
@@ -35,11 +35,18 @@ tasks:
       - task: start-env
       - ./mvnw clean package test -P integration
 
+  jest:
+    desc: Run Jest tests for the frontend
+    dir: frontend
+    cmds:
+      - pnpm test
+
   test:
     desc: Run unit tests, start environment, and run integration tests
     cmds:
       - task: unit-test
       - task: integration-test
+      - task: jest
 
   start-frontend:
     desc: Run the Next.js frontend

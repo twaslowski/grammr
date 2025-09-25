@@ -2,6 +2,7 @@ import { Flashcard } from '@/flashcard/types/flashcard';
 import { MODEL_NAMES } from '@/anki-connect/model/model-names';
 import { AnyNote, BasicNote, ConjugationNote, DeclensionNote, InflectionNote } from './type';
 import { extractVerbForms } from './conjugation-utils';
+import { extractCases } from '@/anki-connect/note/declension-utils';
 
 export class NoteFactory {
   static createFromFlashcard(flashcard: Flashcard, deckName: string): AnyNote {
@@ -55,6 +56,10 @@ export class NoteFactory {
         firstPersonPlural: flattened.firstPersonPlural,
         secondPersonPlural: flattened.secondPersonPlural,
         thirdPersonPlural: flattened.thirdPersonPlural,
+        // TODO: Extract these. Will require more work on the inflections modules.
+        mood: 'indicative',
+        tense: 'present',
+        voice: 'active',
       },
       tags: [`conjugation`, `${paradigm.languageCode}`],
     };
@@ -64,6 +69,7 @@ export class NoteFactory {
     if (!flashcard.paradigm) {
       throw new Error('Declension note requires paradigm data');
     }
+    const cases = extractCases(flashcard.paradigm);
 
     return {
       id: flashcard.id,
@@ -72,11 +78,18 @@ export class NoteFactory {
         back: flashcard.answer,
         lemma: flashcard.paradigm.lemma,
         translation: flashcard.answer,
-        partOfSpeech: flashcard.paradigm.partOfSpeech,
-        inflections: JSON.stringify(flashcard.paradigm.inflections),
+        nominativeSingular: cases.nominativeSingular,
+        genitiveSingular: cases.genitiveSingular,
+        dativeSingular: cases.dativeSingular,
+        accusativeSingular: cases.accusativeSingular,
+        nominativePlural: cases.nominativePlural,
+        genitivePlural: cases.genitivePlural,
+        dativePlural: cases.dativePlural,
+        accusativePlural: cases.accusativePlural,
       },
       modelName: MODEL_NAMES.DECLENSION,
       deckName: deckName,
+      tags: [`conjugation`, `${flashcard.paradigm.languageCode}`],
     };
   }
 
@@ -92,8 +105,7 @@ export class NoteFactory {
         back: flashcard.answer,
         lemma: flashcard.paradigm.lemma,
         translation: flashcard.answer,
-        partOfSpeech: flashcard.paradigm.partOfSpeech,
-        inflections: JSON.stringify(flashcard.paradigm.inflections),
+        table: '',
       },
       modelName: MODEL_NAMES.INFLECTION_GENERIC,
       deckName: deckName,
@@ -102,7 +114,7 @@ export class NoteFactory {
 
   private static getInflectionNoteType(
     partOfSpeech: string,
-  ): 'conjugation' | 'declension' | 'general' {
+  ): 'conjugation' | 'declension' | 'generic' {
     const pos = partOfSpeech.toLowerCase();
 
     if (pos === 'verb' || pos === 'aux') {
@@ -110,7 +122,7 @@ export class NoteFactory {
     } else if (pos === 'noun' || pos === 'adj') {
       return 'declension';
     } else {
-      return 'general';
+      return 'generic';
     }
   }
 }

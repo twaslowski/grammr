@@ -56,7 +56,7 @@ services:
       - "8030:8000"
 
   postgresql:
-    image: postgres:14.7
+    image: postgres:17
     ports:
       - "5432:5432"
     environment:
