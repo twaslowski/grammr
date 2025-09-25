@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.15.0](https://github.com/twaslowski/grammr/compare/v3.14.0...v3.15.0) (2025-09-25)
+
+
+### Features
+
+* **anki:** allow editing deck name and description ([9dd1daa](https://github.com/twaslowski/grammr/commit/9dd1daac807c8c2da620886ae90cb6ae511e9917))
+
+
+### Bug Fixes
+
+* directories in Dockerfile CMD ([b9a8e47](https://github.com/twaslowski/grammr/commit/b9a8e47a01e21d4620d6c5031e44cee758954f0e))
+* **logging:** remove unnecessary profile from logback.xml ([3296d39](https://github.com/twaslowski/grammr/commit/3296d39f3829a1715a5cbedf27dc6272befc8d4d))
+* use amazoncoretto while eclipse-temurin does not support java 25 ([40bf482](https://github.com/twaslowski/grammr/commit/40bf482ad1794b578f0ea6d477078d58f8f65ef8))
+
 ## [3.14.0](https://github.com/twaslowski/grammr/compare/v3.13.0...v3.14.0) (2025-09-18)
 
 
