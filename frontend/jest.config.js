@@ -16,6 +16,14 @@ const customJestConfig = {
 
   testEnvironment: 'jest-environment-jsdom',
 
+  // Handle Node.js built-in modules for server-side tests
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
+
+  // Configure test environments per test file
+  testEnvironmentOptions: {
+    customExportConditions: ['node', 'node-addons'],
+  },
+
   /**
    * Absolute imports and Module Path Aliases
    */
@@ -23,7 +31,13 @@ const customJestConfig = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^~/(.*)$': '<rootDir>/public/$1',
     '^.+\\.(svg)$': '<rootDir>/src/__mocks__/svg.tsx',
+    // Handle Node.js built-in modules
+    '^#crypto$': '<rootDir>/src/__mocks__/crypto.js',
+    '^crypto$': '<rootDir>/src/__mocks__/crypto.js',
   },
+
+  // Transform configuration for Node.js modules
+  transformIgnorePatterns: ['node_modules/(?!(@clerk/.*)/)'],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

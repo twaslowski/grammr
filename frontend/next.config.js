@@ -1,21 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async rewrites() {
-    return [
-      {
-        source: '/api/v1/:path*',
-        destination: `${process.env.BACKEND_HOST}/api/v1/:path*`,
-      },
-      {
-        source: '/api/v2/:path*',
-        destination: `${process.env.BACKEND_HOST}/api/v2/:path*`,
-      },
-      {
-        source: '/api/tts',
-        destination: `${process.env.TTS_HOST}`,
-      },
-    ];
-  },
+  // Remove rewrites - these will be handled by middleware at runtime
   eslint: {
     dirs: ['src'],
   },
@@ -25,6 +10,9 @@ const nextConfig = {
   images: {
     remotePatterns: [new URL('https://img.clerk.com/**')],
   },
+
+  // Enable standalone output for Docker
+  output: 'standalone',
 
   webpack(config) {
     // Grab the existing rule that handles SVG imports
@@ -58,13 +46,7 @@ const nextConfig = {
     return config;
   },
 
-  env: {
-    BACKEND_HOST: process.env.BACKEND_HOST,
-    TTS_HOST: process.env.TTS_HOST,
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
-      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
-    CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
-  },
+  // Remove env section - environment variables will be read at runtime
 };
 
 module.exports = nextConfig;
