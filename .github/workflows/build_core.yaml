@@ -143,6 +143,8 @@ jobs:
         env:
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ steps.publishable-key.outputs.key }}
         with:
+          args: |
+            NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
           context: ./frontend
           file: ./frontend/Dockerfile
           platforms: linux/amd64,linux/arm64
