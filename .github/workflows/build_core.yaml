@@ -9,6 +9,7 @@ on:
       - 'v*.*.*'
     paths:
       - src/**
+      - frontend/**
       - terraform/application/**
       - pom.xml
       - Dockerfile
