@@ -9,7 +9,6 @@ import com.grammr.domain.enums.ExportDataType;
 import com.grammr.flashcards.controller.v2.dto.DeckCreationDto;
 import com.grammr.flashcards.controller.v2.dto.DeckDto;
 import com.grammr.flashcards.controller.v2.dto.DeckDumpDto;
-import com.grammr.flashcards.controller.v2.dto.DeckUpdateDto;
 import com.grammr.flashcards.controller.v2.dto.FlashcardDto;
 import com.grammr.flashcards.controller.v2.dto.SyncResultDto;
 import com.grammr.flashcards.service.DeckService;
@@ -199,7 +198,7 @@ public class DeckController {
   public ResponseEntity<DeckDto> updateDeck(
       @AuthenticationPrincipal User user,
       @PathVariable UUID deckId,
-      @RequestBody DeckUpdateDto updateData
+      @RequestBody DeckCreationDto updateData
   ) {
     var deck = deckService.getDeck(deckId, user);
     var updatedDeck = deckService.updateDeck(deck, updateData.name(), updateData.description());

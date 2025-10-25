@@ -12,8 +12,8 @@ import com.grammr.domain.entity.DeckSpec;
 import com.grammr.domain.entity.Flashcard.Status;
 import com.grammr.domain.entity.FlashcardSpec;
 import com.grammr.domain.entity.UserSpec;
+import com.grammr.flashcards.controller.v2.dto.DeckCreationDto;
 import java.util.UUID;
-import com.grammr.flashcards.controller.v2.dto.DeckUpdateDto;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -123,7 +123,7 @@ class DeckIntegrationTest extends IntegrationTestBase {
     var user = userRepository.save(UserSpec.validWithoutId().build());
     var deck = deckRepository.save(DeckSpec.withUser(user).name("Original Name").description("Original Description").build());
     var authentication = createUserAuthentication(user);
-    var updateDto = new DeckUpdateDto("Updated Name", "Updated Description");
+    var updateDto = new DeckCreationDto("Updated Name", "Updated Description");
 
     mockMvc.perform(MockMvcRequestBuilders.put("/api/v2/deck/" + deck.getDeckId())
             .with(authentication(authentication))
@@ -149,7 +149,7 @@ class DeckIntegrationTest extends IntegrationTestBase {
     var authentication = createUserAuthentication(user);
 
     // Update only the name
-    var nameUpdateDto = new DeckUpdateDto("Updated Name", null);
+    var nameUpdateDto = new DeckCreationDto("Updated Name", null);
 
     mockMvc.perform(MockMvcRequestBuilders.put("/api/v2/deck/" + deck.getDeckId())
             .with(authentication(authentication))
@@ -160,7 +160,7 @@ class DeckIntegrationTest extends IntegrationTestBase {
         .andExpect(jsonPath("$.description").value("Original Description"));
 
     // Update only the description
-    var descriptionUpdateDto = new DeckUpdateDto(null, "Updated Description");
+    var descriptionUpdateDto = new DeckCreationDto(null, "Updated Description");
 
     mockMvc.perform(MockMvcRequestBuilders.put("/api/v2/deck/" + deck.getDeckId())
             .with(authentication(authentication))

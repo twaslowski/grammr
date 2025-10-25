@@ -3,11 +3,12 @@ import { MODEL_NAMES } from '@/anki-connect/model/model-names';
 import { AnyNote, BasicNote, ConjugationNote, DeclensionNote, InflectionNote } from './type';
 import { extractVerbForms } from './conjugation-utils';
 import { extractCases } from '@/anki-connect/note/declension-utils';
+import { Paradigm } from '@/flashcard/types/paradigm';
 
 export class NoteFactory {
   static createFromFlashcard(flashcard: Flashcard, deckName: string): AnyNote {
     if (flashcard.paradigm) {
-      const noteType = this.getInflectionNoteType(flashcard.paradigm.partOfSpeech);
+      const noteType = this.getInflectionNoteType(flashcard.paradigm);
 
       switch (noteType) {
         case 'conjugation':
@@ -121,16 +122,26 @@ export class NoteFactory {
   }
 
   private static getInflectionNoteType(
-    partOfSpeech: string,
+    paradigm: Paradigm,
   ): 'conjugation' | 'declension' | 'generic' {
-    const pos = partOfSpeech.toLowerCase();
+    const pos = paradigm.partOfSpeech.toLowerCase();
 
     if (pos === 'verb' || pos === 'aux') {
       return 'conjugation';
-    } else if (pos === 'noun' || pos === 'adj') {
+    } else if (this.isRegularNoun(pos, paradigm)) {
       return 'declension';
     } else {
       return 'generic';
     }
+  }
+
+  // i.e. if this is a noun with exactly four cases (nominative, genitive, dative, accusative)
+  private static isRegularNoun(pos: string, paradigm: Paradigm) {
+    return (pos === 'noun' || pos === 'adj') && !this.hasAdditionalCases(paradigm);
+  }
+
+  // Could be derived more elegantly, but the number of cases actually does depend on the language
+  private static hasAdditionalCases(paradigm: Paradigm): boolean {
+    return paradigm.languageCode.toLowerCase() === 'ru';
   }
 }

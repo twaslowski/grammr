@@ -60,6 +60,86 @@ jobs:
         run: |
           ./mvnw package test -P integration
 
+  frontend-tests:
+    name: Frontend tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: pnpm install
+
+      - name: Run eslint
+        working-directory: frontend
+        run: pnpm run lint:strict
+
+      - name: Run typechecks
+        working-directory: frontend
+        run: pnpm run typecheck
+
+      - name: Run frontend tests
+        working-directory: frontend
+        run: pnpm run test
+
+  build-frontend:
+    name: Build grammr-frontend Docker image
+    runs-on: ubuntu-latest
+    needs: [frontend-tests]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Download jar
+        uses: actions/download-artifact@v4
+        with:
+          name: grammr-core-jar
+          path: target/
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker meta
+        id: docker-metadata
+        uses: docker/metadata-action@v5
+        with:
+          images: grammrapp/grammr-frontend
+          flavor: |
+            latest=true
+          tags: |
+            type=semver,pattern={{version}}
+            type=raw,value={{branch}}-{{date 'YYYYMMDDHHmmss' tz='UTC'}}-{{sha}}
+            type=sha
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.docker-metadata.outputs.tags }}
+          labels: ${{ steps.docker-metadata.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+
   build-grammr-core:
     name: Build grammr-core Docker image
     runs-on: ubuntu-latest
