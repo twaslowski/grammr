@@ -14,6 +14,16 @@ RUN corepack enable pnpm && pnpm i --frozen-lockfile;
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
+
+# Accept build arguments for environment-specific values
+ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+# Add any other NEXT_PUBLIC_ variables you need here
+# ARG NEXT_PUBLIC_OTHER_VAR
+
+# Set as environment variables for the build process
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+# ENV NEXT_PUBLIC_OTHER_VAR=$NEXT_PUBLIC_OTHER_VAR
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 

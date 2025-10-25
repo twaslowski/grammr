@@ -98,7 +98,7 @@ jobs:
   build-frontend:
     name: Build grammr-frontend Docker image
     runs-on: ubuntu-latest
-    needs: [frontend-tests, compile-and-test, integration-test]
+    needs: [ frontend-tests, compile-and-test, integration-test ]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -123,12 +123,25 @@ jobs:
           flavor: |
             latest=true
           tags: |
-            type=semver,pattern={{version}}
+            type=semver,pattern={{version}}-prod
             type=raw,value={{branch}}-{{date 'YYYYMMDDHHmmss' tz='UTC'}}-{{sha}}
             type=sha
 
+      - name: Determine publishable key
+        id: publishable-key
+        working-directory: frontend
+        run: |
+          source publishable-keys
+          if [ "${GITHUB_REF##*/}" = "main" ]; then
+            echo "key=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY_MAIN" >> $GITHUB_OUTPUT
+          else
+            echo "key=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY_DEVELOP" >> $GITHUB_OUTPUT
+          fi
+
       - name: Build and push
         uses: docker/build-push-action@v5
+        env:
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ steps.publishable-key.outputs.key }}
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
@@ -143,7 +156,7 @@ jobs:
   build-grammr-core:
     name: Build grammr-core Docker image
     runs-on: ubuntu-latest
-    needs: [compile-and-test, integration-test, frontend-tests]
+    needs: [ compile-and-test, integration-test, frontend-tests ]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
