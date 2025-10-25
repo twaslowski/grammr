@@ -62,3 +62,4 @@ ENV HOSTNAME="0.0.0.0"
 
 # Use entrypoint script for validation before starting server
 ENTRYPOINT ["./entrypoint.sh"]
+CMD ["node", "server.js"]

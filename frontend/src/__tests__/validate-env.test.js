@@ -36,7 +36,6 @@ describe('validate-env.js', () => {
     const requiredVars = {
       BACKEND_HOST: 'http://localhost:8080',
       TTS_HOST: 'http://localhost:8081',
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: 'pk_test_123',
       CLERK_SECRET_KEY: 'sk_test_456',
     };
 
@@ -81,9 +80,6 @@ describe('validate-env.js', () => {
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         '❌ Missing required environment variables:',
       );
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        '   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY',
-      );
       expect(consoleErrorSpy).toHaveBeenCalledWith('   CLERK_SECRET_KEY');
       expect(processExitSpy).toHaveBeenCalledWith(1);
     });
@@ -92,8 +88,6 @@ describe('validate-env.js', () => {
       // Set invalid URLs
       process.env.BACKEND_HOST = 'invalid-url';
       process.env.TTS_HOST = 'also-invalid';
-      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY =
-        requiredVars.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
       process.env.CLERK_SECRET_KEY = requiredVars.CLERK_SECRET_KEY;
 
       validateEnvironment();
@@ -115,9 +109,6 @@ describe('validate-env.js', () => {
       // Check that secret keys are masked
       expect(consoleLogSpy).toHaveBeenCalledWith(
         '   CLERK_SECRET_KEY=sk_test_...',
-      );
-      expect(consoleLogSpy).toHaveBeenCalledWith(
-        '   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...',
       );
 
       // Check that non-secret values are not masked
@@ -151,8 +142,6 @@ describe('validate-env.js', () => {
     it('should handle valid URL formats correctly', () => {
       process.env.BACKEND_HOST = 'https://api.example.com:8080';
       process.env.TTS_HOST = 'http://tts.example.com';
-      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY =
-        requiredVars.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
       process.env.CLERK_SECRET_KEY = requiredVars.CLERK_SECRET_KEY;
 
       expect(() => validateEnvironment()).not.toThrow();

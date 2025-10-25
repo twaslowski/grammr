@@ -38,7 +38,6 @@ describe('middleware', () => {
       // Set valid environment variables
       process.env.BACKEND_HOST = 'http://localhost:8080';
       process.env.TTS_HOST = 'http://localhost:8081';
-      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = 'pk_test_123';
       process.env.CLERK_SECRET_KEY = 'sk_test_456';
 
       const middlewareModule = require('../middleware');
