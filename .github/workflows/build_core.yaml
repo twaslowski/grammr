@@ -67,6 +67,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -92,7 +96,7 @@ jobs:
   build-frontend:
     name: Build grammr-frontend Docker image
     runs-on: ubuntu-latest
-    needs: [frontend-tests]
+    needs: [frontend-tests, compile-and-test, integration-test]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -143,7 +147,7 @@ jobs:
   build-grammr-core:
     name: Build grammr-core Docker image
     runs-on: ubuntu-latest
-    needs: [compile-and-test, integration-test]
+    needs: [compile-and-test, integration-test, frontend-tests]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -191,7 +195,7 @@ jobs:
 
   deploy-swagger:
     runs-on: ubuntu-latest
-    needs: [ compile-and-test, integration-test ]
+    needs: [ build-grammr-core ]
     name: Deploy Swagger UI to Github Pages
     steps:
       - name: Checkout repository
