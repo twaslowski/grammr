@@ -5,6 +5,12 @@
 ![License](https://img.shields.io/github/license/twaslowski/grammr)
 [![Vercel Deployment](https://deploy-badge.vercel.app/vercel/grammr)](https://vercel.com/tobias-waslowskis-projects/grammr/deployments)
 
+## Deprecation Notice
+
+This project is archived and no longer maintained. Dubious architectural decisions led to this becoming difficult to maintain, most of all
+the fact that the Spring Boot application requires a server to run on. I am building a serverless, more lightweight and less bloated iteration
+of this project over at [grammr-serverless](https://github.com/twaslowski/grammr-serverless).
+
 ## About
 
 `grammr` is a language learning tool that aims to make understanding the grammar of a variety
